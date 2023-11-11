@@ -1,4 +1,6 @@
-014000 017000 Graphics/NormalGameplay.bin
+014000        Graphics/NormalGameplay.bin
+017000        Graphics/PlayerSuper.bin
+017C00 018000 Graphics/PlayerSmall.bin
 0452E2 045AE2 Graphics/Data0452E2.bin
 065CB0        Graphics/Data065CB0.bin
 065FB0 066280 Tilemaps/Data065FB0.bin
@@ -18,3 +20,100 @@
 134E4C 13511C Tilemaps/Data134E4C.bin
 145397 145667 Tilemaps/Data145397.bin
 154449 154719 Tilemaps/Data154449.bin
+204000        Graphics/PeachGivesMarioAward.bin
+205800        Graphics/PeachGivesLuigiAward.bin
+207000        Tilemaps/PeachGivesMarioAwardTop.bin
+2072D0        Tilemaps/PeachGivesMarioAwardBottom.bin
+2075A0        Tilemaps/PeachGivesLuigiAwardTop.bin
+207870 207B40 Tilemaps/PeachGivesLuigiAwardBottom.bin
+207C40 207F10 Tilemaps/Data207C40.bin
+
+227BB0 227E80 Tilemaps/ToadAward.bin
+
+235800 236E80 Graphics/FortuneCardsBank23.bin
+
+264000        Tilemaps/YoshiIsHereW1_1.bin
+2642D0        Tilemaps/YoshiIsHereW1_2.bin
+2645A0        Tilemaps/YoshiIsHereW1_3.bin
+264870        Tilemaps/YoshiIsHereW1_4.bin
+264B40        Tilemaps/YoshiIsHereW2_1.bin
+264E10        Tilemaps/YoshiIsHereW2_2.bin
+2650E0        Tilemaps/YoshiIsHereW2_3.bin
+2653B0        Tilemaps/YoshiIsHereW2_4.bin
+265680        Tilemaps/YoshiIsHereW3_1.bin
+265950        Tilemaps/YoshiIsHereW3_2.bin
+265C20        Tilemaps/YoshiIsHereW3_3.bin
+265EF0        Tilemaps/YoshiIsHereW3_4.bin
+2661C0        Tilemaps/YoshiIsHereW4_1.bin
+266490        Tilemaps/YoshiIsHereW4_2.bin
+266760        Tilemaps/YoshiIsHereW4_3.bin
+266A30        Tilemaps/YoshiIsHereW4_4.bin
+266D00        Tilemaps/YoshiIsHereW5_1.bin
+266FD0        Tilemaps/YoshiIsHereW5_2.bin
+2672A0        Tilemaps/YoshiIsHereW5_3.bin
+267570        Tilemaps/YoshiIsHereW5_4.bin
+267840        Tilemaps/YoshiIsHereW6_1.bin
+267B10        Tilemaps/YoshiIsHereW6_2.bin
+267DE0 267EE0 Graphics/Data267DE0.bin
+274000        Tilemaps/YoshiIsHereW6_3.bin
+2742D0        Tilemaps/YoshiIsHereW6_4.bin
+2745A0        Tilemaps/YoshiIsHereW7_1.bin
+274870        Tilemaps/YoshiIsHereW7_2.bin
+274B40        Tilemaps/YoshiIsHereW7_3.bin
+274E10        Tilemaps/YoshiIsHereW7_4.bin
+2750E0        Tilemaps/YoshiIsHereW8_1.bin
+2753B0        Tilemaps/YoshiIsHereW8_2.bin
+275680        Tilemaps/YoshiIsHereW8_3.bin
+275950        Tilemaps/YoshiIsHereW8_4.bin
+275C20        Tilemaps/MarioAward.bin
+275EF0        Tilemaps/PeachAward.bin
+2761C0        Tilemaps/BowserAward.bin
+276490        Tilemaps/YoshiAward.bin
+276760        Tilemaps/AlbumFireworks.bin
+276A30        Tilemaps/Album1up.bin
+276D00        Tilemaps/AlbumVine.bin
+276FD0        Tilemaps/AlbumVS.bin
+2772A0        Tilemaps/AlbumPeachKiss.bin
+277570        Tilemaps/AlbumInfrared.bin
+277840        Tilemaps/AlbumRedCoin.bin
+277B10 277DE0 Tilemaps/AlbumHighScore.bin
+284000        Tilemaps/AlbumYoshi.bin
+2842D0        Tilemaps/AlbumGoomba.bin
+2845A0        Tilemaps/AlbumBlooper.bin
+284870        Tilemaps/AlbumLakitu.bin
+284B40        Tilemaps/AlbumCheepCheep.bin
+284E10        Tilemaps/AlbumHammerBro.bin
+2850E0        Tilemaps/AlbumBulletBill.bin
+2853B0        Tilemaps/AlbumKoopa.bin
+285680        Tilemaps/AlbumSpiny.bin
+285950        Tilemaps/AlbumBuzzy.bin
+285C20        Tilemaps/AlbumBowser.bin
+285EF0        Tilemaps/AlbumMarioLuigi.bin
+2861C0 287840 Graphics/FortuneCardsBank28.bin
+2878A0 2879B0 Graphics/Unused2878A0.bin
+294000        Graphics/ToadAward.bin
+294420        Graphics/MarioAward.bin
+294920        Graphics/PeachAward.bin
+294E80        Graphics/BowserAward.bin
+295410        Graphics/YoshiAward.bin
+2958C0        Graphics/AlbumFireworks.bin
+2963C0        Graphics/Album1up.bin
+296B60 2976B0 Graphics/AlbumVine.bin
+2A4000        Graphics/AlbumVS.bin
+2A4B00        Graphics/AlbumPeachKiss.bin
+2A5640        Graphics/AlbumInfrared.bin
+2A6180        Graphics/AlbumRedCoin.bin
+2A6E40        Graphics/AlbumYoshi.bin
+2A79B0 2A8000 Graphics/AlbumGoomba.bin
+2B4000        Graphics/AlbumBlooper.bin
+2B4840        Graphics/AlbumLakitu.bin
+2B4FC0        Graphics/AlbumCheepCheep.bin
+2B5620        Graphics/AlbumHammerBro.bin
+2B5FB0        Graphics/AlbumBulletBill.bin
+2B6590        Graphics/AlbumKoopa.bin
+2B6CD0        Graphics/AlbumSpiny.bin
+2B7570 2B7BB0 Graphics/AlbumBuzzy.bin
+2C4000        Graphics/AlbumBowser.bin
+2C4AC0 2C5820 Graphics/AlbumMarioLuigi.bin
+
+364000 364930 Graphics/AlbumHighScore.bin

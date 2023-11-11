@@ -368,7 +368,7 @@ Sub136520:
     ld   a,[W_GameMode]             ; 13:6537
     cp   $07                        ; 13:653A
     jr   nz,Code136546              ; 13:653C
-    ld   a,[$C383]                  ; 13:653E
+    ld   a,[W_CurrentPlayer]        ; 13:653E
     xor  $01                        ; 13:6541
     ld   [$C3E8],a                  ; 13:6543
 Code136546:
@@ -414,7 +414,7 @@ Code136546:
     ld   a,$13                      ; 13:6585
     ld   b,a                        ; 13:6587
     ld   de,$9820                   ; 13:6588
-    call LoadScreenTilemap          ; 13:658B
+    call LoadScreenTilemapVRAM      ; 13:658B
     pop  de                         ; 13:658E
     ld   hl,DataPtrs13402C          ; 13:658F
     add  hl,de                      ; 13:6592
@@ -533,8 +533,8 @@ Code13665A:
     xor  a                          ; 13:6663
     ld   [$D087],a                  ; 13:6664
     ld   [$D078],a                  ; 13:6667
-    ld   [$D04B],a                  ; 13:666A
-    ld   [$D02D],a                  ; 13:666D
+    ld   [W_SpriteYHigh],a          ; 13:666A
+    ld   [W_SpriteXHigh],a          ; 13:666D
     ld   [$D177],a                  ; 13:6670
     ld   [$D0D2],a                  ; 13:6673
     ld   [$D195],a                  ; 13:6676
@@ -542,18 +542,18 @@ Code13665A:
     inc  a                          ; 13:667C
     ld   [$D11D],a                  ; 13:667D
     ld   a,$07                      ; 13:6680
-    ld   [$D069],a                  ; 13:6682
+    ld   [W_SpriteYSpeed],a         ; 13:6682
     ld   a,$20                      ; 13:6685
-    ld   [$D03C],a                  ; 13:6687
+    ld   [W_SpriteYLow],a           ; 13:6687
     ld   [$D12C],a                  ; 13:668A
     ld   a,$80                      ; 13:668D
-    ld   [$D01E],a                  ; 13:668F
+    ld   [W_SpriteXLow],a           ; 13:668F
     ld   a,$30                      ; 13:6692
     ld   [$D0A5],a                  ; 13:6694
     ld   a,$04                      ; 13:6697
     ld   [$D0B4],a                  ; 13:6699
     ld   a,[$C36A]                  ; 13:669C
-    ld   [$D186],a                  ; 13:669F
+    ld   [W_SpriteSubstate],a       ; 13:669F
     cp   $01                        ; 13:66A2
     jr   nz,Code1366B5              ; 13:66A4
     ld   a,$03                      ; 13:66A6
@@ -561,7 +561,7 @@ Code13665A:
     call Sub1368DC                  ; 13:66AB
     jr   c,Code1366B5               ; 13:66AE
     ld   a,$02                      ; 13:66B0
-    ld   [$D186],a                  ; 13:66B2
+    ld   [W_SpriteSubstate],a       ; 13:66B2
 Code1366B5:
     ldh  a,[<IE]                    ; 13:66B5
     or   $01                        ; 13:66B7
@@ -861,7 +861,7 @@ Code136887:
 
 Code136891:
     call Sub136957                  ; 13:6891
-    ld   a,[$D186]                  ; 13:6894
+    ld   a,[W_SpriteSubstate]       ; 13:6894
     sub  $02                        ; 13:6897
     bit  7,a                        ; 13:6899
     jr   z,Return1368AB             ; 13:689B
@@ -978,7 +978,7 @@ Sub136957:
     ret                             ; 13:6963
 
 Sub136964:
-    ld   a,[$D186]                  ; 13:6964
+    ld   a,[W_SpriteSubstate]       ; 13:6964
     rst  $00                        ; 13:6967
 .dw Code136974                      ; 13:6968
 .dw Return1369A4                    ; 13:696A
@@ -1038,7 +1038,7 @@ Code1369AF:
     ld   [hl],$02                   ; 13:69AF
     xor  a                          ; 13:69B1
     ld   [$D0D2],a                  ; 13:69B2
-    ld   hl,$D186                   ; 13:69B5
+    ld   hl,W_SpriteSubstate        ; 13:69B5
     inc  [hl]                       ; 13:69B8
     ld   a,$78                      ; 13:69B9
     ldh  [<$FFF2],a                 ; 13:69BB
@@ -1048,12 +1048,12 @@ Data1369BE:                         ; 13:69BE
 .db $04,$05
 Code1369C0:
     ld   a,$10                      ; 13:69C0
-    ld   [$D05A],a                  ; 13:69C2
+    ld   [W_SpriteXSpeed],a         ; 13:69C2
     ld   a,$01                      ; 13:69C5
     ld   [$D195],a                  ; 13:69C7
     ld   bc,$0000                   ; 13:69CA
     call Sub001A3D                  ; 13:69CD
-    ld   hl,$D01E                   ; 13:69D0
+    ld   hl,W_SpriteXLow            ; 13:69D0
     ld   a,[hl]                     ; 13:69D3
     cp   $C0                        ; 13:69D4
     jr   c,Code1369F8               ; 13:69D6
@@ -1063,10 +1063,10 @@ Code1369C0:
     ld   a,$06                      ; 13:69DE
     ld   [$D177],a                  ; 13:69E0
     ld   a,$E0                      ; 13:69E3
-    ld   [$D01E],a                  ; 13:69E5
+    ld   [W_SpriteXLow],a           ; 13:69E5
     ld   a,$FF                      ; 13:69E8
-    ld   [$D02D],a                  ; 13:69EA
-    ld   hl,$D186                   ; 13:69ED
+    ld   [W_SpriteXHigh],a          ; 13:69EA
+    ld   hl,W_SpriteSubstate        ; 13:69ED
     inc  [hl]                       ; 13:69F0
     ld   a,$13                      ; 13:69F1
     rst  $10                        ; 13:69F3
@@ -1097,22 +1097,22 @@ Code136A01:
 
 Code136A18:
     ld   a,$10                      ; 13:6A18
-    ld   [$D05A],a                  ; 13:6A1A
+    ld   [W_SpriteXSpeed],a         ; 13:6A1A
     ld   a,$01                      ; 13:6A1D
     ld   [$D195],a                  ; 13:6A1F
     ld   bc,$0000                   ; 13:6A22
     call Sub001A3D                  ; 13:6A25
-    ld   hl,$D02D                   ; 13:6A28
+    ld   hl,W_SpriteXHigh           ; 13:6A28
     ld   a,[hl]                     ; 13:6A2B
     bit  7,a                        ; 13:6A2C
     jr   nz,Return136A3F            ; 13:6A2E
-    ld   hl,$D01E                   ; 13:6A30
+    ld   hl,W_SpriteXLow            ; 13:6A30
     ld   a,[hl]                     ; 13:6A33
     cp   $18                        ; 13:6A34
     jr   c,Return136A3F             ; 13:6A36
     ld   [hl],$18                   ; 13:6A38
     ld   a,$01                      ; 13:6A3A
-    ld   [$D186],a                  ; 13:6A3C
+    ld   [W_SpriteSubstate],a       ; 13:6A3C
 Return136A3F:
     ret                             ; 13:6A3F
 
@@ -1144,7 +1144,7 @@ Sub136A7B:
     ld   de,$8800                   ; 13:6A7D
     ld   h,$13                      ; 13:6A80
     ld   l,$7F                      ; 13:6A82
-    call DMATransfer                ; 13:6A84
+    call DMATransferVRAM            ; 13:6A84
     pop  bc                         ; 13:6A87
     ld   hl,$0800                   ; 13:6A88
     add  hl,bc                      ; 13:6A8B
@@ -1154,11 +1154,11 @@ Sub136A7B:
     ld   de,$9000                   ; 13:6A8F
     ld   h,$13                      ; 13:6A92
     ld   l,$7F                      ; 13:6A94
-    call DMATransfer                ; 13:6A96
+    call DMATransferVRAM            ; 13:6A96
     ld   a,:Gr_Bank17               ; 13:6A99
     ld   bc,Gr_Bank17               ; 13:6A9B
     ld   de,$8000                   ; 13:6A9E
     ld   h,$13                      ; 13:6AA1
     ld   l,$7F                      ; 13:6AA3
-    call DMATransfer                ; 13:6AA5
+    call DMATransferVRAM            ; 13:6AA5
     ret                             ; 13:6AA8

@@ -249,7 +249,7 @@ Sub0B4222:
     ld   a,[W_GameMode]             ; 0B:4222
     cp   $02                        ; 0B:4225
     jr   z,Code0B4260               ; 0B:4227
-    ld   a,[$C383]                  ; 0B:4229
+    ld   a,[W_CurrentPlayer]        ; 0B:4229
     sla  a                          ; 0B:422C
     ld   e,a                        ; 0B:422E
 Code0B422F:
@@ -378,7 +378,7 @@ Sub0B42F8:
     ld   a,[W_GameMode]             ; 0B:4300
     cp   $02                        ; 0B:4303
     jr   z,Code0B4317               ; 0B:4305
-    ld   a,[$C383]                  ; 0B:4307
+    ld   a,[W_CurrentPlayer]        ; 0B:4307
     sla  a                          ; 0B:430A
     sla  a                          ; 0B:430C
     add  e                          ; 0B:430E
@@ -435,7 +435,7 @@ Sub0B4343:
     jr   nz,Code0B4378              ; 0B:4364
     jr   Code0B4371                 ; 0B:4366
 Code0B4368:
-    ld   a,[$C383]                  ; 0B:4368
+    ld   a,[W_CurrentPlayer]        ; 0B:4368
     sla  a                          ; 0B:436B
     sla  a                          ; 0B:436D
     add  e                          ; 0B:436F
@@ -1099,7 +1099,7 @@ SubL_0B536D:
     ld   a,[W_LevelID]              ; 0B:5373
     cp   $1F                        ; 0B:5376
     jr   nz,Code0B5383              ; 0B:5378
-    ld   hl,$D02D                   ; 0B:537A
+    ld   hl,W_SpriteXHigh           ; 0B:537A
     add  hl,bc                      ; 0B:537D
     ld   a,[hl]                     ; 0B:537E
     cp   $04                        ; 0B:537F
@@ -1218,7 +1218,7 @@ Sub0B575E:
     ld   b,a                        ; 0B:57B0
     ld   de,$9820                   ; 0B:57B1
     ld   hl,Data0B53A2              ; 0B:57B4
-    call LoadScreenTilemap          ; 0B:57B7
+    call LoadScreenTilemapVRAM      ; 0B:57B7
     ld   a,$7C                      ; 0B:57BA
     ld   [$DE68],a                  ; 0B:57BC
     ld   a,[W_GameMode]             ; 0B:57BF
@@ -1252,19 +1252,19 @@ Code0B57EA:
     call Sub0B5FA3                  ; 0B:57F8
     xor  a                          ; 0B:57FB
     ld   [$D087],a                  ; 0B:57FC
-    ld   [$D04B],a                  ; 0B:57FF
-    ld   [$D02D],a                  ; 0B:5802
+    ld   [W_SpriteYHigh],a          ; 0B:57FF
+    ld   [W_SpriteXHigh],a          ; 0B:5802
     ld   [$D177],a                  ; 0B:5805
     ld   [$D195],a                  ; 0B:5808
     inc  a                          ; 0B:580B
     ld   [$D11D],a                  ; 0B:580C
     ld   a,$07                      ; 0B:580F
-    ld   [$D069],a                  ; 0B:5811
+    ld   [W_SpriteYSpeed],a         ; 0B:5811
     ld   a,$18                      ; 0B:5814
-    ld   [$D03C],a                  ; 0B:5816
+    ld   [W_SpriteYLow],a           ; 0B:5816
     ld   [$D12C],a                  ; 0B:5819
     ld   a,$70                      ; 0B:581C
-    ld   [$D01E],a                  ; 0B:581E
+    ld   [W_SpriteXLow],a           ; 0B:581E
     xor  a                          ; 0B:5821
     ld   [$C0C4],a                  ; 0B:5822
     ld   hl,H_GameState             ; 0B:5825
@@ -1957,7 +1957,7 @@ Sub0B5DD1:
     and  a                          ; 0B:5DDA
     jr   nz,Code0B5DFF              ; 0B:5DDB
 Code0B5DDD:
-    ld   a,[$D069]                  ; 0B:5DDD
+    ld   a,[W_SpriteYSpeed]         ; 0B:5DDD
     add  $01                        ; 0B:5DE0
     bit  7,a                        ; 0B:5DE2
     jr   nz,Code0B5DFA              ; 0B:5DE4
@@ -1967,13 +1967,13 @@ Code0B5DDD:
     xor  $01                        ; 0B:5DED
     ld   [$D11D],a                  ; 0B:5DEF
     ld   a,[$D12C]                  ; 0B:5DF2
-    ld   [$D03C],a                  ; 0B:5DF5
+    ld   [W_SpriteYLow],a           ; 0B:5DF5
     jr   Code0B5DFF                 ; 0B:5DF8
 Code0B5DFA:
-    ld   [$D069],a                  ; 0B:5DFA
+    ld   [W_SpriteYSpeed],a         ; 0B:5DFA
     jr   Code0B5E19                 ; 0B:5DFD
 Code0B5DFF:
-    ld   a,[$D069]                  ; 0B:5DFF
+    ld   a,[W_SpriteYSpeed]         ; 0B:5DFF
     add  $FF                        ; 0B:5E02
     bit  7,a                        ; 0B:5E04
     jr   z,Code0B5E16               ; 0B:5E06
@@ -1984,17 +1984,17 @@ Code0B5DFF:
     ld   [$D11D],a                  ; 0B:5E11
     jr   Code0B5DDD                 ; 0B:5E14
 Code0B5E16:
-    ld   [$D069],a                  ; 0B:5E16
+    ld   [W_SpriteYSpeed],a         ; 0B:5E16
 Code0B5E19:
     ld   bc,$0000                   ; 0B:5E19
     call Sub001A79                  ; 0B:5E1C
-    ld   a,[$D01E]                  ; 0B:5E1F
+    ld   a,[W_SpriteXLow]           ; 0B:5E1F
     ldh  [<$FF98],a                 ; 0B:5E22
-    ld   a,[$D02D]                  ; 0B:5E24
+    ld   a,[W_SpriteXHigh]          ; 0B:5E24
     ldh  [<$FF99],a                 ; 0B:5E27
-    ld   a,[$D03C]                  ; 0B:5E29
+    ld   a,[W_SpriteYLow]           ; 0B:5E29
     ldh  [<$FF97],a                 ; 0B:5E2C
-    ld   a,[$D04B]                  ; 0B:5E2E
+    ld   a,[W_SpriteYHigh]          ; 0B:5E2E
     ldh  [<$FF9B],a                 ; 0B:5E31
     ld   a,$28                      ; 0B:5E33
     ldh  [<$FFC1],a                 ; 0B:5E35
@@ -2294,7 +2294,7 @@ Code0B6084:
     ld   [$C17B],a                  ; 0B:60AE
     ld   [$C17C],a                  ; 0B:60B1
     ld   [$C1F2],a                  ; 0B:60B4
-    ld   [$C17F],a                  ; 0B:60B7
+    ld   [W_PlayerLives],a          ; 0B:60B7
     ld   [$C180],a                  ; 0B:60BA
     ld   [$C287],a                  ; 0B:60BD
     ld   [$C288],a                  ; 0B:60C0
@@ -2333,7 +2333,7 @@ Code0B6084:
     ld   [W_SublevelID],a           ; 0B:6118
     ldh  [<$FFC3],a                 ; 0B:611B
     ld   a,$0D                      ; 0B:611D
-    ldh  [<H_PlayerY_SLvType],a     ; 0B:611F
+    ldh  [<H_PlInitY_SubLvType],a   ; 0B:611F
     ld   a,$0A                      ; 0B:6121
     ld   [$C356],a                  ; 0B:6123
     ld   a,$70                      ; 0B:6126
@@ -2438,7 +2438,7 @@ Sub0B61AC:
     ld   b,$0B                      ; 0B:61F8
     ld   de,$9C00                   ; 0B:61FA
     ld   hl,Data0F5800              ; 0B:61FD
-    call LoadScreenTilemap          ; 0B:6200
+    call LoadScreenTilemapVRAM      ; 0B:6200
     ret                             ; 0B:6203
 
 Sub0B6204:
@@ -2492,7 +2492,7 @@ Sub0B6204:
     ld   b,$0B                      ; 0B:6280
     ld   de,$9C00                   ; 0B:6282
     ld   hl,Data0F5AD0              ; 0B:6285
-    call LoadScreenTilemap          ; 0B:6288
+    call LoadScreenTilemapVRAM      ; 0B:6288
     ld   a,$0B                      ; 0B:628B
     rst  $10                        ; 0B:628D
 .dl SubL_0B6002                     ; 0B:628E

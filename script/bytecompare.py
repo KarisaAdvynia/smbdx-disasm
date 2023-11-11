@@ -4,8 +4,8 @@ from _gbfile import seek_GB
 
 def bytecompare(source, dest, searchbanks=None):
     mismatchregions = []
-##    if searchregions is None:
-##        searchregions = [(0, min(os.path.getsize(source), os.path.getsize(dest)))]
+    if searchbanks is None:
+        searchbanks = range(min(os.path.getsize(source), os.path.getsize(dest)) // 0x4000)
 
     with open(source, "rb") as f0, open(dest, "rb") as f1:
         for bank in searchbanks:
@@ -40,18 +40,22 @@ def bytecompare(source, dest, searchbanks=None):
                     " ".join(f"{i:02X}" for i in f1.read(min(length, 8)))]
                 if length > 8: text.append("...")
                 print("".join(text))
+        elif isinstance(searchbanks, range):
+            print(f"The compared banks "
+                  f"({searchbanks.start:02X}-{searchbanks.stop-1:02X})"
+                  f" are identical.")
         else:
-            print("The byte regions",
-                  ", ".join(hex(start) + "-" + hex(end)
-                            for start, end in searchregions),
-                  "are identical.")
+            print("The compared banks (" +
+                  " ".join(f"{bank:02X}" for bank in searchbanks) +
+                  ") are identical.")
 
 if __name__ == "__main__":
     bytecompare(
         "../../smbdx.gbc",
         "../smbdx-disasm.gbc",
         searchbanks=[
-            0x00, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09,
-            0x0A, 0x0B, 0x11, 0x13, 0x14, 0x15, 0x1D, 0x1F,
-            ])
+            0x00, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09,
+            0x0A, 0x0B, 0x11, 0x13, 0x14, 0x15, 0x1D, 0x1F, 0x20] +
+            list(range(0x26, 0x2C))
+        )
     input()  # wait for Enter, if run on a shell that closes at end of program

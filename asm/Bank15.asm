@@ -636,11 +636,11 @@ Code154EA1:
     call CopyBytes                  ; 15:4ED2
     ld   a,$00                      ; 15:4ED5
     ldh  [<SVBK],a                  ; 15:4ED7
-    ld   a,$15                      ; 15:4ED9
+    ld   a,:Data154449              ; 15:4ED9
     ld   [$C415],a                  ; 15:4EDB
     ld   hl,Data154449              ; 15:4EDE
     ld   a,$15                      ; 15:4EE1
-    call Sub00156B                  ; 15:4EE3
+    call LoadScreenTilemapD480      ; 15:4EE3
     ld   a,$15                      ; 15:4EE6
     rst  $10                        ; 15:4EE8
 .dl SubL_0756D9                     ; 15:4EE9
@@ -1739,7 +1739,7 @@ Code15572B:
     ld   a,[$C435]                  ; 15:5733
     ld   [$C415],a                  ; 15:5736
     ld   a,$15                      ; 15:5739
-    call Sub001570                  ; 15:573B
+    call LoadScreenTilemapD000      ; 15:573B
     ld   a,l                        ; 15:573E
     ld   [$C433],a                  ; 15:573F
     ld   a,h                        ; 15:5742
@@ -1768,7 +1768,7 @@ Code155759:
     ld   a,[$C435]                  ; 15:5761
     ld   [$C415],a                  ; 15:5764
     ld   a,$15                      ; 15:5767
-    call Sub001570                  ; 15:5769
+    call LoadScreenTilemapD000      ; 15:5769
     ld   a,l                        ; 15:576C
     ld   [$C433],a                  ; 15:576D
     ld   a,h                        ; 15:5770
@@ -1788,7 +1788,7 @@ Sub155779:
     ld   a,[$C435]                  ; 15:5781
     ld   [$C415],a                  ; 15:5784
     ld   a,$15                      ; 15:5787
-    call Sub001570                  ; 15:5789
+    call LoadScreenTilemapD000      ; 15:5789
     ld   a,l                        ; 15:578C
     ld   [$C433],a                  ; 15:578D
     ld   a,h                        ; 15:5790
@@ -3512,7 +3512,7 @@ Code156447:
     ld   a,$3C                      ; 15:645A
     ld   b,$15                      ; 15:645C
     ld   de,$9800                   ; 15:645E
-    call LoadScreenTilemap          ; 15:6461
+    call LoadScreenTilemapVRAM      ; 15:6461
     call Sub156655                  ; 15:6464
     ld   a,$15                      ; 15:6467
     ld   b,$15                      ; 15:6469
@@ -4779,7 +4779,7 @@ Sub157087:
     ldi  a,[hl]                     ; 15:7113
     ld   h,[hl]                     ; 15:7114
     ld   l,a                        ; 15:7115
-    ld   a,$3B                      ; 15:7116
+    ld   a,:Data3B5680              ; 15:7116
     ld   [$C415],a                  ; 15:7118
     ld   de,$D000                   ; 15:711B
     ld   a,$24                      ; 15:711E
@@ -4820,7 +4820,7 @@ Code157122:
     ld   a,h                        ; 15:7157
     adc  $00                        ; 15:7158
     ld   h,a                        ; 15:715A
-    ld   a,$3B                      ; 15:715B
+    ld   a,:Data3B5680              ; 15:715B
     ld   [$C415],a                  ; 15:715D
     ld   de,$D00A                   ; 15:7160
     ld   a,$24                      ; 15:7163
@@ -4882,7 +4882,7 @@ Code1571A0:
     ld   l,e                        ; 15:71CD
     ld   h,d                        ; 15:71CE
     ld   a,$15                      ; 15:71CF
-    call Sub001570                  ; 15:71D1
+    call LoadScreenTilemapD000      ; 15:71D1
     ld   a,l                        ; 15:71D4
     ld   [$C433],a                  ; 15:71D5
     ld   a,h                        ; 15:71D8
@@ -4918,7 +4918,7 @@ Code157210:
     ld   h,[hl]                     ; 15:7222
     ld   l,a                        ; 15:7223
     ld   a,$15                      ; 15:7224
-    jp   Sub001570                  ; 15:7226
+    jp   LoadScreenTilemapD000      ; 15:7226
 
 DataPtrs157229:                     ; 15:7229
 .dl Data374000, Data3742D0, Data3745A0, Data374870,\
@@ -4953,7 +4953,7 @@ Code157247:
     ld   l,e                        ; 15:7276
     ld   h,d                        ; 15:7277
     ld   a,$15                      ; 15:7278
-    jp   Sub001570                  ; 15:727A
+    jp   LoadScreenTilemapD000      ; 15:727A
 
 DataPtrs15727D:                     ; 15:727D
 .dl Data3F6490, Data3F6760, Data3F6A30, Data3F6D00,\
@@ -4987,7 +4987,7 @@ Code157295:
     ld   l,e                        ; 15:72C4
     ld   h,d                        ; 15:72C5
     ld   a,$15                      ; 15:72C6
-    jp   Sub001570                  ; 15:72C8
+    jp   LoadScreenTilemapD000      ; 15:72C8
 
 DataPtrs1572CB:                     ; 15:72CB
 .dl Data376760, Data3772A0, Data355200, Data3557A0
@@ -5031,7 +5031,7 @@ Code1572DF:
     ld   l,e                        ; 15:7320
     ld   h,d                        ; 15:7321
     ld   a,$15                      ; 15:7322
-    call Sub001570                  ; 15:7324
+    call LoadScreenTilemapD000      ; 15:7324
     ld   a,l                        ; 15:7327
     ld   [$C433],a                  ; 15:7328
     ld   a,h                        ; 15:732B
@@ -5072,7 +5072,7 @@ Code157376:
     ld   l,e                        ; 15:738C
     ld   h,d                        ; 15:738D
     ld   a,$15                      ; 15:738E
-    jp   Sub001570                  ; 15:7390
+    jp   LoadScreenTilemapD000      ; 15:7390
 
 DataPtrs157393:                     ; 15:7393
 .dl Data375C20, Data375EF0, Data3761C0, Data376490
@@ -5097,7 +5097,7 @@ Code15739F:
     ld   l,e                        ; 15:73BA
     ld   h,d                        ; 15:73BB
     ld   a,$15                      ; 15:73BC
-    jp   Sub001570                  ; 15:73BE
+    jp   LoadScreenTilemapD000      ; 15:73BE
 
 Sub1573C1:
     ld   a,[$C500]                  ; 15:73C1
@@ -5133,7 +5133,7 @@ Code1573E4:
     ld   l,e                        ; 15:73FA
     ld   h,d                        ; 15:73FB
     ld   a,$15                      ; 15:73FC
-    call Sub00156B                  ; 15:73FE
+    call LoadScreenTilemapD480      ; 15:73FE
     ld   a,$C0                      ; 15:7401
     ld   [$C427],a                  ; 15:7403
     ld   a,$D6                      ; 15:7406
@@ -5174,7 +5174,7 @@ Code15743D:
     ld   h,d                        ; 15:7454
     ld   de,$9800                   ; 15:7455
     ld   b,$15                      ; 15:7458
-    jp   LoadScreenTilemap          ; 15:745A
+    jp   LoadScreenTilemapVRAM      ; 15:745A
 Return15745D:
     ret                             ; 15:745D
 
@@ -5200,7 +5200,7 @@ Code15746A:
     ld   h,d                        ; 15:7481
     ld   de,$9800                   ; 15:7482
     ld   b,$15                      ; 15:7485
-    jp   LoadScreenTilemap          ; 15:7487
+    jp   LoadScreenTilemapVRAM      ; 15:7487
 
 Data15748A:                         ; 15:748A
 .db $54,$10,$08,$04,$54,$98,$08,$24
@@ -5321,7 +5321,7 @@ Code15752B:
     ld   l,e                        ; 15:7541
     ld   h,d                        ; 15:7542
     ld   a,$15                      ; 15:7543
-    call Sub00156B                  ; 15:7545
+    call LoadScreenTilemapD480      ; 15:7545
     xor  a                          ; 15:7548
     ld   [$C4E9],a                  ; 15:7549
     ld   a,$47                      ; 15:754C
@@ -5983,7 +5983,7 @@ Code15798E:
     ld   [$C4E3],a                  ; 15:7996
     jp   Code1577EE                 ; 15:7999
 Code15799C:
-    ld   a,$3B                      ; 15:799C
+    ld   a,:Data3B5680              ; 15:799C
     ld   [$C415],a                  ; 15:799E
     ld   a,[$C4DF]                  ; 15:79A1
     sla  a                          ; 15:79A4
@@ -6255,7 +6255,7 @@ SubL_157B22:
     ld   h,d                        ; 15:7B58
     ld   de,$9800                   ; 15:7B59
     ld   b,$15                      ; 15:7B5C
-    call LoadScreenTilemap          ; 15:7B5E
+    call LoadScreenTilemapVRAM      ; 15:7B5E
     ld   a,[$C4FB]                  ; 15:7B61
     dec  a                          ; 15:7B64
     sla  a                          ; 15:7B65

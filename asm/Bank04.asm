@@ -309,7 +309,7 @@ Code044A14:
     cp   $2D                        ; 04:4A23
     jr   z,Code044A3A               ; 04:4A25
 Code044A27:
-    ldh  a,[<H_PlayerY_SLvType]     ; 04:4A27
+    ldh  a,[<H_PlInitY_SubLvType]   ; 04:4A27
     and  $0F                        ; 04:4A29
     ld   e,a                        ; 04:4A2B
     ld   d,$00                      ; 04:4A2C
@@ -703,7 +703,7 @@ Code044CD9:
     and  $30                        ; 04:4CE0
     jr   z,Code044CE9               ; 04:4CE2
     ld   a,$7F                      ; 04:4CE4
-    ld   [$C17F],a                  ; 04:4CE6
+    ld   [W_PlayerLives],a          ; 04:4CE6
 Code044CE9:
     ldh  a,[<$FF8C]                 ; 04:4CE9
     and  $09                        ; 04:4CEB
@@ -1120,7 +1120,7 @@ Code04503E:
     and  $40                        ; 04:5045
     jr   z,Code045050               ; 04:5047
     ld   a,$7F                      ; 04:5049
-    ld   [$C17F],a                  ; 04:504B
+    ld   [W_PlayerLives],a          ; 04:504B
     jr   Code045068                 ; 04:504E
 Code045050:
     ldh  a,[<$FF8C]                 ; 04:5050
@@ -1147,8 +1147,8 @@ Data04507E:                         ; 04:507E
 .db $D0,$0E,$D2,$0E,$D4,$0E,$D6,$0E,\
     $D8,$0E,$DA,$0E,$DC,$0E,$DE,$0E,\
     $E0,$0E,$E2,$0E
-Data045092:                         ; 04:5092
-.db $00,$7C,$00,$70
+DataPtrs045092:                     ; 04:5092
+.dw Gr_PlayerSmall, Gr_PlayerSuper
 
 Sub045096:
     ld   hl,Data044FFE              ; 04:5096
@@ -1172,7 +1172,7 @@ Code0450A8:
     cp   c                          ; 04:50B4
     jr   nz,Code0450A8              ; 04:50B5
     ld   d,$00                      ; 04:50B7
-    ld   a,[$C17F]                  ; 04:50B9
+    ld   a,[W_PlayerLives]          ; 04:50B9
 Code0450BC:
     cp   $0A                        ; 04:50BC
     jr   c,Code0450C5               ; 04:50BE
@@ -1210,11 +1210,11 @@ Code0450EC:
 Code0450F1:
     ldh  a,[<$FFA1]                 ; 04:50F1
     call Sub045126                  ; 04:50F3
-    ld   hl,Data045092              ; 04:50F6
+    ld   hl,DataPtrs045092          ; 04:50F6
     ldi  a,[hl]                     ; 04:50F9
-    ldh  [<$FFAF],a                 ; 04:50FA
+    ldh  [<H_PlAnimPtrLow],a        ; 04:50FA
     ld   a,[hl]                     ; 04:50FC
-    ldh  [<$FFB0],a                 ; 04:50FD
+    ldh  [<H_PlAnimPtrHigh],a       ; 04:50FD
     call Sub045103                  ; 04:50FF
     ret                             ; 04:5102
 

@@ -43,15 +43,15 @@ Sub074026:
     ld   hl,$D1B3                   ; 07:403A
     add  hl,de                      ; 07:403D
     ld   [hl],a                     ; 07:403E
-    ld   hl,$D01E                   ; 07:403F
+    ld   hl,W_SpriteXLow            ; 07:403F
     add  hl,de                      ; 07:4042
     ldh  a,[<$FF97]                 ; 07:4043
     ld   [hl],a                     ; 07:4045
-    ld   hl,$D02D                   ; 07:4046
+    ld   hl,W_SpriteXHigh           ; 07:4046
     add  hl,de                      ; 07:4049
     ldh  a,[<$FF98]                 ; 07:404A
     ld   [hl],a                     ; 07:404C
-    ld   hl,$D03C                   ; 07:404D
+    ld   hl,W_SpriteYLow            ; 07:404D
     add  hl,de                      ; 07:4050
     ldh  a,[<$FF99]                 ; 07:4051
     ld   [hl],a                     ; 07:4053
@@ -95,10 +95,10 @@ Code074084:
     cp   $04                        ; 07:408C
     jr   c,Code0740CF               ; 07:408E
     ld   a,$00                      ; 07:4090
-    ld   hl,$D000                   ; 07:4092
+    ld   hl,W_SpriteStatus          ; 07:4092
     add  hl,bc                      ; 07:4095
     ld   [hl],a                     ; 07:4096
-    ld   hl,$D00F                   ; 07:4097
+    ld   hl,W_SpriteID              ; 07:4097
     add  hl,bc                      ; 07:409A
     ld   [hl],a                     ; 07:409B
     ld   hl,$D0E1                   ; 07:409C
@@ -262,7 +262,7 @@ Sub0741A4:
     ret  z                          ; 07:41C9
     cp   $09                        ; 07:41CA
     ret  z                          ; 07:41CC
-    ldh  a,[<H_PlayerY_SLvType]     ; 07:41CD
+    ldh  a,[<H_PlInitY_SubLvType]   ; 07:41CD
     and  $0F                        ; 07:41CF
     cp   $02                        ; 07:41D1
     jr   nz,Code074210              ; 07:41D3
@@ -357,7 +357,7 @@ Code074250:
     push de                         ; 07:426A
     ldh  a,[<$FF97]                 ; 07:426B
     ld   e,a                        ; 07:426D
-    ld   hl,$D05A                   ; 07:426E
+    ld   hl,W_SpriteXSpeed          ; 07:426E
     add  hl,bc                      ; 07:4271
     ld   a,[hl]                     ; 07:4272
     bit  7,a                        ; 07:4273
@@ -383,10 +383,10 @@ Code07427B:
     ld   [hl],a                     ; 07:4291
 Code074292:
     xor  a                          ; 07:4292
-    ld   hl,$D000                   ; 07:4293
+    ld   hl,W_SpriteStatus          ; 07:4293
     add  hl,bc                      ; 07:4296
     ld   [hl],a                     ; 07:4297
-    ld   hl,$D00F                   ; 07:4298
+    ld   hl,W_SpriteID              ; 07:4298
     add  hl,bc                      ; 07:429B
     ld   [hl],a                     ; 07:429C
     ld   a,$6C                      ; 07:429D
@@ -395,10 +395,10 @@ Return0742A1:
     ret                             ; 07:42A1
 
 Code0742A2:
-    ld   hl,$D01E                   ; 07:42A2
+    ld   hl,W_SpriteXLow            ; 07:42A2
     add  hl,bc                      ; 07:42A5
     ld   [hl],$48                   ; 07:42A6
-    ld   hl,$D03C                   ; 07:42A8
+    ld   hl,W_SpriteYLow            ; 07:42A8
     add  hl,bc                      ; 07:42AB
     ldh  a,[<$FFBA]                 ; 07:42AC
     add  $20                        ; 07:42AE
@@ -444,10 +444,10 @@ Code074301:
     cp   $05                        ; 07:4301
     jr   nz,Code07432B              ; 07:4303
     ld   a,$00                      ; 07:4305
-    ld   hl,$D000                   ; 07:4307
+    ld   hl,W_SpriteStatus          ; 07:4307
     add  hl,bc                      ; 07:430A
     ld   [hl],a                     ; 07:430B
-    ld   hl,$D00F                   ; 07:430C
+    ld   hl,W_SpriteID              ; 07:430C
     add  hl,bc                      ; 07:430F
     ld   [hl],a                     ; 07:4310
     ldh  a,[<H_GameState]           ; 07:4311
@@ -488,10 +488,10 @@ Code07432F:
     ld   a,[hl]                     ; 07:434C
     cp   $04                        ; 07:434D
     jr   nz,Code07437C              ; 07:434F
-    ld   hl,$D02D                   ; 07:4351
+    ld   hl,W_SpriteXHigh           ; 07:4351
     add  hl,bc                      ; 07:4354
     push hl                         ; 07:4355
-    ld   hl,$D01E                   ; 07:4356
+    ld   hl,W_SpriteXLow            ; 07:4356
     add  hl,bc                      ; 07:4359
     ld   a,[hl]                     ; 07:435A
     add  $10                        ; 07:435B
@@ -500,11 +500,11 @@ Code07432F:
     ld   a,[hl]                     ; 07:4360
     adc  $00                        ; 07:4361
     ldh  [<$FF99],a                 ; 07:4363
-    ld   hl,$D03C                   ; 07:4365
+    ld   hl,W_SpriteYLow            ; 07:4365
     add  hl,bc                      ; 07:4368
     ld   a,[hl]                     ; 07:4369
     ldh  [<$FF97],a                 ; 07:436A
-    ld   hl,$D04B                   ; 07:436C
+    ld   hl,W_SpriteYHigh           ; 07:436C
     add  hl,bc                      ; 07:436F
     ld   a,[hl]                     ; 07:4370
     ldh  [<$FF9B],a                 ; 07:4371
@@ -526,12 +526,12 @@ Code07437C:
 UnusedL_07437F:
     ld   de,$0000                   ; 07:437F
 @Code074382:
-    ld   hl,$D000                   ; 07:4382
+    ld   hl,W_SpriteStatus          ; 07:4382
     add  hl,de                      ; 07:4385
     ld   a,[hl]                     ; 07:4386
     and  a                          ; 07:4387
     jr   z,@Code0743AF              ; 07:4388
-    ld   hl,$D00F                   ; 07:438A
+    ld   hl,W_SpriteID              ; 07:438A
     add  hl,de                      ; 07:438D
     ld   a,[hl]                     ; 07:438E
     cp   $43                        ; 07:438F
@@ -561,19 +561,19 @@ UnusedL_07437F:
     ld   a,$43                      ; 07:43B5
     call Sub0026BE                  ; 07:43B7
     jr   c,@ReturnL                 ; 07:43BA
-    ld   hl,$D01E                   ; 07:43BC
+    ld   hl,W_SpriteXLow            ; 07:43BC
     add  hl,de                      ; 07:43BF
     ldh  a,[<$FF97]                 ; 07:43C0
     ld   [hl],a                     ; 07:43C2
-    ld   hl,$D02D                   ; 07:43C3
+    ld   hl,W_SpriteXHigh           ; 07:43C3
     add  hl,de                      ; 07:43C6
     ldh  a,[<$FF98]                 ; 07:43C7
     ld   [hl],a                     ; 07:43C9
-    ld   hl,$D03C                   ; 07:43CA
+    ld   hl,W_SpriteYLow            ; 07:43CA
     add  hl,de                      ; 07:43CD
     ldh  a,[<$FF99]                 ; 07:43CE
     ld   [hl],a                     ; 07:43D0
-    ld   hl,$D04B                   ; 07:43D1
+    ld   hl,W_SpriteYHigh           ; 07:43D1
     add  hl,de                      ; 07:43D4
     ld   [hl],$00                   ; 07:43D5
     ld   hl,$D11D                   ; 07:43D7
@@ -603,7 +603,7 @@ Return0743FE:
     ret                             ; 07:43FE
 
 Sub0743FF:
-    ld   hl,$D186                   ; 07:43FF
+    ld   hl,W_SpriteSubstate        ; 07:43FF
     add  hl,bc                      ; 07:4402
     ld   a,[hl]                     ; 07:4403
     rst  $00                        ; 07:4404
@@ -624,19 +624,19 @@ SubL_074412:
     ld   a,$44                      ; 07:4412
     call Sub0026BE                  ; 07:4414
     jr   c,ReturnL_074449           ; 07:4417
-    ld   hl,$D01E                   ; 07:4419
+    ld   hl,W_SpriteXLow            ; 07:4419
     add  hl,de                      ; 07:441C
     ldh  a,[<$FF97]                 ; 07:441D
     ld   [hl],a                     ; 07:441F
-    ld   hl,$D02D                   ; 07:4420
+    ld   hl,W_SpriteXHigh           ; 07:4420
     add  hl,de                      ; 07:4423
     ldh  a,[<$FF98]                 ; 07:4424
     ld   [hl],a                     ; 07:4426
-    ld   hl,$D03C                   ; 07:4427
+    ld   hl,W_SpriteYLow            ; 07:4427
     add  hl,de                      ; 07:442A
     ldh  a,[<$FF99]                 ; 07:442B
     ld   [hl],a                     ; 07:442D
-    ld   hl,$D04B                   ; 07:442E
+    ld   hl,W_SpriteYHigh           ; 07:442E
     add  hl,de                      ; 07:4431
     ld   [hl],$00                   ; 07:4432
     ld   hl,$D13B                   ; 07:4434
@@ -673,10 +673,10 @@ Sub07445D:
     cp   $03                        ; 07:4463
     jr   nz,Code074477              ; 07:4465
     xor  a                          ; 07:4467
-    ld   hl,$D000                   ; 07:4468
+    ld   hl,W_SpriteStatus          ; 07:4468
     add  hl,bc                      ; 07:446B
     ld   [hl],a                     ; 07:446C
-    ld   hl,$D00F                   ; 07:446D
+    ld   hl,W_SpriteID              ; 07:446D
     add  hl,bc                      ; 07:4470
     ld   [hl],a                     ; 07:4471
     push bc                         ; 07:4472
@@ -757,7 +757,7 @@ Code0744E6:
     ld   a,$18                      ; 07:44F3
     add  [hl]                       ; 07:44F5
     ldh  [<$FF97],a                 ; 07:44F6
-    ld   hl,$D03C                   ; 07:44F8
+    ld   hl,W_SpriteYLow            ; 07:44F8
     add  hl,bc                      ; 07:44FB
     ld   a,$04                      ; 07:44FC
     add  [hl]                       ; 07:44FE
@@ -820,7 +820,7 @@ Sub07455A:
     ldh  a,[<$FFA9]                 ; 07:4560
     add  $18                        ; 07:4562
     ldh  [<$FF97],a                 ; 07:4564
-    ld   hl,$D03C                   ; 07:4566
+    ld   hl,W_SpriteYLow            ; 07:4566
     add  hl,bc                      ; 07:4569
     ld   a,$04                      ; 07:456A
     add  [hl]                       ; 07:456C
@@ -874,15 +874,15 @@ Sub0745A7:
     ld   [hl],$8A                   ; 07:45BF
     xor  a                          ; 07:45C1
     ldh  [<SVBK],a                  ; 07:45C2
-    ld   hl,$D01E                   ; 07:45C4
+    ld   hl,W_SpriteXLow            ; 07:45C4
     add  hl,bc                      ; 07:45C7
     ld   a,[hl]                     ; 07:45C8
     ldh  [<$FF97],a                 ; 07:45C9
-    ld   hl,$D02D                   ; 07:45CB
+    ld   hl,W_SpriteXHigh           ; 07:45CB
     add  hl,bc                      ; 07:45CE
     ld   a,[hl]                     ; 07:45CF
     ldh  [<$FF99],a                 ; 07:45D0
-    ld   hl,$D03C                   ; 07:45D2
+    ld   hl,W_SpriteYLow            ; 07:45D2
     add  hl,bc                      ; 07:45D5
     ld   a,[hl]                     ; 07:45D6
     ldh  [<$FF98],a                 ; 07:45D7
@@ -959,7 +959,7 @@ Code074716:
     cp   $02                        ; 07:471D
     jr   nz,Code074746              ; 07:471F
 Code074721:
-    ld   hl,$D01E                   ; 07:4721
+    ld   hl,W_SpriteXLow            ; 07:4721
     add  hl,bc                      ; 07:4724
     ld   a,[hl]                     ; 07:4725
     swap a                          ; 07:4726
@@ -973,10 +973,10 @@ Code074721:
     ld   e,[hl]                     ; 07:4735
     inc  hl                         ; 07:4736
     ld   d,[hl]                     ; 07:4737
-    ld   hl,$D01E                   ; 07:4738
+    ld   hl,W_SpriteXLow            ; 07:4738
     add  hl,bc                      ; 07:473B
     ld   [hl],e                     ; 07:473C
-    ld   hl,$D02D                   ; 07:473D
+    ld   hl,W_SpriteXHigh           ; 07:473D
     add  hl,bc                      ; 07:4740
     ld   [hl],d                     ; 07:4741
     ld   a,[W_SublevelID]           ; 07:4742
@@ -997,20 +997,20 @@ Code07474C:
     jr   nz,Code07474C              ; 07:4759
 Code07475B:
     xor  a                          ; 07:475B
-    ld   hl,$D000                   ; 07:475C
+    ld   hl,W_SpriteStatus          ; 07:475C
     add  hl,bc                      ; 07:475F
     ld   [hl],a                     ; 07:4760
-    ld   hl,$D00F                   ; 07:4761
+    ld   hl,W_SpriteID              ; 07:4761
     add  hl,bc                      ; 07:4764
     ld   [hl],a                     ; 07:4765
     ret                             ; 07:4766
 
 Code074767:
-    ld   hl,$D01E                   ; 07:4767
+    ld   hl,W_SpriteXLow            ; 07:4767
     add  hl,bc                      ; 07:476A
     ld   a,[hl]                     ; 07:476B
     ldh  [<$FF97],a                 ; 07:476C
-    ld   hl,$D02D                   ; 07:476E
+    ld   hl,W_SpriteXHigh           ; 07:476E
     add  hl,bc                      ; 07:4771
     ld   a,[hl]                     ; 07:4772
     ldh  [<$FF98],a                 ; 07:4773
@@ -1187,11 +1187,11 @@ Sub07485F:
     ldh  [<$FF99],a                 ; 07:4883
     ld   a,[hl]                     ; 07:4885
     ldh  [<$FF9A],a                 ; 07:4886
-    ld   hl,$D01E                   ; 07:4888
+    ld   hl,W_SpriteXLow            ; 07:4888
     add  hl,bc                      ; 07:488B
     ld   a,[hl]                     ; 07:488C
     ldh  [<$FF9B],a                 ; 07:488D
-    ld   hl,$D02D                   ; 07:488F
+    ld   hl,W_SpriteXHigh           ; 07:488F
     add  hl,bc                      ; 07:4892
     ld   a,[hl]                     ; 07:4893
     ldh  [<$FF9C],a                 ; 07:4894
@@ -1364,7 +1364,7 @@ Code0749BE:
     ret                             ; 07:49E3
 
 Sub0749E4:
-    ld   hl,$D186                   ; 07:49E4
+    ld   hl,W_SpriteSubstate        ; 07:49E4
     add  hl,bc                      ; 07:49E7
     ld   a,[hl]                     ; 07:49E8
     rst  $00                        ; 07:49E9
@@ -1378,7 +1378,7 @@ Code0749F0:
     dec  [hl]                       ; 07:49F5
     and  a                          ; 07:49F6
     jr   nz,Return0749FE            ; 07:49F7
-    ld   hl,$D186                   ; 07:49F9
+    ld   hl,W_SpriteSubstate        ; 07:49F9
     add  hl,bc                      ; 07:49FC
     inc  [hl]                       ; 07:49FD
 Return0749FE:
@@ -1422,7 +1422,7 @@ Code074A0E:
     or   d                          ; 07:4A35
     and  a                          ; 07:4A36
     jr   nz,Return074A3E            ; 07:4A37
-    ld   hl,$D186                   ; 07:4A39
+    ld   hl,W_SpriteSubstate        ; 07:4A39
     add  hl,bc                      ; 07:4A3C
     inc  [hl]                       ; 07:4A3D
 Return074A3E:
@@ -1491,20 +1491,20 @@ Code074A93:
     ldi  a,[hl]                     ; 07:4AA1
     push af                         ; 07:4AA2
     ld   a,[hl]                     ; 07:4AA3
-    ld   hl,$D02D                   ; 07:4AA4
+    ld   hl,W_SpriteXHigh           ; 07:4AA4
     add  hl,bc                      ; 07:4AA7
     ld   [hl],a                     ; 07:4AA8
     pop  af                         ; 07:4AA9
-    ld   hl,$D01E                   ; 07:4AAA
+    ld   hl,W_SpriteXLow            ; 07:4AAA
     add  hl,bc                      ; 07:4AAD
     ld   [hl],a                     ; 07:4AAE
 Code074AAF:
-    ld   hl,$D02D                   ; 07:4AAF
+    ld   hl,W_SpriteXHigh           ; 07:4AAF
     add  hl,bc                      ; 07:4AB2
     push hl                         ; 07:4AB3
     ld   a,[hl]                     ; 07:4AB4
     ld   d,a                        ; 07:4AB5
-    ld   hl,$D01E                   ; 07:4AB6
+    ld   hl,W_SpriteXLow            ; 07:4AB6
     add  hl,bc                      ; 07:4AB9
     ld   a,[hl]                     ; 07:4ABA
     add  $09                        ; 07:4ABB
@@ -1513,7 +1513,7 @@ Code074AAF:
     ld   a,$00                      ; 07:4ABF
     adc  [hl]                       ; 07:4AC1
     ld   [hl],a                     ; 07:4AC2
-    ld   hl,$D03C                   ; 07:4AC3
+    ld   hl,W_SpriteYLow            ; 07:4AC3
     add  hl,bc                      ; 07:4AC6
     ld   a,[hl]                     ; 07:4AC7
     add  $80                        ; 07:4AC8
@@ -1544,12 +1544,12 @@ Code074B1C:
     ld   [$C542],a                  ; 07:4B20
     call Sub074BED                  ; 07:4B23
     call Sub074BFC                  ; 07:4B26
-    ld   hl,$D02D                   ; 07:4B29
+    ld   hl,W_SpriteXHigh           ; 07:4B29
     add  hl,bc                      ; 07:4B2C
     ld   a,[hl]                     ; 07:4B2D
     ld   [$D2E5],a                  ; 07:4B2E
     push hl                         ; 07:4B31
-    ld   hl,$D01E                   ; 07:4B32
+    ld   hl,W_SpriteXLow            ; 07:4B32
     add  hl,bc                      ; 07:4B35
     ld   a,[hl]                     ; 07:4B36
     ld   [$D2E4],a                  ; 07:4B37
@@ -1561,11 +1561,11 @@ Code074B1C:
     ld   [hl],a                     ; 07:4B41
     ld   hl,Data074AD0              ; 07:4B42
     call Sub0027BD                  ; 07:4B45
-    ld   hl,$D01E                   ; 07:4B48
+    ld   hl,W_SpriteXLow            ; 07:4B48
     add  hl,bc                      ; 07:4B4B
     ld   a,[$D2E4]                  ; 07:4B4C
     ld   [hl],a                     ; 07:4B4F
-    ld   hl,$D02D                   ; 07:4B50
+    ld   hl,W_SpriteXHigh           ; 07:4B50
     add  hl,bc                      ; 07:4B53
     ld   a,[$D2E5]                  ; 07:4B54
     ld   [hl],a                     ; 07:4B57
@@ -1590,21 +1590,21 @@ Code074B7A:
     add  hl,de                      ; 07:4B7A
     ld   a,[hl]                     ; 07:4B7B
     ldh  [<$FF97],a                 ; 07:4B7C
-    ld   hl,$D03C                   ; 07:4B7E
+    ld   hl,W_SpriteYLow            ; 07:4B7E
     add  hl,bc                      ; 07:4B81
     ld   a,[hl]                     ; 07:4B82
     ld   [$D2E2],a                  ; 07:4B83
-    ld   hl,$D01E                   ; 07:4B86
+    ld   hl,W_SpriteXLow            ; 07:4B86
     add  hl,bc                      ; 07:4B89
     ld   a,[hl]                     ; 07:4B8A
     ld   [$D2E0],a                  ; 07:4B8B
-    ld   hl,$D02D                   ; 07:4B8E
+    ld   hl,W_SpriteXHigh           ; 07:4B8E
     add  hl,bc                      ; 07:4B91
     ld   a,[hl]                     ; 07:4B92
     ld   [$D2E1],a                  ; 07:4B93
     ld   d,a                        ; 07:4B96
     push hl                         ; 07:4B97
-    ld   hl,$D01E                   ; 07:4B98
+    ld   hl,W_SpriteXLow            ; 07:4B98
     add  hl,bc                      ; 07:4B9B
     ldh  a,[<$FF97]                 ; 07:4B9C
     add  [hl]                       ; 07:4B9E
@@ -1616,34 +1616,34 @@ Code074B7A:
     ld   hl,$D1D1                   ; 07:4BA5
     add  hl,bc                      ; 07:4BA8
     ld   a,[hl]                     ; 07:4BA9
-    ld   hl,$D03C                   ; 07:4BAA
+    ld   hl,W_SpriteYLow            ; 07:4BAA
     add  hl,bc                      ; 07:4BAD
     ld   [hl],a                     ; 07:4BAE
     ld   hl,Data074AD4              ; 07:4BAF
     call Sub0027BD                  ; 07:4BB2
-    ld   hl,$D03C                   ; 07:4BB5
+    ld   hl,W_SpriteYLow            ; 07:4BB5
     add  hl,bc                      ; 07:4BB8
     ld   a,[hl]                     ; 07:4BB9
     add  $10                        ; 07:4BBA
     ld   [hl],a                     ; 07:4BBC
     ld   hl,Data074AD4              ; 07:4BBD
     call Sub0027BD                  ; 07:4BC0
-    ld   hl,$D03C                   ; 07:4BC3
+    ld   hl,W_SpriteYLow            ; 07:4BC3
     add  hl,bc                      ; 07:4BC6
     ld   a,[hl]                     ; 07:4BC7
     add  $10                        ; 07:4BC8
     ld   [hl],a                     ; 07:4BCA
     ld   hl,Data074AD8              ; 07:4BCB
     call Sub0027BD                  ; 07:4BCE
-    ld   hl,$D01E                   ; 07:4BD1
+    ld   hl,W_SpriteXLow            ; 07:4BD1
     add  hl,bc                      ; 07:4BD4
     ld   a,[$D2E0]                  ; 07:4BD5
     ld   [hl],a                     ; 07:4BD8
-    ld   hl,$D02D                   ; 07:4BD9
+    ld   hl,W_SpriteXHigh           ; 07:4BD9
     add  hl,bc                      ; 07:4BDC
     ld   a,[$D2E1]                  ; 07:4BDD
     ld   [hl],a                     ; 07:4BE0
-    ld   hl,$D03C                   ; 07:4BE1
+    ld   hl,W_SpriteYLow            ; 07:4BE1
     add  hl,bc                      ; 07:4BE4
     ld   a,[$D2E2]                  ; 07:4BE5
     ld   [hl],a                     ; 07:4BE8
@@ -1652,7 +1652,7 @@ Code074B7A:
     ret                             ; 07:4BEC
 
 Sub074BED:
-    ld   hl,$D186                   ; 07:4BED
+    ld   hl,W_SpriteSubstate        ; 07:4BED
     add  hl,bc                      ; 07:4BF0
     ld   a,[hl]                     ; 07:4BF1
     rst  $00                        ; 07:4BF2
@@ -1669,7 +1669,7 @@ Sub074BFC:
     jp   z,Code074C66               ; 07:4C01
     cp   $02                        ; 07:4C04
     ret  nz                         ; 07:4C06
-    ld   hl,$D186                   ; 07:4C07
+    ld   hl,W_SpriteSubstate        ; 07:4C07
     add  hl,bc                      ; 07:4C0A
     ld   a,[hl]                     ; 07:4C0B
     and  a                          ; 07:4C0C
@@ -1681,10 +1681,10 @@ Sub074BFC:
     xor  $80                        ; 07:4C14
     ld   e,a                        ; 07:4C16
     ld   d,$00                      ; 07:4C17
-    ld   hl,$D02D                   ; 07:4C19
+    ld   hl,W_SpriteXHigh           ; 07:4C19
     add  hl,bc                      ; 07:4C1C
     ld   a,[hl]                     ; 07:4C1D
-    ld   hl,$D01E                   ; 07:4C1E
+    ld   hl,W_SpriteXLow            ; 07:4C1E
     add  hl,bc                      ; 07:4C21
     ld   c,[hl]                     ; 07:4C22
     ld   b,a                        ; 07:4C23
@@ -1731,7 +1731,7 @@ Code074C64:
     ret                             ; 07:4C65
 
 Code074C66:
-    ld   hl,$D186                   ; 07:4C66
+    ld   hl,W_SpriteSubstate        ; 07:4C66
     add  hl,bc                      ; 07:4C69
     ld   a,[hl]                     ; 07:4C6A
     and  a                          ; 07:4C6B
@@ -1743,10 +1743,10 @@ Code074C66:
     ret  z                          ; 07:4C75
     cp   $04                        ; 07:4C76
     ret  z                          ; 07:4C78
-    ld   hl,$D02D                   ; 07:4C79
+    ld   hl,W_SpriteXHigh           ; 07:4C79
     add  hl,bc                      ; 07:4C7C
     ld   d,[hl]                     ; 07:4C7D
-    ld   hl,$D01E                   ; 07:4C7E
+    ld   hl,W_SpriteXLow            ; 07:4C7E
     add  hl,bc                      ; 07:4C81
     ld   e,[hl]                     ; 07:4C82
     ldh  a,[<$FFA7]                 ; 07:4C83
@@ -1777,10 +1777,10 @@ Code074CA7:
     jp   z,Code074DCC               ; 07:4CB1
 
 Sub074CB4:
-    ld   hl,$D02D                   ; 07:4CB4
+    ld   hl,W_SpriteXHigh           ; 07:4CB4
     add  hl,bc                      ; 07:4CB7
     ld   d,[hl]                     ; 07:4CB8
-    ld   hl,$D01E                   ; 07:4CB9
+    ld   hl,W_SpriteXLow            ; 07:4CB9
     add  hl,bc                      ; 07:4CBC
     ld   e,[hl]                     ; 07:4CBD
     ldh  a,[<$FFAA]                 ; 07:4CBE
@@ -1806,7 +1806,7 @@ Code074CCC:
     sbc  [hl]                       ; 07:4CE1
     bit  7,a                        ; 07:4CE2
     ret  z                          ; 07:4CE4
-    ld   hl,$D186                   ; 07:4CE5
+    ld   hl,W_SpriteSubstate        ; 07:4CE5
     add  hl,bc                      ; 07:4CE8
     inc  [hl]                       ; 07:4CE9
     ld   a,$05                      ; 07:4CEA
@@ -1897,10 +1897,10 @@ Code074D52:
     add  hl,de                      ; 07:4D8A
     ld   [hl],a                     ; 07:4D8B
     push de                         ; 07:4D8C
-    ld   hl,$D02D                   ; 07:4D8D
+    ld   hl,W_SpriteXHigh           ; 07:4D8D
     add  hl,bc                      ; 07:4D90
     ld   d,[hl]                     ; 07:4D91
-    ld   hl,$D01E                   ; 07:4D92
+    ld   hl,W_SpriteXLow            ; 07:4D92
     add  hl,bc                      ; 07:4D95
     ld   e,[hl]                     ; 07:4D96
     ld   a,e                        ; 07:4D97
@@ -1932,7 +1932,7 @@ Code074DBB:
     ld   hl,$D12C                   ; 07:4DC1
     add  hl,bc                      ; 07:4DC4
     ld   [hl],e                     ; 07:4DC5
-    ld   hl,$D186                   ; 07:4DC6
+    ld   hl,W_SpriteSubstate        ; 07:4DC6
     add  hl,bc                      ; 07:4DC9
     inc  [hl]                       ; 07:4DCA
 Return074DCB:
@@ -1947,13 +1947,13 @@ Code074DCC:
     cp   $05                        ; 07:4DD9
     jr   nz,Code074DE4              ; 07:4DDB
     ld   a,$02                      ; 07:4DDD
-    ld   [$D186],a                  ; 07:4DDF
+    ld   [W_SpriteSubstate],a       ; 07:4DDF
     jr   Return074E40               ; 07:4DE2
 Code074DE4:
-    ld   hl,$D02D                   ; 07:4DE4
+    ld   hl,W_SpriteXHigh           ; 07:4DE4
     add  hl,bc                      ; 07:4DE7
     ld   d,[hl]                     ; 07:4DE8
-    ld   hl,$D01E                   ; 07:4DE9
+    ld   hl,W_SpriteXLow            ; 07:4DE9
     add  hl,bc                      ; 07:4DEC
     ld   e,[hl]                     ; 07:4DED
     ld   a,[$C3B0]                  ; 07:4DEE
@@ -1970,42 +1970,42 @@ Code074DE4:
     sbc  [hl]                       ; 07:4E05
     bit  7,a                        ; 07:4E06
     jr   z,Return074E40             ; 07:4E08
-    ld   hl,$D186                   ; 07:4E0A
+    ld   hl,W_SpriteSubstate        ; 07:4E0A
     add  hl,bc                      ; 07:4E0D
     inc  [hl]                       ; 07:4E0E
     ld   a,e                        ; 07:4E0F
     add  $F0                        ; 07:4E10
-    ld   [$D01E],a                  ; 07:4E12
+    ld   [W_SpriteXLow],a           ; 07:4E12
     ld   a,d                        ; 07:4E15
     adc  $FF                        ; 07:4E16
-    ld   [$D02D],a                  ; 07:4E18
+    ld   [W_SpriteXHigh],a          ; 07:4E18
     ld   a,$46                      ; 07:4E1B
     ldh  [<$FFF2],a                 ; 07:4E1D
     ld   a,$00                      ; 07:4E1F
     ld   [$C181],a                  ; 07:4E21
-    ld   a,[$D03C]                  ; 07:4E24
+    ld   a,[W_SpriteYLow]           ; 07:4E24
     cp   $20                        ; 07:4E27
     jr   nc,Code074E30              ; 07:4E29
     ld   a,$20                      ; 07:4E2B
-    ld   [$D03C],a                  ; 07:4E2D
+    ld   [W_SpriteYLow],a           ; 07:4E2D
 Code074E30:
     ld   hl,$D11D                   ; 07:4E30
     add  hl,bc                      ; 07:4E33
-    ld   a,[$D03C]                  ; 07:4E34
+    ld   a,[W_SpriteYLow]           ; 07:4E34
     ld   [hl],a                     ; 07:4E37
     xor  a                          ; 07:4E38
     ld   [$C36A],a                  ; 07:4E39
     inc  a                          ; 07:4E3C
-    ld   [$D186],a                  ; 07:4E3D
+    ld   [W_SpriteSubstate],a       ; 07:4E3D
 Return074E40:
     ret                             ; 07:4E40
 
 Sub074E41:
     push bc                         ; 07:4E41
-    ld   hl,$D02D                   ; 07:4E42
+    ld   hl,W_SpriteXHigh           ; 07:4E42
     add  hl,bc                      ; 07:4E45
     ld   a,[hl]                     ; 07:4E46
-    ld   hl,$D01E                   ; 07:4E47
+    ld   hl,W_SpriteXLow            ; 07:4E47
     add  hl,bc                      ; 07:4E4A
     ld   c,[hl]                     ; 07:4E4B
     ld   b,a                        ; 07:4E4C
@@ -2043,7 +2043,7 @@ Code074E75:
 Sub074E79:
     ld   de,$000E                   ; 07:4E79
 Code074E7C:
-    ld   hl,$D00F                   ; 07:4E7C
+    ld   hl,W_SpriteID              ; 07:4E7C
     add  hl,de                      ; 07:4E7F
     ld   a,[hl]                     ; 07:4E80
     cp   $46                        ; 07:4E81
@@ -2051,10 +2051,10 @@ Code074E7C:
     cp   $09                        ; 07:4E85
     jr   z,Code074E94               ; 07:4E87
     xor  a                          ; 07:4E89
-    ld   hl,$D000                   ; 07:4E8A
+    ld   hl,W_SpriteStatus          ; 07:4E8A
     add  hl,de                      ; 07:4E8D
     ld   [hl],a                     ; 07:4E8E
-    ld   hl,$D00F                   ; 07:4E8F
+    ld   hl,W_SpriteID              ; 07:4E8F
     add  hl,de                      ; 07:4E92
     ld   [hl],a                     ; 07:4E93
 Code074E94:
@@ -2069,10 +2069,10 @@ Data074E9A:                         ; 07:4E9A
 Data074EA4:                         ; 07:4EA4
 .db $08,$06,$04,$02,$00
 Code074EA9:
-    ld   hl,$D069                   ; 07:4EA9
+    ld   hl,W_SpriteYSpeed          ; 07:4EA9
     add  hl,bc                      ; 07:4EAC
     ld   [hl],$20                   ; 07:4EAD
-    ld   hl,$D03C                   ; 07:4EAF
+    ld   hl,W_SpriteYLow            ; 07:4EAF
     add  hl,bc                      ; 07:4EB2
     ld   a,[hl]                     ; 07:4EB3
     ldh  [<$FF99],a                 ; 07:4EB4
@@ -2141,7 +2141,7 @@ Code074F06:
     ld   a,e                        ; 07:4F23
     cp   $02                        ; 07:4F24
     jr   nz,Return074F75            ; 07:4F26
-    ld   hl,$D186                   ; 07:4F28
+    ld   hl,W_SpriteSubstate        ; 07:4F28
     add  hl,bc                      ; 07:4F2B
     inc  [hl]                       ; 07:4F2C
     ld   hl,$D0A5                   ; 07:4F2D
@@ -2210,18 +2210,18 @@ Code074F8F:
     ld   hl,$FF99                   ; 07:4F8F
     sub  [hl]                       ; 07:4F92
     ld   [hl],a                     ; 07:4F93
-    ld   a,[$D03C]                  ; 07:4F94
+    ld   a,[W_SpriteYLow]           ; 07:4F94
     add  [hl]                       ; 07:4F97
     cp   $D0                        ; 07:4F98
     jr   c,Code074F9F               ; 07:4F9A
     inc  e                          ; 07:4F9C
     ld   a,$D0                      ; 07:4F9D
 Code074F9F:
-    ld   [$D03C],a                  ; 07:4F9F
+    ld   [W_SpriteYLow],a           ; 07:4F9F
     ld   a,e                        ; 07:4FA2
     cp   $02                        ; 07:4FA3
     jr   nz,Return074FB2            ; 07:4FA5
-    ld   hl,$D186                   ; 07:4FA7
+    ld   hl,W_SpriteSubstate        ; 07:4FA7
     add  hl,bc                      ; 07:4FAA
     inc  [hl]                       ; 07:4FAB
     ld   hl,$D0A5                   ; 07:4FAC
@@ -2372,7 +2372,7 @@ Code075083:
     ldh  a,[<$FFA8]                 ; 07:508E
     adc  $00                        ; 07:5090
     ldh  [<$FFA8],a                 ; 07:5092
-    ld   hl,$D186                   ; 07:5094
+    ld   hl,W_SpriteSubstate        ; 07:5094
     add  hl,bc                      ; 07:5097
     inc  [hl]                       ; 07:5098
     ld   hl,$C1D3                   ; 07:5099
@@ -2393,7 +2393,7 @@ Sub0750B0:
     jr   c,Return075119             ; 07:50B5
     ld   a,$20                      ; 07:50B7
     ld   [$C3B0],a                  ; 07:50B9
-    ld   hl,$D01E                   ; 07:50BC
+    ld   hl,W_SpriteXLow            ; 07:50BC
     add  hl,de                      ; 07:50BF
     ld   [hl],a                     ; 07:50C0
     push bc                         ; 07:50C1
@@ -2408,7 +2408,7 @@ Code0750D0:
 Code0750D2:
     ld   a,c                        ; 07:50D2
     pop  bc                         ; 07:50D3
-    ld   hl,$D03C                   ; 07:50D4
+    ld   hl,W_SpriteYLow            ; 07:50D4
     add  hl,de                      ; 07:50D7
     ld   [hl],a                     ; 07:50D8
     ld   hl,$D13B                   ; 07:50D9
@@ -2423,10 +2423,10 @@ Code0750D2:
     xor  a                          ; 07:50EA
     ld   [$C3B1],a                  ; 07:50EB
     ld   [$C3E6],a                  ; 07:50EE
-    ld   hl,$D02D                   ; 07:50F1
+    ld   hl,W_SpriteXHigh           ; 07:50F1
     add  hl,de                      ; 07:50F4
     ld   [hl],a                     ; 07:50F5
-    ld   hl,$D04B                   ; 07:50F6
+    ld   hl,W_SpriteYHigh           ; 07:50F6
     ld   [hl],a                     ; 07:50F9
     ld   hl,$D11D                   ; 07:50FA
     add  hl,de                      ; 07:50FD
@@ -2442,7 +2442,7 @@ Code0750D2:
     add  hl,de                      ; 07:510D
     ld   [hl],a                     ; 07:510E
     ld   a,$07                      ; 07:510F
-    ld   hl,$D069                   ; 07:5111
+    ld   hl,W_SpriteYSpeed          ; 07:5111
     add  hl,de                      ; 07:5114
     ld   [hl],a                     ; 07:5115
     call Sub07532F                  ; 07:5116
@@ -2469,7 +2469,7 @@ Code07513A:
     ret                             ; 07:513D
 
 Sub07513E:
-    ld   hl,$D186                   ; 07:513E
+    ld   hl,W_SpriteSubstate        ; 07:513E
     add  hl,bc                      ; 07:5141
     ld   a,[hl]                     ; 07:5142
     rst  $00                        ; 07:5143
@@ -2503,10 +2503,10 @@ Code075165:
     ldh  [<$FF97],a                 ; 07:5175
     ld   a,[hl]                     ; 07:5177
     ldh  [<$FF98],a                 ; 07:5178
-    ld   hl,$D02D                   ; 07:517A
+    ld   hl,W_SpriteXHigh           ; 07:517A
     add  hl,bc                      ; 07:517D
     push hl                         ; 07:517E
-    ld   hl,$D01E                   ; 07:517F
+    ld   hl,W_SpriteXLow            ; 07:517F
     add  hl,bc                      ; 07:5182
     ldh  a,[<$FF97]                 ; 07:5183
     sub  [hl]                       ; 07:5185
@@ -2515,7 +2515,7 @@ Code075165:
     sbc  [hl]                       ; 07:5189
     bit  7,a                        ; 07:518A
     jr   z,Code0751A0               ; 07:518C
-    ld   hl,$D186                   ; 07:518E
+    ld   hl,W_SpriteSubstate        ; 07:518E
     add  hl,bc                      ; 07:5191
     ld   [hl],$01                   ; 07:5192
     xor  a                          ; 07:5194
@@ -2535,7 +2535,7 @@ Code0751A0:
     and  a                          ; 07:51AC
     jr   nz,Code0751D4              ; 07:51AD
 Code0751AF:
-    ld   hl,$D069                   ; 07:51AF
+    ld   hl,W_SpriteYSpeed          ; 07:51AF
     add  hl,bc                      ; 07:51B2
     ld   a,[hl]                     ; 07:51B3
     add  $01                        ; 07:51B4
@@ -2551,14 +2551,14 @@ Code0751AF:
     ld   hl,$D13B                   ; 07:51C6
     add  hl,bc                      ; 07:51C9
     ld   a,[hl]                     ; 07:51CA
-    ld   hl,$D03C                   ; 07:51CB
+    ld   hl,W_SpriteYLow            ; 07:51CB
     add  hl,bc                      ; 07:51CE
     ld   [hl],a                     ; 07:51CF
     jr   Code0751D4                 ; 07:51D0
 Code0751D2:
     jr   Code0751ED                 ; 07:51D2
 Code0751D4:
-    ld   hl,$D069                   ; 07:51D4
+    ld   hl,W_SpriteYSpeed          ; 07:51D4
     add  hl,bc                      ; 07:51D7
     ld   a,[hl]                     ; 07:51D8
     add  $FF                        ; 07:51D9
@@ -2573,7 +2573,7 @@ Code0751D4:
     ld   [hl],a                     ; 07:51EA
     jr   Code0751AF                 ; 07:51EB
 Code0751ED:
-    ld   hl,$D069                   ; 07:51ED
+    ld   hl,W_SpriteYSpeed          ; 07:51ED
     add  hl,bc                      ; 07:51F0
     ld   [hl],a                     ; 07:51F1
 Code0751F2:
@@ -2648,10 +2648,10 @@ Code075260:
     adc  $00                        ; 07:5268
     ldh  [<$FF98],a                 ; 07:526A
 Code07526C:
-    ld   hl,$D02D                   ; 07:526C
+    ld   hl,W_SpriteXHigh           ; 07:526C
     add  hl,bc                      ; 07:526F
     push hl                         ; 07:5270
-    ld   hl,$D01E                   ; 07:5271
+    ld   hl,W_SpriteXLow            ; 07:5271
     add  hl,bc                      ; 07:5274
     ldh  a,[<$FF97]                 ; 07:5275
     add  [hl]                       ; 07:5277
@@ -2661,21 +2661,21 @@ Code07526C:
     adc  [hl]                       ; 07:527C
     ld   [hl],a                     ; 07:527D
     call Sub001A79                  ; 07:527E
-    ld   hl,$D01E                   ; 07:5281
+    ld   hl,W_SpriteXLow            ; 07:5281
     add  hl,bc                      ; 07:5284
     ld   a,[hl]                     ; 07:5285
     ld   [$C3B0],a                  ; 07:5286
-    ld   hl,$D02D                   ; 07:5289
+    ld   hl,W_SpriteXHigh           ; 07:5289
     add  hl,bc                      ; 07:528C
     ld   a,[hl]                     ; 07:528D
     ld   [$C3B1],a                  ; 07:528E
     ret                             ; 07:5291
 
 Sub075292:
-    ld   hl,$D01E                   ; 07:5292
+    ld   hl,W_SpriteXLow            ; 07:5292
     add  hl,bc                      ; 07:5295
     ld   e,[hl]                     ; 07:5296
-    ld   hl,$D02D                   ; 07:5297
+    ld   hl,W_SpriteXHigh           ; 07:5297
     add  hl,bc                      ; 07:529A
     ld   d,[hl]                     ; 07:529B
     ld   a,$10                      ; 07:529C
@@ -2977,7 +2977,7 @@ Code07547D:
     ld   [hl],$FF                   ; 07:5480
     rst  $18                        ; 07:5482
 
-Data075483:                         ; 07:5483
+Original_InitialLives:              ; 07:5483
 .db $05,$0A
 
 SubL_075485:
@@ -3020,10 +3020,10 @@ SubL_075485:
     ld   a,[$C1B2]                  ; 07:54EB
     ld   e,a                        ; 07:54EE
     ld   d,$00                      ; 07:54EF
-    ld   hl,Data075483              ; 07:54F1
+    ld   hl,Original_InitialLives   ; 07:54F1  if "Extremely Lucky" fortune, start with 10 lives
     add  hl,de                      ; 07:54F4
     ld   a,[hl]                     ; 07:54F5
-    ld   [$C17F],a                  ; 07:54F6
+    ld   [W_PlayerLives],a          ; 07:54F6
     jp   Code07557E                 ; 07:54F9
 Code0754FC:
     ld   a,[$C16B]                  ; 07:54FC
@@ -3052,7 +3052,7 @@ Code0754FC:
     ld   hl,$A106                   ; 07:552F
     add  hl,de                      ; 07:5532
     ld   a,[hl]                     ; 07:5533
-    ld   [$C17F],a                  ; 07:5534
+    ld   [W_PlayerLives],a          ; 07:5534
     ld   hl,$A107                   ; 07:5537
     add  hl,de                      ; 07:553A
     ld   a,[hl]                     ; 07:553B
@@ -3148,7 +3148,7 @@ Code07559B:
     ld   [hl],a                     ; 07:55EB
     ld   hl,$A106                   ; 07:55EC
     add  hl,de                      ; 07:55EF
-    ld   a,[$C17F]                  ; 07:55F0
+    ld   a,[W_PlayerLives]          ; 07:55F0
     ld   [hl],a                     ; 07:55F3
     ld   hl,$A107                   ; 07:55F4
     add  hl,de                      ; 07:55F7

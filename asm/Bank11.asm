@@ -119,9 +119,9 @@ Code1140D4:
     ld   a,$05                      ; 11:40E0
     jr   Code1140E6                 ; 11:40E2
 Code1140E4:
-    ld   a,$0A                      ; 11:40E4
+    ld   a,$0A                      ; 11:40E4  if "Extremely Lucky" fortune, start with 10 lives
 Code1140E6:
-    ld   [$C17F],a                  ; 11:40E6
+    ld   [W_PlayerLives],a          ; 11:40E6  set lives after game over
     ld   hl,$C17A                   ; 11:40E9
     ld   a,$00                      ; 11:40EC
     ldi  [hl],a                     ; 11:40EE
@@ -245,7 +245,7 @@ Code1141CD:
     ldi  [hl],a                     ; 11:41D3
     ld   [hl],a                     ; 11:41D4
     ld   a,$05                      ; 11:41D5
-    ld   [$C17F],a                  ; 11:41D7
+    ld   [W_PlayerLives],a          ; 11:41D7
     ld   a,$00                      ; 11:41DA
     ld   [$C1F2],a                  ; 11:41DC
     ld   [$C1EF],a                  ; 11:41DF
@@ -274,16 +274,16 @@ Sub114200:
     ld   a,:Gr_Bank19               ; 11:4207
     ld   b,$11                      ; 11:4209
     call LoadGraphicsBank           ; 11:420B
-    ld   a,$19                      ; 11:420E
+    ld   a,:Data197620              ; 11:420E
     ld   b,$11                      ; 11:4210
     ld   de,Data197620              ; 11:4212
     call LoadFullPaletteLong        ; 11:4215
     call Sub00128D                  ; 11:4218
-    ld   a,$19                      ; 11:421B
+    ld   a,:Data1972D0              ; 11:421B
     ld   b,$11                      ; 11:421D
     ld   de,$99C0                   ; 11:421F
     ld   hl,Data1972D0              ; 11:4222
-    call LoadScreenTilemap          ; 11:4225
+    call LoadScreenTilemapVRAM      ; 11:4225
     ld   a,$00                      ; 11:4228
     ld   [$C174],a                  ; 11:422A
     ld   [$C168],a                  ; 11:422D
@@ -1557,16 +1557,16 @@ Sub114B60:
     ld   a,:Gr_Bank19               ; 11:4B6B
     ld   b,$11                      ; 11:4B6D
     call LoadGraphicsBank           ; 11:4B6F
-    ld   a,$19                      ; 11:4B72
+    ld   a,:Data1975A0              ; 11:4B72
     ld   b,$11                      ; 11:4B74
     ld   de,Data1975A0              ; 11:4B76
     call LoadFullPaletteLong        ; 11:4B79
     call Sub00128D                  ; 11:4B7C
-    ld   a,$19                      ; 11:4B7F
+    ld   a,:Data197000              ; 11:4B7F
     ld   b,$11                      ; 11:4B81
     ld   de,$99C0                   ; 11:4B83
     ld   hl,Data197000              ; 11:4B86
-    call LoadScreenTilemap          ; 11:4B89
+    call LoadScreenTilemapVRAM      ; 11:4B89
     ld   a,$00                      ; 11:4B8C
     and  a                          ; 11:4B8E
     jr   z,Code114B96               ; 11:4B8F
@@ -3040,7 +3040,7 @@ Code1157B9:
     ld   a,[$C429]                  ; 11:57C5
     or   $80                        ; 11:57C8
     ld   [$C429],a                  ; 11:57CA
-    ld   a,$01                      ; 11:57CD
+    ld   a,$01                      ; 11:57CD  01: Toad award
     ld   [$C1B0],a                  ; 11:57CF
     ld   a,$80                      ; 11:57D2
     ld   [$C326],a                  ; 11:57D4
@@ -3180,7 +3180,7 @@ Code11589C:
     ld   [$C19C],a                  ; 11:58D3
     ld   [$C19D],a                  ; 11:58D6
     ld   a,$01                      ; 11:58D9
-    ld   [$C17F],a                  ; 11:58DB
+    ld   [W_PlayerLives],a          ; 11:58DB
     ld   [$C287],a                  ; 11:58DE
     ld   [$C288],a                  ; 11:58E1
     ld   [$C289],a                  ; 11:58E4
@@ -3748,7 +3748,7 @@ Code115DD2:
     ld   a,$0E                      ; 11:5DD2
     ld   b,$11                      ; 11:5DD4
     ld   de,$99C0                   ; 11:5DD6
-    call LoadScreenTilemap          ; 11:5DD9
+    call LoadScreenTilemapVRAM      ; 11:5DD9
     ld   a,[W_SPFlag]               ; 11:5DDC
     and  a                          ; 11:5DDF
     jr   z,Code115E02               ; 11:5DE0
@@ -4282,9 +4282,9 @@ Code1161E1:
     jr   z,Code1161F9               ; 11:61E5
     ld   a,$45                      ; 11:61E7
     ldh  [<$FFF2],a                 ; 11:61E9
-    ld   a,[$C383]                  ; 11:61EB
+    ld   a,[W_CurrentPlayer]        ; 11:61EB
     xor  $01                        ; 11:61EE
-    ld   [$C383],a                  ; 11:61F0
+    ld   [W_CurrentPlayer],a        ; 11:61F0
     ld   a,$11                      ; 11:61F3
     rst  $10                        ; 11:61F5
 .dl SubL_0B421E                     ; 11:61F6
@@ -5161,7 +5161,7 @@ Code116881:
 Code116896:
     ld   de,Data1A75A0              ; 11:6896
 Code116899:
-    ld   a,$1A                      ; 11:6899
+    ld   a,:Data1A75A0              ; 11:6899
     ld   b,$11                      ; 11:689B
     call LoadFullPaletteLong        ; 11:689D
     ld   a,$11                      ; 11:68A0
@@ -5180,7 +5180,7 @@ Code1168BA:
     ld   a,$1A                      ; 11:68BA
     ld   b,$11                      ; 11:68BC
     ld   de,$99C0                   ; 11:68BE
-    call LoadScreenTilemap          ; 11:68C1
+    call LoadScreenTilemapVRAM      ; 11:68C1
     ld   a,[W_LevelID]              ; 11:68C4
     ld   [W_SublevelID],a           ; 11:68C7
     ld   a,$60                      ; 11:68CA
@@ -6015,15 +6015,15 @@ Code116E8D:
     ld   a,:Gr_Bank1C               ; 11:6E94
     ld   b,$11                      ; 11:6E96
     call LoadGraphicsBank           ; 11:6E98
-    ld   a,$1C                      ; 11:6E9B
+    ld   a,:Data1C75E0              ; 11:6E9B
     ld   b,$11                      ; 11:6E9D
     ld   de,Data1C75E0              ; 11:6E9F
     call LoadFullPaletteLong        ; 11:6EA2
-    ld   a,$1C                      ; 11:6EA5
+    ld   a,:Data1C72D0              ; 11:6EA5
     ld   b,$11                      ; 11:6EA7
     ld   de,$99C0                   ; 11:6EA9
     ld   hl,Data1C72D0              ; 11:6EAC
-    call LoadScreenTilemap          ; 11:6EAF
+    call LoadScreenTilemapVRAM      ; 11:6EAF
     ld   a,$00                      ; 11:6EB2
     ldh  [<$FFB8],a                 ; 11:6EB4
     ldh  [<$FFB9],a                 ; 11:6EB6
@@ -6082,7 +6082,7 @@ Sub116F12:
     ld   a,:Gr_Bank0E               ; 11:6F23
     ld   b,$11                      ; 11:6F25
     call LoadGraphicsBank           ; 11:6F27
-    ld   a,$11                      ; 11:6F2A
+    ld   a,:Data115C6A              ; 11:6F2A
     ld   b,a                        ; 11:6F2C
     ld   de,Data115C6A              ; 11:6F2D
     call LoadFullPaletteLong        ; 11:6F30

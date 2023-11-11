@@ -466,7 +466,7 @@ Code034365:
 Code034379:
     ld   [hl],$00                   ; 03:4379
 Code03437B:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:437B
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:437B
     and  $0F                        ; 03:437D
     cp   $02                        ; 03:437F
     jr   z,Code034396               ; 03:4381
@@ -1225,9 +1225,9 @@ Code0348C6:
     ld   a,[hl]                     ; 03:48D2
     or   e                          ; 03:48D3
     jr   z,Code034911               ; 03:48D4
-    ld   a,[$C17F]                  ; 03:48D6
+    ld   a,[W_PlayerLives]          ; 03:48D6
     dec  a                          ; 03:48D9
-    ld   [$C17F],a                  ; 03:48DA
+    ld   [W_PlayerLives],a          ; 03:48DA
     bit  7,a                        ; 03:48DD
     jr   nz,Code0348FA              ; 03:48DF
     and  a                          ; 03:48E1
@@ -2032,17 +2032,17 @@ Code034E8D:
     ld   [$D2F6],a                  ; 03:4E91
     ld   de,$0000                   ; 03:4E94
 Code034E97:
-    ld   hl,$D000                   ; 03:4E97
+    ld   hl,W_SpriteStatus          ; 03:4E97
     add  hl,de                      ; 03:4E9A
     ld   a,[hl]                     ; 03:4E9B
     and  a                          ; 03:4E9C
     jr   z,Code034EDB               ; 03:4E9D
-    ld   hl,$D00F                   ; 03:4E9F
+    ld   hl,W_SpriteID              ; 03:4E9F
     add  hl,de                      ; 03:4EA2
     ld   a,[hl]                     ; 03:4EA3
     cp   $1A                        ; 03:4EA4
     jr   nz,Code034EDB              ; 03:4EA6
-    ld   hl,$D186                   ; 03:4EA8
+    ld   hl,W_SpriteSubstate        ; 03:4EA8
     add  hl,de                      ; 03:4EAB
     ld   a,[hl]                     ; 03:4EAC
     cp   $03                        ; 03:4EAD
@@ -2133,7 +2133,7 @@ Code034F54:
     and  $0F                        ; 03:4F5B
     ld   d,a                        ; 03:4F5D
     ld   e,$00                      ; 03:4F5E
-    ld   hl,$D000                   ; 03:4F60
+    ld   hl,W_SubLv16x16Tilemap     ; 03:4F60
     add  hl,de                      ; 03:4F63
     ld   d,$00                      ; 03:4F64
     ld   a,[$C267]                  ; 03:4F66
@@ -2181,12 +2181,12 @@ Code034FA9:
     jr   nz,Return034FE7            ; 03:4FAF
     ld   de,$0000                   ; 03:4FB1
 Code034FB4:
-    ld   hl,$D000                   ; 03:4FB4
+    ld   hl,W_SpriteStatus          ; 03:4FB4
     add  hl,de                      ; 03:4FB7
     ld   a,[hl]                     ; 03:4FB8
     and  a                          ; 03:4FB9
     jr   z,Code034FC5               ; 03:4FBA
-    ld   hl,$D00F                   ; 03:4FBC
+    ld   hl,W_SpriteID              ; 03:4FBC
     add  hl,de                      ; 03:4FBF
     ld   a,[hl]                     ; 03:4FC0
     cp   $1A                        ; 03:4FC1
@@ -2197,14 +2197,14 @@ Code034FC5:
     cp   $0F                        ; 03:4FC7
     jr   nz,Code034FB4              ; 03:4FC9
 Code034FCB:
-    ld   hl,$D186                   ; 03:4FCB
+    ld   hl,W_SpriteSubstate        ; 03:4FCB
     add  hl,de                      ; 03:4FCE
     ld   [hl],$01                   ; 03:4FCF
-    ld   hl,$D069                   ; 03:4FD1
+    ld   hl,W_SpriteYSpeed          ; 03:4FD1
     add  hl,de                      ; 03:4FD4
     xor  a                          ; 03:4FD5
     ld   [hl],a                     ; 03:4FD6
-    ld   hl,$D05A                   ; 03:4FD7
+    ld   hl,W_SpriteXSpeed          ; 03:4FD7
     add  hl,de                      ; 03:4FDA
     ld   [hl],a                     ; 03:4FDB
     ld   [$C268],a                  ; 03:4FDC
@@ -2223,12 +2223,12 @@ Data034FF8:                         ; 03:4FF8
 Code035000:
     ld   de,$0000                   ; 03:5000
 Code035003:
-    ld   hl,$D000                   ; 03:5003
+    ld   hl,W_SpriteStatus          ; 03:5003
     add  hl,de                      ; 03:5006
     ld   a,[hl]                     ; 03:5007
     and  a                          ; 03:5008
     jr   z,Code035014               ; 03:5009
-    ld   hl,$D00F                   ; 03:500B
+    ld   hl,W_SpriteID              ; 03:500B
     add  hl,de                      ; 03:500E
     ld   a,[hl]                     ; 03:500F
     cp   $1A                        ; 03:5010
@@ -2504,7 +2504,7 @@ Code035352:
     srl  a                          ; 03:5359
     ld   e,a                        ; 03:535B
     ld   d,$00                      ; 03:535C
-    ld   a,[$C383]                  ; 03:535E
+    ld   a,[W_CurrentPlayer]        ; 03:535E
     and  a                          ; 03:5361
     jr   z,Code035368               ; 03:5362
     ld   a,e                        ; 03:5364
@@ -2758,6 +2758,7 @@ Code035500:
     ret                             ; 03:5512
 
 Sub035513:
+; determine award to give, for clearing 8-4
     ld   a,[W_SPFlag]               ; 03:5513
     and  a                          ; 03:5516
     jr   nz,Code035527              ; 03:5517
@@ -2928,12 +2929,12 @@ Return035641:
 Code035642:
     ld   de,$0000                   ; 03:5642
 Code035645:
-    ld   hl,$D000                   ; 03:5645
+    ld   hl,W_SpriteStatus          ; 03:5645
     add  hl,de                      ; 03:5648
     ld   a,[hl]                     ; 03:5649
     and  a                          ; 03:564A
     jr   z,Code035661               ; 03:564B
-    ld   hl,$D00F                   ; 03:564D
+    ld   hl,W_SpriteID              ; 03:564D
     add  hl,de                      ; 03:5650
     ld   a,[hl]                     ; 03:5651
     cp   $0D                        ; 03:5652
@@ -3116,7 +3117,7 @@ Sub03577E:
     xor  a                          ; 03:5794
     ld   [$C207],a                  ; 03:5795
     ld   c,$00                      ; 03:5798
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:579A
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:579A
     and  $0F                        ; 03:579C
     cp   $02                        ; 03:579E
     jr   z,Code0357B0               ; 03:57A0
@@ -3202,7 +3203,7 @@ Code035811:
     jr   nc,Code03585B              ; 03:581E
     jr   Code03584F                 ; 03:5820
 Code035822:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:5822
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:5822
     and  $0F                        ; 03:5824
     cp   $02                        ; 03:5826
     jr   z,Code03584F               ; 03:5828
@@ -3241,7 +3242,7 @@ Code03585B:
     ld   d,$00                      ; 03:585C
     ld   e,a                        ; 03:585E
     ld   hl,Data035764              ; 03:585F
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:5862
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:5862
     and  $0F                        ; 03:5864
     cp   $02                        ; 03:5866
     jr   nz,Code03586D              ; 03:5868
@@ -3259,7 +3260,7 @@ Code03586D:
     jp   z,Code03587F               ; 03:587B
     inc  e                          ; 03:587E
 Code03587F:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:587F
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:587F
     and  $0F                        ; 03:5881
     cp   $02                        ; 03:5883
     jr   nz,Code035895              ; 03:5885
@@ -3381,7 +3382,7 @@ Sub035944:
     jr   z,Code035966               ; 03:5949
     cp   $13                        ; 03:594B
     jr   z,Code035966               ; 03:594D
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:594F
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:594F
     and  $0F                        ; 03:5951
     cp   $02                        ; 03:5953
     jr   z,Code035963               ; 03:5955
@@ -3590,7 +3591,7 @@ Code035A93:
     ld   a,$01                      ; 03:5AB3
     ld   [$C25F],a                  ; 03:5AB5
     ld   [$C1FA],a                  ; 03:5AB8
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:5ABB
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:5ABB
     and  $0F                        ; 03:5ABD
     cp   $02                        ; 03:5ABF
     jr   nz,Code035AC7              ; 03:5AC1
@@ -4498,7 +4499,7 @@ Code036108:
     cp   $38                        ; 03:6117
     jr   z,Code03612B               ; 03:6119
 Code03611B:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:611B
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:611B
     and  $0F                        ; 03:611D
     cp   $04                        ; 03:611F
     jr   nz,Code03612B              ; 03:6121
@@ -4625,7 +4626,7 @@ Data0361DC:                         ; 03:61DC
 .db $02,$04,$07
 
 Sub0361DF:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:61DF
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:61DF
     and  $0F                        ; 03:61E1
     cp   $02                        ; 03:61E3
     jp   z,Code0361F4               ; 03:61E5
@@ -4666,7 +4667,7 @@ Code036225:
     dec  b                          ; 03:6226
     jr   nz,Code03620F              ; 03:6227
 Code036229:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:6229
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:6229
     and  $0F                        ; 03:622B
     cp   $02                        ; 03:622D
     jp   z,Code036321               ; 03:622F
@@ -4931,7 +4932,7 @@ Code0363FC:
     ld   [$C207],a                  ; 03:6409
     jp   Code036449                 ; 03:640C
 Code03640F:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:640F
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:640F
     and  $0F                        ; 03:6411
     cp   $02                        ; 03:6413
     jr   z,Code036438               ; 03:6415
@@ -4970,7 +4971,7 @@ Code036449:
     ret                             ; 03:644B
 
 Sub03644C:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:644C
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:644C
     and  $0F                        ; 03:644E
     cp   $02                        ; 03:6450
     jr   nz,Code036462              ; 03:6452
@@ -5354,7 +5355,7 @@ Code03673F:
     ld   a,$01                      ; 03:673F
     ld   [$C36A],a                  ; 03:6741
     inc  a                          ; 03:6744
-    ld   [$D186],a                  ; 03:6745
+    ld   [W_SpriteSubstate],a       ; 03:6745
     ld   a,$03                      ; 03:6748
     rst  $10                        ; 03:674A
 .dl SubL_075D06                     ; 03:674B
@@ -6258,7 +6259,7 @@ Code036E22:
     and  $0F                        ; 03:6E29
     ld   d,a                        ; 03:6E2B
     ld   e,$00                      ; 03:6E2C
-    ld   hl,$D000                   ; 03:6E2E
+    ld   hl,W_SubLv16x16Tilemap     ; 03:6E2E
     add  hl,de                      ; 03:6E31
     ld   d,$00                      ; 03:6E32
     ldh  a,[<$FF99]                 ; 03:6E34
@@ -6543,7 +6544,7 @@ Code03700D:
     and  $0F                        ; 03:7014
     ld   d,a                        ; 03:7016
     ld   e,$00                      ; 03:7017
-    ld   hl,$D000                   ; 03:7019
+    ld   hl,W_SubLv16x16Tilemap     ; 03:7019
     add  hl,de                      ; 03:701C
     ld   d,$00                      ; 03:701D
     ldh  a,[<$FF99]                 ; 03:701F
@@ -6650,7 +6651,7 @@ Return0370C1:
     ret                             ; 03:70C1
 
 Sub0370C2:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:70C2
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:70C2
     and  $0F                        ; 03:70C4
     cp   $02                        ; 03:70C6
     jr   nz,Code0370E2              ; 03:70C8
@@ -6788,7 +6789,7 @@ Code03719B:
     ldi  [hl],a                     ; 03:719D
     xor  a                          ; 03:719E
     ldi  [hl],a                     ; 03:719F
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:71A0
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71A0
     and  $F0                        ; 03:71A2
     ldi  [hl],a                     ; 03:71A4
     ld   [hl],$00                   ; 03:71A5
@@ -6804,7 +6805,7 @@ Sub0371A9:
     ld   [hl],$00                   ; 03:71B4
     jr   Code0371BF                 ; 03:71B6
 Code0371B8:
-    ldh  a,[<H_PlayerY_SLvType]     ; 03:71B8
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71B8
     and  $F0                        ; 03:71BA
     ldi  [hl],a                     ; 03:71BC
     ld   [hl],$00                   ; 03:71BD

@@ -1,15 +1,19 @@
 .bank $01 slot 1
 
 .orga $4000
-Gr_NormalGameplay:
+Gr_NormalGameplay:                  ; 01:4000
 .incbin "data/Graphics/NormalGameplay.bin"
+Gr_PlayerSuper:                     ; 01:7000
+.incbin "data/Graphics/PlayerSuper.bin"
+Gr_PlayerSmall:                     ; 01:7C00
+.incbin "data/Graphics/PlayerSmall.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $0E slot 1
 
 .orga $4000
-Gr_Bank0E:
+Gr_Bank0E:                          ; 0E:4000
 
 .orga $4800
 Data0E4800:                         ; 0E:4800
@@ -110,7 +114,7 @@ Data177900:                         ; 17:7900
 .bank $18 slot 1
 
 .orga $4000
-Gr_Bank18:
+Gr_Bank18:                          ; 18:4000
 
 .orga $7000
 Data187000:                         ; 18:7000
@@ -138,7 +142,7 @@ Data187B60:                         ; 18:7B60
 .bank $19 slot 1
 
 .orga $4000
-Gr_Bank19:
+Gr_Bank19:                          ; 19:4000
 
 .orga $7000
 Data197000:                         ; 19:7000
@@ -166,7 +170,7 @@ Data197C00:                         ; 19:7C00
 .bank $1A slot 1
 
 .orga $4000
-Gr_Bank1A:
+Gr_Bank1A:                          ; 1A:4000
 
 .orga $7000
 Data1A7000:                         ; 1A:7000
@@ -185,7 +189,7 @@ Data1A7620:                         ; 1A:7620
 .bank $1B slot 1
 
 .orga $4000
-Gr_Bank1B:
+Gr_Bank1B:                          ; 1B:4000
 
 .orga $7000
 Data1B7000:                         ; 1B:7000
@@ -207,7 +211,7 @@ Data1B7D50:                         ; 1B:7D50
 .bank $1C slot 1
 
 .orga $4000
-Gr_Bank1C:
+Gr_Bank1C:                          ; 1C:4000
 
 .orga $7000
 Data1C7000:                         ; 1C:7000
@@ -268,24 +272,35 @@ Data1E7540:                         ; 1E:7540
 .bank $20 slot 1
 
 .orga $4000
-
-.orga $4000
-Data204000:                         ; 20:4000
-
-.orga $5800
-Data205800:                         ; 20:5800
-
-.orga $7000
-Data207000:                         ; 20:7000
-
-.orga $75A0
-Data2075A0:                         ; 20:75A0
-
-.orga $7B40
-Data207B40:                         ; 20:7B40
-
-.orga $7C40
+Gr_PeachGivesMarioAward:            ; 20:4000
+.incbin "data/Graphics/PeachGivesMarioAward.bin"
+Gr_PeachGivesLuigiAward:            ; 20:5800
+.incbin "data/Graphics/PeachGivesLuigiAward.bin"
+Ti_PeachGivesMarioAward:            ; 20:7000
+.incbin "data/Tilemaps/PeachGivesMarioAwardTop.bin"
+.incbin "data/Tilemaps/PeachGivesMarioAwardBottom.bin"
+Ti_PeachGivesLuigiAward:            ; 20:75A0
+.incbin "data/Tilemaps/PeachGivesLuigiAwardTop.bin"
+.incbin "data/Tilemaps/PeachGivesLuigiAwardBottom.bin"
+Pal_PeachGivesAward:                ; 20:7B40
+.dw $0000,$7A8D,$79AB,$7FFF,$00C0,$36BF,$001B,$7FFF,\
+    $00C0,$0150,$7406,$36BF,$00C0,$001B,$7406,$7FFF,\
+    $00C0,$0200,$034B,$0150,$00C0,$597F,$481B,$0150,\
+    $00C0,$597F,$01BF,$7FFF,$00C0,$03FF,$01BF,$7FFF,\
+    $00C0,$4F1E,$7CED,$1CFF,$00C0,$03E0,$481B,$03E0,\
+    $00C0,$03E0,$03E0,$03E0,$00C0,$03E0,$03E0,$03E0,\
+    $00C0,$03E0,$481B,$03E0,$00C0,$03E0,$03E0,$03E0,\
+    $00C0,$03E0,$03E0,$03E0,$00C0,$03E0,$03E0,$03E0,\
+    $0000,$7A8D,$79AB,$7FFF,$00C0,$36BF,$0240,$7FFF,\
+    $00C0,$0150,$7406,$36BF,$00C0,$0240,$7406,$7FFF,\
+    $00C0,$0240,$034B,$7FFF,$00C0,$597F,$481B,$0150,\
+    $00C0,$597F,$01BF,$7FFF,$00C0,$03FF,$01BF,$7FFF,\
+    $01C0,$4F1E,$7CED,$109C,$00C0,$4F1E,$481B,$0112,\
+    $00C0,$03FF,$7CED,$109C,$00C0,$034B,$034B,$034B,\
+    $00C0,$034B,$034B,$034B,$00C0,$034B,$034B,$034B,\
+    $00C0,$034B,$034B,$034B,$00C0,$034B,$034B,$034B
 Data207C40:                         ; 20:7C40
+.incbin "data/Tilemaps/Data207C40.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -332,7 +347,8 @@ Data225F80:                         ; 22:5F80
 Data226E80:                         ; 22:6E80
 
 .orga $7BB0
-Data227BB0:                         ; 22:7BB0
+Ti_ToadAward:                       ; 22:7BB0
+.incbin "data/Tilemaps/ToadAward.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -342,7 +358,8 @@ Data227BB0:                         ; 22:7BB0
 Data234000:                         ; 23:4000
 
 .orga $5800
-Data235800:                         ; 23:5800
+Gr_FortuneCardsBank23:                         ; 23:5800
+.incbin "data/Graphics/FortuneCardsBank23.bin"
 
 .orga $7000
 Data237000:                         ; 23:7000
@@ -423,276 +440,209 @@ Data257000:                         ; 25:7000
 .bank $26 slot 1
 
 .orga $4000
-Data264000:                         ; 26:4000
-
-.orga $42D0
-Data2642D0:                         ; 26:42D0
-
-.orga $45A0
-Data2645A0:                         ; 26:45A0
-
-.orga $4870
-Data264870:                         ; 26:4870
-
-.orga $4B40
-Data264B40:                         ; 26:4B40
-
-.orga $4E10
-Data264E10:                         ; 26:4E10
-
-.orga $50E0
-Data2650E0:                         ; 26:50E0
-
-.orga $53B0
-Data2653B0:                         ; 26:53B0
-
-.orga $5680
-Data265680:                         ; 26:5680
-
-.orga $5950
-Data265950:                         ; 26:5950
-
-.orga $5C20
-Data265C20:                         ; 26:5C20
-
-.orga $5EF0
-Data265EF0:                         ; 26:5EF0
-
-.orga $61C0
-Data2661C0:                         ; 26:61C0
-
-.orga $6490
-Data266490:                         ; 26:6490
-
-.orga $6760
-Data266760:                         ; 26:6760
-
-.orga $6A30
-Data266A30:                         ; 26:6A30
-
-.orga $6D00
-Data266D00:                         ; 26:6D00
-
-.orga $6FD0
-Data266FD0:                         ; 26:6FD0
-
-.orga $72A0
-Data2672A0:                         ; 26:72A0
-
-.orga $7570
-Data267570:                         ; 26:7570
-
-.orga $7840
-Data267840:                         ; 26:7840
-
-.orga $7B10
-Data267B10:                         ; 26:7B10
-
-.orga $7DE0
+Ti_YoshiIsHereW1_1:                 ; 26:4000
+.incbin "data/Tilemaps/YoshiIsHereW1_1.bin"      
+Ti_YoshiIsHereW1_2:                 ; 26:42D0
+.incbin "data/Tilemaps/YoshiIsHereW1_2.bin"      
+Ti_YoshiIsHereW1_3:                 ; 26:45A0
+.incbin "data/Tilemaps/YoshiIsHereW1_3.bin"      
+Ti_YoshiIsHereW1_4:                 ; 26:4870
+.incbin "data/Tilemaps/YoshiIsHereW1_4.bin"      
+Ti_YoshiIsHereW2_1:                 ; 26:4B40
+.incbin "data/Tilemaps/YoshiIsHereW2_1.bin"      
+Ti_YoshiIsHereW2_2:                 ; 26:4E10
+.incbin "data/Tilemaps/YoshiIsHereW2_2.bin"      
+Ti_YoshiIsHereW2_3:                 ; 26:50E0
+.incbin "data/Tilemaps/YoshiIsHereW2_3.bin"      
+Ti_YoshiIsHereW2_4:                 ; 26:53B0
+.incbin "data/Tilemaps/YoshiIsHereW2_4.bin"      
+Ti_YoshiIsHereW3_1:                 ; 26:5680
+.incbin "data/Tilemaps/YoshiIsHereW3_1.bin"      
+Ti_YoshiIsHereW3_2:                 ; 26:5950
+.incbin "data/Tilemaps/YoshiIsHereW3_2.bin"      
+Ti_YoshiIsHereW3_3:                 ; 26:5C20
+.incbin "data/Tilemaps/YoshiIsHereW3_3.bin"      
+Ti_YoshiIsHereW3_4:                 ; 26:5EF0
+.incbin "data/Tilemaps/YoshiIsHereW3_4.bin"      
+Ti_YoshiIsHereW4_1:                 ; 26:61C0
+.incbin "data/Tilemaps/YoshiIsHereW4_1.bin"      
+Ti_YoshiIsHereW4_2:                 ; 26:6490
+.incbin "data/Tilemaps/YoshiIsHereW4_2.bin"      
+Ti_YoshiIsHereW4_3:                 ; 26:6760
+.incbin "data/Tilemaps/YoshiIsHereW4_3.bin"      
+Ti_YoshiIsHereW4_4:                 ; 26:6A30
+.incbin "data/Tilemaps/YoshiIsHereW4_4.bin"      
+Ti_YoshiIsHereW5_1:                 ; 26:6D00
+.incbin "data/Tilemaps/YoshiIsHereW5_1.bin"      
+Ti_YoshiIsHereW5_2:                 ; 26:6FD0
+.incbin "data/Tilemaps/YoshiIsHereW5_2.bin"      
+Ti_YoshiIsHereW5_3:                 ; 26:72A0
+.incbin "data/Tilemaps/YoshiIsHereW5_3.bin"      
+Ti_YoshiIsHereW5_4:                 ; 26:7570
+.incbin "data/Tilemaps/YoshiIsHereW5_4.bin"      
+Ti_YoshiIsHereW6_1:                 ; 26:7840
+.incbin "data/Tilemaps/YoshiIsHereW6_1.bin"      
+Ti_YoshiIsHereW6_2:                 ; 26:7B10
+.incbin "data/Tilemaps/YoshiIsHereW6_2.bin"      
 Data267DE0:                         ; 26:7DE0
+.incbin "data/Graphics/Data267DE0.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $27 slot 1
 
 .orga $4000
-Data274000:                         ; 27:4000
-
-.orga $42D0
-Data2742D0:                         ; 27:42D0
-
-.orga $45A0
-Data2745A0:                         ; 27:45A0
-
-.orga $4870
-Data274870:                         ; 27:4870
-
-.orga $4B40
-Data274B40:                         ; 27:4B40
-
-.orga $4E10
-Data274E10:                         ; 27:4E10
-
-.orga $50E0
-Data2750E0:                         ; 27:50E0
-
-.orga $53B0
-Data2753B0:                         ; 27:53B0
-
-.orga $5680
-Data275680:                         ; 27:5680
-
-.orga $5950
-Data275950:                         ; 27:5950
-
-.orga $5C20
-Data275C20:                         ; 27:5C20
-
-.orga $5EF0
-Data275EF0:                         ; 27:5EF0
-
-.orga $61C0
-Data2761C0:                         ; 27:61C0
-
-.orga $6490
-Data276490:                         ; 27:6490
-
-.orga $6760
-Data276760:                         ; 27:6760
-
-.orga $6A30
-Data276A30:                         ; 27:6A30
-
-.orga $6D00
-Data276D00:                         ; 27:6D00
-
-.orga $6FD0
-Data276FD0:                         ; 27:6FD0
-
-.orga $72A0
-Data2772A0:                         ; 27:72A0
-
-.orga $7570
-Data277570:                         ; 27:7570
-
-.orga $7840
-Data277840:                         ; 27:7840
-
-.orga $7B10
-Data277B10:                         ; 27:7B10
+Ti_YoshiIsHereW6_3:                 ; 27:4000
+.incbin "data/Tilemaps/YoshiIsHereW6_3.bin"      
+Ti_YoshiIsHereW6_4:                 ; 27:42D0
+.incbin "data/Tilemaps/YoshiIsHereW6_4.bin"      
+Ti_YoshiIsHereW7_1:                 ; 27:45A0
+.incbin "data/Tilemaps/YoshiIsHereW7_1.bin"      
+Ti_YoshiIsHereW7_2:                 ; 27:4870
+.incbin "data/Tilemaps/YoshiIsHereW7_2.bin"      
+Ti_YoshiIsHereW7_3:                 ; 27:4B40
+.incbin "data/Tilemaps/YoshiIsHereW7_3.bin"      
+Ti_YoshiIsHereW7_4:                 ; 27:4E10
+.incbin "data/Tilemaps/YoshiIsHereW7_4.bin"      
+Ti_YoshiIsHereW8_1:                 ; 27:50E0
+.incbin "data/Tilemaps/YoshiIsHereW8_1.bin"      
+Ti_YoshiIsHereW8_2:                 ; 27:53B0
+.incbin "data/Tilemaps/YoshiIsHereW8_2.bin"      
+Ti_YoshiIsHereW8_3:                 ; 27:5680
+.incbin "data/Tilemaps/YoshiIsHereW8_3.bin"      
+Ti_YoshiIsHereW8_4:                 ; 27:5950
+.incbin "data/Tilemaps/YoshiIsHereW8_4.bin"      
+Ti_MarioAward:                      ; 27:5C20
+.incbin "data/Tilemaps/MarioAward.bin"           
+Ti_PeachAward:                      ; 27:5EF0
+.incbin "data/Tilemaps/PeachAward.bin"           
+Ti_BowserAward:                     ; 27:61C0
+.incbin "data/Tilemaps/BowserAward.bin"          
+Ti_YoshiAward:                      ; 27:6490
+.incbin "data/Tilemaps/YoshiAward.bin"           
+Ti_AlbumFireworks:                  ; 27:6760
+.incbin "data/Tilemaps/AlbumFireworks.bin"      
+Ti_Album1up:                        ; 27:6A30
+.incbin "data/Tilemaps/Album1up.bin"            
+Ti_AlbumVine:                       ; 27:6D00
+.incbin "data/Tilemaps/AlbumVine.bin"           
+Ti_AlbumVS:                         ; 27:6FD0
+.incbin "data/Tilemaps/AlbumVS.bin"             
+Ti_AlbumPeachKiss:                  ; 27:72A0
+.incbin "data/Tilemaps/AlbumPeachKiss.bin"      
+Ti_AlbumInfrared:                   ; 27:7570
+.incbin "data/Tilemaps/AlbumInfrared.bin"       
+Ti_AlbumRedCoin:                    ; 27:7840
+.incbin "data/Tilemaps/AlbumRedCoin.bin"        
+Ti_AlbumHighScore:                  ; 27:7B10
+.incbin "data/Tilemaps/AlbumHighScore.bin"      
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $28 slot 1
 
 .orga $4000
-Data284000:                         ; 28:4000
+Ti_AlbumYoshi:                      ; 28:4000
+.incbin "data/Tilemaps/AlbumYoshi.bin"          
+Ti_AlbumGoomba:                     ; 28:42D0
+.incbin "data/Tilemaps/AlbumGoomba.bin"         
+Ti_AlbumBlooper:                    ; 28:45A0
+.incbin "data/Tilemaps/AlbumBlooper.bin"        
+Ti_AlbumLakitu:                     ; 28:4870
+.incbin "data/Tilemaps/AlbumLakitu.bin"         
+Ti_AlbumCheepCheep:                 ; 28:4B40
+.incbin "data/Tilemaps/AlbumCheepCheep.bin"     
+Ti_AlbumHammerBro:                  ; 28:4E10
+.incbin "data/Tilemaps/AlbumHammerBro.bin"      
+Ti_AlbumBulletBill:                 ; 28:50E0
+.incbin "data/Tilemaps/AlbumBulletBill.bin"     
+Ti_AlbumKoopa:                      ; 28:53B0
+.incbin "data/Tilemaps/AlbumKoopa.bin"          
+Ti_AlbumSpiny:                      ; 28:5680
+.incbin "data/Tilemaps/AlbumSpiny.bin"          
+Ti_AlbumBuzzy:                      ; 28:5950
+.incbin "data/Tilemaps/AlbumBuzzy.bin"          
+Ti_AlbumBowser:                     ; 28:5C20
+.incbin "data/Tilemaps/AlbumBowser.bin"         
+Ti_AlbumMarioLuigi:                 ; 28:5EF0
+.incbin "data/Tilemaps/AlbumMarioLuigi.bin"     
+Gr_FortuneCardsBank28:                         ; 28:61C0
+.incbin "data/Graphics/FortuneCardsBank28.bin"
 
-.orga $42D0
-Data2842D0:                         ; 28:42D0
-
-.orga $45A0
-Data2845A0:                         ; 28:45A0
-
-.orga $4870
-Data284870:                         ; 28:4870
-
-.orga $4B40
-Data284B40:                         ; 28:4B40
-
-.orga $4E10
-Data284E10:                         ; 28:4E10
-
-.orga $50E0
-Data2850E0:                         ; 28:50E0
-
-.orga $53B0
-Data2853B0:                         ; 28:53B0
-
-.orga $5680
-Data285680:                         ; 28:5680
-
-.orga $5950
-Data285950:                         ; 28:5950
-
-.orga $5C20
-Data285C20:                         ; 28:5C20
-
-.orga $5EF0
-Data285EF0:                         ; 28:5EF0
-
-.orga $61C0
-Data2861C0:                         ; 28:61C0
+.orga $78A0
+.incbin "data/Graphics/Unused2878A0.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $29 slot 1
 
 .orga $4000
-Data294000:                         ; 29:4000
-
-.orga $4420
-Data294420:                         ; 29:4420
-
-.orga $4920
-Data294920:                         ; 29:4920
-
-.orga $4E80
-Data294E80:                         ; 29:4E80
-
-.orga $5410
-Data295410:                         ; 29:5410
-
-.orga $58C0
-Data2958C0:                         ; 29:58C0
-
-.orga $63C0
-Data2963C0:                         ; 29:63C0
-
-.orga $6B60
-Data296B60:                         ; 29:6B60
+Gr_ToadAward:                       ; 29:4000
+.incbin "data/Graphics/ToadAward.bin"            
+Gr_MarioAward:                      ; 29:4420
+.incbin "data/Graphics/MarioAward.bin"           
+Gr_PeachAward:                      ; 29:4920
+.incbin "data/Graphics/PeachAward.bin"           
+Gr_BowserAward:                     ; 29:4E80
+.incbin "data/Graphics/BowserAward.bin"          
+Gr_YoshiAward:                      ; 29:5410
+.incbin "data/Graphics/YoshiAward.bin"           
+Gr_AlbumFireworks:                  ; 29:58C0
+.incbin "data/Graphics/AlbumFireworks.bin"       
+Gr_Album1up:                        ; 29:63C0
+.incbin "data/Graphics/Album1up.bin"             
+Gr_AlbumVine:                       ; 29:6B60
+.incbin "data/Graphics/AlbumVine.bin"            
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2A slot 1
 
 .orga $4000
-Data2A4000:                         ; 2A:4000
-
-.orga $4B00
-Data2A4B00:                         ; 2A:4B00
-
-.orga $5640
-Data2A5640:                         ; 2A:5640
-
-.orga $6180
-Data2A6180:                         ; 2A:6180
-
-.orga $6E40
-Data2A6E40:                         ; 2A:6E40
-
-.orga $79B0
-Data2A79B0:                         ; 2A:79B0
+Gr_AlbumVS:                         ; 2A:4000
+.incbin "data/Graphics/AlbumVS.bin"              
+Gr_AlbumPeachKiss:                  ; 2A:4B00
+.incbin "data/Graphics/AlbumPeachKiss.bin"       
+Gr_AlbumInfrared:                   ; 2A:5640
+.incbin "data/Graphics/AlbumInfrared.bin"        
+Gr_AlbumRedCoin:                    ; 2A:6180
+.incbin "data/Graphics/AlbumRedCoin.bin"         
+Gr_AlbumYoshi:                      ; 2A:6E40
+.incbin "data/Graphics/AlbumYoshi.bin"           
+Gr_AlbumGoomba:                     ; 2A:79B0
+.incbin "data/Graphics/AlbumGoomba.bin"          
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2B slot 1
 
 .orga $4000
-Data2B4000:                         ; 2B:4000
-
-.orga $4840
-Data2B4840:                         ; 2B:4840
-
-.orga $4FC0
-Data2B4FC0:                         ; 2B:4FC0
-
-.orga $5620
-Data2B5620:                         ; 2B:5620
-
-.orga $5FB0
-Data2B5FB0:                         ; 2B:5FB0
-
-.orga $6590
-Data2B6590:                         ; 2B:6590
-
-.orga $6CD0
-Data2B6CD0:                         ; 2B:6CD0
-
-.orga $7570
-Data2B7570:                         ; 2B:7570
+Gr_AlbumBlooper:                    ; 2B:4000
+.incbin "data/Graphics/AlbumBlooper.bin"         
+Gr_AlbumLakitu:                     ; 2B:4840
+.incbin "data/Graphics/AlbumLakitu.bin"          
+Gr_AlbumCheepCheep:                 ; 2B:4FC0
+.incbin "data/Graphics/AlbumCheepCheep.bin"      
+Gr_AlbumHammerBro:                  ; 2B:5620
+.incbin "data/Graphics/AlbumHammerBro.bin"       
+Gr_AlbumBulletBill:                 ; 2B:5FB0
+.incbin "data/Graphics/AlbumBulletBill.bin"      
+Gr_AlbumKoopa:                      ; 2B:6590
+.incbin "data/Graphics/AlbumKoopa.bin"           
+Gr_AlbumSpiny:                      ; 2B:6CD0
+.incbin "data/Graphics/AlbumSpiny.bin"           
+Gr_AlbumBuzzy:                      ; 2B:7570
+.incbin "data/Graphics/AlbumBuzzy.bin"           
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2C slot 1
 
 .orga $4000
-Data2C4000:                         ; 2C:4000
-
-.orga $4AC0
-Data2C4AC0:                         ; 2C:4AC0
-
-.orga $5820
+Gr_AlbumBowser:                     ; 2C:4000
+.incbin "data/Graphics/AlbumBowser.bin"          
+Gr_AlbumMarioLuigi:                 ; 2C:4AC0
+.incbin "data/Graphics/AlbumMarioLuigi.bin"      
 Data2C5820:                         ; 2C:5820
 
 .orga $61C0
@@ -906,9 +856,8 @@ Data3557A0:                         ; 35:57A0
 .bank $36 slot 1
 
 .orga $4000
-Data364000:                         ; 36:4000
-
-.orga $4930
+Gr_AlbumHighScore:                  ; 36:4000
+.incbin "data/Graphics/AlbumHighScore.bin"       
 Data364930:                         ; 36:4930
 
 .orga $4F00

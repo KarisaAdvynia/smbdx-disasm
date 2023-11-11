@@ -102,7 +102,7 @@ Code144118:
     ld   [$C415],a                  ; 14:4132
     ld   hl,Data225800              ; 14:4135
     ld   a,$14                      ; 14:4138
-    call Sub001570                  ; 14:413A
+    call LoadScreenTilemapD000      ; 14:413A
     ld   a,$14                      ; 14:413D
     ld   b,$14                      ; 14:413F
     ld   de,Data144037              ; 14:4141
@@ -414,19 +414,19 @@ Sub144412:
     ld   de,$8000                   ; 14:441B
     ld   h,$14                      ; 14:441E
     ld   l,$7F                      ; 14:4420
-    call DMATransfer                ; 14:4422
+    call DMATransferVRAM            ; 14:4422
     ld   a,$25                      ; 14:4425
     ld   bc,Data256000              ; 14:4427
     ld   de,$8800                   ; 14:442A
     ld   h,$14                      ; 14:442D
     ld   l,$7F                      ; 14:442F
-    call DMATransfer                ; 14:4431
+    call DMATransferVRAM            ; 14:4431
     ld   a,$25                      ; 14:4434
     ld   bc,Data256800              ; 14:4436
     ld   de,$9000                   ; 14:4439
     ld   h,$14                      ; 14:443C
     ld   l,$7F                      ; 14:443E
-    call DMATransfer                ; 14:4440
+    call DMATransferVRAM            ; 14:4440
     ld   a,$31                      ; 14:4443
     ld   [$C415],a                  ; 14:4445
     ld   a,$01                      ; 14:4448
@@ -780,7 +780,7 @@ Code144905:
     xor  a                          ; 14:4908
     ldh  [<IE],a                    ; 14:4909
     ldh  [<$FF93],a                 ; 14:490B
-    ld   a,$23                      ; 14:490D
+    ld   a,:Gr_FortuneCardsBank23              ; 14:490D
     ld   [$C415],a                  ; 14:490F
     call Sub0010E4                  ; 14:4912
     ld   b,$04                      ; 14:4915
@@ -793,18 +793,18 @@ Code14491A:
     jr   nz,Code14491A              ; 14:491F
 Code144921:
     ld   a,b                        ; 14:4921
-    ldh  [<$FF97],a                 ; 14:4922
+    ldh  [<$FF97],a                 ; 14:4922  [$FF97] = index
     ld   b,a                        ; 14:4924
     ld   c,$00                      ; 14:4925
     sla  a                          ; 14:4927
     sla  a                          ; 14:4929
     sla  a                          ; 14:492B
-    add  b                          ; 14:492D
+    add  b                          ; 14:492D  a = index*9
     srl  a                          ; 14:492E
     rr   c                          ; 14:4930
-    ld   b,a                        ; 14:4932
+    ld   b,a                        ; 14:4932  bc = index*480
     push bc                         ; 14:4933
-    ld   hl,Data235800              ; 14:4934
+    ld   hl,Gr_FortuneCardsBank23              ; 14:4934
     add  hl,bc                      ; 14:4937
     ld   de,$9300                   ; 14:4938
     ld   bc,$0480                   ; 14:493B
@@ -819,10 +819,10 @@ Code144921:
     ld   de,$D000                   ; 14:4953
     ld   bc,$0800                   ; 14:4956
     call CopyBytes                  ; 14:4959
-    pop  bc                         ; 14:495C
-    ld   a,$28                      ; 14:495D
+    pop  bc                         ; 14:495C  bc = index*480
+    ld   a,:Gr_FortuneCardsBank28              ; 14:495D
     ld   [$C415],a                  ; 14:495F
-    ld   hl,Data2861C0              ; 14:4962
+    ld   hl,Gr_FortuneCardsBank28              ; 14:4962
     add  hl,bc                      ; 14:4965
     ld   de,$D300                   ; 14:4966
     ld   bc,$0480                   ; 14:4969
@@ -830,7 +830,7 @@ Code144921:
     call CopyBytesLong              ; 14:496E
     ld   a,$00                      ; 14:4971
     ldh  [<SVBK],a                  ; 14:4973
-    ld   a,$23                      ; 14:4975
+    ld   a,:Data237800              ; 14:4975
     ld   [$C415],a                  ; 14:4977
     ld   hl,Data237800              ; 14:497A
     ld   de,$D000                   ; 14:497D
@@ -1388,16 +1388,16 @@ Code145191:
 Code14519F:
     jp   Code1450D8                 ; 14:519F
 
-DataPtrs1451A2:                     ; 14:51A2
-.dl Data264000, Data2642D0, Data2645A0, Data264870,\
-    Data264B40, Data264E10, Data2650E0, Data2653B0,\
-    Data265680, Data265950, Data265C20, Data265EF0,\
-    Data2661C0, Data266490, Data266760, Data266A30,\
-    Data266D00, Data266FD0, Data2672A0, Data267570,\
-    Data267840, Data267B10, Data274000, Data2742D0,\
-    Data2745A0, Data274870, Data274B40, Data274E10,\
-    Data2750E0, Data2753B0, Data275680, Data275950
-DataPtrs145202:                     ; 14:5202
+YoshiIsHereTilemapPtrs:             ; 14:51A2
+.dl Ti_YoshiIsHereW1_1, Ti_YoshiIsHereW1_2, Ti_YoshiIsHereW1_3, Ti_YoshiIsHereW1_4,\
+    Ti_YoshiIsHereW2_1, Ti_YoshiIsHereW2_2, Ti_YoshiIsHereW2_3, Ti_YoshiIsHereW2_4,\
+    Ti_YoshiIsHereW3_1, Ti_YoshiIsHereW3_2, Ti_YoshiIsHereW3_3, Ti_YoshiIsHereW3_4,\
+    Ti_YoshiIsHereW4_1, Ti_YoshiIsHereW4_2, Ti_YoshiIsHereW4_3, Ti_YoshiIsHereW4_4,\
+    Ti_YoshiIsHereW5_1, Ti_YoshiIsHereW5_2, Ti_YoshiIsHereW5_3, Ti_YoshiIsHereW5_4,\
+    Ti_YoshiIsHereW6_1, Ti_YoshiIsHereW6_2, Ti_YoshiIsHereW6_3, Ti_YoshiIsHereW6_4,\
+    Ti_YoshiIsHereW7_1, Ti_YoshiIsHereW7_2, Ti_YoshiIsHereW7_3, Ti_YoshiIsHereW7_4,\
+    Ti_YoshiIsHereW8_1, Ti_YoshiIsHereW8_2, Ti_YoshiIsHereW8_3, Ti_YoshiIsHereW8_4
+YoshiIsHerePalettePtrs:             ; 14:5202
 .dl Data044000, Data044040, Data044000, Data0440C0,\
     Data044000, Data044080, Data044000, Data0440C0,\
     Data044100, Data044100, Data044180, Data0440C0,\
@@ -1424,7 +1424,7 @@ Code145262:
     ld   c,a                        ; 14:527C
     ld   b,$00                      ; 14:527D
     push bc                         ; 14:527F
-    ld   hl,DataPtrs1451A2          ; 14:5280
+    ld   hl,YoshiIsHereTilemapPtrs  ; 14:5280
     add  hl,bc                      ; 14:5283
     ld   c,[hl]                     ; 14:5284
     inc  hl                         ; 14:5285
@@ -1435,7 +1435,7 @@ Code145262:
     ld   l,c                        ; 14:528C
     ld   h,b                        ; 14:528D
     ld   a,$14                      ; 14:528E
-    call Sub001570                  ; 14:5290
+    call LoadScreenTilemapD000      ; 14:5290
     ld   a,$01                      ; 14:5293
     ld   [$C423],a                  ; 14:5295
     ld   a,$00                      ; 14:5298
@@ -1447,7 +1447,7 @@ Code145262:
     ld   a,$D2                      ; 14:52A7
     ld   [$C428],a                  ; 14:52A9
     pop  bc                         ; 14:52AC
-    ld   hl,DataPtrs145202          ; 14:52AD
+    ld   hl,YoshiIsHerePalettePtrs  ; 14:52AD
     add  hl,bc                      ; 14:52B0
     ld   c,[hl]                     ; 14:52B1
     inc  hl                         ; 14:52B2
@@ -1504,7 +1504,7 @@ Sub145306:
     jp   Code145100                 ; 14:530E
 
 Unused145311:
-    ld   a,$14                      ; 14:5311
+    ld   a,:Unused145311            ; 14:5311
     call Unused000F0A               ; 14:5313
     ret                             ; 14:5316
 
@@ -1532,19 +1532,19 @@ Code145667:
     ld   de,$8000                   ; 14:5677
     ld   h,$14                      ; 14:567A
     ld   l,$7F                      ; 14:567C
-    call DMATransfer                ; 14:567E
+    call DMATransferVRAM            ; 14:567E
     ld   a,$24                      ; 14:5681
     ld   bc,Data244800              ; 14:5683
     ld   de,$8800                   ; 14:5686
     ld   h,$14                      ; 14:5689
     ld   l,$7F                      ; 14:568B
-    call DMATransfer                ; 14:568D
+    call DMATransferVRAM            ; 14:568D
     ld   a,$24                      ; 14:5690
     ld   bc,Data245000              ; 14:5692
     ld   de,$9000                   ; 14:5695
     ld   h,$14                      ; 14:5698
     ld   l,$7F                      ; 14:569A
-    call DMATransfer                ; 14:569C
+    call DMATransferVRAM            ; 14:569C
     ld   a,$24                      ; 14:569F
     ld   [$C415],a                  ; 14:56A1
     ld   a,$02                      ; 14:56A4
@@ -1569,7 +1569,7 @@ Code145667:
     ld   a,$14                      ; 14:56D4
     ld   [$C415],a                  ; 14:56D6
     ld   a,$14                      ; 14:56D9
-    call Sub001570                  ; 14:56DB
+    call LoadScreenTilemapD000      ; 14:56DB
     ld   a,$01                      ; 14:56DE
     ldh  [<VBK],a                   ; 14:56E0
     ld   de,$9800                   ; 14:56E2
@@ -2495,7 +2495,7 @@ Code145D7B:
     ld   a,c                        ; 14:5D7C
     cp   $9E                        ; 14:5D7D
     jr   nz,Code145D56              ; 14:5D7F
-    ld   hl,$D02D                   ; 14:5D81
+    ld   hl,W_SpriteXHigh           ; 14:5D81
     ld   b,$03                      ; 14:5D84
     ld   a,[$D907]                  ; 14:5D86
     ld   b,a                        ; 14:5D89
@@ -3555,7 +3555,7 @@ Code1466BD:
     ld   de,$9800                   ; 14:66DD
     ld   h,$14                      ; 14:66E0
     ld   l,$23                      ; 14:66E2
-    call DMATransfer                ; 14:66E4
+    call DMATransferVRAM            ; 14:66E4
     xor  a                          ; 14:66E7
     ldh  [<VBK],a                   ; 14:66E8
     ld   a,$00                      ; 14:66EA
@@ -3563,19 +3563,19 @@ Code1466BD:
     ld   de,$9800                   ; 14:66EF
     ld   h,$14                      ; 14:66F2
     ld   l,$23                      ; 14:66F4
-    call DMATransfer                ; 14:66F6
+    call DMATransferVRAM            ; 14:66F6
     ld   a,$3A                      ; 14:66F9
     ld   bc,Data3A4870              ; 14:66FB
     ld   de,$8000                   ; 14:66FE
     ld   h,$14                      ; 14:6701
     ld   l,$7F                      ; 14:6703
-    call DMATransfer                ; 14:6705
+    call DMATransferVRAM            ; 14:6705
     ld   a,$3A                      ; 14:6708
     ld   bc,Data3A5870              ; 14:670A
     ld   de,$9000                   ; 14:670D
     ld   h,$14                      ; 14:6710
     ld   l,$7F                      ; 14:6712
-    call DMATransfer                ; 14:6714
+    call DMATransferVRAM            ; 14:6714
     ld   a,$3A                      ; 14:6717
     ld   [$C415],a                  ; 14:6719
     ld   a,$02                      ; 14:671C
@@ -3597,7 +3597,7 @@ Code1466BD:
     ld   de,$8800                   ; 14:6740
     ld   h,$14                      ; 14:6743
     ld   l,$7F                      ; 14:6745
-    call DMATransfer                ; 14:6747
+    call DMATransferVRAM            ; 14:6747
     xor  a                          ; 14:674A
     ldh  [<SVBK],a                  ; 14:674B
     ld   hl,Data14633C              ; 14:674D
@@ -4088,7 +4088,7 @@ Sub146AD0:
     ld   de,$9800                   ; 14:6AD9
     ld   h,$14                      ; 14:6ADC
     ld   l,$23                      ; 14:6ADE
-    call DMATransfer                ; 14:6AE0
+    call DMATransferVRAM            ; 14:6AE0
     xor  a                          ; 14:6AE3
     ldh  [<VBK],a                   ; 14:6AE4
     ld   a,$00                      ; 14:6AE6
@@ -4096,7 +4096,7 @@ Sub146AD0:
     ld   de,$9800                   ; 14:6AEB
     ld   h,$14                      ; 14:6AEE
     ld   l,$23                      ; 14:6AF0
-    call DMATransfer                ; 14:6AF2
+    call DMATransferVRAM            ; 14:6AF2
     ret                             ; 14:6AF5
 
 Data146AF6:                         ; 14:6AF6
@@ -4142,19 +4142,19 @@ Code146BA9:
     ld   de,$8000                   ; 14:6BB8
     ld   h,$14                      ; 14:6BBB
     ld   l,$7F                      ; 14:6BBD
-    call DMATransfer                ; 14:6BBF
+    call DMATransferVRAM            ; 14:6BBF
     ld   a,$31                      ; 14:6BC2
     ld   bc,Data314800              ; 14:6BC4
     ld   de,$8800                   ; 14:6BC7
     ld   h,$14                      ; 14:6BCA
     ld   l,$7F                      ; 14:6BCC
-    call DMATransfer                ; 14:6BCE
+    call DMATransferVRAM            ; 14:6BCE
     ld   a,$31                      ; 14:6BD1
     ld   bc,Data315000              ; 14:6BD3
     ld   de,$9000                   ; 14:6BD6
     ld   h,$14                      ; 14:6BD9
     ld   l,$7F                      ; 14:6BDB
-    call DMATransfer                ; 14:6BDD
+    call DMATransferVRAM            ; 14:6BDD
     ld   a,$02                      ; 14:6BE0
     ldh  [<SVBK],a                  ; 14:6BE2
     ld   hl,$9000                   ; 14:6BE4
@@ -5061,19 +5061,19 @@ Code14724F:
     ld   de,$8000                   ; 14:7267
     ld   h,$14                      ; 14:726A
     ld   l,$7F                      ; 14:726C
-    call DMATransfer                ; 14:726E
+    call DMATransferVRAM            ; 14:726E
     ld   a,$0E                      ; 14:7271
     ld   bc,Data0E4800              ; 14:7273
     ld   de,$8800                   ; 14:7276
     ld   h,$14                      ; 14:7279
     ld   l,$7F                      ; 14:727B
-    call DMATransfer                ; 14:727D
+    call DMATransferVRAM            ; 14:727D
     ld   a,$0E                      ; 14:7280
     ld   bc,Data0E5000              ; 14:7282
     ld   de,$9000                   ; 14:7285
     ld   h,$14                      ; 14:7288
     ld   l,$7F                      ; 14:728A
-    call DMATransfer                ; 14:728C
+    call DMATransferVRAM            ; 14:728C
     ld   a,$02                      ; 14:728F
     ldh  [<SVBK],a                  ; 14:7291
     ld   hl,$9000                   ; 14:7293
@@ -5089,7 +5089,7 @@ Code14724F:
     ld   [$C415],a                  ; 14:72AD
     ld   hl,Data0E5800              ; 14:72B0
     ld   a,$14                      ; 14:72B3
-    call Sub001570                  ; 14:72B5
+    call LoadScreenTilemapD000      ; 14:72B5
     ld   hl,$D014                   ; 14:72B8
     ld   b,$12                      ; 14:72BB
     ld   a,$F4                      ; 14:72BD

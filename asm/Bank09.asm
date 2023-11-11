@@ -20,16 +20,16 @@ Code09401D:
     ld   a,:Gr_Bank18               ; 09:401D
     ld   b,$09                      ; 09:401F
     call LoadGraphicsBank           ; 09:4021
-    ld   a,$18                      ; 09:4024
+    ld   a,:Data187850              ; 09:4024
     ld   b,$09                      ; 09:4026
     ld   de,Data187850              ; 09:4028
     call LoadFullPaletteLong        ; 09:402B
     call Sub00128D                  ; 09:402E
-    ld   a,$18                      ; 09:4031
+    ld   a,:Data187480              ; 09:4031
     ld   b,$09                      ; 09:4033
     ld   de,$99C0                   ; 09:4035
     ld   hl,Data187480              ; 09:4038
-    call LoadScreenTilemap          ; 09:403B
+    call LoadScreenTilemapVRAM      ; 09:403B
     ld   a,$00                      ; 09:403E
     ldh  [<H_GameSubstate],a        ; 09:4040
     ld   [$C1B4],a                  ; 09:4042
@@ -1025,9 +1025,9 @@ Code094853:
     ret                             ; 09:4867
 
 Code094868:
-    ld   a,[$C17F]                  ; 09:4868
+    ld   a,[W_PlayerLives]          ; 09:4868
     dec  a                          ; 09:486B
-    ld   [$C17F],a                  ; 09:486C
+    ld   [W_PlayerLives],a          ; 09:486C
     bit  7,a                        ; 09:486F
     jr   nz,Code094889              ; 09:4871
     and  a                          ; 09:4873
@@ -1087,12 +1087,12 @@ Code094B82:
     ld   b,a                        ; 09:4BA2
     ld   de,Data0950A7              ; 09:4BA3
     call LoadFullPaletteLong        ; 09:4BA6
-    ld   a,$09                      ; 09:4BA9
+    ld   a,:Code094B82              ; 09:4BA9
     ld   b,a                        ; 09:4BAB
     ld   de,$99C0                   ; 09:4BAC
     ld   hl,Data09488E              ; 09:4BAF
-    call LoadScreenTilemap          ; 09:4BB2
-    ld   a,$09                      ; 09:4BB5
+    call LoadScreenTilemapVRAM      ; 09:4BB2
+    ld   a,:Code094B82              ; 09:4BB5
     rst  $10                        ; 09:4BB7
 .dl SubL_07588C                     ; 09:4BB8
     ld   a,$01                      ; 09:4BBB
@@ -1460,7 +1460,7 @@ Sub0950F1:
     ldh  [<$FFBA],a                 ; 09:5121
     ld   a,$60                      ; 09:5123
     ld   [$C326],a                  ; 09:5125
-    ld   a,$09                      ; 09:5128
+    ld   a,:Sub0950F1               ; 09:5128
     ld   b,a                        ; 09:512A
     ld   de,Data0950A7              ; 09:512B
     call LoadFullPaletteLong        ; 09:512E
@@ -1468,11 +1468,11 @@ Sub0950F1:
     ld   [hl],$FF                   ; 09:5134
     inc  hl                         ; 09:5136
     ld   [hl],$7F                   ; 09:5137
-    ld   a,$09                      ; 09:5139
+    ld   a,:Sub0950F1               ; 09:5139
     ld   b,a                        ; 09:513B
     ld   de,$99C0                   ; 09:513C
     ld   hl,Data094DAF              ; 09:513F
-    call LoadScreenTilemap          ; 09:5142
+    call LoadScreenTilemapVRAM      ; 09:5142
     ld   hl,$C291                   ; 09:5145
     ld   b,$06                      ; 09:5148
 Code09514A:
@@ -2344,9 +2344,9 @@ Code095B70:
     and  a                          ; 09:5B97
     ld   a,$05                      ; 09:5B98
     jr   z,Code095B9E               ; 09:5B9A
-    ld   a,$0A                      ; 09:5B9C
+    ld   a,$0A                      ; 09:5B9C  if "Extremely Lucky" fortune, start with 10 lives
 Code095B9E:
-    ld   [$C17F],a                  ; 09:5B9E
+    ld   [W_PlayerLives],a          ; 09:5B9E  set life count in Super Players mode
     ld   hl,H_GameSubstate          ; 09:5BA1
     inc  [hl]                       ; 09:5BA4
     jr   Return095BEE               ; 09:5BA5

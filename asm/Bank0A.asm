@@ -199,7 +199,7 @@ Sub0A4FE2:
     ld   a,$0A                      ; 0A:4FF1
     ld   [$C415],a                  ; 0A:4FF3
     ld   a,$0A                      ; 0A:4FF6
-    call Sub001570                  ; 0A:4FF8
+    call LoadScreenTilemapD000      ; 0A:4FF8
     ld   a,[$D900]                  ; 0A:4FFB
     rst  $00                        ; 0A:4FFE
 .dw Code0A5013                      ; 0A:4FFF
@@ -2429,169 +2429,236 @@ Code0A6355:
     ld   [$C428],a                  ; 0A:636B
     ret                             ; 0A:636E
 
-Data0A636F:                         ; 0A:636F
+Pal_AlbumImageSpr:                  ; 0A:636F
 .dw $7FFF,$4A5F,$001F,$0000,$7FFF,$56B5,$7E60,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
-Data0A63AF:                         ; 0A:63AF
+Pal_AlbumImageBG:                   ; 0A:63AF
+; image 00: Toad Award
 .dw $0000,$7CFF,$7CFF,$0000,$7D4A,$7FFF,$033F,$0000,\
     $7FFF,$01FF,$02A0,$0000,$7FFF,$7D4A,$0019,$0000,\
     $7FFF,$2E5F,$0D5F,$0000,$7FFF,$7D5F,$0019,$0000,\
-    $7FFF,$2E5F,$0019,$0000
-Data0A63E7:                         ; 0A:63E7
-.db $FF,$7F,$D3,$04,$FF,$22,$00,$00
-Data0A63EF:                         ; 0A:63EF
+    $7FFF,$2E5F,$0019,$0000,$7FFF,$04D3,$22FF,$0000,
+; image 01: Mario Award
 .dw $0000,$03FF,$027B,$0159,$0000,$03FF,$01F9,$0000,\
     $7FFF,$03FF,$01F9,$0000,$0000,$03FF,$0019,$0000,\
     $7FFF,$7D5F,$0019,$0000,$7FFF,$327F,$7E80,$0000,\
-    $7FFF,$327F,$0016,$0000,$7FFF,$25DA,$3F9F,$0000
-Data0A642F:                         ; 0A:642F
+    $7FFF,$327F,$0016,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 02: Peach Award
 .dw $0000,$03FF,$3EDF,$01BF,$7FFF,$03FF,$7C1F,$0000,\
     $7C1F,$03FF,$3EDF,$0000,$7FFF,$03FF,$3EDF,$0000,\
     $3FE0,$03FF,$0014,$0000,$0000,$03FF,$0014,$7FFF,\
-    $7FFF,$03FF,$01F9,$0000,$7FFF,$25DA,$3F9F,$0000
-Data0A646F:                         ; 0A:646F
+    $7FFF,$03FF,$01F9,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 03: Bowser Award
 .dw $0000,$0096,$0199,$2129,$7FFF,$03FF,$0199,$0000,\
     $7FFF,$03FF,$3E80,$0000,$7FFF,$000D,$0199,$0000,\
     $7FFF,$2129,$0199,$0000,$7FFF,$03E0,$0199,$0000,\
-    $0096,$03FF,$0199,$0000,$7FFF,$25DA,$3F9F,$0000
-Data0A64AF:                         ; 0A:64AF
+    $0096,$03FF,$0199,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 04: Yoshi Award
 .dw $0000,$03FF,$027B,$0159,$7FFF,$03FF,$01F9,$0000,\
     $7FFF,$25E0,$0300,$00E0,$7FFF,$01F9,$25E0,$00E0,\
     $7DFF,$7FFF,$0019,$0000,$7FFF,$7DFF,$0019,$0000,\
-    $7FFF,$03FF,$7812,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$02DF,$0016,$0000,$5617,$4114,$200D,$0000,\
+    $7FFF,$03FF,$7812,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 05
+.dw $7FFF,$02DF,$0016,$0000,$5617,$4114,$200D,$0000,\
     $7FFF,$0220,$0120,$0000,$7FFF,$0018,$365F,$0000,\
     $7FFF,$7E60,$365F,$0000,$7C65,$0018,$365F,$0000,\
-    $7C65,$03FF,$0000,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$037F,$012D,$0000,$7FFF,$037F,$0DC0,$0000,\
+    $7C65,$03FF,$0000,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 06
+.dw $7FFF,$037F,$012D,$0000,$7FFF,$037F,$0DC0,$0000,\
     $7FFF,$367F,$64A2,$0000,$7FFF,$0018,$64A2,$0000,\
     $367F,$0018,$64A2,$0000,$7FFF,$0018,$367F,$0000,\
-    $7FFF,$012D,$64A2,$0000,$0000,$294A,$56B5,$7FFF,\
-    $7FFF,$2A5F,$001A,$0000,$7FFF,$001A,$7C08,$0000,\
+    $7FFF,$012D,$64A2,$0000,$0000,$294A,$56B5,$7FFF,
+; image 07
+.dw $7FFF,$2A5F,$001A,$0000,$7FFF,$001A,$7C08,$0000,\
     $2A5F,$0240,$001A,$0000,$7FFF,$0240,$17AB,$0000,\
     $001A,$0240,$7C08,$0000,$0240,$7C08,$0109,$0000,\
-    $7FFF,$0240,$0109,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$7C83,$0018,$0000,$7FFF,$32BE,$0018,$0000,\
+    $7FFF,$0240,$0109,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 08
+.dw $7FFF,$7C83,$0018,$0000,$7FFF,$32BE,$0018,$0000,\
     $7FFF,$023F,$008C,$0000,$7FFF,$7C83,$008C,$0000,\
     $7FFF,$7C83,$0220,$0000,$7FFF,$32BE,$0220,$0000,\
-    $7FFF,$7FFF,$7FFF,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$7E20,$46FF,$0000,$7FFF,$01FF,$46FF,$0000,\
+    $7FFF,$7FFF,$7FFF,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 09
+.dw $7FFF,$7E20,$46FF,$0000,$7FFF,$01FF,$46FF,$0000,\
     $7FFF,$5CBF,$46FF,$0000,$7E20,$01FF,$5CBF,$0000,\
     $7C00,$0016,$46FF,$0000,$7FFF,$0016,$7C00,$0000,\
-    $7FFF,$0016,$013F,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$01FF,$7E20,$0000,$7FFF,$01FF,$3A9F,$0000,\
+    $7FFF,$0016,$013F,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0A
+.dw $7FFF,$01FF,$7E20,$0000,$7FFF,$01FF,$3A9F,$0000,\
     $7FFF,$5CBF,$3A9F,$0000,$7E20,$01FF,$5CBF,$0000,\
     $7FFF,$001A,$3A9F,$0000,$7FFF,$5CCD,$3A9F,$0000,\
-    $7FFF,$001A,$0010,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $147F,$0012,$000D,$0827,$311F,$1895,$104B,$0824,\
+    $7FFF,$001A,$0010,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0B
+.dw $147F,$0012,$000D,$0827,$311F,$1895,$104B,$0824,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$5800,$7CC0,$0000,$7FFF,$011F,$0016,$0000,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0C
+.dw $7FFF,$5800,$7CC0,$0000,$7FFF,$011F,$0016,$0000,\
     $2A5F,$0016,$7CC0,$0000,$7FFF,$2A5F,$0016,$0000,\
     $7FFF,$2A5F,$7E20,$0000,$7FFF,$2A5F,$00EB,$0000,\
-    $7FFF,$00EB,$7CC0,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$02E0,$0112,$0000,$7FFF,$02E0,$2812,$0000,\
+    $7FFF,$00EB,$7CC0,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0D
+.dw $7FFF,$02E0,$0112,$0000,$7FFF,$02E0,$2812,$0000,\
     $7FFF,$16DF,$0112,$0000,$7FFF,$02E0,$01E0,$0000,\
     $7FFF,$02E0,$7EB5,$0000,$008C,$16DF,$0112,$0000,\
-    $7FFF,$16DF,$008C,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$0218,$110E,$0000,$7FFF,$0218,$231C,$0000,\
+    $7FFF,$16DF,$008C,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0E
+.dw $7FFF,$0218,$110E,$0000,$7FFF,$0218,$231C,$0000,\
     $7FFF,$7EF4,$110E,$0000,$7FFF,$1109,$110E,$0000,\
     $1109,$0218,$110E,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$427F,$673F,$0000,$7FFF,$56B5,$294A,$0000,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 0F
+.dw $7FFF,$427F,$673F,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$02BB,$02C2,$0000,$7FFF,$02BB,$437E,$0000,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 10
+.dw $7FFF,$02BB,$02C2,$0000,$7FFF,$02BB,$437E,$0000,\
     $437E,$02BB,$02C2,$0000,$7FFF,$7EF7,$02BB,$0000,\
     $7FFF,$7EF7,$02C2,$0000,$7FFF,$02BB,$0179,$0000,\
-    $7FFF,$7FFF,$7FFF,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$021F,$0C9C,$0000,$7FFF,$27BF,$0C9C,$0000,\
+    $7FFF,$7FFF,$7FFF,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 11
+.dw $7FFF,$021F,$0C9C,$0000,$7FFF,$27BF,$0C9C,$0000,\
     $7FFF,$021F,$0C93,$0000,$7FFF,$27BF,$021F,$0000,\
     $7FFF,$27BF,$736F,$0000,$7FFF,$7FFF,$7FFF,$7FFF,\
-    $7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$017F,$0282,$0000,$7FFF,$017F,$5693,$0000,\
+    $7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$25DA,$3F9F,$0000,
+; image 12
+.dw $7FFF,$017F,$0282,$0000,$7FFF,$017F,$5693,$0000,\
     $5693,$017F,$238A,$0000,$7FFF,$017F,$03F9,$0000,\
     $7FFF,$017F,$052C,$0000,$7FFF,$238A,$0282,$0000,\
-    $7FFF,$017F,$238A,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$0218,$294A,$0000,$7FFF,$3FFF,$294A,$0000,\
+    $7FFF,$017F,$238A,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 13
+.dw $7FFF,$0218,$294A,$0000,$7FFF,$3FFF,$294A,$0000,\
     $7FFF,$0131,$294A,$0000,$7FFF,$5295,$294A,$0000,\
     $294A,$0218,$0131,$0000,$7FFF,$7FFF,$7FFF,$0000,\
-    $7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$25DA,$3F9F,$7FFF,\
-    $7FFF,$0220,$01FC,$0000,$7FFF,$033F,$01FC,$0000,\
+    $7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$25DA,$3F9F,$7FFF,
+; image 14
+.dw $7FFF,$0220,$01FC,$0000,$7FFF,$033F,$01FC,$0000,\
     $7FFF,$0220,$0140,$0000,$7FFF,$0136,$01FC,$0000,\
     $0136,$033F,$01FC,$0000,$021A,$033F,$01FC,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$033F,$0019,$0000,$019F,$033F,$0019,$0000,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,
+; image 15
+.dw $7FFF,$033F,$0019,$0000,$019F,$033F,$0019,$0000,\
     $7FFF,$033F,$019F,$0000,$7FFF,$019F,$0019,$0000,\
     $7FFF,$56B5,$019F,$0000,$7FFF,$0019,$000E,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$6A80,$4183,$0000,$7FFF,$03FF,$2D03,$0000,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,
+; image 16
+.dw $7FFF,$6A80,$4183,$0000,$7FFF,$03FF,$2D03,$0000,\
     $4183,$6A80,$2D03,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
+    $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,
+; image 17: Bowser
+.dw $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
     $7FFF,$0260,$021E,$0421,$7FFF,$354A,$021E,$0421,\
     $7FFF,$03FF,$0260,$0421,$7FFF,$001F,$021E,$0000,\
-    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
+    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 18: Bowser
+.dw $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
     $7FFF,$0260,$021E,$0421,$7FFF,$354A,$021E,$0421,\
     $7FFF,$03FF,$0260,$0421,$7FFF,$001F,$021E,$0000,\
-    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
+    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 19: Bowser
+.dw $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
     $7FFF,$0260,$021E,$0421,$7FFF,$354A,$021E,$0421,\
     $7FFF,$03FF,$0260,$0421,$7FFF,$001F,$021E,$0000,\
-    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
+    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 1A: Bowser
+.dw $7FFF,$0260,$001F,$0421,$7FFF,$03FF,$001F,$0421,\
     $7FFF,$0260,$021E,$0421,$7FFF,$354A,$021E,$0421,\
     $7FFF,$03FF,$0260,$0421,$7FFF,$001F,$021E,$0000,\
-    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
+    $7FFF,$03FF,$021E,$0000,$7FFF,$25DA,$3F9F,$0000,
+; image 1B: Mario & Luigi
+.dw $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
     $7FFF,$6D23,$014F,$10C6,$7FFF,$329E,$7E2E,$10C6,\
     $7FFF,$6D23,$0018,$10C6,$7FFF,$6D23,$02C0,$10C6,\
-    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
+    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,
+; image 1C: Mario & Luigi
+.dw $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
     $7FFF,$6D23,$014F,$10C6,$7FFF,$329E,$7E2E,$10C6,\
     $7FFF,$6D23,$0018,$10C6,$7FFF,$6D23,$02C0,$10C6,\
-    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
+    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,
+; image 1D: Mario & Luigi
+.dw $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
     $7FFF,$6D23,$014F,$10C6,$7FFF,$329E,$7E2E,$10C6,\
     $7FFF,$6D23,$0018,$10C6,$7FFF,$6D23,$02C0,$10C6,\
-    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,\
-    $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
+    $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000,
+; image 1E: Mario & Luigi
+.dw $7FFF,$329E,$0018,$10C6,$7FFF,$329E,$02C0,$10C6,\
     $7FFF,$6D23,$014F,$10C6,$7FFF,$329E,$7E2E,$10C6,\
     $7FFF,$6D23,$0018,$10C6,$7FFF,$6D23,$02C0,$10C6,\
     $7FFF,$035E,$014F,$10C6,$7FFF,$25DA,$3F9F,$0000
-Data0A6B6F:                         ; 0A:6B6F
-.db $20,$04,$00,$05,$60,$05,$90,$05,\
-    $B0,$04,$00,$0B,$A0,$07,$50,$0B,\
-    $00,$0B,$40,$0B,$40,$0B,$C0,$0C,\
-    $30,$09,$70,$0B,$50,$06,$40,$08,\
-    $80,$07,$60,$06,$90,$09,$E0,$05,\
-    $40,$07,$A0,$08,$40,$06,$C0,$0A,\
-    $C0,$0A,$C0,$0A,$C0,$0A,$60,$0D,\
-    $60,$0D,$60,$0D,$60,$0D
-DataPtrs0A6BAD:                     ; 0A:6BAD
-.dl Data294000, Data294420, Data294920, Data294E80,\
-    Data295410, Data2958C0, Data2963C0, Data296B60,\
-    Data2A4000, Data2A4B00, Data2A5640, Data2A6180,\
-    Data364000, Data2A6E40, Data2A79B0, Data2B4000,\
-    Data2B4840, Data2B4FC0, Data2B5620, Data2B5FB0,\
-    Data2B6590, Data2B6CD0, Data2B7570, Data2C4000,\
-    Data2C4000, Data2C4000, Data2C4000, Data2C4AC0,\
-    Data2C4AC0, Data2C4AC0, Data2C4AC0
-DataPtrs0A6C0A:                     ; 0A:6C0A
-.dl Data227BB0, Data275C20, Data275EF0, Data2761C0,\
-    Data276490, Data276760, Data276A30, Data276D00,\
-    Data276FD0, Data2772A0, Data277570, Data277840,\
-    Data277B10, Data284000, Data2842D0, Data2845A0,\
-    Data284870, Data284B40, Data284E10, Data2850E0,\
-    Data2853B0, Data285680, Data285950, Data285C20,\
-    Data285C20, Data285C20, Data285C20, Data285EF0,\
-    Data285EF0, Data285EF0, Data285EF0
+AlbumImageGrLengths:                ; 0A:6B6F
+.dw $0420,$0500,$0560,$0590,$04B0,$0B00,$07A0,$0B50,\
+    $0B00,$0B40,$0B40,$0CC0,$0930,$0B70,$0650,$0840,\
+    $0780,$0660,$0990,$05E0,$0740,$08A0,$0640,$0AC0,\
+    $0AC0,$0AC0,$0AC0,$0D60,$0D60,$0D60,$0D60
+AlbumImageGrPtrs:                   ; 0A:6BAD
+.dl Gr_ToadAward                    ; 00
+.dl Gr_MarioAward                   ; 01
+.dl Gr_PeachAward                   ; 02
+.dl Gr_BowserAward                  ; 03
+.dl Gr_YoshiAward                   ; 04
+.dl Gr_AlbumFireworks               ; 05
+.dl Gr_Album1up                     ; 06
+.dl Gr_AlbumVine                    ; 07
+.dl Gr_AlbumVS                      ; 08
+.dl Gr_AlbumPeachKiss               ; 09
+.dl Gr_AlbumInfrared                ; 0A
+.dl Gr_AlbumRedCoin                 ; 0B
+.dl Gr_AlbumHighScore               ; 0C
+.dl Gr_AlbumYoshi                   ; 0D
+.dl Gr_AlbumGoomba                  ; 0E
+.dl Gr_AlbumBlooper                 ; 0F
+.dl Gr_AlbumLakitu                  ; 10
+.dl Gr_AlbumCheepCheep              ; 11
+.dl Gr_AlbumHammerBro               ; 12
+.dl Gr_AlbumBulletBill              ; 13
+.dl Gr_AlbumKoopa                   ; 14
+.dl Gr_AlbumSpiny                   ; 15
+.dl Gr_AlbumBuzzy                   ; 16
+.dl Gr_AlbumBowser                  ; 17
+.dl Gr_AlbumBowser                  ; 18
+.dl Gr_AlbumBowser                  ; 19
+.dl Gr_AlbumBowser                  ; 1A
+.dl Gr_AlbumMarioLuigi              ; 1B
+.dl Gr_AlbumMarioLuigi              ; 1C
+.dl Gr_AlbumMarioLuigi              ; 1D
+.dl Gr_AlbumMarioLuigi              ; 1E
+AlbumImageTilemapPtrs:              ; 0A:6C0A
+.dl Ti_ToadAward                    ; 00
+.dl Ti_MarioAward                   ; 01
+.dl Ti_PeachAward                   ; 02
+.dl Ti_BowserAward                  ; 03
+.dl Ti_YoshiAward                   ; 04
+.dl Ti_AlbumFireworks               ; 05
+.dl Ti_Album1up                     ; 06
+.dl Ti_AlbumVine                    ; 07
+.dl Ti_AlbumVS                      ; 08
+.dl Ti_AlbumPeachKiss               ; 09
+.dl Ti_AlbumInfrared                ; 0A
+.dl Ti_AlbumRedCoin                 ; 0B
+.dl Ti_AlbumHighScore               ; 0C
+.dl Ti_AlbumYoshi                   ; 0D
+.dl Ti_AlbumGoomba                  ; 0E
+.dl Ti_AlbumBlooper                 ; 0F
+.dl Ti_AlbumLakitu                  ; 10
+.dl Ti_AlbumCheepCheep              ; 11
+.dl Ti_AlbumHammerBro               ; 12
+.dl Ti_AlbumBulletBill              ; 13
+.dl Ti_AlbumKoopa                   ; 14
+.dl Ti_AlbumSpiny                   ; 15
+.dl Ti_AlbumBuzzy                   ; 16
+.dl Ti_AlbumBowser                  ; 17
+.dl Ti_AlbumBowser                  ; 18
+.dl Ti_AlbumBowser                  ; 19
+.dl Ti_AlbumBowser                  ; 1A
+.dl Ti_AlbumMarioLuigi              ; 1B
+.dl Ti_AlbumMarioLuigi              ; 1C
+.dl Ti_AlbumMarioLuigi              ; 1D
+.dl Ti_AlbumMarioLuigi              ; 1E
 Code0A6C67:
     call Sub00126D                  ; 0A:6C67
     xor  a                          ; 0A:6C6A
@@ -2607,7 +2674,7 @@ Code0A6C67:
     sla  a                          ; 0A:6C7E
     ld   c,a                        ; 0A:6C80
     ld   b,$00                      ; 0A:6C81
-    ld   hl,Data0A6B6F              ; 0A:6C83
+    ld   hl,AlbumImageGrLengths     ; 0A:6C83
     add  hl,bc                      ; 0A:6C86
     ldi  a,[hl]                     ; 0A:6C87
     ldh  [<$FF99],a                 ; 0A:6C88
@@ -2621,7 +2688,7 @@ Code0A6C67:
     ldh  [<$FF97],a                 ; 0A:6C95
     ld   b,$00                      ; 0A:6C97
     push bc                         ; 0A:6C99
-    ld   hl,DataPtrs0A6BAD          ; 0A:6C9A
+    ld   hl,AlbumImageGrPtrs        ; 0A:6C9A
     add  hl,bc                      ; 0A:6C9D
     ld   e,[hl]                     ; 0A:6C9E
     inc  hl                         ; 0A:6C9F
@@ -2639,7 +2706,7 @@ Code0A6C67:
     ld   a,$0A                      ; 0A:6CB1
     call CopyBytesLong              ; 0A:6CB3
     pop  bc                         ; 0A:6CB6
-    ld   hl,DataPtrs0A6C0A          ; 0A:6CB7
+    ld   hl,AlbumImageTilemapPtrs   ; 0A:6CB7
     add  hl,bc                      ; 0A:6CBA
     ld   e,[hl]                     ; 0A:6CBB
     inc  hl                         ; 0A:6CBC
@@ -2650,7 +2717,7 @@ Code0A6C67:
     ld   h,d                        ; 0A:6CC1
     ld   b,$0A                      ; 0A:6CC2
     ld   de,$9800                   ; 0A:6CC4
-    call LoadScreenTilemap          ; 0A:6CC7
+    call LoadScreenTilemapVRAM      ; 0A:6CC7
     call Sub0A6E12                  ; 0A:6CCA
     ld   hl,$9800                   ; 0A:6CCD
     ld   de,$D480                   ; 0A:6CD0
@@ -2668,15 +2735,15 @@ Code0A6C67:
     srl  a                          ; 0A:6CEF
     rr   c                          ; 0A:6CF1
     ld   b,a                        ; 0A:6CF3
-    ld   hl,Data0A63AF              ; 0A:6CF4
+    ld   hl,Pal_AlbumImageBG        ; 0A:6CF4
     add  hl,bc                      ; 0A:6CF7
     ld   de,$DF80                   ; 0A:6CF8
     ld   bc,$0038                   ; 0A:6CFB
     call CopyBytes                  ; 0A:6CFE
-    ld   hl,Data0A63E7              ; 0A:6D01
+    ld   hl,Pal_AlbumImageBG+$38    ; 0A:6D01
     ld   bc,$0008                   ; 0A:6D04
     call CopyBytes                  ; 0A:6D07
-    ld   hl,Data0A636F              ; 0A:6D0A
+    ld   hl,Pal_AlbumImageSpr       ; 0A:6D0A
     ld   bc,$0040                   ; 0A:6D0D
     call CopyBytes                  ; 0A:6D10
     ld   a,$01                      ; 0A:6D13
@@ -2707,7 +2774,7 @@ Code0A6C67:
 DataPtrs0A6D49:                     ; 0A:6D49
 .dl Data2D6600, Data2D7050, Data354000, Data2E4000,\
     Data2E4DD0, Data2E58F0, Data354A60, Data2E63F0,\
-    Data2E6F40, Data2F4000, Data2F4B40, Data2A6180,\
+    Data2E6F40, Data2F4000, Data2F4B40, Gr_AlbumRedCoin,\
     Data2F5680, Data2F5FB0, Data247750, Data2F6B20,\
     Data2F7360, Data1E7540, Data304000, Data3D4000,\
     Data304990, Data3050D0, Data305970, Data2C5820,\
@@ -2715,11 +2782,11 @@ DataPtrs0A6D49:                     ; 0A:6D49
     Data2D47F0, Data2D51C0, Data2D5B50
 DataPtrs0A6DA6:                     ; 0A:6DA6
 .dl Data245E00, Data2463A0, Data305FB0, Data306820,\
-    Data3A4000, Data276760, Data276A30, Data276D00,\
-    Data276FD0, Data2772A0, Data277570, Data277840,\
-    Data277B10, Data284000, Data2842D0, Data2845A0,\
-    Data284870, Data284B40, Data284E10, Data2850E0,\
-    Data2853B0, Data285680, Data285950, Data307090,\
+    Data3A4000, Ti_AlbumFireworks, Ti_Album1up, Ti_AlbumVine,\
+    Ti_AlbumVS, Ti_AlbumPeachKiss, Ti_AlbumInfrared, Ti_AlbumRedCoin,\
+    Ti_AlbumHighScore, Ti_AlbumYoshi, Ti_AlbumGoomba, Ti_AlbumBlooper,\
+    Ti_AlbumLakitu, Ti_AlbumCheepCheep, Ti_AlbumHammerBro, Ti_AlbumBulletBill,\
+    Ti_AlbumKoopa, Ti_AlbumSpiny, Ti_AlbumBuzzy, Data307090,\
     Data307360, Data307630, Data307900, Data246C10,\
     Data246EE0, Data2471B0, Data247480
 Data0A6E03:                         ; 0A:6E03
@@ -2838,7 +2905,7 @@ Code0A6E7F:
     ld   l,e                        ; 0A:6ED8
     ld   h,d                        ; 0A:6ED9
     ld   a,$0A                      ; 0A:6EDA
-    call Sub001570                  ; 0A:6EDC
+    call LoadScreenTilemapD000      ; 0A:6EDC
     ld   a,l                        ; 0A:6EDF
     ld   [$C433],a                  ; 0A:6EE0
     ld   a,h                        ; 0A:6EE3
@@ -3107,7 +3174,7 @@ Code0A714B:
     xor  a                          ; 0A:714E
     ldh  [<IE],a                    ; 0A:714F
     ldh  [<$FF93],a                 ; 0A:7151
-    ld   a,$26                      ; 0A:7153
+    ld   a,:Data267DE0              ; 0A:7153
     ld   [$C415],a                  ; 0A:7155
     ld   hl,Data267DE0              ; 0A:7158
     ld   de,$9000                   ; 0A:715B
@@ -3371,7 +3438,7 @@ Code0A7396:
     ld   [$C415],a                  ; 0A:73EB
     ld   hl,Data207C40              ; 0A:73EE
     ld   a,$0A                      ; 0A:73F1
-    call Sub001570                  ; 0A:73F3
+    call LoadScreenTilemapD000      ; 0A:73F3
     ld   hl,$D000                   ; 0A:73F6
     ld   de,$9800                   ; 0A:73F9
     ld   bc,$0240                   ; 0A:73FC
