@@ -1,0 +1,20 @@
+014000 017000 Graphics/NormalGameplay.bin
+0452E2 045AE2 Graphics/Data0452E2.bin
+065CB0        Graphics/Data065CB0.bin
+065FB0 066280 Tilemaps/Data065FB0.bin
+09488E 094B5E Tilemaps/Data09488E.bin
+094DAF 09507F Tilemaps/Data094DAF.bin
+0A4080        Tilemaps/Data0A4080.bin
+0A4350        Tilemaps/Data0A4350.bin
+0A4620        Tilemaps/Data0A4620.bin
+0A48F0        Tilemaps/Data0A48F0.bin
+0A4BC0 0A4E90 Tilemaps/Data0A4BC0.bin
+0B53A2 0B5672 Tilemaps/Data0B53A2.bin
+13403C        Tilemaps/Data13403C.bin
+13430C        Tilemaps/Data13430C.bin
+1345DC        Tilemaps/Data1345DC.bin
+1348AC        Tilemaps/Data1348AC.bin
+134B7C        Tilemaps/Data134B7C.bin
+134E4C 13511C Tilemaps/Data134E4C.bin
+145397 145667 Tilemaps/Data145397.bin
+154449 154719 Tilemaps/Data154449.bin
