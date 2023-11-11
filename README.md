@@ -1,10 +1,12 @@
 # Super Mario Bros. Deluxe (U V1.1) disassembly
 
-For assembling with [WLA DX](https://github.com/vhelin/wla-dx). Usage:
-```wla-gb smbdx.asm
-wlalink smbdx-linkfile smbdx-disasm.gbc```
+For assembling with [WLA DX](https://github.com/vhelin/wla-dx). To assemble:
+```
+wla-gb smbdx.asm
+wlalink smbdx-linkfile smbdx-disasm.gbc
+```
 
-Produces an exact match for the code banks (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
+Work in progress. Produces an exact match for the 0x10 banks that contain code (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
 
 Remaining regions:
 - Bank 1D: Music. While this mixed code/data bank does assemble to an exact match, much of this bank's data seems to contain pointers, in a yet-to-be-documented format.
