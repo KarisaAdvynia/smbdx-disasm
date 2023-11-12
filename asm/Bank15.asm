@@ -1,11 +1,13 @@
 .bank $15 slot 1
 .orga $4000
 
-Sub154000:
-    call Sub154004                  ; 15:4000
+PrintMenuBank15Wrapper:
+; Game state 2E wrapper (again)
+    call PrintMenuMain              ; 15:4000
     ret                             ; 15:4003
 
-Sub154004:
+PrintMenuMain:
+; Game state 2E
     ldh  a,[<H_GameSubstate]        ; 15:4004
     rst  $00                        ; 15:4006
 .dw Code154249                      ; 15:4007
@@ -165,7 +167,7 @@ Code154286:
     ret                             ; 15:4296
 
 Code154297:
-    ldh  a,[<$FF8C]                 ; 15:4297
+    ldh  a,[<H_ButtonsPressed]      ; 15:4297
     bit  1,a                        ; 15:4299
     jr   z,Code1542A8               ; 15:429B
     ld   a,$31                      ; 15:429D
@@ -812,7 +814,7 @@ Code154FFA:
     call Sub1554D8                  ; 15:500F
     jp   Code1550DB                 ; 15:5012
 Code155015:
-    ldh  a,[<$FF8C]                 ; 15:5015
+    ldh  a,[<H_ButtonsPressed]      ; 15:5015
     bit  2,a                        ; 15:5017
     jr   z,Code155039               ; 15:5019
     ld   a,[$C41F]                  ; 15:501B
@@ -981,7 +983,7 @@ Return155167:
     ret                             ; 15:5167
 
 Sub155168:
-    ldh  a,[<$FF8C]                 ; 15:5168
+    ldh  a,[<H_ButtonsPressed]      ; 15:5168
     and  $F3                        ; 15:516A
     ld   [$C4EB],a                  ; 15:516C
     ld   a,$20                      ; 15:516F
@@ -997,7 +999,7 @@ Code15517E:
     ld   a,[$C422]                  ; 15:517E
     and  a                          ; 15:5181
     ret  nz                         ; 15:5182
-    ldh  a,[<H_ButtonFlags]         ; 15:5183
+    ldh  a,[<H_ButtonsHeld]         ; 15:5183
     and  $F3                        ; 15:5185
     ld   [$C4EB],a                  ; 15:5187
     ret  z                          ; 15:518A
@@ -1515,7 +1517,7 @@ Code1555A0:
 
 Code1555B3:
     call Sub155588                  ; 15:55B3
-    ldh  a,[<$FF8C]                 ; 15:55B6
+    ldh  a,[<H_ButtonsPressed]      ; 15:55B6
     bit  1,a                        ; 15:55B8
     ret  nz                         ; 15:55BA
     ld   a,$09                      ; 15:55BB
@@ -2402,7 +2404,7 @@ Code155C0A:
     and  $7F                        ; 15:5C0D
     cp   $01                        ; 15:5C0F
     jr   z,Code155C2B               ; 15:5C11
-    ldh  a,[<$FF8C]                 ; 15:5C13
+    ldh  a,[<H_ButtonsPressed]      ; 15:5C13
     and  $02                        ; 15:5C15
     jr   z,Code155C2B               ; 15:5C17
     ld   a,$FF                      ; 15:5C19
@@ -2421,7 +2423,7 @@ Code155C31:
     ld   a,[de]                     ; 15:5C31
     cp   $FF                        ; 15:5C32
     jr   nz,Code155C5D              ; 15:5C34
-    ldh  a,[<$FFB7]                 ; 15:5C36
+    ldh  a,[<H_GlobalTimer]         ; 15:5C36
     and  $01                        ; 15:5C38
     jr   nz,Return155C5C            ; 15:5C3A
     ld   a,[$C3FE]                  ; 15:5C3C
@@ -2484,7 +2486,7 @@ Data155CBA:                         ; 15:5CBA
 .dw Data155C6F, Data155C88, Data155CA1, Data155CBA
 
 Code155CDB:
-    ldh  a,[<$FF8C]                 ; 15:5CDB
+    ldh  a,[<H_ButtonsPressed]      ; 15:5CDB
     and  a                          ; 15:5CDD
     jr   z,Code155CE5               ; 15:5CDE
     ld   a,$0D                      ; 15:5CE0
@@ -3436,6 +3438,7 @@ Sub156349:
     ret                             ; 15:636B
 
 Code15636C:
+; Game state 41
     ldh  a,[<H_GameSubstate]        ; 15:636C
     rst  $00                        ; 15:636E
 .dw Code1563F9                      ; 15:636F
@@ -3787,7 +3790,7 @@ Data156814:                         ; 15:6814
     $48,$60,$2E,$01,$48,$68,$30,$01,\
     $58,$40,$12,$01,$58,$68,$32,$01
 Code156864:
-    ldh  a,[<$FF8C]                 ; 15:6864
+    ldh  a,[<H_ButtonsPressed]      ; 15:6864
     bit  1,a                        ; 15:6866
     jr   z,Code156877               ; 15:6868
     ld   a,$63                      ; 15:686A
@@ -3802,7 +3805,7 @@ Code156877:
     ld   a,[$C500]                  ; 15:6877
     cp   $FF                        ; 15:687A
     jr   nz,Code156893              ; 15:687C
-    ldh  a,[<$FF8C]                 ; 15:687E
+    ldh  a,[<H_ButtonsPressed]      ; 15:687E
     and  $F5                        ; 15:6880
     jp   z,Code156946               ; 15:6882
     and  $01                        ; 15:6885
@@ -3813,7 +3816,7 @@ Code15688C:
     ldh  [<$FFF3],a                 ; 15:688E
     jp   Code156946                 ; 15:6890
 Code156893:
-    ldh  a,[<$FF8C]                 ; 15:6893
+    ldh  a,[<H_ButtonsPressed]      ; 15:6893
     bit  0,a                        ; 15:6895
     jr   z,Code1568A2               ; 15:6897
     call Sub0010A9                  ; 15:6899
@@ -4052,7 +4055,7 @@ Code156AFB:
     ldi  a,[hl]                     ; 15:6B7D
     ld   h,[hl]                     ; 15:6B7E
     ld   l,a                        ; 15:6B7F
-    ld   de,$DF80                   ; 15:6B80
+    ld   de,W_PaletteBuffer         ; 15:6B80
     ld   bc,$0038                   ; 15:6B83
     call CopyBytes                  ; 15:6B86
 Code156B89:
@@ -5207,7 +5210,7 @@ Data15748A:                         ; 15:748A
 
 Code157492:
     call Sub157A4A                  ; 15:7492
-    ldh  a,[<$FF8C]                 ; 15:7495
+    ldh  a,[<H_ButtonsPressed]      ; 15:7495
     bit  1,a                        ; 15:7497
     jr   z,Code1574AC               ; 15:7499
     ld   a,$63                      ; 15:749B
@@ -5267,7 +5270,7 @@ Data1574E9:                         ; 15:74E9
 .db $04,$00
 
 Code1574EB:
-    ldh  a,[<$FF8C]                 ; 15:74EB
+    ldh  a,[<H_ButtonsPressed]      ; 15:74EB
     bit  0,a                        ; 15:74ED
     jr   z,Code15750D               ; 15:74EF
 Code1574F1:
@@ -5336,7 +5339,7 @@ Data15755A:                         ; 15:755A
 .db $04,$00
 
 Code15755C:
-    ldh  a,[<$FF8C]                 ; 15:755C
+    ldh  a,[<H_ButtonsPressed]      ; 15:755C
     bit  0,a                        ; 15:755E
     jr   z,Code157566               ; 15:7560
     ld   a,$01                      ; 15:7562
@@ -5374,13 +5377,13 @@ Data157594:                         ; 15:7594
 Data157596:                         ; 15:7596
 .db $0C,$00
 Code157598:
-    ldh  a,[<$FF8C]                 ; 15:7598
+    ldh  a,[<H_ButtonsPressed]      ; 15:7598
     bit  0,a                        ; 15:759A
     jr   z,Code1575A3               ; 15:759C
     ld   a,$01                      ; 15:759E
     jp   Code1574F2                 ; 15:75A0
 Code1575A3:
-    ldh  a,[<$FF8C]                 ; 15:75A3
+    ldh  a,[<H_ButtonsPressed]      ; 15:75A3
     and  $30                        ; 15:75A5
     ret  z                          ; 15:75A7
     and  $10                        ; 15:75A8
@@ -5416,7 +5419,7 @@ Data1575DA:                         ; 15:75DA
 .db $09,$00
 
 Code1575DC:
-    ldh  a,[<$FF8C]                 ; 15:75DC
+    ldh  a,[<H_ButtonsPressed]      ; 15:75DC
     bit  0,a                        ; 15:75DE
     jp   nz,Code1574F1              ; 15:75E0
     and  $30                        ; 15:75E3
@@ -5452,7 +5455,7 @@ Data157612:                         ; 15:7612
 Data157614:                         ; 15:7614
 .db $07,$00
 Code157616:
-    ldh  a,[<$FF8C]                 ; 15:7616
+    ldh  a,[<H_ButtonsPressed]      ; 15:7616
     bit  0,a                        ; 15:7618
     jr   z,Code157621               ; 15:761A
     ld   a,$01                      ; 15:761C
@@ -5490,7 +5493,7 @@ Data15764F:                         ; 15:764F
 Data157651:                         ; 15:7651
 .db $03,$00
 Code157653:
-    ldh  a,[<$FF8C]                 ; 15:7653
+    ldh  a,[<H_ButtonsPressed]      ; 15:7653
     bit  0,a                        ; 15:7655
     jp   nz,Code1574F1              ; 15:7657
     and  $30                        ; 15:765A
@@ -5525,7 +5528,7 @@ Data157688:                         ; 15:7688
 Data15768A:                         ; 15:768A
 .db $0E,$00
 Code15768C:
-    ldh  a,[<$FF8C]                 ; 15:768C
+    ldh  a,[<H_ButtonsPressed]      ; 15:768C
     bit  0,a                        ; 15:768E
     jp   z,Code157698               ; 15:7690
     ld   a,$01                      ; 15:7693
@@ -5566,7 +5569,7 @@ Data1576CD:                         ; 15:76CD
 .db $03,$00
 
 Code1576CF:
-    ldh  a,[<$FF8C]                 ; 15:76CF
+    ldh  a,[<H_ButtonsPressed]      ; 15:76CF
     bit  0,a                        ; 15:76D1
     jp   nz,Code1574F1              ; 15:76D3
     and  $30                        ; 15:76D6
@@ -5794,7 +5797,7 @@ Code15784F:
     add  c                          ; 15:7856
     ld   c,a                        ; 15:7857
     push bc                         ; 15:7858
-    ld   hl,Sub154000               ; 15:7859
+    ld   hl,PrintMenuBank15Wrapper  ; 15:7859
     add  hl,bc                      ; 15:785C
     ld   a,$08                      ; 15:785D
     sub  e                          ; 15:785F
@@ -6087,7 +6090,7 @@ Sub157A4A:
     ld   a,[$C4F5]                  ; 15:7A50
     and  a                          ; 15:7A53
     jr   z,Code157A6A               ; 15:7A54
-    ldh  a,[<$FF8C]                 ; 15:7A56
+    ldh  a,[<H_ButtonsPressed]      ; 15:7A56
     and  a                          ; 15:7A58
     jr   z,Code157A74               ; 15:7A59
 Code157A5B:
@@ -6101,7 +6104,7 @@ Code157A5F:
     ret                             ; 15:7A69
 
 Code157A6A:
-    ldh  a,[<$FF8C]                 ; 15:7A6A
+    ldh  a,[<H_ButtonsPressed]      ; 15:7A6A
     bit  3,a                        ; 15:7A6C
     ret  z                          ; 15:7A6E
     ld   a,$01                      ; 15:7A6F
@@ -6266,7 +6269,7 @@ SubL_157B22:
     ldi  a,[hl]                     ; 15:7B6E
     ld   h,[hl]                     ; 15:7B6F
     ld   l,a                        ; 15:7B70
-    ld   de,$DF80                   ; 15:7B71
+    ld   de,W_PaletteBuffer         ; 15:7B71
     ld   bc,$0038                   ; 15:7B74
     call CopyBytes                  ; 15:7B77
     ld   a,$01                      ; 15:7B7A

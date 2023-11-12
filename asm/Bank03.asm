@@ -2,9 +2,9 @@
 .orga $4000
 
 Sub034000:
-    ldh  a,[<H_ButtonFlags]         ; 03:4000
+    ldh  a,[<H_ButtonsHeld]         ; 03:4000
     push af                         ; 03:4002
-    ldh  a,[<$FF8C]                 ; 03:4003
+    ldh  a,[<H_ButtonsPressed]      ; 03:4003
     push af                         ; 03:4005
     ld   a,$03                      ; 03:4006
     rst  $10                        ; 03:4008
@@ -13,9 +13,9 @@ Sub034000:
     jr   Code034020                 ; 03:400F
 
 Sub034011:
-    ldh  a,[<H_ButtonFlags]         ; 03:4011
+    ldh  a,[<H_ButtonsHeld]         ; 03:4011
     push af                         ; 03:4013
-    ldh  a,[<$FF8C]                 ; 03:4014
+    ldh  a,[<H_ButtonsPressed]      ; 03:4014
     push af                         ; 03:4016
     ld   a,$03                      ; 03:4017
     rst  $10                        ; 03:4019
@@ -23,10 +23,10 @@ Sub034011:
     call Sub034033                  ; 03:401D
 Code034020:
     pop  af                         ; 03:4020
-    ldh  [<$FF8C],a                 ; 03:4021
+    ldh  [<H_ButtonsPressed],a      ; 03:4021
     pop  af                         ; 03:4023
-    ldh  [<H_ButtonFlags],a         ; 03:4024
-    ldh  a,[<$FF8C]                 ; 03:4026
+    ldh  [<H_ButtonsHeld],a         ; 03:4024
+    ldh  a,[<H_ButtonsPressed]      ; 03:4026
     and  $0B                        ; 03:4028
     ret  z                          ; 03:402A
     ld   a,$02                      ; 03:402B
@@ -39,9 +39,9 @@ Sub034033:
     ld   a,[$C38D]                  ; 03:4033
     and  a                          ; 03:4036
     jp   z,Code034088               ; 03:4037
-    ldh  a,[<H_ButtonFlags]         ; 03:403A
+    ldh  a,[<H_ButtonsHeld]         ; 03:403A
     push af                         ; 03:403C
-    ldh  a,[<$FF8C]                 ; 03:403D
+    ldh  a,[<H_ButtonsPressed]      ; 03:403D
     push af                         ; 03:403F
     ld   a,[$C535]                  ; 03:4040
     ld   [$C3E9],a                  ; 03:4043
@@ -65,9 +65,9 @@ Code034060:
     ld   a,[$C536]                  ; 03:406D
     ld   [hl],a                     ; 03:4070
     pop  af                         ; 03:4071
-    ldh  [<$FF8C],a                 ; 03:4072
+    ldh  [<H_ButtonsPressed],a      ; 03:4072
     pop  af                         ; 03:4074
-    ldh  [<H_ButtonFlags],a         ; 03:4075
+    ldh  [<H_ButtonsHeld],a         ; 03:4075
     call Sub0378F6                  ; 03:4077
     xor  a                          ; 03:407A
     ld   [$C53D],a                  ; 03:407B
@@ -79,8 +79,8 @@ Code034060:
 Code034088:
     call Sub037817                  ; 03:4088
     xor  a                          ; 03:408B
-    ldh  [<H_ButtonFlags],a         ; 03:408C
-    ldh  [<$FF8C],a                 ; 03:408E
+    ldh  [<H_ButtonsHeld],a         ; 03:408C
+    ldh  [<H_ButtonsPressed],a      ; 03:408E
     ld   [$C366],a                  ; 03:4090
     call Sub03421E                  ; 03:4093
     call Sub035A3C                  ; 03:4096
@@ -92,8 +92,8 @@ Code034088:
     call Sub03737C                  ; 03:40A5
     call Sub03781C                  ; 03:40A8
     xor  a                          ; 03:40AB
-    ldh  [<H_ButtonFlags],a         ; 03:40AC
-    ldh  [<$FF8C],a                 ; 03:40AE
+    ldh  [<H_ButtonsHeld],a         ; 03:40AC
+    ldh  [<H_ButtonsPressed],a      ; 03:40AE
     inc  a                          ; 03:40B0
     ld   [$C366],a                  ; 03:40B1
     ld   a,$01                      ; 03:40B4
@@ -108,9 +108,9 @@ Code034088:
 Sub0340C9:
     call Sub037817                  ; 03:40C9
     ld   a,[$DA74]                  ; 03:40CC
-    ldh  [<H_ButtonFlags],a         ; 03:40CF
+    ldh  [<H_ButtonsHeld],a         ; 03:40CF
     ld   a,[$DA76]                  ; 03:40D1
-    ldh  [<$FF8C],a                 ; 03:40D4
+    ldh  [<H_ButtonsPressed],a      ; 03:40D4
     xor  a                          ; 03:40D6
     ld   [$C366],a                  ; 03:40D7
     call Sub03421E                  ; 03:40DA
@@ -141,9 +141,9 @@ Sub0340F9:
 Code03410F:
     call Sub03781C                  ; 03:410F
     ld   a,[$DA75]                  ; 03:4112
-    ldh  [<H_ButtonFlags],a         ; 03:4115
+    ldh  [<H_ButtonsHeld],a         ; 03:4115
     ld   a,[$DA77]                  ; 03:4117
-    ldh  [<$FF8C],a                 ; 03:411A
+    ldh  [<H_ButtonsPressed],a      ; 03:411A
     ld   a,$01                      ; 03:411C
     ld   [$C366],a                  ; 03:411E
     call Sub03421E                  ; 03:4121
@@ -236,16 +236,16 @@ Sub0341C2:
     ld   a,$00                      ; 03:41CC
     and  a                          ; 03:41CE
     jr   z,Sub03421E                ; 03:41CF
-    ldh  a,[<H_ButtonFlags]         ; 03:41D1
+    ldh  a,[<H_ButtonsHeld]         ; 03:41D1
     and  $04                        ; 03:41D3
     jr   z,Sub03421E                ; 03:41D5
-    ldh  a,[<$FF8C]                 ; 03:41D7
+    ldh  a,[<H_ButtonsPressed]      ; 03:41D7
     and  $03                        ; 03:41D9
     jr   z,Sub03421E                ; 03:41DB
     and  $01                        ; 03:41DD
     jr   nz,Code034208              ; 03:41DF
     xor  a                          ; 03:41E1
-    ld   [$C1CE],a                  ; 03:41E2
+    ld   [W_PlayerFireFlag],a       ; 03:41E2
     ld   a,[$C167]                  ; 03:41E5
     inc  a                          ; 03:41E8
     cp   $03                        ; 03:41E9
@@ -253,12 +253,12 @@ Sub0341C2:
     xor  a                          ; 03:41ED
 Code0341EE:
     ld   [$C167],a                  ; 03:41EE
-    ld   [$C1C5],a                  ; 03:41F1
+    ld   [W_PlayerSize],a           ; 03:41F1
     cp   $02                        ; 03:41F4
     jr   nz,Code034200              ; 03:41F6
     ld   a,$01                      ; 03:41F8
-    ld   [$C1C5],a                  ; 03:41FA
-    ld   [$C1CE],a                  ; 03:41FD
+    ld   [W_PlayerSize],a           ; 03:41FA
+    ld   [W_PlayerFireFlag],a       ; 03:41FD
 Code034200:
     ld   a,$03                      ; 03:4200
     rst  $10                        ; 03:4202
@@ -281,9 +281,9 @@ Code03421A:
     ldh  [<$FFF2],a                 ; 03:421C
 
 Sub03421E:
-    ldh  a,[<H_ButtonFlags]         ; 03:421E
+    ldh  a,[<H_ButtonsHeld]         ; 03:421E
     ld   [$C25E],a                  ; 03:4220
-    ldh  a,[<$FF8C]                 ; 03:4223
+    ldh  a,[<H_ButtonsPressed]      ; 03:4223
     ld   [$C1C8],a                  ; 03:4225
     ld   hl,$C1D5                   ; 03:4228
     ld   a,[hl]                     ; 03:422B
@@ -431,12 +431,12 @@ Code034336:
     ld   a,[$C1DA]                  ; 03:433C
     cp   $E0                        ; 03:433F
     jr   nc,Code03434A              ; 03:4341
-    ldh  a,[<$FFB7]                 ; 03:4343
+    ldh  a,[<H_GlobalTimer]         ; 03:4343
     and  $03                        ; 03:4345
     ret  nz                         ; 03:4347
     jr   Code03434F                 ; 03:4348
 Code03434A:
-    ldh  a,[<$FFB7]                 ; 03:434A
+    ldh  a,[<H_GlobalTimer]         ; 03:434A
     and  $01                        ; 03:434C
     ret  nz                         ; 03:434E
 Code03434F:
@@ -455,7 +455,7 @@ Code034358:
 
 Code034365:
     ld   hl,$C1DD                   ; 03:4365
-    ld   a,[$C1C5]                  ; 03:4368
+    ld   a,[W_PlayerSize]           ; 03:4368
     and  a                          ; 03:436B
     jr   z,Code034379               ; 03:436C
     ld   a,[$C25E]                  ; 03:436E
@@ -587,7 +587,7 @@ Code034452:
     add  hl,de                      ; 03:4455
     ld   a,[hl]                     ; 03:4456
     ldh  [<$FFAC],a                 ; 03:4457
-    ldh  a,[<$FFB7]                 ; 03:4459
+    ldh  a,[<H_GlobalTimer]         ; 03:4459
     and  $03                        ; 03:445B
     jr   nz,Code034471              ; 03:445D
     ld   e,$07                      ; 03:445F
@@ -657,7 +657,7 @@ Code0344BB:
     ld   a,$0D                      ; 03:44CF
     ldh  [<H_GameState],a           ; 03:44D1
 Code0344D3:
-    ldh  a,[<$FFB7]                 ; 03:44D3
+    ldh  a,[<H_GlobalTimer]         ; 03:44D3
     and  $03                        ; 03:44D5
     jr   nz,Code0344EB              ; 03:44D7
     ld   e,$07                      ; 03:44D9
@@ -1140,15 +1140,15 @@ Code034830:
 Code03483D:
     ld   a,$05                      ; 03:483D
     ld   [$C1C2],a                  ; 03:483F
-    ld   a,[$C1CE]                  ; 03:4842
+    ld   a,[W_PlayerFireFlag]       ; 03:4842
     push af                         ; 03:4845
     xor  a                          ; 03:4846
-    ld   [$C1CE],a                  ; 03:4847
+    ld   [W_PlayerFireFlag],a       ; 03:4847
     ld   a,$03                      ; 03:484A
     rst  $10                        ; 03:484C
 .dl SubL_0B421E                     ; 03:484D
     pop  af                         ; 03:4850
-    ld   [$C1CE],a                  ; 03:4851
+    ld   [W_PlayerFireFlag],a       ; 03:4851
     ld   hl,$C1CF                   ; 03:4854
     ld   a,[hl]                     ; 03:4857
     cp   $00                        ; 03:4858
@@ -1263,8 +1263,8 @@ Code034911:
 Code034917:
     ld   [$C28E],a                  ; 03:4917
     xor  a                          ; 03:491A
-    ld   [$C1CE],a                  ; 03:491B
-    ld   [$C1C5],a                  ; 03:491E
+    ld   [W_PlayerFireFlag],a       ; 03:491B
+    ld   [W_PlayerSize],a           ; 03:491E
     ret                             ; 03:4921
 
 Code034922:
@@ -1338,7 +1338,7 @@ Code03498D:
     ld   a,[$C3A6]                  ; 03:498D
     and  a                          ; 03:4990
     ret  nz                         ; 03:4991
-    ldh  a,[<$FF8C]                 ; 03:4992
+    ldh  a,[<H_ButtonsPressed]      ; 03:4992
     bit  0,a                        ; 03:4994
     ret  z                          ; 03:4996
     ld   a,[$C366]                  ; 03:4997
@@ -1901,10 +1901,10 @@ Code034D80:
     xor  a                          ; 03:4D98
     ld   [$C1D4],a                  ; 03:4D99
     ld   [W_PlayerState],a          ; 03:4D9C
-    ld   [$C1CE],a                  ; 03:4D9F
+    ld   [W_PlayerFireFlag],a       ; 03:4D9F
     ld   [$C1F7],a                  ; 03:4DA2
     ld   [$C1C2],a                  ; 03:4DA5
-    ld   [$C1C5],a                  ; 03:4DA8
+    ld   [W_PlayerSize],a           ; 03:4DA8
     inc  a                          ; 03:4DAB
     ld   [$C181],a                  ; 03:4DAC
     ld   a,$03                      ; 03:4DAF
@@ -1921,7 +1921,7 @@ Code034DB6:
     ld   hl,Data034D69              ; 03:4DBF
     add  hl,de                      ; 03:4DC2
     ld   a,[hl]                     ; 03:4DC3
-    ld   [$C1C5],a                  ; 03:4DC4
+    ld   [W_PlayerSize],a           ; 03:4DC4
     ret                             ; 03:4DC7
 
 Data034DC8:                         ; 03:4DC8
@@ -1969,7 +1969,7 @@ Code034E1F:
     ld   hl,Data034DD8              ; 03:4E28
     add  hl,de                      ; 03:4E2B
     ld   a,[hl]                     ; 03:4E2C
-    ld   [$C1C5],a                  ; 03:4E2D
+    ld   [W_PlayerSize],a           ; 03:4E2D
     ret                             ; 03:4E30
 
 Code034E31:
@@ -1995,7 +1995,7 @@ Code034E3C:
     ld   a,[$C1D9]                  ; 03:4E54
     ld   [W_PlayerState],a          ; 03:4E57
     ld   a,$01                      ; 03:4E5A
-    ld   [$C1CE],a                  ; 03:4E5C
+    ld   [W_PlayerFireFlag],a       ; 03:4E5C
     ld   [$C181],a                  ; 03:4E5F
     inc  a                          ; 03:4E62
     ld   [$C1D4],a                  ; 03:4E63
@@ -2637,7 +2637,7 @@ Return035429:
     ret                             ; 03:5429
 
 Code03542A:
-    ldh  a,[<$FF8C]                 ; 03:542A
+    ldh  a,[<H_ButtonsPressed]      ; 03:542A
     and  $03                        ; 03:542C
     ret  z                          ; 03:542E
     ld   a,[$C283]                  ; 03:542F
@@ -2827,7 +2827,7 @@ Code03556F:
     inc  a                          ; 03:5593
 Code035594:
     ld   [$C1FF],a                  ; 03:5594
-    ld   a,[$C1C5]                  ; 03:5597
+    ld   a,[W_PlayerSize]           ; 03:5597
     ld   e,a                        ; 03:559A
     ld   d,$00                      ; 03:559B
     ld   hl,Data035546              ; 03:559D
@@ -2903,7 +2903,7 @@ Return035614:
     ret                             ; 03:5614
 
 Sub035615:
-    ld   a,[$C1CE]                  ; 03:5615
+    ld   a,[W_PlayerFireFlag]       ; 03:5615
     and  a                          ; 03:5618
     jr   z,Return035641             ; 03:5619
     ld   a,[$C1DD]                  ; 03:561B
@@ -3580,7 +3580,7 @@ Code035A93:
     ldh  a,[<$FFAA]                 ; 03:5A9E
     sbc  [hl]                       ; 03:5AA0
     ldh  [<$FF98],a                 ; 03:5AA1
-    ldh  a,[<$FF8C]                 ; 03:5AA3
+    ldh  a,[<H_ButtonsPressed]      ; 03:5AA3
     bit  7,a                        ; 03:5AA5
     jr   z,Code035ADA               ; 03:5AA7
     call Sub035F73                  ; 03:5AA9
@@ -3608,7 +3608,7 @@ Code035AC7:
     ldh  [<$FFF2],a                 ; 03:5AD6
     jr   Code035B12                 ; 03:5AD8
 Code035ADA:
-    ldh  a,[<$FF8C]                 ; 03:5ADA
+    ldh  a,[<H_ButtonsPressed]      ; 03:5ADA
     bit  6,a                        ; 03:5ADC
     jr   z,Code035B12               ; 03:5ADE
     call Sub035F73                  ; 03:5AE0
@@ -3638,7 +3638,7 @@ Code035AFC:
     ld   a,$77                      ; 03:5B0E
     ldh  [<$FFF2],a                 ; 03:5B10
 Code035B12:
-    ldh  a,[<$FF8C]                 ; 03:5B12
+    ldh  a,[<H_ButtonsPressed]      ; 03:5B12
     and  $04                        ; 03:5B14
     jr   z,Code035B6F               ; 03:5B16
     ld   a,[W_GameMode]             ; 03:5B18
@@ -4565,7 +4565,7 @@ Code036179:
     cp   [hl]                       ; 03:6185
     jr   nz,Code0361C8              ; 03:6186
     ld   hl,$C1F4                   ; 03:6188
-    ldh  a,[<H_ButtonFlags]         ; 03:618B
+    ldh  a,[<H_ButtonsHeld]         ; 03:618B
     and  $30                        ; 03:618D
     jr   z,Code036194               ; 03:618F
     ld   [hl],$00                   ; 03:6191
@@ -4590,7 +4590,7 @@ Code036194:
 Code0361AD:
     cp   $03                        ; 03:61AD
     jr   c,Code0361C8               ; 03:61AF
-    ldh  a,[<$FFB7]                 ; 03:61B1
+    ldh  a,[<H_GlobalTimer]         ; 03:61B1
     and  $01                        ; 03:61B3
     ret  nz                         ; 03:61B5
     ld   a,[$C1E9]                  ; 03:61B6
@@ -4637,7 +4637,7 @@ Sub0361DF:
     and  a                          ; 03:61F1
     jr   z,Code036229               ; 03:61F2
 Code0361F4:
-    ld   a,[$C1C5]                  ; 03:61F4
+    ld   a,[W_PlayerSize]           ; 03:61F4
     and  a                          ; 03:61F7
     jr   z,Code036200               ; 03:61F8
     ld   a,[$C1DD]                  ; 03:61FA
@@ -4676,7 +4676,7 @@ Code036229:
     ret  z                          ; 03:6237
 Code036238:
     ld   hl,$C25E                   ; 03:6238
-    ld   a,[$C1C5]                  ; 03:623B
+    ld   a,[W_PlayerSize]           ; 03:623B
     and  a                          ; 03:623E
     jr   nz,Code036248              ; 03:623F
     ldh  a,[<$FFAB]                 ; 03:6241
@@ -4703,7 +4703,7 @@ Code036262:
     and  $30                        ; 03:6263
     jr   nz,Code0362AB              ; 03:6265
 Code036267:
-    ld   a,[$C1C5]                  ; 03:6267
+    ld   a,[W_PlayerSize]           ; 03:6267
     and  a                          ; 03:626A
     jr   z,Code03629F               ; 03:626B
     ld   a,[$C26B]                  ; 03:626D
@@ -4948,7 +4948,7 @@ Code036427:
     xor  a                          ; 03:6427
     ld   [$C208],a                  ; 03:6428
     ld   l,$74                      ; 03:642B
-    ld   a,[$C1C5]                  ; 03:642D
+    ld   a,[W_PlayerSize]           ; 03:642D
     and  a                          ; 03:6430
     jr   z,Code036435               ; 03:6431
     ld   l,$75                      ; 03:6433
@@ -5109,7 +5109,7 @@ Sub036516:
     xor  a                          ; 03:6556
     jr   Code03655C                 ; 03:6557
 Code036559:
-    ld   a,[$C1C5]                  ; 03:6559
+    ld   a,[W_PlayerSize]           ; 03:6559
 Code03655C:
     push af                         ; 03:655C
     ld   e,a                        ; 03:655D
@@ -5673,7 +5673,7 @@ Code0369AA:
 .dl SubL_027560                     ; 03:69B1
     call Sub002D66                  ; 03:69B4
 Code0369B7:
-    ld   a,[$C1C5]                  ; 03:69B7
+    ld   a,[W_PlayerSize]           ; 03:69B7
     and  a                          ; 03:69BA
     jr   nz,Code0369C1              ; 03:69BB
     ld   a,$02                      ; 03:69BD
@@ -6354,7 +6354,7 @@ Code036EC2:
     call Sub036EA8                  ; 03:6EC5
     jr   Code036EA5                 ; 03:6EC8
 Code036ECA:
-    ld   a,[$C1C5]                  ; 03:6ECA
+    ld   a,[W_PlayerSize]           ; 03:6ECA
     and  a                          ; 03:6ECD
     jr   nz,Code036ED2              ; 03:6ECE
     jr   Code036EAD                 ; 03:6ED0
@@ -6655,7 +6655,7 @@ Sub0370C2:
     and  $0F                        ; 03:70C4
     cp   $02                        ; 03:70C6
     jr   nz,Code0370E2              ; 03:70C8
-    ld   a,[$C1C5]                  ; 03:70CA
+    ld   a,[W_PlayerSize]           ; 03:70CA
     and  a                          ; 03:70CD
     jr   nz,Code0370D9              ; 03:70CE
     ldh  a,[<$FFA9]                 ; 03:70D0
@@ -6687,7 +6687,7 @@ SubL_0370E4:
     ld   [$C1C4],a                  ; 03:70F1
     ld   a,$28                      ; 03:70F4
     ldh  [<$FFF3],a                 ; 03:70F6
-    ld   a,[$C1C5]                  ; 03:70F8
+    ld   a,[W_PlayerSize]           ; 03:70F8
     and  a                          ; 03:70FB
     jr   nz,Code037110              ; 03:70FC
     ld   a,[$C1C2]                  ; 03:70FE
@@ -6699,7 +6699,7 @@ SubL_0370E4:
     rst  $18                        ; 03:710F
 
 Code037110:
-    ld   a,[$C1CE]                  ; 03:7110
+    ld   a,[W_PlayerFireFlag]       ; 03:7110
     and  a                          ; 03:7113
     jr   nz,ReturnL_037121          ; 03:7114
     ld   a,[W_PlayerState]          ; 03:7116
@@ -7002,7 +7002,7 @@ Code0373B5:
     ld   e,a                        ; 03:73ED
     sla  e                          ; 03:73EE
     sla  e                          ; 03:73F0
-    ld   a,[$C1C5]                  ; 03:73F2
+    ld   a,[W_PlayerSize]           ; 03:73F2
     and  a                          ; 03:73F5
     jp   z,Code0373FD               ; 03:73F6
     sla  e                          ; 03:73F9
@@ -7013,14 +7013,14 @@ Code0373FD:
     add  hl,bc                      ; 03:7400
     push hl                         ; 03:7401
     ld   hl,Data037364              ; 03:7402
-    ld   a,[$C1C5]                  ; 03:7405
+    ld   a,[W_PlayerSize]           ; 03:7405
     ld   e,a                        ; 03:7408
     ld   d,$00                      ; 03:7409
     add  hl,de                      ; 03:740B
     ld   b,[hl]                     ; 03:740C
     ld   hl,DataPtrs037360          ; 03:740D
     ld   d,$00                      ; 03:7410
-    ld   a,[$C1C5]                  ; 03:7412
+    ld   a,[W_PlayerSize]           ; 03:7412
     sla  a                          ; 03:7415
     ld   e,a                        ; 03:7417
     add  hl,de                      ; 03:7418
@@ -7048,7 +7048,7 @@ Code037430:
     dec  b                          ; 03:7433
     jr   nz,Code037430              ; 03:7434
     ld   hl,Data037366              ; 03:7436
-    ld   a,[$C1C5]                  ; 03:7439
+    ld   a,[W_PlayerSize]           ; 03:7439
     ld   d,$00                      ; 03:743C
     ld   e,a                        ; 03:743E
     add  hl,de                      ; 03:743F
@@ -7078,7 +7078,7 @@ Code037452:
     dec  d                          ; 03:745C
     jp   nz,Code037452              ; 03:745D
 Code037460:
-    ld   a,[$C1C5]                  ; 03:7460
+    ld   a,[W_PlayerSize]           ; 03:7460
     and  a                          ; 03:7463
     jr   z,Code037492               ; 03:7464
     ld   a,[$C1F7]                  ; 03:7466
@@ -7098,7 +7098,7 @@ Code037460:
     cp   $0E                        ; 03:7483
     jr   nz,Code03748D              ; 03:7485
 Code037487:
-    ldh  a,[<H_ButtonFlags]         ; 03:7487
+    ldh  a,[<H_ButtonsHeld]         ; 03:7487
     and  $30                        ; 03:7489
     jr   nz,Code037492              ; 03:748B
 Code03748D:
@@ -7106,7 +7106,7 @@ Code03748D:
     jr   Code0374A2                 ; 03:7490
 Code037492:
     ld   hl,DataPtrs0372FC          ; 03:7492
-    ld   a,[$C1C5]                  ; 03:7495
+    ld   a,[W_PlayerSize]           ; 03:7495
     sla  a                          ; 03:7498
     ld   e,a                        ; 03:749A
     ld   d,$00                      ; 03:749B
@@ -7650,21 +7650,21 @@ Code03783A:
     jr   nz,Code03783A              ; 03:7848
     ret                             ; 03:784A
 
-Data03784B:                         ; 03:784B
-.db $00,$4B,$40,$4B,$80,$4B,$C0,$4B
-Data037853:                         ; 03:7853
-.db $40,$4C,$50,$4C,$60,$4C,$70,$4C
-Data03785B:                         ; 03:785B
-.db $00,$4C,$10,$4C,$20,$4C,$30,$4C
+RedCoinAnimPtrs:                    ; 03:784B
+.dw Gr_RedCoinAnim, Gr_RedCoinAnim+$40, Gr_RedCoinAnim+$80, Gr_RedCoinAnim+$C0
+UnderwaterAnimPtrs:                 ; 03:7853
+.dw Gr_UnderwaterAnim, Gr_UnderwaterAnim+$10, Gr_UnderwaterAnim+$20, Gr_UnderwaterAnim+$30
+WaterLavaAnimPtrs:                  ; 03:785B
+.dw Gr_WaterLavaAnim, Gr_WaterLavaAnim+$10, Gr_WaterLavaAnim+$20, Gr_WaterLavaAnim+$30
 
 Sub037863:
     ld   a,[$C283]                  ; 03:7863
     and  a                          ; 03:7866
-    jr   z,Code03788F               ; 03:7867
-    ldh  a,[<$FFB7]                 ; 03:7869
+    jr   z,@Code03788F              ; 03:7867
+    ldh  a,[<H_GlobalTimer]         ; 03:7869
     and  $03                        ; 03:786B
     and  a                          ; 03:786D
-    jr   nz,Code03788F              ; 03:786E
+    jr   nz,@Code03788F             ; 03:786E
     ld   a,[$C385]                  ; 03:7870
     inc  a                          ; 03:7873
     and  $03                        ; 03:7874
@@ -7672,7 +7672,7 @@ Sub037863:
     sla  a                          ; 03:7879
     ld   e,a                        ; 03:787B
     ld   d,$00                      ; 03:787C
-    ld   hl,Data03784B              ; 03:787E
+    ld   hl,RedCoinAnimPtrs         ; 03:787E
     add  hl,de                      ; 03:7881
     ldi  a,[hl]                     ; 03:7882
     ld   [$C377],a                  ; 03:7883
@@ -7680,11 +7680,11 @@ Sub037863:
     ld   [$C378],a                  ; 03:7887
     ld   a,$01                      ; 03:788A
     ld   [$C376],a                  ; 03:788C
-Code03788F:
-    ldh  a,[<$FFB7]                 ; 03:788F
+@Code03788F:
+    ldh  a,[<H_GlobalTimer]         ; 03:788F
     and  $0F                        ; 03:7891
     and  a                          ; 03:7893
-    jr   nz,Code0378B5              ; 03:7894
+    jr   nz,@Code0378B5             ; 03:7894
     ld   a,[$C380]                  ; 03:7896
     inc  a                          ; 03:7899
     and  $03                        ; 03:789A
@@ -7692,7 +7692,7 @@ Code03788F:
     sla  a                          ; 03:789F
     ld   e,a                        ; 03:78A1
     ld   d,$00                      ; 03:78A2
-    ld   hl,Data03785B              ; 03:78A4
+    ld   hl,WaterLavaAnimPtrs       ; 03:78A4
     add  hl,de                      ; 03:78A7
     ldi  a,[hl]                     ; 03:78A8
     ld   [$C37E],a                  ; 03:78A9
@@ -7700,11 +7700,11 @@ Code03788F:
     ld   [$C37F],a                  ; 03:78AD
     ld   a,$01                      ; 03:78B0
     ld   [$C37D],a                  ; 03:78B2
-Code0378B5:
-    ldh  a,[<$FFB7]                 ; 03:78B5
+@Code0378B5:
+    ldh  a,[<H_GlobalTimer]         ; 03:78B5
     and  $07                        ; 03:78B7
     and  a                          ; 03:78B9
-    jr   nz,Return0378DB            ; 03:78BA
+    jr   nz,@Return                 ; 03:78BA
     ld   a,[$C37C]                  ; 03:78BC
     inc  a                          ; 03:78BF
     and  $03                        ; 03:78C0
@@ -7712,7 +7712,7 @@ Code0378B5:
     sla  a                          ; 03:78C5
     ld   e,a                        ; 03:78C7
     ld   d,$00                      ; 03:78C8
-    ld   hl,Data037853              ; 03:78CA
+    ld   hl,UnderwaterAnimPtrs      ; 03:78CA
     add  hl,de                      ; 03:78CD
     ldi  a,[hl]                     ; 03:78CE
     ld   [$C37A],a                  ; 03:78CF
@@ -7720,18 +7720,18 @@ Code0378B5:
     ld   [$C37B],a                  ; 03:78D3
     ld   a,$01                      ; 03:78D6
     ld   [$C379],a                  ; 03:78D8
-Return0378DB:
+@Return:
     ret                             ; 03:78DB
 
-Data0378DC:                         ; 03:78DC
-.db $00,$48,$40,$48,$80,$48,$C0,$48,\
-    $00,$49,$40,$49,$80,$49,$C0,$49,\
-    $00,$4A,$40,$4A,$80,$4A,$C0,$4A
+Race321BlockAnimPtrs:               ; 03:78DC
+.dw Gr_321BlockAnim,      Gr_321BlockAnim+$040, Gr_321BlockAnim+$080, Gr_321BlockAnim+$0C0,\
+    Gr_321BlockAnim+$100, Gr_321BlockAnim+$140, Gr_321BlockAnim+$180, Gr_321BlockAnim+$1C0,\
+    Gr_321BlockAnim+$200, Gr_321BlockAnim+$240, Gr_321BlockAnim+$280, Gr_321BlockAnim+$2C0
 Data0378F4:                         ; 03:78F4
 .db $00,$06
 
 Sub0378F6:
-    ld   a,[$C3A2]                  ; 03:78F6
+    ld   a,[W_RaceHeaderFlags]      ; 03:78F6
     bit  0,a                        ; 03:78F9
     ret  z                          ; 03:78FB
     ld   hl,$C38D                   ; 03:78FC
@@ -7795,7 +7795,7 @@ Code037954:
     sla  a                          ; 03:7954
     ld   e,a                        ; 03:7956
     ld   d,$00                      ; 03:7957
-    ld   hl,Data0378DC              ; 03:7959
+    ld   hl,Race321BlockAnimPtrs    ; 03:7959
     add  hl,de                      ; 03:795C
     ldi  a,[hl]                     ; 03:795D
     ld   [$C386],a                  ; 03:795E
@@ -7819,7 +7819,7 @@ Code037972:
     ret                             ; 03:7980
 
 Sub037981:
-    ld   a,[$C3A2]                  ; 03:7981
+    ld   a,[W_RaceHeaderFlags]      ; 03:7981
     bit  0,a                        ; 03:7984
     jr   nz,Code037989              ; 03:7986
     ret                             ; 03:7988
@@ -7834,7 +7834,7 @@ Code037989:
     add  hl,de                      ; 03:7997
     ld   e,[hl]                     ; 03:7998
     sla  e                          ; 03:7999
-    ld   hl,Data0378DC              ; 03:799B
+    ld   hl,Race321BlockAnimPtrs    ; 03:799B
     add  hl,de                      ; 03:799E
     ldi  a,[hl]                     ; 03:799F
     ld   [$C386],a                  ; 03:79A0

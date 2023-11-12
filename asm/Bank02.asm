@@ -501,7 +501,7 @@ Code02432A:
     jr   z,Code02434A               ; 02:4346
     ld   [hl],$E0                   ; 02:4348
 Code02434A:
-    ldh  a,[<$FFB7]                 ; 02:434A
+    ldh  a,[<H_GlobalTimer]         ; 02:434A
     and  $03                        ; 02:434C
     ret  nz                         ; 02:434E
     ld   hl,$D177                   ; 02:434F
@@ -1396,7 +1396,7 @@ Sub0248B5:
     pop  de                         ; 02:494B
     jr   Code024951                 ; 02:494C
 Code02494E:
-    ld   a,[$C1C5]                  ; 02:494E
+    ld   a,[W_PlayerSize]           ; 02:494E
 Code024951:
     ld   hl,$D11D                   ; 02:4951
     add  hl,de                      ; 02:4954
@@ -1584,7 +1584,7 @@ Code024ABF:
 Code024ACD:
     pop  hl                         ; 02:4ACD
     add  hl,de                      ; 02:4ACE
-    ldh  a,[<$FFB7]                 ; 02:4ACF
+    ldh  a,[<H_GlobalTimer]         ; 02:4ACF
     and  $06                        ; 02:4AD1
     sla  a                          ; 02:4AD3
     ld   e,a                        ; 02:4AD5
@@ -2874,7 +2874,7 @@ Code02532E:
     ld   a,[hl]                     ; 02:5332
     and  a                          ; 02:5333
     jr   nz,Code025353              ; 02:5334
-    ldh  a,[<$FFB7]                 ; 02:5336
+    ldh  a,[<H_GlobalTimer]         ; 02:5336
     srl  a                          ; 02:5338
     jr   nc,Code025353              ; 02:533A
     ld   a,$02                      ; 02:533C
@@ -3565,7 +3565,7 @@ Code0257B0:
     call Sub002E64                  ; 02:57EC
     jr   Code02580C                 ; 02:57EF
 Code0257F1:
-    ldh  a,[<$FFB7]                 ; 02:57F1
+    ldh  a,[<H_GlobalTimer]         ; 02:57F1
     srl  a                          ; 02:57F3
     jr   nc,Code025812              ; 02:57F5
     ld   a,$02                      ; 02:57F7
@@ -4038,7 +4038,7 @@ Code025ACF:
     ret                             ; 02:5AE9
 
 Code025AEA:
-    ldh  a,[<$FFB7]                 ; 02:5AEA
+    ldh  a,[<H_GlobalTimer]         ; 02:5AEA
     and  $3C                        ; 02:5AEC
     add  $78                        ; 02:5AEE
     ld   hl,$D0B4                   ; 02:5AF0
@@ -4118,7 +4118,7 @@ Code025B3F:
     ld   [hl],$00                   ; 02:5B6B
 Code025B6D:
     ld   e,$FC                      ; 02:5B6D
-    ldh  a,[<$FFB7]                 ; 02:5B6F
+    ldh  a,[<H_GlobalTimer]         ; 02:5B6F
     and  $40                        ; 02:5B71
     jr   nz,Code025B77              ; 02:5B73
     ld   e,$04                      ; 02:5B75
@@ -4667,7 +4667,7 @@ Sub025EF4:
     ld   [hl],a                     ; 02:5F15
     push de                         ; 02:5F16
     ld   de,$0000                   ; 02:5F17
-    ldh  a,[<$FFB7]                 ; 02:5F1A
+    ldh  a,[<H_GlobalTimer]         ; 02:5F1A
     and  $03                        ; 02:5F1C
     jr   nz,Code025F21              ; 02:5F1E
     inc  e                          ; 02:5F20
@@ -4768,7 +4768,7 @@ Sub025F9B:
     ld   [hl],a                     ; 02:5FB8
     jr   Code025FC8                 ; 02:5FB9
 Code025FBB:
-    ldh  a,[<$FFB7]                 ; 02:5FBB
+    ldh  a,[<H_GlobalTimer]         ; 02:5FBB
     srl  a                          ; 02:5FBD
     jr   nc,Code025FC8              ; 02:5FBF
     ld   a,$02                      ; 02:5FC1
@@ -5045,7 +5045,7 @@ Code02619D:
     jr   c,Code0261B2               ; 02:61A0
     jr   Code0261C5                 ; 02:61A2
 Code0261A4:
-    ldh  a,[<$FFB7]                 ; 02:61A4
+    ldh  a,[<H_GlobalTimer]         ; 02:61A4
     srl  a                          ; 02:61A6
     jr   nc,Code0261C5              ; 02:61A8
     ld   a,$02                      ; 02:61AA
@@ -5555,7 +5555,7 @@ Code0264F0:
 .db $02,$01,$06
 
 Sub0264F7:
-    ldh  a,[<$FFB7]                 ; 02:64F7
+    ldh  a,[<H_GlobalTimer]         ; 02:64F7
     and  $03                        ; 02:64F9
     ret  nz                         ; 02:64FB
     call Sub02679E                  ; 02:64FC
@@ -5738,7 +5738,7 @@ Code026614:
     and  a                          ; 02:6619
     jr   z,Code026626               ; 02:661A
     dec  [hl]                       ; 02:661C
-    ldh  a,[<$FFB7]                 ; 02:661D
+    ldh  a,[<H_GlobalTimer]         ; 02:661D
     and  $03                        ; 02:661F
     jr   nz,Code026626              ; 02:6621
     call Sub0268FD                  ; 02:6623
@@ -5856,7 +5856,7 @@ Code0266CB:
     ld   [hl],a                     ; 02:66DC
     bit  0,e                        ; 02:66DD
     jr   z,Code0266ED               ; 02:66DF
-    ldh  a,[<$FFB7]                 ; 02:66E1
+    ldh  a,[<H_GlobalTimer]         ; 02:66E1
     srl  a                          ; 02:66E3
     jr   nc,Code0266ED              ; 02:66E5
     ld   a,$02                      ; 02:66E7
@@ -6745,7 +6745,7 @@ Sub026CBA:
     ld   a,[hl]                     ; 02:6D01
     ld   [$D2E4],a                  ; 02:6D02
     push bc                         ; 02:6D05
-    ldh  a,[<$FFB7]                 ; 02:6D06
+    ldh  a,[<H_GlobalTimer]         ; 02:6D06
     and  $07                        ; 02:6D08
     ld   c,a                        ; 02:6D0A
     ld   b,$00                      ; 02:6D0B
@@ -6850,7 +6850,7 @@ Sub026D9B:
     ld   hl,$C1DB                   ; 02:6DAA
     or   [hl]                       ; 02:6DAD
     jr   nz,Code026DC1              ; 02:6DAE
-    ldh  a,[<$FFB7]                 ; 02:6DB0
+    ldh  a,[<H_GlobalTimer]         ; 02:6DB0
     srl  a                          ; 02:6DB2
     jr   nc,Code026DC1              ; 02:6DB4
     ld   a,$02                      ; 02:6DB6
@@ -7583,7 +7583,7 @@ Code0272BA:
     add  hl,bc                      ; 02:72C2
     and  a                          ; 02:72C3
     jr   nz,Code0272EC              ; 02:72C4
-    ldh  a,[<$FFB7]                 ; 02:72C6
+    ldh  a,[<H_GlobalTimer]         ; 02:72C6
     and  $03                        ; 02:72C8
     jr   nz,Code0272CD              ; 02:72CA
     inc  [hl]                       ; 02:72CC
@@ -7608,7 +7608,7 @@ Code0272D9:
 Code0272E9:
     jp   Sub027290                  ; 02:72E9
 Code0272EC:
-    ldh  a,[<$FFB7]                 ; 02:72EC
+    ldh  a,[<H_GlobalTimer]         ; 02:72EC
     and  $03                        ; 02:72EE
     jr   nz,Code0272F3              ; 02:72F0
     dec  [hl]                       ; 02:72F2
@@ -7716,7 +7716,7 @@ Code02738E:
     pop  af                         ; 02:7398
 Code027399:
     ld   e,a                        ; 02:7399
-    ldh  a,[<$FFB7]                 ; 02:739A
+    ldh  a,[<H_GlobalTimer]         ; 02:739A
     and  $03                        ; 02:739C
     jr   nz,Code0273A5              ; 02:739E
     ld   hl,W_SpriteXSpeed          ; 02:73A0
@@ -7812,7 +7812,7 @@ Sub02741E:
     cp   $5F                        ; 02:7429
     jr   nz,Code027440              ; 02:742B
 Code02742D:
-    ld   a,[$C1C5]                  ; 02:742D
+    ld   a,[W_PlayerSize]           ; 02:742D
     and  a                          ; 02:7430
     jr   z,Code027440               ; 02:7431
     ldh  a,[<$FFAB]                 ; 02:7433
@@ -9326,7 +9326,7 @@ Code027E50:
     add  hl,bc                      ; 02:7E56
     ld   e,[hl]                     ; 02:7E57
     ld   d,$00                      ; 02:7E58
-    ldh  a,[<$FFB7]                 ; 02:7E5A
+    ldh  a,[<H_GlobalTimer]         ; 02:7E5A
     and  $03                        ; 02:7E5C
     jr   nz,Code027E79              ; 02:7E5E
     ld   hl,W_SpriteYSpeed          ; 02:7E60

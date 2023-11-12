@@ -36,7 +36,8 @@ DataPtrs0A4E9A:                     ; 0A:4E9A
 .dw Data214000, Data215000, Data215B00, Data216600,\
     Data217100
 
-Sub0A4EA4:
+AlbumMain:
+; Game state 2C
     ldh  a,[<H_GameSubstate]        ; 0A:4EA4
     rst  $00                        ; 0A:4EA6
 .dw Code0A4EC6                      ; 0A:4EA7
@@ -767,7 +768,7 @@ Data0A53B4:                         ; 0A:53B4
     $07,$07,$07,$07,$07,$07,$07,$07,\
     $07,$07,$07,$07
 Code0A53F8:
-    ldh  a,[<$FF8C]                 ; 0A:53F8
+    ldh  a,[<H_ButtonsPressed]      ; 0A:53F8
     bit  1,a                        ; 0A:53FA
     jr   z,Code0A540B               ; 0A:53FC
     ld   a,$63                      ; 0A:53FE
@@ -871,7 +872,7 @@ Code0A549F:
     ld   a,[$D927]                  ; 0A:549F
     cp   $03                        ; 0A:54A2
     jr   z,Code0A54F2               ; 0A:54A4
-    ldh  a,[<$FF8C]                 ; 0A:54A6
+    ldh  a,[<H_ButtonsPressed]      ; 0A:54A6
     and  $C0                        ; 0A:54A8
     jr   nz,Code0A54C0              ; 0A:54AA
     ld   a,[$D90C]                  ; 0A:54AC
@@ -881,7 +882,7 @@ Code0A549F:
     ld   [$D90C],a                  ; 0A:54B3
     jp   Code0A5C31                 ; 0A:54B6
 Code0A54B9:
-    ldh  a,[<H_ButtonFlags]         ; 0A:54B9
+    ldh  a,[<H_ButtonsHeld]         ; 0A:54B9
     and  $C0                        ; 0A:54BB
     jp   z,Code0A54F2               ; 0A:54BD
 Code0A54C0:
@@ -914,7 +915,7 @@ Code0A54E3:
     ld   [$D90C],a                  ; 0A:54EC
     jp   Code0A5C31                 ; 0A:54EF
 Code0A54F2:
-    ldh  a,[<$FF8C]                 ; 0A:54F2
+    ldh  a,[<H_ButtonsPressed]      ; 0A:54F2
     and  $30                        ; 0A:54F4
     jr   nz,Code0A550C              ; 0A:54F6
     ld   a,[$D90C]                  ; 0A:54F8
@@ -924,7 +925,7 @@ Code0A54F2:
     ld   [$D90C],a                  ; 0A:54FF
     jp   Code0A5C31                 ; 0A:5502
 Code0A5505:
-    ldh  a,[<H_ButtonFlags]         ; 0A:5505
+    ldh  a,[<H_ButtonsHeld]         ; 0A:5505
     and  $30                        ; 0A:5507
     jp   z,Code0A5596               ; 0A:5509
 Code0A550C:
@@ -1405,7 +1406,7 @@ Code0A5C83:
     sla  a                          ; 0A:5C94
     sla  a                          ; 0A:5C96
     ld   c,a                        ; 0A:5C98
-    ldh  a,[<$FFB7]                 ; 0A:5C99
+    ldh  a,[<H_GlobalTimer]         ; 0A:5C99
     srl  a                          ; 0A:5C9B
     srl  a                          ; 0A:5C9D
     and  $03                        ; 0A:5C9F
@@ -1438,7 +1439,7 @@ Code0A5CAF:
     ldh  [<$FF97],a                 ; 0A:5CC0
     jr   nz,Code0A5CAF              ; 0A:5CC2
 Code0A5CC4:
-    ldh  a,[<$FFB7]                 ; 0A:5CC4
+    ldh  a,[<H_GlobalTimer]         ; 0A:5CC4
     srl  a                          ; 0A:5CC6
     and  $0E                        ; 0A:5CC8
     ld   c,a                        ; 0A:5CCA
@@ -1520,7 +1521,7 @@ Code0A5D38:
     ld   a,$1C                      ; 0A:5D40
     ldh  [<$FF97],a                 ; 0A:5D42
     ld   hl,DataPtrs0A5BAE          ; 0A:5D44
-    ldh  a,[<$FFB7]                 ; 0A:5D47
+    ldh  a,[<H_GlobalTimer]         ; 0A:5D47
     srl  a                          ; 0A:5D49
     srl  a                          ; 0A:5D4B
     and  $03                        ; 0A:5D4D
@@ -1555,7 +1556,7 @@ Code0A5D68:
     sla  a                          ; 0A:5D7B
     sla  a                          ; 0A:5D7D
     ld   c,a                        ; 0A:5D7F
-    ldh  a,[<$FFB7]                 ; 0A:5D80
+    ldh  a,[<H_GlobalTimer]         ; 0A:5D80
     srl  a                          ; 0A:5D82
     srl  a                          ; 0A:5D84
     and  $03                        ; 0A:5D86
@@ -2737,7 +2738,7 @@ Code0A6C67:
     ld   b,a                        ; 0A:6CF3
     ld   hl,Pal_AlbumImageBG        ; 0A:6CF4
     add  hl,bc                      ; 0A:6CF7
-    ld   de,$DF80                   ; 0A:6CF8
+    ld   de,W_PaletteBuffer         ; 0A:6CF8
     ld   bc,$0038                   ; 0A:6CFB
     call CopyBytes                  ; 0A:6CFE
     ld   hl,Pal_AlbumImageBG+$38    ; 0A:6D01
@@ -3015,7 +3016,7 @@ Code0A6F77:
 Code0A6F7E:
     ld   a,$0A                      ; 0A:6F7E
     call Sub00160F                  ; 0A:6F80
-    ldh  a,[<$FF8C]                 ; 0A:6F83
+    ldh  a,[<H_ButtonsPressed]      ; 0A:6F83
     bit  1,a                        ; 0A:6F85
     jr   z,Code0A6F92               ; 0A:6F87
     ld   a,$63                      ; 0A:6F89
@@ -3098,7 +3099,7 @@ Code0A704F:
     ret                             ; 0A:705F
 
 Code0A7060:
-    ldh  a,[<$FF8C]                 ; 0A:7060
+    ldh  a,[<H_ButtonsPressed]      ; 0A:7060
     bit  1,a                        ; 0A:7062
     jr   z,Code0A7071               ; 0A:7064
     ld   a,$31                      ; 0A:7066
@@ -3345,7 +3346,7 @@ Code0A72AD:
 Code0A72B4:
     ld   a,$0A                      ; 0A:72B4
     call Sub00160F                  ; 0A:72B6
-    ldh  a,[<$FF8C]                 ; 0A:72B9
+    ldh  a,[<H_ButtonsPressed]      ; 0A:72B9
     bit  1,a                        ; 0A:72BB
     jr   z,Code0A72C9               ; 0A:72BD
     ld   a,$63                      ; 0A:72BF
@@ -3520,7 +3521,7 @@ Code0A7473:
     ret                             ; 0A:749E
 
 Code0A749F:
-    ldh  a,[<$FF8C]                 ; 0A:749F
+    ldh  a,[<H_ButtonsPressed]      ; 0A:749F
     bit  1,a                        ; 0A:74A1
     jr   z,Code0A74B2               ; 0A:74A3
     ld   a,$63                      ; 0A:74A5

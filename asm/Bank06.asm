@@ -282,7 +282,7 @@ Code0641BC:
     jp   c,Return064219             ; 06:41BF
     call Sub001D21                  ; 06:41C2
     jr   nc,Code0641D3              ; 06:41C5
-    ldh  a,[<$FFB7]                 ; 06:41C7
+    ldh  a,[<H_GlobalTimer]         ; 06:41C7
     srl  a                          ; 06:41C9
     jr   nc,Code0641D3              ; 06:41CB
     ld   a,$06                      ; 06:41CD
@@ -430,7 +430,7 @@ Code0642AF:
     jp   c,Return0642E3             ; 06:42B2
     call Sub001D21                  ; 06:42B5
     jr   nc,Code0642C6              ; 06:42B8
-    ldh  a,[<$FFB7]                 ; 06:42BA
+    ldh  a,[<H_GlobalTimer]         ; 06:42BA
     srl  a                          ; 06:42BC
     jr   nc,Code0642C6              ; 06:42BE
     ld   a,$06                      ; 06:42C0
@@ -562,7 +562,7 @@ Code064377:
     ld   hl,$C1DB                   ; 06:4396
     or   [hl]                       ; 06:4399
     jr   nz,Code0643AA              ; 06:439A
-    ldh  a,[<$FFB7]                 ; 06:439C
+    ldh  a,[<H_GlobalTimer]         ; 06:439C
     srl  a                          ; 06:439E
     jr   nc,Code0643BC              ; 06:43A0
     ld   a,$06                      ; 06:43A2
@@ -850,7 +850,7 @@ Code064565:
     jr   c,Code06458E               ; 06:4582
     call Sub064618                  ; 06:4584
     ld   d,$00                      ; 06:4587
-    ldh  a,[<$FFB7]                 ; 06:4589
+    ldh  a,[<H_GlobalTimer]         ; 06:4589
     and  $08                        ; 06:458B
     ld   e,a                        ; 06:458D
 Code06458E:
@@ -1078,7 +1078,7 @@ Code0646CA:
     add  hl,bc                      ; 06:46ED
     ld   [hl],a                     ; 06:46EE
     ld   hl,Data064728              ; 06:46EF
-    ld   a,[$C1C5]                  ; 06:46F2
+    ld   a,[W_PlayerSize]           ; 06:46F2
     and  a                          ; 06:46F5
     jr   z,Code0646FB               ; 06:46F6
     ld   hl,Data06472B              ; 06:46F8
@@ -1138,7 +1138,7 @@ Code064744:
     ld   e,a                        ; 06:4749
     ld   d,$00                      ; 06:474A
     ld   hl,Data064728              ; 06:474C
-    ld   a,[$C1C5]                  ; 06:474F
+    ld   a,[W_PlayerSize]           ; 06:474F
     and  a                          ; 06:4752
     jr   z,Code064758               ; 06:4753
     ld   hl,Data06472B              ; 06:4755
@@ -1247,7 +1247,7 @@ Sub06482C:
     call Sub0026BE                  ; 06:482E
     ret  c                          ; 06:4831
     ld   hl,Data06482A              ; 06:4832
-    ld   a,[$C1C5]                  ; 06:4835
+    ld   a,[W_PlayerSize]           ; 06:4835
     and  a                          ; 06:4838
     jr   z,Code06483C               ; 06:4839
     inc  hl                         ; 06:483B
@@ -1653,7 +1653,7 @@ Sub064AA0:
 
 Sub064AD1:
     ld   a,$00                      ; 06:4AD1
-    ld   hl,$DF80                   ; 06:4AD3
+    ld   hl,W_PaletteBuffer         ; 06:4AD3
     ldi  [hl],a                     ; 06:4AD6
     ld   [hl],a                     ; 06:4AD7
     inc  a                          ; 06:4AD8
@@ -1699,7 +1699,8 @@ Code064AF8:
     ret                             ; 06:4B27
 
 Sub064B28:
-    ldh  a,[<$FF8C]                 ; 06:4B28
+; Game state 2A
+    ldh  a,[<H_ButtonsPressed]      ; 06:4B28
     and  $08                        ; 06:4B2A
     jr   z,Return064B32             ; 06:4B2C
     ld   a,$27                      ; 06:4B2E
@@ -1769,7 +1770,7 @@ Sub064B87:
     ld   hl,$D978                   ; 06:4BB5
     ld   a,[$DA79]                  ; 06:4BB8
     ldi  [hl],a                     ; 06:4BBB
-    ldh  a,[<H_ButtonFlags]         ; 06:4BBC
+    ldh  a,[<H_ButtonsHeld]         ; 06:4BBC
     ldi  [hl],a                     ; 06:4BBE
     ld   a,[$C535]                  ; 06:4BBF
     ldi  [hl],a                     ; 06:4BC2
@@ -1798,7 +1799,7 @@ Sub064B87:
     ld   hl,$DA08                   ; 06:4BE3
     ld   a,[$DA79]                  ; 06:4BE6
     ldi  [hl],a                     ; 06:4BE9
-    ldh  a,[<H_ButtonFlags]         ; 06:4BEA
+    ldh  a,[<H_ButtonsHeld]         ; 06:4BEA
     ld   [hl],a                     ; 06:4BEC
     ld   hl,$DA39                   ; 06:4BED
     ld   a,[hl]                     ; 06:4BF0
@@ -1811,9 +1812,9 @@ Sub064B87:
     jp   z,Code064C05               ; 06:4BFF
     jp   Code064C0F                 ; 06:4C02
 Code064C05:
-    ldh  a,[<$FF8C]                 ; 06:4C05
+    ldh  a,[<H_ButtonsPressed]      ; 06:4C05
     ld   [$D979],a                  ; 06:4C07
-    ldh  a,[<$FF8C]                 ; 06:4C0A
+    ldh  a,[<H_ButtonsPressed]      ; 06:4C0A
     ld   [$DA09],a                  ; 06:4C0C
 Code064C0F:
     ld   a,[$DA6A]                  ; 06:4C0F
@@ -1840,7 +1841,7 @@ Code064C2F:
     jp   z,Code064C3E               ; 06:4C38
     jp   Code064C56                 ; 06:4C3B
 Code064C3E:
-    ldh  a,[<$FF8C]                 ; 06:4C3E
+    ldh  a,[<H_ButtonsPressed]      ; 06:4C3E
     ld   hl,$D9D9                   ; 06:4C40
     ld   [hl],a                     ; 06:4C43
     xor  a                          ; 06:4C44
@@ -1856,7 +1857,7 @@ Code064C3E:
     ld   [hl],a                     ; 06:4C52
     jp   Code064C65                 ; 06:4C53
 Code064C56:
-    ldh  a,[<H_ButtonFlags]         ; 06:4C56
+    ldh  a,[<H_ButtonsHeld]         ; 06:4C56
     ld   hl,$D9D9                   ; 06:4C58
     ld   [hl],a                     ; 06:4C5B
     xor  a                          ; 06:4C5C
@@ -1959,6 +1960,7 @@ Sub064CF8:
     ret                             ; 06:4D0B
 
 Sub064D0C:
+; shared by game states 00-03,18-19 (init/main for: pre-title, title, main menu)
     ld   a,[$DA6E]                  ; 06:4D0C
     and  a                          ; 06:4D0F
     jp   z,Code064D49               ; 06:4D10
@@ -1979,24 +1981,20 @@ Sub064D0C:
     cp   $02                        ; 06:4D33
     jp   z,Code064D3F               ; 06:4D35
     ret                             ; 06:4D38
-
 Code064D39:
     ld   a,$02                      ; 06:4D39
     ld   [$DA73],a                  ; 06:4D3B
     ret                             ; 06:4D3E
-
 Code064D3F:
     ld   a,$00                      ; 06:4D3F
     ld   [$DA73],a                  ; 06:4D41
     ld   a,$30                      ; 06:4D44
     ldh  [<$FFF3],a                 ; 06:4D46
     ret                             ; 06:4D48
-
 Code064D49:
     ld   a,$01                      ; 06:4D49
     ld   [$DA6E],a                  ; 06:4D4B
     ret                             ; 06:4D4E
-
 Code064D4F:
     ld   a,$00                      ; 06:4D4F
     ldh  [<$FF91],a                 ; 06:4D51
@@ -2028,7 +2026,7 @@ Code064D64:
     jr   nz,Code064D9D              ; 06:4D89
 Code064D8B:
     ld   b,$20                      ; 06:4D8B
-    ld   hl,$DF80                   ; 06:4D8D
+    ld   hl,W_PaletteBuffer         ; 06:4D8D
 Code064D90:
     ld   a,$FF                      ; 06:4D90
     ldi  [hl],a                     ; 06:4D92
@@ -2578,7 +2576,7 @@ Sub065156:
     ldi  [hl],a                     ; 06:519A
     ld   a,[$DA79]                  ; 06:519B
     ldi  [hl],a                     ; 06:519E
-    ldh  a,[<H_ButtonFlags]         ; 06:519F
+    ldh  a,[<H_ButtonsHeld]         ; 06:519F
     ldi  [hl],a                     ; 06:51A1
     ld   de,$D976                   ; 06:51A2
     ld   a,[de]                     ; 06:51A5
@@ -2780,7 +2778,7 @@ Code06529A:
     push hl                         ; 06:529A
     call Sub0011C8                  ; 06:529B
     pop  hl                         ; 06:529E
-    ldh  a,[<$FF8C]                 ; 06:529F
+    ldh  a,[<H_ButtonsPressed]      ; 06:529F
     bit  1,a                        ; 06:52A1
     jr   z,Code0652AB               ; 06:52A3
     ld   a,$FF                      ; 06:52A5
@@ -2793,7 +2791,7 @@ Code0652AB:
     jp   z,Code06532F               ; 06:52B0
     cp   $02                        ; 06:52B3
     jp   z,Code0652C8               ; 06:52B5
-    ldh  a,[<$FF8C]                 ; 06:52B8
+    ldh  a,[<H_ButtonsPressed]      ; 06:52B8
     bit  0,a                        ; 06:52BA
     jr   nz,Code06532F              ; 06:52BC
     ld   b,$02                      ; 06:52BE
@@ -3174,12 +3172,14 @@ Return065559:
     ret                             ; 06:5559
 
 Sub06555A:
+; Game state 2F
     ld   a,[$C168]                  ; 06:555A
     ldh  a,[<H_GameSubstate]        ; 06:555D
     rst  $00                        ; 06:555F
 .dw Code065566                      ; 06:5560
 .dw Code0655E7                      ; 06:5562
 .dw Code0655F9                      ; 06:5564
+
 Code065566:
     ld   hl,SRAMBANK                ; 06:5566
     ld   a,$00                      ; 06:5569
@@ -3279,6 +3279,7 @@ Return065615:
     ret                             ; 06:5615
 
 Sub065616:
+; Game state 30
     ldh  a,[<H_GameSubstate]        ; 06:5616
     rst  $00                        ; 06:5618
 .dw Code065672                      ; 06:5619
@@ -3583,6 +3584,7 @@ Return0658FB:
     $CE,$00
 
 Sub06590E:
+; Game state 22
     ld   a,[$C168]                  ; 06:590E
     rst  $00                        ; 06:5911
 .dw Code065916                      ; 06:5912
@@ -3652,7 +3654,7 @@ Return065990:
     ret                             ; 06:5990
 
 Code065991:
-    ldh  a,[<$FF8C]                 ; 06:5991
+    ldh  a,[<H_ButtonsPressed]      ; 06:5991
     and  $09                        ; 06:5993
     jr   nz,Code06599F              ; 06:5995
     ld   hl,$C285                   ; 06:5997
@@ -3670,7 +3672,8 @@ Code06599F:
 Return0659AD:
     ret                             ; 06:59AD
 
-Sub0659AE:
+AwardCutsceneMain:
+; Game state 1C
     ld   a,[$C168]                  ; 06:59AE
     rst  $00                        ; 06:59B1
 .dw Code0659BA                      ; 06:59B2
@@ -3778,7 +3781,7 @@ Code065A31:
     call LoadFullPaletteLong        ; 06:5A7F
     xor  a                          ; 06:5A82
     ldh  [<SVBK],a                  ; 06:5A83
-    ld   hl,$DF80                   ; 06:5A85
+    ld   hl,W_PaletteBuffer         ; 06:5A85
     ld   b,$2C                      ; 06:5A88
 Code065A8A:
     ld   [hl],$FF                   ; 06:5A8A
@@ -3972,7 +3975,7 @@ Code065BB2:
     ret                             ; 06:5BC3
 
 Code065BC4:
-    ldh  a,[<$FF8C]                 ; 06:5BC4
+    ldh  a,[<H_ButtonsPressed]      ; 06:5BC4
     and  $01                        ; 06:5BC6
     ret  z                          ; 06:5BC8
     ld   a,[$C1B0]                  ; 06:5BC9
@@ -4053,6 +4056,7 @@ Code065C7C:
     ret                             ; 06:5C83
 
 Sub065C84:
+; Game state 3A
     ldh  a,[<H_GameSubstate]        ; 06:5C84
     rst  $00                        ; 06:5C86
 .dw Code065C8F                      ; 06:5C87
@@ -4096,7 +4100,7 @@ Code066280:
     ld   a,$07                      ; 06:6293
     ldh  [<SVBK],a                  ; 06:6295
     ld   a,$00                      ; 06:6297
-    ld   hl,$DF80                   ; 06:6299
+    ld   hl,W_PaletteBuffer         ; 06:6299
     ld   b,$06                      ; 06:629C
 Code06629E:
     ldi  [hl],a                     ; 06:629E
@@ -4109,7 +4113,7 @@ Code06629E:
     ldh  [<$FFC0],a                 ; 06:62A8
     xor  a                          ; 06:62AA
     ldh  [<SVBK],a                  ; 06:62AB
-    ld   hl,$DF80                   ; 06:62AD
+    ld   hl,W_PaletteBuffer         ; 06:62AD
     ld   b,$20                      ; 06:62B0
 Code0662B2:
     ld   [hl],$FF                   ; 06:62B2
@@ -4154,7 +4158,7 @@ Code0662EB:
     ret                             ; 06:62FD
 
 Code0662FE:
-    ldh  a,[<$FF8C]                 ; 06:62FE
+    ldh  a,[<H_ButtonsPressed]      ; 06:62FE
     and  $01                        ; 06:6300
     ret  z                          ; 06:6302
     ld   a,$00                      ; 06:6303

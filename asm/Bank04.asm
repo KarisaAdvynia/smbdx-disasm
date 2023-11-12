@@ -127,7 +127,7 @@ Code0444D0:
     ld   hl,Data044000              ; 04:44D0
     add  hl,de                      ; 04:44D3
     ld   a,[hl]                     ; 04:44D4
-    ld   hl,$DF80                   ; 04:44D5
+    ld   hl,W_PaletteBuffer         ; 04:44D5
     add  hl,bc                      ; 04:44D8
     ld   [hl],a                     ; 04:44D9
     inc  e                          ; 04:44DA
@@ -258,21 +258,21 @@ Code044931:
     jr   nz,Code044931              ; 04:4936
     ret                             ; 04:4938
 
-Data044939:                         ; 04:4939
+SublevelTypeMusicIDs:               ; 04:4939
 .db $62,$63,$66,$62,$68,$62
-Data04493F:                         ; 04:493F
-.dw $0190,$0190,$012C,$012C,$0190,$0190,$012C,$012C,\
-    $0190,$012C,$012C,$012C,$0190,$0190,$012C,$0190,\
-    $012C,$0190,$012C,$012C,$0190,$0190,$012C,$012C,\
-    $0190,$0190,$012C,$0190,$012C,$0190,$012C,$0190
-Data04497F:                         ; 04:497F
-.dw $0190,$0190,$012C,$012C,$0190,$0190,$012C,$012C,\
-    $0190,$012C,$012C,$012C,$0190,$0190,$012C,$0190,\
-    $012C,$0190,$012C,$012C,$0190,$0190,$012C,$012C,\
-    $0190,$0190,$012C,$0190,$012C,$0190,$012C,$0190,\
-    $0190,$0190,$0190,$0190,$0190,$0190,$0190,$0190,\
-    $0190,$0190,$0190,$012C,$0190,$0190,$0190,$012C,\
-    $0190,$0190,$0190,$0190
+LevelTimers0:                       ; 04:493F
+.dw 400, 400, 300, 300, 400, 400, 300, 300,\
+    400, 300, 300, 300, 400, 400, 300, 400,\
+    300, 400, 300, 300, 400, 400, 300, 300,\
+    400, 400, 300, 400, 300, 400, 300, 400,
+LevelTimersSP:                      ; 04:497F
+.dw 400, 400, 300, 300, 400, 400, 300, 300,\
+    400, 300, 300, 300, 400, 400, 300, 400,\
+    300, 400, 300, 300, 400, 400, 300, 300,\
+    400, 400, 300, 400, 300, 400, 300, 400,\
+    400, 400, 400, 400, 400, 400, 400, 400,\
+    400, 400, 400, 300, 400, 400, 400, 300,\
+    400, 400, 400, 400
 
 Sub0449E7:
     ld   a,[W_SublevelID]           ; 04:49E7
@@ -313,7 +313,7 @@ Code044A27:
     and  $0F                        ; 04:4A29
     ld   e,a                        ; 04:4A2B
     ld   d,$00                      ; 04:4A2C
-    ld   hl,Data044939              ; 04:4A2E
+    ld   hl,SublevelTypeMusicIDs    ; 04:4A2E
     add  hl,de                      ; 04:4A31
     ld   a,[hl]                     ; 04:4A32
     ld   [$DE68],a                  ; 04:4A33
@@ -350,11 +350,11 @@ Sub044A64:
     ld   e,a                        ; 04:4A64
     sla  e                          ; 04:4A65
     ld   d,$00                      ; 04:4A67
-    ld   hl,Data04493F              ; 04:4A69
+    ld   hl,LevelTimers0            ; 04:4A69
     ld   a,[W_SPFlag]               ; 04:4A6C
     and  a                          ; 04:4A6F
     jr   z,Code044A75               ; 04:4A70
-    ld   hl,Data04497F              ; 04:4A72
+    ld   hl,LevelTimersSP           ; 04:4A72
 Code044A75:
     add  hl,de                      ; 04:4A75
     ldi  a,[hl]                     ; 04:4A76
@@ -365,8 +365,8 @@ Code044A75:
     ld   [$DED0],a                  ; 04:4A80
     ret                             ; 04:4A83
 
-Data044A84:                         ; 04:4A84
-.dw $0118,$012C,$012C,$00FA,$012C,$012C,$012C,$00FA
+RaceLevelTimers:                    ; 04:4A84
+.dw 280, 300, 300, 250, 300, 300, 300, 250
 
 Sub044A94:
     ld   a,[W_SublevelID]           ; 04:4A94
@@ -375,7 +375,7 @@ Sub044A94:
     sla  a                          ; 04:4A9B
     ld   e,a                        ; 04:4A9D
     ld   d,$00                      ; 04:4A9E
-    ld   hl,Data044A84              ; 04:4AA0
+    ld   hl,RaceLevelTimers         ; 04:4AA0
     add  hl,de                      ; 04:4AA3
     ldi  a,[hl]                     ; 04:4AA4
     ld   [$C17D],a                  ; 04:4AA5
@@ -534,7 +534,7 @@ Sub044BA3:
     ret                             ; 04:4BB1
 
 Code044BB2:
-    ldh  a,[<$FF8C]                 ; 04:4BB2
+    ldh  a,[<H_ButtonsPressed]      ; 04:4BB2
     ret                             ; 04:4BB4
 
 Code044BB5:
@@ -576,7 +576,8 @@ Code044BEE:
     ld   [$C168],a                  ; 04:4BF3
     ret                             ; 04:4BF6
 
-Sub044BF7:
+PauseMain:
+; Game state 0C
     call Sub044C10                  ; 04:4BF7
     ld   a,[$C168]                  ; 04:4BFA
     and  a                          ; 04:4BFD
@@ -661,10 +662,10 @@ Code044C6A:
     jr   z,Code044C9C               ; 04:4C99
     inc  [hl]                       ; 04:4C9B
 Code044C9C:
-    ld   a,[$C1CE]                  ; 04:4C9C
+    ld   a,[W_PlayerFireFlag]       ; 04:4C9C
     ld   [$C1AF],a                  ; 04:4C9F
     xor  a                          ; 04:4CA2
-    ld   [$C1CE],a                  ; 04:4CA3
+    ld   [W_PlayerFireFlag],a       ; 04:4CA3
     ld   a,$04                      ; 04:4CA6
     rst  $10                        ; 04:4CA8
 .dl SubL_0B421E                     ; 04:4CA9
@@ -699,13 +700,13 @@ Code044CD9:
     ld   a,$00                      ; 04:4CD9
     and  a                          ; 04:4CDB
     jr   z,Code044CE9               ; 04:4CDC
-    ldh  a,[<$FF8C]                 ; 04:4CDE
+    ldh  a,[<H_ButtonsPressed]      ; 04:4CDE
     and  $30                        ; 04:4CE0
     jr   z,Code044CE9               ; 04:4CE2
     ld   a,$7F                      ; 04:4CE4
     ld   [W_PlayerLives],a          ; 04:4CE6
 Code044CE9:
-    ldh  a,[<$FF8C]                 ; 04:4CE9
+    ldh  a,[<H_ButtonsPressed]      ; 04:4CE9
     and  $09                        ; 04:4CEB
     jr   z,Code044D5A               ; 04:4CED
     ld   a,[$C322]                  ; 04:4CEF
@@ -724,12 +725,12 @@ Code044CE9:
 
 Code044D0C:
     ld   a,[$C1AF]                  ; 04:4D0C
-    ld   [$C1CE],a                  ; 04:4D0F
+    ld   [W_PlayerFireFlag],a       ; 04:4D0F
     ld   a,$04                      ; 04:4D12
     rst  $10                        ; 04:4D14
 .dl SubL_075584                     ; 04:4D15
     xor  a                          ; 04:4D18
-    ld   [$C1CE],a                  ; 04:4D19
+    ld   [W_PlayerFireFlag],a       ; 04:4D19
     ld   a,$04                      ; 04:4D1C
     rst  $10                        ; 04:4D1E
 .dl SubL_0757EF                     ; 04:4D1F
@@ -766,10 +767,10 @@ Code044D45:
     ret                             ; 04:4D59
 
 Code044D5A:
-    ldh  a,[<$FF8C]                 ; 04:4D5A
+    ldh  a,[<H_ButtonsPressed]      ; 04:4D5A
     and  $C4                        ; 04:4D5C
     jr   z,Return044DC5             ; 04:4D5E
-    ldh  a,[<$FF8C]                 ; 04:4D60
+    ldh  a,[<H_ButtonsPressed]      ; 04:4D60
     and  $84                        ; 04:4D62
     jr   nz,Code044D72              ; 04:4D64
     ld   a,[$C322]                  ; 04:4D66
@@ -922,7 +923,7 @@ Code044E86:
     ret                             ; 04:4E90
 
 Code044E91:
-    ldh  a,[<$FF8C]                 ; 04:4E91
+    ldh  a,[<H_ButtonsPressed]      ; 04:4E91
     and  $C0                        ; 04:4E93
     jr   z,Code044ECB               ; 04:4E95
     ld   a,$47                      ; 04:4E97
@@ -953,7 +954,7 @@ Code044EAA:
     ld   hl,$DF07                   ; 04:4EC6
     ld   [hl],$46                   ; 04:4EC9
 Code044ECB:
-    ldh  a,[<$FF8C]                 ; 04:4ECB
+    ldh  a,[<H_ButtonsPressed]      ; 04:4ECB
     and  $09                        ; 04:4ECD
     jr   z,Return044EF7             ; 04:4ECF
     ld   a,[$C322]                  ; 04:4ED1
@@ -987,7 +988,7 @@ Code044EF8:
     cp   $06                        ; 04:4F04
     jr   z,Code044F0E               ; 04:4F06
     ld   a,[$C1AF]                  ; 04:4F08
-    ld   [$C1CE],a                  ; 04:4F0B
+    ld   [W_PlayerFireFlag],a       ; 04:4F0B
 Code044F0E:
     ld   a,$04                      ; 04:4F0E
     rst  $10                        ; 04:4F10
@@ -1116,14 +1117,14 @@ Code04503E:
     ld   a,$00                      ; 04:503E
     and  a                          ; 04:5040
     jr   z,Code045050               ; 04:5041
-    ldh  a,[<$FF8C]                 ; 04:5043
+    ldh  a,[<H_ButtonsPressed]      ; 04:5043
     and  $40                        ; 04:5045
     jr   z,Code045050               ; 04:5047
     ld   a,$7F                      ; 04:5049
     ld   [W_PlayerLives],a          ; 04:504B
     jr   Code045068                 ; 04:504E
 Code045050:
-    ldh  a,[<$FF8C]                 ; 04:5050
+    ldh  a,[<H_ButtonsPressed]      ; 04:5050
     and  $08                        ; 04:5052
     jr   z,Code045068               ; 04:5054
     ld   a,$00                      ; 04:5056
@@ -1332,14 +1333,14 @@ SubL_0451A8:
     ld   a,[$C1AE]                  ; 04:51A8
     ld   c,a                        ; 04:51AB
     ld   b,$00                      ; 04:51AC
-    ld   hl,$DF80                   ; 04:51AE
+    ld   hl,W_PaletteBuffer         ; 04:51AE
     add  hl,bc                      ; 04:51B1
     ld   d,$01                      ; 04:51B2
     call Sub0451BD                  ; 04:51B4
     rst  $18                        ; 04:51B7
 
 Sub0451B8:
-    ld   hl,$DF80                   ; 04:51B8
+    ld   hl,W_PaletteBuffer         ; 04:51B8
     ld   d,$20                      ; 04:51BB
 
 Sub0451BD:
@@ -1419,7 +1420,7 @@ SubL_045225:
     ld   a,[$C1AE]                  ; 04:5225
     ld   c,a                        ; 04:5228
     ld   b,$00                      ; 04:5229
-    ld   hl,$DF80                   ; 04:522B
+    ld   hl,W_PaletteBuffer         ; 04:522B
     add  hl,bc                      ; 04:522E
     ld   a,$01                      ; 04:522F
     ldh  [<$FF9A],a                 ; 04:5231
@@ -1434,7 +1435,7 @@ SubL_045237:
     rst  $18                        ; 04:5241
 
 Sub045242:
-    ld   hl,$DF80                   ; 04:5242
+    ld   hl,W_PaletteBuffer         ; 04:5242
     ld   a,$20                      ; 04:5245
     ldh  [<$FF9A],a                 ; 04:5247
 
@@ -1983,7 +1984,9 @@ Data046722:                         ; 04:6722
     $00,$00,$00,$00,$3A,$00,$3B,$00,\
     $3C,$3D,$3E,$3F,$00,$00,$00,$00,\
     $00
-Code04681B:
+
+CreditsMain:
+; Game state 39
     ldh  a,[<H_GameSubstate]        ; 04:681B
     rst  $00                        ; 04:681D
 .dw Code04682E                      ; 04:681E
@@ -2164,7 +2167,7 @@ Code04695A:
     ret                             ; 04:695E
 
 Code04695F:
-    ldh  a,[<$FFB7]                 ; 04:695F
+    ldh  a,[<H_GlobalTimer]         ; 04:695F
     and  $01                        ; 04:6961
     ret  nz                         ; 04:6963
     ld   a,[$C3F2]                  ; 04:6964
@@ -2329,7 +2332,7 @@ Sub046A79:
     ld   a,$07                      ; 04:6A79
     ldh  [<SVBK],a                  ; 04:6A7B
     ld   hl,Data0466E2              ; 04:6A7D
-    ld   de,$DF80                   ; 04:6A80
+    ld   de,W_PaletteBuffer         ; 04:6A80
     ld   bc,$0040                   ; 04:6A83
     call CopyBytes                  ; 04:6A86
     ret                             ; 04:6A89
@@ -2337,7 +2340,7 @@ Sub046A79:
 Sub046A8A:
     xor  a                          ; 04:6A8A
     ldh  [<SVBK],a                  ; 04:6A8B
-    ld   hl,$DF80                   ; 04:6A8D
+    ld   hl,W_PaletteBuffer         ; 04:6A8D
     ld   c,$20                      ; 04:6A90
 Code046A92:
     ld   [hl],$FF                   ; 04:6A92

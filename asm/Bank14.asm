@@ -1,7 +1,8 @@
 .bank $14 slot 1
 .orga $4000
 
-Sub144000:
+ToyBoxMain:
+; Game state 2D
     ldh  a,[<H_GameSubstate]        ; 14:4000
     rst  $00                        ; 14:4002
 .dw Code1440B7                      ; 14:4003
@@ -157,7 +158,7 @@ Data1441BC:                         ; 14:41BC
     $70,$7C,$08,$00,$80,$6C,$0A,$00,\
     $80,$74,$0C,$00,$80,$7C,$0E,$00
 Code1441D4:
-    ldh  a,[<$FF8C]                 ; 14:41D4
+    ldh  a,[<H_ButtonsPressed]      ; 14:41D4
     bit  1,a                        ; 14:41D6
     jr   z,Code1441EB               ; 14:41D8
     ld   a,$18                      ; 14:41DA
@@ -195,7 +196,7 @@ Code144212:
     call Sub0010A9                  ; 14:4214
     jr   Code144286                 ; 14:4217
 Code144219:
-    ldh  a,[<$FF8C]                 ; 14:4219
+    ldh  a,[<H_ButtonsPressed]      ; 14:4219
     and  $30                        ; 14:421B
     jr   z,Code14424A               ; 14:421D
     ld   a,[$C41E]                  ; 14:421F
@@ -222,7 +223,7 @@ Code144244:
     ldh  [<$FFF2],a                 ; 14:4246
     jr   Code144286                 ; 14:4248
 Code14424A:
-    ldh  a,[<$FF8C]                 ; 14:424A
+    ldh  a,[<H_ButtonsPressed]      ; 14:424A
     and  $C0                        ; 14:424C
     jr   z,Code144286               ; 14:424E
     ld   a,[$C41D]                  ; 14:4250
@@ -517,7 +518,7 @@ Data144579:                         ; 14:4579
 Data14457E:                         ; 14:457E
 .db $00,$00,$04,$01,$03,$02
 Code144584:
-    ldh  a,[<$FF8C]                 ; 14:4584
+    ldh  a,[<H_ButtonsPressed]      ; 14:4584
     bit  1,a                        ; 14:4586
     jr   z,Code144593               ; 14:4588
     ld   a,$63                      ; 14:458A
@@ -559,7 +560,7 @@ Code1445B4:
     ldh  [<$FFF2],a                 ; 14:45CC
     jr   Code14464E                 ; 14:45CE
 Code1445D0:
-    ldh  a,[<$FF8C]                 ; 14:45D0
+    ldh  a,[<H_ButtonsPressed]      ; 14:45D0
     and  $30                        ; 14:45D2
     jr   z,Code144608               ; 14:45D4
     and  $10                        ; 14:45D6
@@ -589,7 +590,7 @@ Code144601:
     ld   [$D90D],a                  ; 14:4602
     jp   Code144635                 ; 14:4605
 Code144608:
-    ldh  a,[<$FF8C]                 ; 14:4608
+    ldh  a,[<H_ButtonsPressed]      ; 14:4608
     and  $C0                        ; 14:460A
     jr   z,Code14464E               ; 14:460C
     and  $80                        ; 14:460E
@@ -642,7 +643,7 @@ Code14464E:
     ld   a,[hl]                     ; 14:4664
     ldh  [<$FF98],a                 ; 14:4665
     ld   hl,DataPtrs144566          ; 14:4667
-    ldh  a,[<$FFB7]                 ; 14:466A
+    ldh  a,[<H_GlobalTimer]         ; 14:466A
     srl  a                          ; 14:466C
     and  $06                        ; 14:466E
     ld   c,a                        ; 14:4670
@@ -780,7 +781,7 @@ Code144905:
     xor  a                          ; 14:4908
     ldh  [<IE],a                    ; 14:4909
     ldh  [<$FF93],a                 ; 14:490B
-    ld   a,:Gr_FortuneCardsBank23              ; 14:490D
+    ld   a,:Gr_FortuneCardsBank23   ; 14:490D
     ld   [$C415],a                  ; 14:490F
     call Sub0010E4                  ; 14:4912
     ld   b,$04                      ; 14:4915
@@ -804,7 +805,7 @@ Code144921:
     rr   c                          ; 14:4930
     ld   b,a                        ; 14:4932  bc = index*480
     push bc                         ; 14:4933
-    ld   hl,Gr_FortuneCardsBank23              ; 14:4934
+    ld   hl,Gr_FortuneCardsBank23   ; 14:4934
     add  hl,bc                      ; 14:4937
     ld   de,$9300                   ; 14:4938
     ld   bc,$0480                   ; 14:493B
@@ -820,9 +821,9 @@ Code144921:
     ld   bc,$0800                   ; 14:4956
     call CopyBytes                  ; 14:4959
     pop  bc                         ; 14:495C  bc = index*480
-    ld   a,:Gr_FortuneCardsBank28              ; 14:495D
+    ld   a,:Gr_FortuneCardsBank28   ; 14:495D
     ld   [$C415],a                  ; 14:495F
-    ld   hl,Gr_FortuneCardsBank28              ; 14:4962
+    ld   hl,Gr_FortuneCardsBank28   ; 14:4962
     add  hl,bc                      ; 14:4965
     ld   de,$D300                   ; 14:4966
     ld   bc,$0480                   ; 14:4969
@@ -851,7 +852,7 @@ Code144921:
     ldi  a,[hl]                     ; 14:49A1
     ld   h,[hl]                     ; 14:49A2
     ld   l,a                        ; 14:49A3
-    ld   de,$DF80                   ; 14:49A4
+    ld   de,W_PaletteBuffer         ; 14:49A4
     ld   bc,$0038                   ; 14:49A7
     call CopyBytes                  ; 14:49AA
     ld   a,$01                      ; 14:49AD
@@ -1035,7 +1036,7 @@ Code144AD2:
     ret                             ; 14:4AE3
 
 Code144AE4:
-    ldh  a,[<$FF8C]                 ; 14:4AE4
+    ldh  a,[<H_ButtonsPressed]      ; 14:4AE4
     bit  1,a                        ; 14:4AE6
     jr   z,Code144AF3               ; 14:4AE8
     ld   a,$63                      ; 14:4AEA
@@ -1250,7 +1251,7 @@ Data14504D:                         ; 14:504D
 
 Code1450B5:
     call Sub145110                  ; 14:50B5
-    ldh  a,[<$FF8C]                 ; 14:50B8
+    ldh  a,[<H_ButtonsPressed]      ; 14:50B8
     bit  1,a                        ; 14:50BA
     jr   z,Code1450C7               ; 14:50BC
     ld   a,$01                      ; 14:50BE
@@ -1457,7 +1458,7 @@ Code145262:
     ld   [$C415],a                  ; 14:52B6
     ld   l,c                        ; 14:52B9
     ld   h,b                        ; 14:52BA
-    ld   de,$DF80                   ; 14:52BB
+    ld   de,W_PaletteBuffer         ; 14:52BB
     ld   bc,$0040                   ; 14:52BE
     ld   a,$14                      ; 14:52C1
     call CopyBytesLong              ; 14:52C3
@@ -1468,7 +1469,7 @@ Code145262:
     call Sub145306                  ; 14:52CE
     jp   Sub144189                  ; 14:52D1
 Code1452D4:
-    ldh  a,[<$FF8C]                 ; 14:52D4
+    ldh  a,[<H_ButtonsPressed]      ; 14:52D4
     bit  1,a                        ; 14:52D6
     jr   z,Code1452E3               ; 14:52D8
     ld   a,$01                      ; 14:52DA
@@ -1481,7 +1482,7 @@ Code1452E3:
     bit  0,a                        ; 14:52E3
     jr   z,Sub145306                ; 14:52E5
     ld   b,$40                      ; 14:52E7
-    ld   hl,$DF80                   ; 14:52E9
+    ld   hl,W_PaletteBuffer         ; 14:52E9
     xor  a                          ; 14:52EC
 Code1452ED:
     ldi  [hl],a                     ; 14:52ED
@@ -1918,10 +1919,10 @@ Code14595F:
     ld   a,$01                      ; 14:596D
     ld   [$C423],a                  ; 14:596F
 Code145972:
-    ldh  a,[<$FF8C]                 ; 14:5972
+    ldh  a,[<H_ButtonsPressed]      ; 14:5972
     bit  2,a                        ; 14:5974
     jp   nz,Code145773              ; 14:5976
-    ldh  a,[<$FF8C]                 ; 14:5979
+    ldh  a,[<H_ButtonsPressed]      ; 14:5979
     bit  1,a                        ; 14:597B
     jr   z,Code14598A               ; 14:597D
     ld   a,$63                      ; 14:597F
@@ -1961,11 +1962,11 @@ Code14598A:
     call Sub0010AD                  ; 14:59CA
     jp   Code145842                 ; 14:59CD
 Code1459D0:
-    ldh  a,[<$FF8C]                 ; 14:59D0
+    ldh  a,[<H_ButtonsPressed]      ; 14:59D0
     ld   c,a                        ; 14:59D2
     and  $C0                        ; 14:59D3
     jr   nz,Code1459EC              ; 14:59D5
-    ldh  a,[<H_ButtonFlags]         ; 14:59D7
+    ldh  a,[<H_ButtonsHeld]         ; 14:59D7
     ld   c,a                        ; 14:59D9
     and  $C0                        ; 14:59DA
     jp   z,Code145A01               ; 14:59DC
@@ -1987,7 +1988,7 @@ Code1459EC:
     call Sub14576E                  ; 14:59FB
     jp   Code145842                 ; 14:59FE
 Code145A01:
-    ldh  a,[<$FF8C]                 ; 14:5A01
+    ldh  a,[<H_ButtonsPressed]      ; 14:5A01
     and  $30                        ; 14:5A03
     jr   z,Code145A29               ; 14:5A05
     and  $10                        ; 14:5A07
@@ -2317,7 +2318,7 @@ Code145C51:
 
 Code145C58:
     call Sub145ACA                  ; 14:5C58
-    ldh  a,[<$FF8C]                 ; 14:5C5B
+    ldh  a,[<H_ButtonsPressed]      ; 14:5C5B
     bit  1,a                        ; 14:5C5D
     jr   z,Code145C8F               ; 14:5C5F
     ld   a,$63                      ; 14:5C61
@@ -2386,13 +2387,13 @@ Code145CD9:
     ret                             ; 14:5CE1
 
 Code145CE2:
-    ldh  a,[<H_ButtonFlags]         ; 14:5CE2
+    ldh  a,[<H_ButtonsHeld]         ; 14:5CE2
     ldh  [<$FF97],a                 ; 14:5CE4
     ld   hl,$D90C                   ; 14:5CE6
-    ldh  a,[<$FF8C]                 ; 14:5CE9
+    ldh  a,[<H_ButtonsPressed]      ; 14:5CE9
     and  $F0                        ; 14:5CEB
     jr   nz,Code145CFE              ; 14:5CED
-    ldh  a,[<H_ButtonFlags]         ; 14:5CEF
+    ldh  a,[<H_ButtonsHeld]         ; 14:5CEF
     and  $F0                        ; 14:5CF1
     jr   z,Return145D05             ; 14:5CF3
     dec  [hl]                       ; 14:5CF5
@@ -2691,21 +2692,21 @@ Sub145EBD:
     xor  a                          ; 14:5EBD
     ld   e,a                        ; 14:5EBE
     ld   d,a                        ; 14:5EBF
-Code145EC0:
+@Loop:
     ld   hl,$C439                   ; 14:5EC0
     add  hl,de                      ; 14:5EC3
     ld   a,[$D906]                  ; 14:5EC4
     cp   [hl]                       ; 14:5EC7
-    jr   nz,Code145EE6              ; 14:5EC8
+    jr   nz,@Continue               ; 14:5EC8
     inc  hl                         ; 14:5ECA
     ld   a,[$D905]                  ; 14:5ECB
     cp   [hl]                       ; 14:5ECE
-    jr   nz,Code145EE6              ; 14:5ECF
+    jr   nz,@Continue               ; 14:5ECF
     inc  hl                         ; 14:5ED1
     ld   a,[$D907]                  ; 14:5ED2
     inc  a                          ; 14:5ED5
     cp   [hl]                       ; 14:5ED6
-    jr   nz,Code145EE6              ; 14:5ED7
+    jr   nz,@Continue               ; 14:5ED7
     inc  hl                         ; 14:5ED9
     push bc                         ; 14:5EDA
     push de                         ; 14:5EDB
@@ -2715,14 +2716,14 @@ Code145EC0:
     call Sub145E21                  ; 14:5EE1
     pop  de                         ; 14:5EE4
     pop  bc                         ; 14:5EE5
-Code145EE6:
+@Continue:
     inc  de                         ; 14:5EE6
     inc  de                         ; 14:5EE7
     inc  de                         ; 14:5EE8
     inc  de                         ; 14:5EE9
     ld   a,[$0038]                  ; 14:5EEA
     cp   e                          ; 14:5EED
-    jr   c,Code145EC0               ; 14:5EEE
+    jr   c,@Loop                    ; 14:5EEE
     ret                             ; 14:5EF0
 
 Sub145EF1:
@@ -3601,7 +3602,7 @@ Code1466BD:
     xor  a                          ; 14:674A
     ldh  [<SVBK],a                  ; 14:674B
     ld   hl,Data14633C              ; 14:674D
-    ld   de,$DF80                   ; 14:6750
+    ld   de,W_PaletteBuffer         ; 14:6750
     ld   bc,$0080                   ; 14:6753
     call CopyBytes                  ; 14:6756
     ld   a,$01                      ; 14:6759
@@ -3752,7 +3753,7 @@ Code146850:
     ld   a,[$D908]                  ; 14:6878
     ldi  [hl],a                     ; 14:687B
     call Sub1467D4                  ; 14:687C
-    ldh  a,[<$FF8C]                 ; 14:687F
+    ldh  a,[<H_ButtonsPressed]      ; 14:687F
     and  $34                        ; 14:6881
     jr   z,Code1468CF               ; 14:6883
     ld   b,$01                      ; 14:6885
@@ -3798,7 +3799,7 @@ Code1468C7:
     ret                             ; 14:68CE
 
 Code1468CF:
-    ldh  a,[<$FF8C]                 ; 14:68CF
+    ldh  a,[<H_ButtonsPressed]      ; 14:68CF
     bit  1,a                        ; 14:68D1
     jr   z,Code1468E4               ; 14:68D3
     call Sub14683C                  ; 14:68D5
@@ -4002,7 +4003,7 @@ Code146A37:
     ld   [$C178],a                  ; 14:6A39
     call Sub146930                  ; 14:6A3C
     call Sub1467D4                  ; 14:6A3F
-    ldh  a,[<$FF8C]                 ; 14:6A42
+    ldh  a,[<H_ButtonsPressed]      ; 14:6A42
     and  $30                        ; 14:6A44
     jr   z,Code146A8D               ; 14:6A46
     ld   b,$01                      ; 14:6A48
@@ -4045,7 +4046,7 @@ Code146A66:
     ret                             ; 14:6A8C
 
 Code146A8D:
-    ldh  a,[<$FF8C]                 ; 14:6A8D
+    ldh  a,[<H_ButtonsPressed]      ; 14:6A8D
     bit  1,a                        ; 14:6A8F
     jr   z,Code146A98               ; 14:6A91
     call Sub14683C                  ; 14:6A93
@@ -4069,7 +4070,8 @@ Code146AA7:
 Return146ABE:
     ret                             ; 14:6ABE
 
-Sub146ABF:
+RankingMain:
+; Game state 2B
     ldh  a,[<H_GameSubstate]        ; 14:6ABF
     rst  $00                        ; 14:6AC1
 .dw Code146B76                      ; 14:6AC2
@@ -4108,6 +4110,7 @@ Data146AF6:                         ; 14:6AF6
     $7FFF,$7FFF,$7FFF,$7FFF,$639F,$629F,$10FF,$08B5,\
     $2B3F,$7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$7FFF,$7FFF,\
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
+
 Code146B76:
     ld   a,$FF                      ; 14:6B76
     ld   [$DE68],a                  ; 14:6B78
@@ -4169,7 +4172,7 @@ Code146BA9:
     call Sub146EF2                  ; 14:6BFC
     call Sub146AD0                  ; 14:6BFF
     ld   hl,Data146AF6              ; 14:6C02
-    ld   de,$DF80                   ; 14:6C05
+    ld   de,W_PaletteBuffer         ; 14:6C05
     ld   bc,$0080                   ; 14:6C08
     call CopyBytes                  ; 14:6C0B
     ld   a,$01                      ; 14:6C0E
@@ -4867,7 +4870,7 @@ Code14711C:
 
 Code147123:
     call Sub1470F0                  ; 14:7123
-    ldh  a,[<$FF8C]                 ; 14:7126
+    ldh  a,[<H_ButtonsPressed]      ; 14:7126
     bit  1,a                        ; 14:7128
     jr   z,Code14713B               ; 14:712A
     ld   a,$18                      ; 14:712C
@@ -4883,7 +4886,7 @@ Code14713B:
     ldh  a,[<H_GameSubstate]        ; 14:713B
     cp   $02                        ; 14:713D
     jr   nz,Code14716D              ; 14:713F
-    ldh  a,[<$FF8C]                 ; 14:7141
+    ldh  a,[<H_ButtonsPressed]      ; 14:7141
     bit  0,a                        ; 14:7143
     jr   z,Code147163               ; 14:7145
     xor  a                          ; 14:7147
@@ -4901,13 +4904,13 @@ Code14714B:
     ldh  [<H_GameSubstate],a        ; 14:715E
     jp   Sub0010AD                  ; 14:7160
 Code147163:
-    ldh  a,[<$FF8C]                 ; 14:7163
+    ldh  a,[<H_ButtonsPressed]      ; 14:7163
     and  $10                        ; 14:7165
     jr   z,Return147190             ; 14:7167
     ld   a,$03                      ; 14:7169
     jr   Code147175                 ; 14:716B
 Code14716D:
-    ldh  a,[<$FF8C]                 ; 14:716D
+    ldh  a,[<H_ButtonsPressed]      ; 14:716D
     and  $20                        ; 14:716F
     jr   z,Code147183               ; 14:7171
     ld   a,$01                      ; 14:7173
@@ -4919,7 +4922,7 @@ Code147175:
     ld   a,$47                      ; 14:717F
     ldh  [<$FFF2],a                 ; 14:7181
 Code147183:
-    ldh  a,[<$FF8C]                 ; 14:7183
+    ldh  a,[<H_ButtonsPressed]      ; 14:7183
     bit  0,a                        ; 14:7185
     jr   z,Return147190             ; 14:7187
     ld   a,$01                      ; 14:7189
@@ -5014,7 +5017,7 @@ Sub1471FA:
 Code147213:
     call Sub1471C3                  ; 14:7213
     call Sub1471FA                  ; 14:7216
-    ldh  a,[<$FF8C]                 ; 14:7219
+    ldh  a,[<H_ButtonsPressed]      ; 14:7219
     bit  1,a                        ; 14:721B
     jr   z,Code147225               ; 14:721D
     ld   a,$63                      ; 14:721F
@@ -5031,7 +5034,7 @@ Code147225:
     ret                             ; 14:7235
 
 Code147236:
-    ldh  a,[<$FF8C]                 ; 14:7236
+    ldh  a,[<H_ButtonsPressed]      ; 14:7236
     and  $01                        ; 14:7238
     ret  z                          ; 14:723A
     ld   a,[$D928]                  ; 14:723B
@@ -5063,13 +5066,13 @@ Code14724F:
     ld   l,$7F                      ; 14:726C
     call DMATransferVRAM            ; 14:726E
     ld   a,$0E                      ; 14:7271
-    ld   bc,Data0E4800              ; 14:7273
+    ld   bc,Gr_OW_ChalMenu+$800     ; 14:7273
     ld   de,$8800                   ; 14:7276
     ld   h,$14                      ; 14:7279
     ld   l,$7F                      ; 14:727B
     call DMATransferVRAM            ; 14:727D
     ld   a,$0E                      ; 14:7280
-    ld   bc,Data0E5000              ; 14:7282
+    ld   bc,Gr_OW_ChalMenu+$1000    ; 14:7282
     ld   de,$9000                   ; 14:7285
     ld   h,$14                      ; 14:7288
     ld   l,$7F                      ; 14:728A
@@ -5108,7 +5111,7 @@ Code1472C1:
     ld   a,$0E                      ; 14:72D2
     ld   [$C415],a                  ; 14:72D4
     ld   hl,Data0E5AD0              ; 14:72D7
-    ld   de,$DF80                   ; 14:72DA
+    ld   de,W_PaletteBuffer         ; 14:72DA
     ld   bc,$0038                   ; 14:72DD
     ld   a,$14                      ; 14:72E0
     call CopyBytesLong              ; 14:72E2

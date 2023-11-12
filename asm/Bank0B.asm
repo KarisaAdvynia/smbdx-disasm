@@ -40,7 +40,7 @@ Sub0B4027:
     ld   [$C1CF],a                  ; 0B:4039
     xor  a                          ; 0B:403C
     ldh  [<$FFAB],a                 ; 0B:403D
-    ld   [$C1C5],a                  ; 0B:403F
+    ld   [W_PlayerSize],a           ; 0B:403F
     inc  a                          ; 0B:4042
     ld   [$C1F3],a                  ; 0B:4043
     ret                             ; 0B:4046
@@ -90,7 +90,7 @@ SubL_0B407C:
     jr   z,ReturnL_0B40FE           ; 0B:409D
     cp   $08                        ; 0B:409F
     jr   z,ReturnL_0B40FE           ; 0B:40A1
-    ld   a,[$C1C5]                  ; 0B:40A3
+    ld   a,[W_PlayerSize]           ; 0B:40A3
     and  a                          ; 0B:40A6
     jr   z,Code0B40D8               ; 0B:40A7
     xor  a                          ; 0B:40A9
@@ -101,13 +101,13 @@ SubL_0B407C:
     ld   [$C1C4],a                  ; 0B:40B4
     ld   a,$A0                      ; 0B:40B7
     ld   [$C1D5],a                  ; 0B:40B9
-    ld   a,[$C1CE]                  ; 0B:40BC
+    ld   a,[W_PlayerFireFlag]       ; 0B:40BC
     push af                         ; 0B:40BF
     xor  a                          ; 0B:40C0
-    ld   [$C1CE],a                  ; 0B:40C1
+    ld   [W_PlayerFireFlag],a       ; 0B:40C1
     call Sub0B4222                  ; 0B:40C4
     pop  af                         ; 0B:40C7
-    ld   [$C1CE],a                  ; 0B:40C8
+    ld   [W_PlayerFireFlag],a       ; 0B:40C8
     ld   a,$25                      ; 0B:40CB
     ldh  [<$FFF3],a                 ; 0B:40CD
     ld   de,$0030                   ; 0B:40CF
@@ -186,13 +186,13 @@ Code0B40FF:
     ld   [hl],$A0                   ; 0B:4155
     ld   a,[$D2F5]                  ; 0B:4157
     ld   [$C366],a                  ; 0B:415A
-    ld   a,[$C1CE]                  ; 0B:415D
+    ld   a,[W_PlayerFireFlag]       ; 0B:415D
     push af                         ; 0B:4160
     xor  a                          ; 0B:4161
-    ld   [$C1CE],a                  ; 0B:4162
+    ld   [W_PlayerFireFlag],a       ; 0B:4162
     call Sub0B4222                  ; 0B:4165
     pop  af                         ; 0B:4168
-    ld   [$C1CE],a                  ; 0B:4169
+    ld   [W_PlayerFireFlag],a       ; 0B:4169
     ld   a,$25                      ; 0B:416C
     ldh  [<$FFF3],a                 ; 0B:416E
     ld   a,e                        ; 0B:4170
@@ -253,7 +253,7 @@ Sub0B4222:
     sla  a                          ; 0B:422C
     ld   e,a                        ; 0B:422E
 Code0B422F:
-    ld   a,[$C1CE]                  ; 0B:422F
+    ld   a,[W_PlayerFireFlag]       ; 0B:422F
     add  e                          ; 0B:4232
     ld   e,a                        ; 0B:4233
     ld   d,$00                      ; 0B:4234
@@ -294,7 +294,7 @@ Sub0B426B:
 
 Sub0B426F:
     ld   e,$02                      ; 0B:426F
-    ld   a,[$C1CE]                  ; 0B:4271
+    ld   a,[W_PlayerFireFlag]       ; 0B:4271
     add  e                          ; 0B:4274
     ld   e,a                        ; 0B:4275
     ld   d,$00                      ; 0B:4276
@@ -345,19 +345,19 @@ Sub0B42B8:
     and  a                          ; 0B:42BB
     jr   z,Code0B42D1               ; 0B:42BC
     ld   a,[$C516]                  ; 0B:42BE
-    ld   [$C1CE],a                  ; 0B:42C1
+    ld   [W_PlayerFireFlag],a       ; 0B:42C1
     call Sub0B426B                  ; 0B:42C4
     ld   a,[$C596]                  ; 0B:42C7
-    ld   [$C1CE],a                  ; 0B:42CA
+    ld   [W_PlayerFireFlag],a       ; 0B:42CA
     call Sub0B426F                  ; 0B:42CD
     ret                             ; 0B:42D0
 
 Code0B42D1:
     ld   a,[$C516]                  ; 0B:42D1
-    ld   [$C1CE],a                  ; 0B:42D4
+    ld   [W_PlayerFireFlag],a       ; 0B:42D4
     call Sub0B426F                  ; 0B:42D7
     ld   a,[$C596]                  ; 0B:42DA
-    ld   [$C1CE],a                  ; 0B:42DD
+    ld   [W_PlayerFireFlag],a       ; 0B:42DD
     call Sub0B426B                  ; 0B:42E0
     ret                             ; 0B:42E3
 
@@ -418,7 +418,7 @@ SubL_0B433F:
 Sub0B4343:
     ld   a,[$C1DC]                  ; 0B:4343
     ld   e,a                        ; 0B:4346
-    ld   a,[$C1CE]                  ; 0B:4347
+    ld   a,[W_PlayerFireFlag]       ; 0B:4347
     sla  a                          ; 0B:434A
     sla  a                          ; 0B:434C
     sla  a                          ; 0B:434E
@@ -455,7 +455,7 @@ Code0B4378:
 Sub0B4383:
     xor  a                          ; 0B:4383
     ld   [$C3EF],a                  ; 0B:4384
-    ldh  [<$FFB7],a                 ; 0B:4387
+    ldh  [<H_GlobalTimer],a         ; 0B:4387
     ld   hl,$C3EB                   ; 0B:4389
     ldi  [hl],a                     ; 0B:438C
     ld   [hl],a                     ; 0B:438D
@@ -633,13 +633,13 @@ SubL_0B488F:
     ld   hl,Data0B438F              ; 0B:4899
     add  hl,de                      ; 0B:489C
     ld   a,[hl]                     ; 0B:489D
-    ldh  [<H_ButtonFlags],a         ; 0B:489E
+    ldh  [<H_ButtonsHeld],a         ; 0B:489E
     ld   [$C3EF],a                  ; 0B:48A0
     ld   c,a                        ; 0B:48A3
     ld   a,b                        ; 0B:48A4
     xor  c                          ; 0B:48A5
     and  c                          ; 0B:48A6
-    ldh  [<$FF8C],a                 ; 0B:48A7
+    ldh  [<H_ButtonsPressed],a      ; 0B:48A7
 Code0B48A9:
     ld   hl,$C3EB                   ; 0B:48A9
     ld   e,[hl]                     ; 0B:48AC
@@ -1038,7 +1038,7 @@ Code0B5312:
     ldh  [<SVBK],a                  ; 0B:5314
     ld   hl,$D000                   ; 0B:5316
     add  hl,de                      ; 0B:5319
-    ldh  a,[<H_ButtonFlags]         ; 0B:531A
+    ldh  a,[<H_ButtonsHeld]         ; 0B:531A
     ld   [hl],a                     ; 0B:531C
     xor  a                          ; 0B:531D
     ldh  [<SVBK],a                  ; 0B:531E
@@ -1459,6 +1459,7 @@ Data0B5A4B:                         ; 0B:5A4B
 .db $18,$78
 
 Sub0B5A4D:
+; Game state 34
     ldh  a,[<H_GameSubstate]        ; 0B:5A4D
     rst  $00                        ; 0B:5A4F
 .dw Code0B5A54                      ; 0B:5A50
@@ -1467,13 +1468,13 @@ Code0B5A54:
     ld   a,[W_GameMode]             ; 0B:5A54
     cp   $07                        ; 0B:5A57
     jr   nz,Code0B5AB2              ; 0B:5A59
-    ldh  a,[<$FF8C]                 ; 0B:5A5B
+    ldh  a,[<H_ButtonsPressed]      ; 0B:5A5B
     ld   [$DA76],a                  ; 0B:5A5D
     xor  a                          ; 0B:5A60
     ld   [$DA77],a                  ; 0B:5A61
     inc  a                          ; 0B:5A64
     ld   [$DA6A],a                  ; 0B:5A65
-    ldh  a,[<$FFB7]                 ; 0B:5A68
+    ldh  a,[<H_GlobalTimer]         ; 0B:5A68
     ld   [$DA79],a                  ; 0B:5A6A
     ld   hl,$DA76                   ; 0B:5A6D
     ld   a,[$DA77]                  ; 0B:5A70
@@ -1540,7 +1541,7 @@ Code0B5AE1:
     inc  e                          ; 0B:5AEE
     push de                         ; 0B:5AEF
     xor  a                          ; 0B:5AF0
-    ld   [$C1CE],a                  ; 0B:5AF1
+    ld   [W_PlayerFireFlag],a       ; 0B:5AF1
     ld   a,[$C36C]                  ; 0B:5AF4
     inc  a                          ; 0B:5AF7
     cp   $03                        ; 0B:5AF8
@@ -1551,7 +1552,7 @@ Code0B5AFD:
     cp   $02                        ; 0B:5B00
     jr   nz,Code0B5B09              ; 0B:5B02
     ld   a,$01                      ; 0B:5B04
-    ld   [$C1CE],a                  ; 0B:5B06
+    ld   [W_PlayerFireFlag],a       ; 0B:5B06
 Code0B5B09:
     ld   a,[W_GameMode]             ; 0B:5B09
     cp   $07                        ; 0B:5B0C
@@ -1583,7 +1584,7 @@ Code0B5B2E:
     inc  e                          ; 0B:5B39
     push de                         ; 0B:5B3A
     xor  a                          ; 0B:5B3B
-    ld   [$C1CE],a                  ; 0B:5B3C
+    ld   [W_PlayerFireFlag],a       ; 0B:5B3C
     ld   a,[$C36D]                  ; 0B:5B3F
     inc  a                          ; 0B:5B42
     cp   $03                        ; 0B:5B43
@@ -1594,7 +1595,7 @@ Code0B5B48:
     cp   $02                        ; 0B:5B4B
     jr   nz,Code0B5B54              ; 0B:5B4D
     ld   a,$01                      ; 0B:5B4F
-    ld   [$C1CE],a                  ; 0B:5B51
+    ld   [W_PlayerFireFlag],a       ; 0B:5B51
 Code0B5B54:
     ld   a,[$DA6A]                  ; 0B:5B54
     cp   $00                        ; 0B:5B57
@@ -1880,7 +1881,7 @@ Sub0B5D0A:
     jr   nz,Code0B5D29              ; 0B:5D26
     dec  a                          ; 0B:5D28
 Code0B5D29:
-    ld   [$C1C5],a                  ; 0B:5D29
+    ld   [W_PlayerSize],a           ; 0B:5D29
     ld   e,a                        ; 0B:5D2C
     ld   hl,Data0B5A1B              ; 0B:5D2D
     add  hl,de                      ; 0B:5D30
@@ -1907,7 +1908,7 @@ Code0B5D29:
     jr   nz,Code0B5D61              ; 0B:5D5E
     dec  a                          ; 0B:5D60
 Code0B5D61:
-    ld   [$C1C5],a                  ; 0B:5D61
+    ld   [W_PlayerSize],a           ; 0B:5D61
     ld   e,a                        ; 0B:5D64
     ld   d,$00                      ; 0B:5D65
     ld   hl,Data0B5A1B              ; 0B:5D67
@@ -1950,7 +1951,7 @@ SubL_0B5DCD:
     rst  $18                        ; 0B:5DD0
 
 Sub0B5DD1:
-    ldh  a,[<$FFB7]                 ; 0B:5DD1
+    ldh  a,[<H_GlobalTimer]         ; 0B:5DD1
     bit  0,a                        ; 0B:5DD3
     jr   nz,Code0B5E19              ; 0B:5DD5
     ld   a,[$D11D]                  ; 0B:5DD7
@@ -2058,7 +2059,7 @@ Unused0B5EC9:
     ret                             ; 0B:5EDB
 
 Code0B5EDC:
-    ldh  a,[<$FF8C]                 ; 0B:5EDC
+    ldh  a,[<H_ButtonsPressed]      ; 0B:5EDC
     and  $30                        ; 0B:5EDE
     jr   z,Code0B5F09               ; 0B:5EE0
     ld   a,$47                      ; 0B:5EE2
@@ -2078,7 +2079,7 @@ Code0B5EDC:
     ld   hl,$DF07                   ; 0B:5F04
     ld   [hl],$45                   ; 0B:5F07
 Code0B5F09:
-    ldh  a,[<$FF8C]                 ; 0B:5F09
+    ldh  a,[<H_ButtonsPressed]      ; 0B:5F09
     and  $01                        ; 0B:5F0B
     jr   z,Code0B5F43               ; 0B:5F0D
     ld   a,[$C361]                  ; 0B:5F0F
@@ -2111,7 +2112,7 @@ Code0B5F09:
     ret                             ; 0B:5F42
 
 Code0B5F43:
-    ldh  a,[<$FF8C]                 ; 0B:5F43
+    ldh  a,[<H_ButtonsPressed]      ; 0B:5F43
     and  $0A                        ; 0B:5F45
     ret  z                          ; 0B:5F47
 Code0B5F48:
@@ -2218,9 +2219,9 @@ Sub0B601C:
     inc  e                          ; 0B:6022
     ld   a,$01                      ; 0B:6023
 Code0B6025:
-    ld   [$C1C5],a                  ; 0B:6025
+    ld   [W_PlayerSize],a           ; 0B:6025
     ld   a,e                        ; 0B:6028
-    ld   [$C1CE],a                  ; 0B:6029
+    ld   [W_PlayerFireFlag],a       ; 0B:6029
     ret                             ; 0B:602C
 
 Sub0B602D:
@@ -2341,7 +2342,7 @@ Code0B6084:
     ld   a,$0B                      ; 0B:612A
     rst  $10                        ; 0B:612C
 .dl Sub0B572E                       ; 0B:612D
-    ld   hl,$0000                   ; 0B:6130
+    ld   hl,SRAMENABLE              ; 0B:6130
     ld   [hl],$0A                   ; 0B:6133
     ld   hl,$B6C5                   ; 0B:6135
     ldi  a,[hl]                     ; 0B:6138
@@ -2373,7 +2374,7 @@ Code0B6151:
     ld   hl,$B6B5                   ; 0B:6162
     ld   [hl],$00                   ; 0B:6165
 Code0B6167:
-    ld   hl,$0000                   ; 0B:6167
+    ld   hl,SRAMENABLE              ; 0B:6167
     ld   [hl],$FF                   ; 0B:616A
     call Sub0B7580                  ; 0B:616C
     ld   a,$0B                      ; 0B:616F
@@ -2433,11 +2434,11 @@ Sub0B61AC:
     ld   a,$90                      ; 0B:61EE
     ld   [$C178],a                  ; 0B:61F0
     xor  a                          ; 0B:61F3
-    ldh  [<$FFB7],a                 ; 0B:61F4
-    ld   a,$0F                      ; 0B:61F6
+    ldh  [<H_GlobalTimer],a         ; 0B:61F4
+    ld   a,:Ti_PauseMenu0           ; 0B:61F6
     ld   b,$0B                      ; 0B:61F8
     ld   de,$9C00                   ; 0B:61FA
-    ld   hl,Data0F5800              ; 0B:61FD
+    ld   hl,Ti_PauseMenu0           ; 0B:61FD
     call LoadScreenTilemapVRAM      ; 0B:6200
     ret                             ; 0B:6203
 
@@ -2459,8 +2460,8 @@ Sub0B6204:
     ld   [$C3A7],a                  ; 0B:6227
     ld   [$C1F8],a                  ; 0B:622A
     ld   [$C1F9],a                  ; 0B:622D
-    ld   [$C1CE],a                  ; 0B:6230
-    ld   [$C1C5],a                  ; 0B:6233
+    ld   [W_PlayerFireFlag],a       ; 0B:6230
+    ld   [W_PlayerSize],a           ; 0B:6233
     ld   [$C174],a                  ; 0B:6236
     ld   [$C375],a                  ; 0B:6239
     ld   [$C384],a                  ; 0B:623C
@@ -2487,11 +2488,11 @@ Sub0B6204:
     ld   a,$90                      ; 0B:6276
     ld   [$C178],a                  ; 0B:6278
     xor  a                          ; 0B:627B
-    ldh  [<$FFB7],a                 ; 0B:627C
-    ld   a,$0F                      ; 0B:627E
+    ldh  [<H_GlobalTimer],a         ; 0B:627C
+    ld   a,:Ti_PauseMenuRace        ; 0B:627E
     ld   b,$0B                      ; 0B:6280
     ld   de,$9C00                   ; 0B:6282
-    ld   hl,Data0F5AD0              ; 0B:6285
+    ld   hl,Ti_PauseMenuRace        ; 0B:6285
     call LoadScreenTilemapVRAM      ; 0B:6288
     ld   a,$0B                      ; 0B:628B
     rst  $10                        ; 0B:628D
@@ -3146,7 +3147,7 @@ Data0B62F0:                         ; 0B:62F0
     $00,$00,$00,$00,$00,$00,$00,$00
 
 Sub0B7580:
-    ld   hl,$0000                   ; 0B:7580
+    ld   hl,SRAMENABLE              ; 0B:7580
     ld   [hl],$0A                   ; 0B:7583
     ld   hl,$B6B5                   ; 0B:7585
     ld   a,[hl]                     ; 0B:7588
@@ -3165,17 +3166,17 @@ Code0B7598:
     or   c                          ; 0B:759D
     jr   nz,Code0B7598              ; 0B:759E
 Code0B75A0:
-    ld   hl,$0000                   ; 0B:75A0
+    ld   hl,SRAMENABLE              ; 0B:75A0
     ld   [hl],$FF                   ; 0B:75A3
     ret                             ; 0B:75A5
 
 SubL_0B75A6:
-    ld   hl,$0000                   ; 0B:75A6
+    ld   hl,SRAMENABLE              ; 0B:75A6
     ld   [hl],$0A                   ; 0B:75A9
     xor  a                          ; 0B:75AB
     ld   [$B6B5],a                  ; 0B:75AC
     ld   [$A37C],a                  ; 0B:75AF
-    ld   hl,$0000                   ; 0B:75B2
+    ld   hl,SRAMENABLE              ; 0B:75B2
     ld   [hl],$FF                   ; 0B:75B5
     call Sub0B7580                  ; 0B:75B7
     rst  $18                        ; 0B:75BA

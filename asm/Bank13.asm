@@ -865,7 +865,7 @@ Code136891:
     sub  $02                        ; 13:6897
     bit  7,a                        ; 13:6899
     jr   z,Return1368AB             ; 13:689B
-    ldh  a,[<$FF8C]                 ; 13:689D
+    ldh  a,[<H_ButtonsPressed]      ; 13:689D
     and  $01                        ; 13:689F
     jr   z,Return1368AB             ; 13:68A1
     ld   a,$33                      ; 13:68A3

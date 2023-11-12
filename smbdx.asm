@@ -42,5 +42,5 @@
 .include "asm/Bank15.asm"
 .include "asm/Bank1D.asm"
 .include "asm/Bank1F.asm"
+.include "asm/LevelBanks.asm"
 .include "asm/GraphicsBanks.asm"
-.include "asm/LevelData.asm"

@@ -2,6 +2,7 @@
 .orga $4000
 
 Sub094000:
+; called by game state 00
     ld   a,$00                      ; 09:4000
     ldh  [<IE],a                    ; 09:4002
     inc  a                          ; 09:4004
@@ -17,18 +18,18 @@ Sub094000:
     and  a                          ; 09:401A
     jr   nz,Code09406C              ; 09:401B
 Code09401D:
-    ld   a,:Gr_Bank18               ; 09:401D
+    ld   a,:Gr_TitleScreen          ; 09:401D
     ld   b,$09                      ; 09:401F
     call LoadGraphicsBank           ; 09:4021
-    ld   a,:Data187850              ; 09:4024
+    ld   a,:Pal_PreTitle            ; 09:4024
     ld   b,$09                      ; 09:4026
-    ld   de,Data187850              ; 09:4028
+    ld   de,Pal_PreTitle            ; 09:4028
     call LoadFullPaletteLong        ; 09:402B
     call Sub00128D                  ; 09:402E
-    ld   a,:Data187480              ; 09:4031
+    ld   a,:Ti_PreTitle             ; 09:4031
     ld   b,$09                      ; 09:4033
     ld   de,$99C0                   ; 09:4035
-    ld   hl,Data187480              ; 09:4038
+    ld   hl,Ti_PreTitle             ; 09:4038
     call LoadScreenTilemapVRAM      ; 09:403B
     ld   a,$00                      ; 09:403E
     ldh  [<H_GameSubstate],a        ; 09:4040
@@ -88,6 +89,7 @@ Code094096:
     ret                             ; 09:40A7
 
 Sub0940A8:
+; called by game state 01
     ldh  a,[<H_GameSubstate]        ; 09:40A8
     rst  $00                        ; 09:40AA
 .dw Code0940B1                      ; 09:40AB
@@ -97,13 +99,12 @@ Code0940B1:
     ld   a,[$C164]                  ; 09:40B1
     dec  a                          ; 09:40B4
     ld   [$C164],a                  ; 09:40B5
-    jr   z,Code0940C1               ; 09:40B8
-    ldh  a,[<$FF8C]                 ; 09:40BA
+    jr   z,@Code0940C1              ; 09:40B8
+    ldh  a,[<H_ButtonsPressed]      ; 09:40BA
     and  $09                        ; 09:40BC
-    jr   nz,Code0940C1              ; 09:40BE
+    jr   nz,@Code0940C1             ; 09:40BE
     ret                             ; 09:40C0
-
-Code0940C1:
+@Code0940C1:
     ld   a,$20                      ; 09:40C1
     ld   [$C1AD],a                  ; 09:40C3
     ld   hl,H_GameSubstate          ; 09:40C6
@@ -117,10 +118,9 @@ Code0940CB:
     ld   a,[$C1AD]                  ; 09:40D1
     dec  a                          ; 09:40D4
     ld   [$C1AD],a                  ; 09:40D5
-    jr   z,Code0940DB               ; 09:40D8
+    jr   z,@Code0940DB              ; 09:40D8
     ret                             ; 09:40DA
-
-Code0940DB:
+@Code0940DB:
     ld   a,$02                      ; 09:40DB
     ldh  [<H_GameState],a           ; 09:40DD
     ret                             ; 09:40DF
@@ -130,35 +130,36 @@ Code0940E0:
     call Sub00160F                  ; 09:40E2
     ld   a,[$C4F5]                  ; 09:40E5
     and  a                          ; 09:40E8
-    jr   nz,Return0940F4            ; 09:40E9
+    jr   nz,@Return                 ; 09:40E9
     ld   a,$20                      ; 09:40EB
     ld   [$C1AD],a                  ; 09:40ED
     ld   a,$01                      ; 09:40F0
     ldh  [<H_GameSubstate],a        ; 09:40F2
-Return0940F4:
+@Return:
     ret                             ; 09:40F4
 
 Data0940F5:                         ; 09:40F5
 .dw $0000,$03BF,$0255,$090B,$0000,$03BF,$7FFF,$0000
 
 Sub094105:
+; called by game state 02
     ld   a,$01                      ; 09:4105
     ldh  [<SB],a                    ; 09:4107
     call Sub00126D                  ; 09:4109
     xor  a                          ; 09:410C
     ldh  [<IE],a                    ; 09:410D
-    ld   a,:Gr_Bank18               ; 09:410F
+    ld   a,:Gr_TitleScreen          ; 09:410F
     ld   b,$09                      ; 09:4111
     call LoadGraphicsBank           ; 09:4113
     ld   a,$07                      ; 09:4116
     ldh  [<SVBK],a                  ; 09:4118
     ld   a,$18                      ; 09:411A
     ld   b,$09                      ; 09:411C
-    ld   de,Data187750              ; 09:411E
+    ld   de,Pal_TitleScreen         ; 09:411E
     call LoadFullPaletteLong        ; 09:4121
     xor  a                          ; 09:4124
     ldh  [<SVBK],a                  ; 09:4125
-    ld   hl,$DF80                   ; 09:4127
+    ld   hl,W_PaletteBuffer         ; 09:4127
     ld   b,$20                      ; 09:412A
 Code09412C:
     ld   [hl],$FF                   ; 09:412C
@@ -179,7 +180,7 @@ Code09413D:
     call Sub00128D                  ; 09:4143
     ld   a,$01                      ; 09:4146
     ldh  [<VBK],a                   ; 09:4148
-    ld   hl,Data187240              ; 09:414A
+    ld   hl,Ti_TitleScreen_Attr     ; 09:414A
     ld   de,$99C0                   ; 09:414D
     ld   bc,$0240                   ; 09:4150
     ld   a,$18                      ; 09:4153
@@ -188,7 +189,7 @@ Code09413D:
     call CopyBytesLong              ; 09:415A
     xor  a                          ; 09:415D
     ldh  [<VBK],a                   ; 09:415E
-    ld   hl,Data187000              ; 09:4160
+    ld   hl,Ti_TitleScreen_Tiles    ; 09:4160
     ld   de,$99C0                   ; 09:4163
     ld   bc,$0240                   ; 09:4166
     ld   a,$18                      ; 09:4169
@@ -197,8 +198,8 @@ Code09413D:
     call CopyBytesLong              ; 09:4170
     xor  a                          ; 09:4173
     ld   [$C0C4],a                  ; 09:4174
-    ld   [$C1CE],a                  ; 09:4177
-    ld   [$C1C5],a                  ; 09:417A
+    ld   [W_PlayerFireFlag],a       ; 09:4177
+    ld   [W_PlayerSize],a           ; 09:417A
     ld   [$C174],a                  ; 09:417D
     ld   [$C168],a                  ; 09:4180
     ldh  [<H_GameSubstate],a        ; 09:4183
@@ -321,6 +322,7 @@ Data094382:                         ; 09:4382
     $01,$04,$00,$04
 
 Sub094396:
+; called by game state 03
     ldh  a,[<H_GameSubstate]        ; 09:4396
     rst  $00                        ; 09:4398
 .dw Code09439D                      ; 09:4399
@@ -333,7 +335,7 @@ Code09439D:
     ld   a,$09                      ; 09:43A6
     rst  $10                        ; 09:43A8
 .dl SubL_045221                     ; 09:43A9
-    ldh  a,[<$FFB7]                 ; 09:43AC
+    ldh  a,[<H_GlobalTimer]         ; 09:43AC
     and  $01                        ; 09:43AE
     jr   z,Return0943B6             ; 09:43B0
     ld   hl,$C40E                   ; 09:43B2
@@ -353,7 +355,7 @@ Code0943B7:
     ret                             ; 09:43C8
 
 Code0943C9:
-    ldh  a,[<$FFB7]                 ; 09:43C9
+    ldh  a,[<H_GlobalTimer]         ; 09:43C9
     and  $01                        ; 09:43CB
     jr   z,Code0943D3               ; 09:43CD
     ld   hl,$C40E                   ; 09:43CF
@@ -378,9 +380,9 @@ Code0943ED:
     ld   l,a                        ; 09:43F2
     ld   c,$06                      ; 09:43F3
     call Sub001802                  ; 09:43F5
-    ld   hl,Data187750              ; 09:43F8
+    ld   hl,Pal_TitleScreen         ; 09:43F8
     add  hl,de                      ; 09:43FB
-    ld   de,$DF80                   ; 09:43FC
+    ld   de,W_PaletteBuffer         ; 09:43FC
     ld   bc,$0040                   ; 09:43FF
     ld   a,[$C40C]                  ; 09:4402
     and  a                          ; 09:4405
@@ -393,14 +395,14 @@ Code0943ED:
     ld   c,a                        ; 09:4413
     add  hl,bc                      ; 09:4414
     push hl                         ; 09:4415
-    ld   hl,$DF80                   ; 09:4416
+    ld   hl,W_PaletteBuffer         ; 09:4416
     add  hl,bc                      ; 09:4419
     ld   d,h                        ; 09:441A
     ld   e,l                        ; 09:441B
     pop  hl                         ; 09:441C
     ld   bc,$0008                   ; 09:441D
 Code094420:
-    ld   a,$18                      ; 09:4420
+    ld   a,:Pal_TitleScreen         ; 09:4420
     ld   [$C415],a                  ; 09:4422
     ld   a,$09                      ; 09:4425
     call CopyBytesLong              ; 09:4427
@@ -661,7 +663,7 @@ Code0945C6:
     ld   a,[$C411]                  ; 09:45C6
     and  a                          ; 09:45C9
     jr   nz,Code0945EE              ; 09:45CA
-    ldh  a,[<$FF8C]                 ; 09:45CC
+    ldh  a,[<H_ButtonsPressed]      ; 09:45CC
     and  $09                        ; 09:45CE
     jr   z,Code09460D               ; 09:45D0
     call Sub0010A9                  ; 09:45D2
@@ -699,10 +701,10 @@ Code09460D:
     ld   a,$00                      ; 09:460D
     cp   $01                        ; 09:460F
     ret  nz                         ; 09:4611
-    ldh  a,[<H_ButtonFlags]         ; 09:4612
+    ldh  a,[<H_ButtonsHeld]         ; 09:4612
     and  $40                        ; 09:4614
     ret  z                          ; 09:4616
-    ldh  a,[<$FF8C]                 ; 09:4617
+    ldh  a,[<H_ButtonsPressed]      ; 09:4617
     and  $02                        ; 09:4619
     ret  z                          ; 09:461B
     ld   a,$24                      ; 09:461C
@@ -711,11 +713,11 @@ Code09460D:
     ret                             ; 09:4623
 
 Sub094624:
-    ld   hl,$0000                   ; 09:4624
+    ld   hl,SRAMENABLE              ; 09:4624
     ld   [hl],$0A                   ; 09:4627
     xor  a                          ; 09:4629
     ld   [$A2AA],a                  ; 09:462A
-    ld   hl,$0000                   ; 09:462D
+    ld   hl,SRAMENABLE              ; 09:462D
     ld   [hl],$FF                   ; 09:4630
     ld   a,$09                      ; 09:4632
     rst  $10                        ; 09:4634
@@ -724,7 +726,7 @@ Sub094624:
 
 Unused094639:
     ld   c,$00                      ; 09:4639
-    ldh  a,[<H_ButtonFlags]         ; 09:463B
+    ldh  a,[<H_ButtonsHeld]         ; 09:463B
     bit  1,a                        ; 09:463D
     jr   z,Code094642               ; 09:463F
     inc  c                          ; 09:4641
@@ -739,6 +741,7 @@ Data094647:                         ; 09:4647
     $EF,$00,$DE,$00,$EB,$00
 
 Sub09465D:
+; Game state 0E
     call Sub00126D                  ; 09:465D
     ld   a,$00                      ; 09:4660
     ldh  [<IE],a                    ; 09:4662
@@ -759,7 +762,7 @@ Sub09465D:
     ld   a,$09                      ; 09:4684
     call Sub001480                  ; 09:4686
     xor  a                          ; 09:4689
-    ld   hl,$DF80                   ; 09:468A
+    ld   hl,W_PaletteBuffer         ; 09:468A
     ldi  [hl],a                     ; 09:468D
     ld   [hl],a                     ; 09:468E
     inc  a                          ; 09:468F
@@ -882,7 +885,8 @@ Code09475B:
 ReturnL_09476A:
     rst  $18                        ; 09:476A
 
-Sub09476B:
+GameOverMain:
+; Game state 0F
     ldh  a,[<H_GameSubstate]        ; 09:476B
     rst  $00                        ; 09:476D
 .dw Code094772                      ; 09:476E
@@ -908,7 +912,7 @@ Return094790:
     ret                             ; 09:4790
 
 Code094791:
-    ldh  a,[<$FF8C]                 ; 09:4791
+    ldh  a,[<H_ButtonsPressed]      ; 09:4791
     and  $09                        ; 09:4793
     jr   nz,Code09479F              ; 09:4795
     ld   hl,$C285                   ; 09:4797
@@ -940,6 +944,7 @@ Data0947BC:                         ; 09:47BC
     $E9,$00
 
 Sub0947CE:
+; Game state 10
     ld   a,$00                      ; 09:47CE
     ldh  [<IE],a                    ; 09:47D0
     ldh  [<$FF93],a                 ; 09:47D2
@@ -960,7 +965,7 @@ Sub0947CE:
     ld   a,$09                      ; 09:47F7
     call Sub001480                  ; 09:47F9
     ld   a,$00                      ; 09:47FC
-    ld   hl,$DF80                   ; 09:47FE
+    ld   hl,W_PaletteBuffer         ; 09:47FE
     ldi  [hl],a                     ; 09:4801
     ld   [hl],a                     ; 09:4802
     inc  a                          ; 09:4803
@@ -979,6 +984,7 @@ Sub0947CE:
     ret                             ; 09:481E
 
 Sub09481F:
+; Game state 11
     ldh  a,[<H_GameSubstate]        ; 09:481F
     rst  $00                        ; 09:4821
 .dw Code094826                      ; 09:4822
@@ -1004,7 +1010,7 @@ Return094844:
     ret                             ; 09:4844
 
 Code094845:
-    ldh  a,[<$FF8C]                 ; 09:4845
+    ldh  a,[<H_ButtonsPressed]      ; 09:4845
     and  $09                        ; 09:4847
     jr   nz,Code094853              ; 09:4849
     ld   hl,$C285                   ; 09:484B
@@ -1066,6 +1072,7 @@ Sub094B5E:
     jr   Code094B82                 ; 09:4B79
 
 Sub094B7B:
+; Game state 12
     call Sub00126D                  ; 09:4B7B
     ld   a,$00                      ; 09:4B7E
     ldh  [<IE],a                    ; 09:4B80
@@ -1104,13 +1111,14 @@ Code094B82:
     ret                             ; 09:4BC7
 
 Sub094BC8:
+; Game state 13
     ldh  a,[<H_GameSubstate]        ; 09:4BC8
     rst  $00                        ; 09:4BCA
 .dw Code094BD1                      ; 09:4BCB
 .dw Code094C1D                      ; 09:4BCD
 .dw Code094C0A                      ; 09:4BCF
 Code094BD1:
-    ldh  a,[<$FF8C]                 ; 09:4BD1
+    ldh  a,[<H_ButtonsPressed]      ; 09:4BD1
     and  $01                        ; 09:4BD3
     jr   z,Code094BDD               ; 09:4BD5
     ld   a,$02                      ; 09:4BD7
@@ -1169,7 +1177,7 @@ Code094C1D:
 Code094C37:
     call Sub094D3E                  ; 09:4C37
 Code094C3A:
-    ldh  a,[<$FF8C]                 ; 09:4C3A
+    ldh  a,[<H_ButtonsPressed]      ; 09:4C3A
     and  $09                        ; 09:4C3C
     jr   z,Return094C5F             ; 09:4C3E
     call Sub0010A9                  ; 09:4C40
@@ -1191,7 +1199,7 @@ Return094C5F:
     ret                             ; 09:4C5F
 
 Sub094C60:
-    ld   hl,$0000                   ; 09:4C60
+    ld   hl,SRAMENABLE              ; 09:4C60
     ld   [hl],$0A                   ; 09:4C63
     ld   a,$07                      ; 09:4C65
     ldh  [<SVBK],a                  ; 09:4C67
@@ -1366,12 +1374,13 @@ Sub094D3E:
     ret                             ; 09:4D62
 
 Sub094D63:
+; Game state 40
     ldh  a,[<H_GameSubstate]        ; 09:4D63
     rst  $00                        ; 09:4D65
 .dw Code094D6A                      ; 09:4D66
 .dw Code094D94                      ; 09:4D68
 Code094D6A:
-    ldh  a,[<$FF8C]                 ; 09:4D6A
+    ldh  a,[<H_ButtonsPressed]      ; 09:4D6A
     and  $0B                        ; 09:4D6C
     jr   nz,Code094DA7              ; 09:4D6E
     ld   a,[$C326]                  ; 09:4D70
@@ -1405,7 +1414,7 @@ Code094D94:
     ld   a,d                        ; 09:4D9E
     or   e                          ; 09:4D9F
     jr   z,Code094DA7               ; 09:4DA0
-    ldh  a,[<$FF8C]                 ; 09:4DA2
+    ldh  a,[<H_ButtonsPressed]      ; 09:4DA2
     and  $0B                        ; 09:4DA4
     ret  z                          ; 09:4DA6
 Code094DA7:
@@ -1561,7 +1570,7 @@ Code0951AE:
     ret                             ; 09:51D8
 
 Sub0951D9:
-    ld   hl,$0000                   ; 09:51D9
+    ld   hl,SRAMENABLE              ; 09:51D9
     ld   [hl],$0A                   ; 09:51DC
     ld   a,$07                      ; 09:51DE
     ldh  [<SVBK],a                  ; 09:51E0
@@ -1598,7 +1607,7 @@ Code095208:
 Code095211:
     xor  a                          ; 09:5211
     ldh  [<SVBK],a                  ; 09:5212
-    ld   hl,$0000                   ; 09:5214
+    ld   hl,SRAMENABLE              ; 09:5214
     ld   [hl],$FF                   ; 09:5217
     ret                             ; 09:5219
 
@@ -1672,6 +1681,7 @@ Data095364:                         ; 09:5364
 .dw $7FFF,$001F,$03E0,$7C00,$0000,$03FF
 
 Sub095370:
+; Game state 15
     ldh  a,[<H_GameSubstate]        ; 09:5370
     rst  $00                        ; 09:5372
 .dw Code095377                      ; 09:5373
@@ -1731,7 +1741,7 @@ Code09539B:
     inc  hl                         ; 09:53D3
     ld   [hl],$00                   ; 09:53D4
 Code0953D6:
-    ldh  a,[<$FF8C]                 ; 09:53D6
+    ldh  a,[<H_ButtonsPressed]      ; 09:53D6
     and  $08                        ; 09:53D8
     jr   z,Code0953EA               ; 09:53DA
 Code0953DC:
@@ -1744,7 +1754,7 @@ Code0953DC:
     ret                             ; 09:53E9
 
 Code0953EA:
-    ldh  a,[<$FF8C]                 ; 09:53EA
+    ldh  a,[<H_ButtonsPressed]      ; 09:53EA
     and  $04                        ; 09:53EC
     jr   z,Code095424               ; 09:53EE
     ld   a,$47                      ; 09:53F0
@@ -1772,10 +1782,10 @@ Code095417:
     ld   [$C28F],a                  ; 09:541E
     jp   Code0954C7                 ; 09:5421
 Code095424:
-    ldh  a,[<$FF8C]                 ; 09:5424
+    ldh  a,[<H_ButtonsPressed]      ; 09:5424
     and  $02                        ; 09:5426
     jp   nz,Code0954A9              ; 09:5428
-    ldh  a,[<$FF8C]                 ; 09:542B
+    ldh  a,[<H_ButtonsPressed]      ; 09:542B
     and  $01                        ; 09:542D
     ret  z                          ; 09:542F
     ld   a,[$C28F]                  ; 09:5430
@@ -1901,7 +1911,7 @@ Return0954F8:
     ret                             ; 09:54F8
 
 Sub0954F9:
-    ldh  a,[<H_ButtonFlags]         ; 09:54F9
+    ldh  a,[<H_ButtonsHeld]         ; 09:54F9
     ld   c,a                        ; 09:54FB
     ld   b,$04                      ; 09:54FC
 Code0954FE:
@@ -2049,7 +2059,9 @@ Code0955D3:
 
 Data0955DA:                         ; 09:55DA
 .db $00
-Code0955DB:
+
+NonGBCErrorMain:
+; Game state 37
     ldh  a,[<H_GameSubstate]        ; 09:55DB
     rst  $00                        ; 09:55DD
 .dw Code0955E2                      ; 09:55DE
@@ -2063,19 +2075,19 @@ Code0955E2:
     ld   [$C0C1],a                  ; 09:55EC
     ld   a,$E4                      ; 09:55EF
     ldh  [<BGP],a                   ; 09:55F1
-    ld   hl,Data1B7750              ; 09:55F3
+    ld   hl,Gr_NonGBCError          ; 09:55F3
     ld   de,$8800                   ; 09:55F6
     ld   bc,$0600                   ; 09:55F9
-    ld   a,$1B                      ; 09:55FC
+    ld   a,:Gr_NonGBCError          ; 09:55FC
     ld   [$C415],a                  ; 09:55FE
-    ld   a,$09                      ; 09:5601
+    ld   a,:Code0955E2              ; 09:5601
     call CopyBytesLong              ; 09:5603
-    ld   hl,Data1B7D50              ; 09:5606
+    ld   hl,Ti_NonGBCError          ; 09:5606
     ld   de,$9800                   ; 09:5609
     ld   bc,$0240                   ; 09:560C
-    ld   a,$1B                      ; 09:560F
+    ld   a,:Ti_NonGBCError          ; 09:560F
     ld   [$C415],a                  ; 09:5611
-    ld   a,$09                      ; 09:5614
+    ld   a,:Code0955E2              ; 09:5614
     call CopyBytesLong              ; 09:5616
     ld   a,$01                      ; 09:5619
     ldh  [<IE],a                    ; 09:561B
@@ -2083,168 +2095,24 @@ Code0955E2:
     ld   a,$81                      ; 09:561F
     ldh  [<LCDC],a                  ; 09:5621
     ld   hl,H_GameSubstate          ; 09:5623
-    inc  [hl]                       ; 09:5626
+    inc  [hl]                       ; 09:5626  to substate 1: infinite loop
     ret                             ; 09:5627
 
 Return095628:
     ret                             ; 09:5628
 
-Data095629:                         ; 09:5629
-.db $FF,$FF,$80,$81,$82,$83,$84,$85,\
-    $86,$87,$88,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$89,$8A,$8B,$8C,$8D,$8E,\
-    $8F,$90,$91,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$92,$93,$94,$95,$96,$97,\
-    $98,$99,$9A,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$26,$27,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$9B,$9C,$9D,$9E,$9F,$A0,\
-    $A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,\
-    $A9,$AA,$AB,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$AC,$AD,$AE,$AF,$B0,$B1,\
-    $B2,$B3,$B4,$B5,$B6,$B7,$B8,$B9,\
-    $BA,$BB,$BC,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$BD,$BE,$BF,$C0,$C1,$C2,\
-    $C3,$C4,$C5,$C6,$C7,$C8,$C9,$CA,\
-    $CB,$CC,$CD,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$CE,$CF,$D0,$D1,$D2,$D3,\
-    $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,\
-    $DC,$DD,$DE,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$E0,$E1,$E2,$E3,$E4,$E5,\
-    $E6,$E7,$E8,$E9,$EA,$EB,$EC,$ED,\
-    $FF,$EE,$EF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$F0,$F1,$F2,$FF,$F3,$F4,\
-    $F5,$F6,$F2,$FF,$F5,$F7,$F8,$F9,\
-    $F6,$F2,$F3,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FA,$FB,$FC,$FF,$FB,$FB,\
-    $FA,$FD,$FC,$FF,$FA,$FD,$FC,$FE,\
-    $FD,$FC,$FB,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$17,\
-    $0E,$20,$FF,$10,$0A,$16,$0E,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$24,$FF,$0C,\
-    $18,$17,$1D,$12,$17,$1E,$0E,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$20,$08,$25,$04,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$1D,$18,$19,$FF,\
-    $25,$FF,$FF,$00,$00,$00,$00,$00,\
-    $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,\
-    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-Data095869:                         ; 09:5869
-.db $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$04,$04,$04,$04,$04,$04,\
-    $04,$04,$04,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$04,$04,$04,$04,$04,$04,\
-    $04,$04,$04,$04,$04,$04,$04,$04,\
-    $04,$04,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$01,$01,\
-    $01,$01,$01,$01,$01,$01,$01,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$01,$01,\
-    $01,$01,$01,$01,$01,$01,$01,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$01,$01,\
-    $01,$01,$01,$01,$01,$01,$01,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$01,$01,\
-    $00,$01,$01,$01,$01,$01,$01,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$01,$01,\
-    $01,$01,$01,$01,$01,$01,$01,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$01,$01,$01,$01,\
-    $01,$01,$01,$01,$01,$01,$01,$01,\
-    $01,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00
-Data095AA9:                         ; 09:5AA9
-.db $FF,$07,$FF,$01,$14,$00,$00,$00,\
-    $FF,$73,$FF,$01,$00,$00,$00,$00,\
-    $00,$00,$4A,$29,$B5,$56,$FF,$73,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $FF,$07,$3B,$01,$14,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $FF,$73,$FF,$01,$00,$00,$00,$00
-Code095AE9:
+Ti_SPTitle_Tiles:                   ; 09:5629
+.incbin "data/Tilemaps/SPTitle_Tiles.bin"
+Ti_SPTitle_Attr:                    ; 09:5869
+.incbin "data/Tilemaps/SPTitle_Attr.bin"
+Pal_SPTitle:                        ; 09:5AA9
+.dw $07FF,$01FF,$0014,$0000,$73FF,$01FF,$0000,$0000,\
+    $0000,$294A,$56B5,$73FF,$0000,$0000,$0000,$0000,\
+    $07FF,$013B,$0014,$0000,$0000,$0000,$0000,$0000,\
+    $0000,$0000,$0000,$0000,$73FF,$01FF,$0000,$0000
+
+SPTitleMain:
+; Game state 38
     ldh  a,[<H_GameSubstate]        ; 09:5AE9
     rst  $00                        ; 09:5AEB
 .dw Code095AF4                      ; 09:5AEC
@@ -2263,7 +2131,7 @@ Code095AF4:
     ld   a,$09                      ; 09:5B05
     rst  $10                        ; 09:5B07
 .dl SubL_075485                     ; 09:5B08
-    call Sub095CB9                  ; 09:5B0B
+    call SPTitle_LoadGraphics       ; 09:5B0B
     call Sub095D37                  ; 09:5B0E
     ld   a,$01                      ; 09:5B11
     ldh  [<IE],a                    ; 09:5B13
@@ -2319,7 +2187,7 @@ Return095B65:
     ret                             ; 09:5B65
 
 Sub095B66:
-    ldh  a,[<$FF8C]                 ; 09:5B66
+    ldh  a,[<H_ButtonsPressed]      ; 09:5B66
     ld   b,a                        ; 09:5B68
     bit  2,a                        ; 09:5B69
     jr   z,Code095B70               ; 09:5B6B
@@ -2383,7 +2251,7 @@ Code095BD9:
     and  a                          ; 09:5BDB
     jr   z,Return095BEE             ; 09:5BDC
     ld   a,b                        ; 09:5BDE
-    ldh  a,[<H_ButtonFlags]         ; 09:5BDF
+    ldh  a,[<H_ButtonsHeld]         ; 09:5BDF
     and  $C0                        ; 09:5BE1
     jr   z,Return095BEE             ; 09:5BE3
     ld   a,b                        ; 09:5BE5
@@ -2405,9 +2273,9 @@ Code095BEF:
     ret                             ; 09:5BFF
 
 Sub095C00:
-    ldh  a,[<$FF8C]                 ; 09:5C00
+    ldh  a,[<H_ButtonsPressed]      ; 09:5C00
     ld   b,a                        ; 09:5C02
-    ldh  a,[<H_ButtonFlags]         ; 09:5C03
+    ldh  a,[<H_ButtonsHeld]         ; 09:5C03
     bit  6,a                        ; 09:5C05
     jr   z,Code095C11               ; 09:5C07
     bit  6,b                        ; 09:5C09
@@ -2513,8 +2381,8 @@ Code095CAD:
     ldh  [<$FFF2],a                 ; 09:5CB6
     ret                             ; 09:5CB8
 
-Sub095CB9:
-    ld   hl,Data0F5DA0              ; 09:5CB9
+SPTitle_LoadGraphics:
+    ld   hl,Gr_SPTitle              ; 09:5CB9
     ld   de,$8800                   ; 09:5CBC
     ld   bc,$1000                   ; 09:5CBF
     ld   a,$0F                      ; 09:5CC2
@@ -2523,27 +2391,27 @@ Sub095CB9:
     call CopyBytesLong              ; 09:5CC9
     ld   a,$01                      ; 09:5CCC
     ldh  [<VBK],a                   ; 09:5CCE
-    ld   hl,Data095869              ; 09:5CD0
+    ld   hl,Ti_SPTitle_Attr         ; 09:5CD0
     ld   de,$9800                   ; 09:5CD3
     ld   bc,$0240                   ; 09:5CD6
     call CopyBytes                  ; 09:5CD9
     xor  a                          ; 09:5CDC
     ldh  [<VBK],a                   ; 09:5CDD
-    ld   hl,Data095629              ; 09:5CDF
+    ld   hl,Ti_SPTitle_Tiles        ; 09:5CDF
     ld   de,$9800                   ; 09:5CE2
     ld   bc,$0240                   ; 09:5CE5
     call CopyBytes                  ; 09:5CE8
-    ld   hl,Data095AA9              ; 09:5CEB
+    ld   hl,Pal_SPTitle             ; 09:5CEB
     ld   b,$20                      ; 09:5CEE
     ld   a,$80                      ; 09:5CF0
     ldh  [<BGPI],a                  ; 09:5CF2
-Code095CF4:
+@Loop:
     ldi  a,[hl]                     ; 09:5CF4
     ldh  [<BGPD],a                  ; 09:5CF5
     ldi  a,[hl]                     ; 09:5CF7
     ldh  [<BGPD],a                  ; 09:5CF8
     dec  b                          ; 09:5CFA
-    jr   nz,Code095CF4              ; 09:5CFB
+    jr   nz,@Loop                   ; 09:5CFB
     ret                             ; 09:5CFD
 
 Sub095CFE:
@@ -2588,11 +2456,11 @@ Sub095D37:
     ld   a,$00                      ; 09:5D3A
     and  a                          ; 09:5D3C
     jr   nz,Code095D51              ; 09:5D3D
-    ld   hl,$0000                   ; 09:5D3F
+    ld   hl,SRAMENABLE              ; 09:5D3F
     ld   [hl],$0A                   ; 09:5D42
     ld   a,[$C16B]                  ; 09:5D44
     call Sub000FF6                  ; 09:5D47
-    ld   hl,$0000                   ; 09:5D4A
+    ld   hl,SRAMENABLE              ; 09:5D4A
     ld   [hl],$FF                   ; 09:5D4D
     jr   nc,Code095D70              ; 09:5D4F
 Code095D51:

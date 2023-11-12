@@ -2,16 +2,392 @@
 017000        Graphics/PlayerSuper.bin
 017C00 018000 Graphics/PlayerSmall.bin
 0452E2 045AE2 Graphics/Data0452E2.bin
+054000        Sublevels/00_Sprites.bin
+05405B        Sublevels/01_Sprites.bin
+0540EC        Sublevels/02_Sprites.bin
+054147        Sublevels/03_Sprites.bin
+054190        Sublevels/04_Sprites.bin
+054245        Sublevels/05_Sprites.bin
+054282        Sublevels/06_Sprites.bin
+0542A1        Sublevels/07_Sprites.bin
+0542FC        Sublevels/08_Sprites.bin
+0543B1        Sublevels/09_Sprites.bin
+05442A        Sublevels/0A_Sprites.bin
+0544B5        Sublevels/0B_Sprites.bin
+054534        Sublevels/0C_Sprites.bin
+054565        Sublevels/0D_Sprites.bin
+0545F6        Sublevels/0E_Sprites.bin
+054669        Sublevels/0F_Sprites.bin
+0546CA        Sublevels/10_Sprites.bin
+05475B        Sublevels/11_Sprites.bin
+054822        Sublevels/12_Sprites.bin
+054889        Sublevels/13_Sprites.bin
+054914        Sublevels/14_Sprites.bin
+054939        Sublevels/15_Sprites.bin
+054A42        Sublevels/16_Sprites.bin
+054ADF        Sublevels/17_Sprites.bin
+054B4C        Sublevels/18_Sprites.bin
+054C1F        Sublevels/19_Sprites.bin
+054C80        Sublevels/1A_Sprites.bin
+054CC9        Sublevels/1B_Sprites.bin
+054D0C        Sublevels/1C_Sprites.bin
+054E09        Sublevels/1D_Sprites.bin
+054EEE        Sublevels/1E_Sprites.bin
+054F6D        Sublevels/1F_Sprites.bin
+054F9E        Sublevels/36_Sprites.bin
+054FE7        Sublevels/37_Sprites.bin
+05501E        Sublevels/38_Sprites.bin
+05504F        Sublevels/39_Sprites.bin
+055074 05508D Sublevels/20_Sprites.bin
+05508E        Sublevels/26_Sprites.bin
+05509B 0550AE Sublevels/27_Sprites.bin
+0550AF 0550BC Sublevels/2A_Sprites.bin
+0550BD 0550D0 Sublevels/2D_Sprites.bin
+0550D1        Sublevels/30_Sprites.bin
+0550EA        Sublevels/31_Sprites.bin
+05512D 055170 Sublevels/32_Sprites.bin
+055172        Sublevels/35_Sprites.bin
+055185        Sublevels/3A_Sprites.bin
+055192        Sublevels/3B_Sprites.bin
+0551A5        Sublevels/3C_Sprites.bin
+0551BE        Sublevels/3D_Sprites.bin
+0551CB        Sublevels/3E_Sprites.bin
+0551E4        Sublevels/3F_Sprites.bin
+0551FD        Sublevels/40_Sprites.bin
+05520A 055217 Sublevels/41_Sprites.bin
+05529B        Sublevels/00_SpritesHard.bin
+055314        Sublevels/01_SpritesHard.bin
+0553B7        Sublevels/02_SpritesHard.bin
+05541E        Sublevels/03_SpritesHard.bin
+05548B        Sublevels/04_SpritesHard.bin
+05556A        Sublevels/05_SpritesHard.bin
+0555CB        Sublevels/06_SpritesHard.bin
+055614        Sublevels/07_SpritesHard.bin
+05569F        Sublevels/08_SpritesHard.bin
+05577E        Sublevels/09_SpritesHard.bin
+055863        Sublevels/0A_SpritesHard.bin
+0558EE        Sublevels/0B_SpritesHard.bin
+05596D        Sublevels/0C_SpritesHard.bin
+05599E        Sublevels/0D_SpritesHard.bin
+055A47        Sublevels/0E_SpritesHard.bin
+055ABA        Sublevels/0F_SpritesHard.bin
+055B1B        Sublevels/10_SpritesHard.bin
+055C0C        Sublevels/11_SpritesHard.bin
+055CD3        Sublevels/12_SpritesHard.bin
+055D3A        Sublevels/13_SpritesHard.bin
+055DC5        Sublevels/14_SpritesHard.bin
+055DF0        Sublevels/15_SpritesHard.bin
+055EFF        Sublevels/16_SpritesHard.bin
+055F9C        Sublevels/17_SpritesHard.bin
+056009        Sublevels/18_SpritesHard.bin
+0560DC        Sublevels/19_SpritesHard.bin
+05613D        Sublevels/1A_SpritesHard.bin
+056186        Sublevels/1B_SpritesHard.bin
+0561C9        Sublevels/1C_SpritesHard.bin
+056344        Sublevels/1D_SpritesHard.bin
+056429        Sublevels/1E_SpritesHard.bin
+0564A8        Sublevels/1F_SpritesHard.bin
+0564E5        Sublevels/36_SpritesHard.bin
+05652E        Sublevels/37_SpritesHard.bin
+056565        Sublevels/38_SpritesHard.bin
+056596 0565BB Sublevels/39_SpritesHard.bin
+0565BC        Sublevels/26_SpritesHard.bin
+0565C9 0565DC Sublevels/27_SpritesHard.bin
+0565DD 0565EA Sublevels/2A_SpritesHard.bin
+0565EB 0565FE Sublevels/2D_SpritesHard.bin
+0565FF        Sublevels/30_SpritesHard.bin
+056618        Sublevels/31_SpritesHard.bin
+05664F 056686 Sublevels/32_SpritesHard.bin
 065CB0        Graphics/Data065CB0.bin
 065FB0 066280 Tilemaps/Data065FB0.bin
 09488E 094B5E Tilemaps/Data09488E.bin
 094DAF 09507F Tilemaps/Data094DAF.bin
+095629        Tilemaps/SPTitle_Tiles.bin
+095869 095AA9 Tilemaps/SPTitle_Attr.bin
 0A4080        Tilemaps/Data0A4080.bin
 0A4350        Tilemaps/Data0A4350.bin
 0A4620        Tilemaps/Data0A4620.bin
 0A48F0        Tilemaps/Data0A48F0.bin
 0A4BC0 0A4E90 Tilemaps/Data0A4BC0.bin
 0B53A2 0B5672 Tilemaps/Data0B53A2.bin
+0C4000        Sublevels/3A_Main.bin
+0C472F        Sublevels/3B_Main.bin
+0C4BC1        Sublevels/3C_Main.bin
+0C51A3        Sublevels/3D_Main.bin
+0C557D        Sublevels/3E_Main.bin
+0C5BD7        Sublevels/3F_Main.bin
+0C5EF8        Sublevels/40_Main.bin
+0C6486 0C683D Sublevels/41_Main.bin
+0D4000        Sublevels/SP00_Main.bin
+0D41A4        Sublevels/SP01_Main.bin
+0D4312        Sublevels/SP02_Main.bin
+0D4478        Sublevels/SP03_Main.bin
+0D454C        Sublevels/SP04_Main.bin
+0D473C        Sublevels/SP05_Main.bin
+0D48BA        Sublevels/SP06_Main.bin
+0D4A3C        Sublevels/SP07_Main.bin
+0D4B37        Sublevels/SP08_Main.bin
+0D4D70        Sublevels/SP09_Main.bin
+0D4EB7        Sublevels/SP0A_Main.bin
+0D502A        Sublevels/SP0B_Main.bin
+0D512D        Sublevels/SP0C_Main.bin
+0D5303        Sublevels/SP0D_Main.bin
+0D545A        Sublevels/SP0E_Main.bin
+0D558B        Sublevels/SP0F_Main.bin
+0D56C9        Sublevels/SP10_Main.bin
+0D59C9        Sublevels/SP11_Main.bin
+0D5B62        Sublevels/SP12_Main.bin
+0D5BEE        Sublevels/SP13_Main.bin
+0D5DAD        Sublevels/SP14_Main.bin
+0D5FAC        Sublevels/SP15_Main.bin
+0D6104        Sublevels/SP16_Main.bin
+0D62BC        Sublevels/SP17_Main.bin
+0D63DF        Sublevels/SP18_Main.bin
+0D6686        Sublevels/SP19_Main.bin
+0D6718        Sublevels/SP1A_Main.bin
+0D68F9        Sublevels/SP1B_Main.bin
+0D6ABD        Sublevels/SP1C_Main.bin
+0D6C96        Sublevels/SP1D_Main.bin
+0D6DC5        Sublevels/SP1E_Main.bin
+0D6F8F        Sublevels/SP1F_Main.bin
+0D7008        Sublevels/SP34_Main.bin
+0D702F        Sublevels/SP35_Main.bin
+0D7088        Sublevels/SP36_Main.bin
+0D70F3        Sublevels/SP37_Main.bin
+0D7121        Sublevels/SP38_Main.bin
+0D714E        Sublevels/SP39_Main.bin
+0D717B        Sublevels/SP3A_Main.bin
+0D71A2        Sublevels/SP3B_Main.bin
+0D71D0        Sublevels/SP3C_Main.bin
+0D71FD        Sublevels/SP3D_Main.bin
+0D722A        Sublevels/SP3E_Main.bin
+0D72A9        Sublevels/SP3F_Main.bin
+0D72D6        Sublevels/SP40_Main.bin
+0D72FD        Sublevels/SP41_Main.bin
+0D732A        Sublevels/SP42_Main.bin
+0D7372        Sublevels/SP43_Main.bin
+0D73A2        Sublevels/SP44_Main.bin
+0D73FB        Sublevels/SP45_Main.bin
+0D744A        Sublevels/SP46_Main.bin
+0D7545        Sublevels/SP47_Main.bin
+0D75CA        Sublevels/SP48_Main.bin
+0D7616        Sublevels/SP49_Main.bin
+0D7665        Sublevels/SP4A_Main.bin
+0D7692        Sublevels/SP4B_Main.bin
+0D7746        Sublevels/SP4C_Main.bin
+0D77CB        Sublevels/SP4D_Main.bin
+0D77FB        Sublevels/SP4E_Main.bin
+0D7847        Sublevels/SP4F_Main.bin
+0D78A2        Sublevels/SP50_Main.bin
+0D78EA        Sublevels/SP51_Main.bin
+0D7968        Sublevels/SP52_Main.bin
+0D7989        Sublevels/SP53_Main.bin
+0D7A60        Sublevels/SP54_Main.bin
+0D7B44 0D7BB7 Sublevels/SP63_Main.bin
+0E4000        Graphics/Overworld_ChallengeMenu.bin
+0E5800 0E5AD0 Tilemaps/Data0E5800.bin
+0E5B50        Tilemaps/Overworld_W1.bin
+0E5E20        Tilemaps/Overworld_W2.bin
+0E60F0        Tilemaps/Overworld_W3.bin
+0E63C0        Tilemaps/Overworld_W4.bin
+0E6690        Tilemaps/Overworld_W5.bin
+0E6960        Tilemaps/Overworld_W6.bin
+0E6C30        Tilemaps/Overworld_W7.bin
+0E6F00        Tilemaps/Overworld_W8.bin
+0E71D0        Tilemaps/Data0E71D0.bin
+0E74A0        Tilemaps/Data0E74A0.bin
+0E7770        Tilemaps/Data0E7770.bin
+0E7A40        Tilemaps/Data0E7A40.bin
+0E7D10 0E7FE0 Tilemaps/Data0E7D10.bin
+0F4000        Graphics/FaceSolidSpikedAnim.bin
+0F4600        Graphics/Unused0F4600.bin
+0F4800        Graphics/321BlockAnim.bin
+0F4B00        Graphics/RedCoinAnim.bin
+0F4C00        Graphics/WaterLavaAnim.bin
+0F4C40        Graphics/UnderwaterAnim.bin
+0F4C80        Graphics/Unused0F4C80.bin
+0F5000 0F5600 Graphics/FaceSolidDottedAnim.bin
+0F5800        Tilemaps/PauseMenu0.bin
+0F5AD0        Tilemaps/PauseMenuRace.bin
+0F5DA0        Graphics/SPTitle.bin
+0F6DA0 0F7070 Tilemaps/Data0F6DA0.bin
+104000        Sublevels/00_Main.bin
+104174        Sublevels/01_Main.bin
+1042B5        Sublevels/02_12_Main.bin
+1043E9        Sublevels/03_17_Main.bin
+1044D5        Sublevels/04_Main.bin
+1046A8        Sublevels/05_19_Main.bin
+1047BB        Sublevels/06_1A_Main.bin
+10499F        Sublevels/07_13_Main.bin
+104A7F        Sublevels/08_Main.bin
+104C67        Sublevels/09_Main.bin
+104DC0        Sublevels/0A_Main.bin
+104F19        Sublevels/0B_Main.bin
+105005        Sublevels/0C_Main.bin
+105188        Sublevels/0D_Main.bin
+1052BA        Sublevels/0E_Main.bin
+10544B        Sublevels/0F_Main.bin
+10552A        Sublevels/10_Main.bin
+10568A        Sublevels/11_Main.bin
+105848        Sublevels/14_Main.bin
+1059FD        Sublevels/15_Main.bin
+105BB8        Sublevels/16_Main.bin
+105D1A        Sublevels/18_Main.bin
+105EE1        Sublevels/1B_Main.bin
+105FC8        Sublevels/1C_Main.bin
+10627A        Sublevels/1D_Main.bin
+106450        Sublevels/1E_Main.bin
+106640        Sublevels/1F_Main.bin
+106692        Sublevels/36_Main.bin
+1066C1        Sublevels/37_Main.bin
+10670B        Sublevels/38_Main.bin
+106775        Sublevels/39_Main.bin
+1067B3        Sublevels/20_Main.bin
+1067C9        Sublevels/34_SP62_Main.bin
+106801        Sublevels/35_Main.bin
+106858        Sublevels/21_Main.bin
+10687F        Sublevels/22_Main.bin
+1068AF        Sublevels/23_Main.bin
+106906        Sublevels/24_Main.bin
+10692D        Sublevels/25_Main.bin
+106957        Sublevels/26_Main.bin
+106979        Sublevels/27_Main.bin
+1069B7        Sublevels/28_Main.bin
+1069DE        Sublevels/29_Main.bin
+106A08        Sublevels/2A_Main.bin
+106A2A        Sublevels/2B_Main.bin
+106A51        Sublevels/2C_Main.bin
+106A7B        Sublevels/2D_Main.bin
+106AB9        Sublevels/2E_Main.bin
+106AE0        Sublevels/2F_Main.bin
+106B0A        Sublevels/30_Main.bin
+106BA9        Sublevels/31_Main.bin
+106C3F        Sublevels/32_Main.bin
+106CD2 106D02 Sublevels/33_Main.bin
+124000        Tilemaps/16x16Tiles.bin
+1244F0        Sublevels/00_ChObj.bin
+124512        Sublevels/01_ChObj.bin
+12456F        Sublevels/02_ChObj.bin
+124595        Sublevels/03_ChObj.bin
+1245BD        Sublevels/04_ChObj.bin
+1245E8        Sublevels/05_ChObj.bin
+124606        Sublevels/06_ChObj.bin
+124633        Sublevels/07_ChObj.bin
+12465E        Sublevels/08_ChObj.bin
+12467D        Sublevels/09_ChObj.bin
+1246BB        Sublevels/0A_ChObj.bin
+1246E4        Sublevels/0B_ChObj.bin
+124712        Sublevels/0C_ChObj.bin
+12473C        Sublevels/0D_ChObj.bin
+12479E        Sublevels/0E_ChObj.bin
+1247C9        Sublevels/0F_ChObj.bin
+1247F6        Sublevels/10_ChObj.bin
+124815        Sublevels/11_ChObj.bin
+12483D        Sublevels/12_ChObj.bin
+12485F        Sublevels/13_ChObj.bin
+124887        Sublevels/14_ChObj.bin
+1248AF        Sublevels/15_ChObj.bin
+1248CC        Sublevels/16_ChObj.bin
+1248FB        Sublevels/17_ChObj.bin
+124923        Sublevels/18_ChObj.bin
+124944        Sublevels/19_ChObj.bin
+124962        Sublevels/1A_ChObj.bin
+12499B        Sublevels/1B_ChObj.bin
+1249C7        Sublevels/1C_ChObj.bin
+1249F1        Sublevels/1D_ChObj.bin
+124A17        Sublevels/1E_ChObj.bin
+124A41        Sublevels/1F_ChObj.bin
+124A51        Sublevels/37_ChObj.bin
+124A6E        Sublevels/38_ChObj.bin
+124A79        Sublevels/39_ChObj.bin
+124A8C        Sublevels/20_22_ChObj.bin
+124A90        Sublevels/23_ChObj.bin
+124A94        Sublevels/29_ChObj.bin
+124A98        Sublevels/2B_ChObj.bin
+124A9C        Sublevels/2C_ChObj.bin
+124AA0        Sublevels/2E_ChObj.bin
+124AA7        Sublevels/2F_ChObj.bin
+124AAE        Sublevels/31_ChObj.bin
+124AB5        Sublevels/33_ChObj.bin
+124AB9 124B1A Sublevels/30_ChObj.bin
+124D15        Sublevels/SP00_Sprites.bin
+124DB8        Sublevels/SP01_Sprites.bin
+124E3D        Sublevels/SP02_Sprites.bin
+124EB6        Sublevels/SP03_Sprites.bin
+124F0B        Sublevels/SP04_Sprites.bin
+124FA2        Sublevels/SP05_Sprites.bin
+12506F        Sublevels/SP06_Sprites.bin
+1250B8        Sublevels/SP07_Sprites.bin
+125131        Sublevels/SP08_Sprites.bin
+1251FE        Sublevels/SP09_Sprites.bin
+1252A1        Sublevels/SP0A_Sprites.bin
+125350        Sublevels/SP0B_Sprites.bin
+1253AB        Sublevels/SP0C_Sprites.bin
+12541E        Sublevels/SP0D_Sprites.bin
+1254C7        Sublevels/SP0E_Sprites.bin
+12554C        Sublevels/SP0F_Sprites.bin
+1255E9        Sublevels/SP10_Sprites.bin
+1256DA        Sublevels/SP11_Sprites.bin
+12576B        Sublevels/SP12_Sprites.bin
+1257A8        Sublevels/SP13_Sprites.bin
+12585D        Sublevels/SP14_Sprites.bin
+12590C        Sublevels/SP15_Sprites.bin
+1259D9        Sublevels/SP16_Sprites.bin
+125A3A        Sublevels/SP17_Sprites.bin
+125AE9        Sublevels/SP18_Sprites.bin
+125BDA        Sublevels/SP19_Sprites.bin
+125BF9        Sublevels/SP1A_Sprites.bin
+125C90        Sublevels/SP1B_Sprites.bin
+125D5D        Sublevels/SP1C_Sprites.bin
+125E30        Sublevels/SP1D_Sprites.bin
+125E9D        Sublevels/SP1E_Sprites.bin
+125F22        Sublevels/SP1F_Sprites.bin
+125F65        Sublevels/SP20_Sprites.bin
+125F6C        Sublevels/SP21_Sprites.bin
+125FC1        Sublevels/SP22_Sprites.bin
+125FC8        Sublevels/SP23_Sprites.bin
+125FF9        Sublevels/SP24_Sprites.bin
+1260EA        Sublevels/SP25_Sprites.bin
+126169        Sublevels/SP26_Sprites.bin
+1261A6        Sublevels/SP27_Sprites.bin
+12620D        Sublevels/SP28_Sprites.bin
+126292        Sublevels/SP29_Sprites.bin
+1262E7        Sublevels/SP2A_Sprites.bin
+126354        Sublevels/SP2B_Sprites.bin
+12643F        Sublevels/SP2C_Sprites.bin
+126488        Sublevels/SP2D_Sprites.bin
+1264D7        Sublevels/SP2E_Sprites.bin
+12651A        Sublevels/SP2F_Sprites.bin
+1265D5        Sublevels/SP30_Sprites.bin
+126636        Sublevels/SP31_Sprites.bin
+126697        Sublevels/SP32_Sprites.bin
+1266CE 126736 Sublevels/SP33_Sprites.bin
+126737        Sublevels/SP35_Sprites.bin
+126744        Sublevels/SP36_Sprites.bin
+12677B 126782 Sublevels/SP37_Sprites.bin
+126783 126796 Sublevels/SP39_Sprites.bin
+126797        Sublevels/SP3B_Sprites.bin
+12679E 1267B1 Sublevels/SP3C_Sprites.bin
+1267B2        Sublevels/SP3E_Sprites.bin
+1267D7 1267EA Sublevels/SP3F_Sprites.bin
+1267EC        Sublevels/SP42_Sprites.bin
+1267FF        Sublevels/SP43_Sprites.bin
+12680C 126819 Sublevels/SP44_Sprites.bin
+12681A        Sublevels/SP46_Sprites.bin
+12687B        Sublevels/SP47_Sprites.bin
+1268A6 1268BF Sublevels/SP48_Sprites.bin
+1268C1        Sublevels/SP4B_Sprites.bin
+126940        Sublevels/SP4C_Sprites.bin
+12696B        Sublevels/SP4D_Sprites.bin
+126978        Sublevels/SP4E_Sprites.bin
+126991        Sublevels/SP4F_Sprites.bin
+12699E        Sublevels/SP50_Sprites.bin
+1269B1        Sublevels/SP51_Sprites.bin
+1269D6        Sublevels/SP52_Sprites.bin
+1269E3        Sublevels/SP53_Sprites.bin
+126A26        Sublevels/SP54_Sprites.bin
+126A63 126AF4 Sublevels/SP55_Sprites.bin
+126B01 126B14 Sublevels/SP63_Sprites.bin
 13403C        Tilemaps/Data13403C.bin
 13430C        Tilemaps/Data13430C.bin
 1345DC        Tilemaps/Data1345DC.bin
@@ -20,6 +396,18 @@
 134E4C 13511C Tilemaps/Data134E4C.bin
 145397 145667 Tilemaps/Data145397.bin
 154449 154719 Tilemaps/Data154449.bin
+
+184000        Graphics/TitleScreen.bin
+187000        Tilemaps/TitleScreen_Tiles.bin
+187240        Tilemaps/TitleScreen_Attr.bin
+187480 187750 Tilemaps/PreTitle.bin
+194000        Graphics/MainMenu_FileSelect.bin
+197000        Tilemaps/MainMenu.bin
+1972D0 1975A0 Tilemaps/FileSelect.bin
+
+1B7750        Graphics/NonGBCError.bin
+1B7D50 1B7F90 Tilemaps/NonGBCError.bin
+
 204000        Graphics/PeachGivesMarioAward.bin
 205800        Graphics/PeachGivesLuigiAward.bin
 207000        Tilemaps/PeachGivesMarioAwardTop.bin
@@ -115,5 +503,39 @@
 2B7570 2B7BB0 Graphics/AlbumBuzzy.bin
 2C4000        Graphics/AlbumBowser.bin
 2C4AC0 2C5820 Graphics/AlbumMarioLuigi.bin
+
+324000        Sublevels/SP20_Main.bin
+324034        Sublevels/SP21_Main.bin
+324160        Sublevels/SP22_Main.bin
+324383        Sublevels/SP23_Main.bin
+324452        Sublevels/SP24_Main.bin
+324679        Sublevels/SP25_Main.bin
+3247ED        Sublevels/SP26_Main.bin
+3249C6        Sublevels/SP27_Main.bin
+324B06        Sublevels/SP28_Main.bin
+324CCE        Sublevels/SP29_Main.bin
+324DB5        Sublevels/SP2A_Main.bin
+324F44        Sublevels/SP2B_Main.bin
+3250BF        Sublevels/SP2C_Main.bin
+32530A        Sublevels/SP2D_Main.bin
+32543B        Sublevels/SP2E_Main.bin
+3255EC        Sublevels/SP2F_Main.bin
+3257A8        Sublevels/SP30_Main.bin
+325970        Sublevels/SP31_Main.bin
+325AE4        Sublevels/SP32_Main.bin
+325CFE        Sublevels/SP33_Main.bin
+325DA7        Sublevels/SP55_Main.bin
+325EB9        Sublevels/SP56_Main.bin
+325F26        Sublevels/SP57_Main.bin
+325F54        Sublevels/SP58_Main.bin
+325F87        Sublevels/SP59_Main.bin
+325FB5        Sublevels/SP5A_Main.bin
+325FE5        Sublevels/SP5B_Main.bin
+326046        Sublevels/SP5C_Main.bin
+326079        Sublevels/SP5D_Main.bin
+3260AF        Sublevels/SP5E_Main.bin
+3260DD        Sublevels/SP5F_Main.bin
+326163        Sublevels/SP60_Main.bin
+3261C4 3262A0 Sublevels/SP61_Main.bin
 
 364000 364930 Graphics/AlbumHighScore.bin

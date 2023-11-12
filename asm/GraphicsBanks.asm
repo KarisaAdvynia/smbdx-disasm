@@ -13,55 +13,67 @@ Gr_PlayerSmall:                     ; 01:7C00
 .bank $0E slot 1
 
 .orga $4000
-Gr_Bank0E:                          ; 0E:4000
-
-.orga $4800
-Data0E4800:                         ; 0E:4800
-
-.orga $5000
-Data0E5000:                         ; 0E:5000
-
-.orga $5800
+Gr_OW_ChalMenu:                     ; 0E:4000
+.incbin "data/Graphics/Overworld_ChallengeMenu.bin"
 Data0E5800:                         ; 0E:5800
-
-.orga $5AD0
+.incbin "data/Tilemaps/Data0E5800.bin"
 Data0E5AD0:                         ; 0E:5AD0
-
-.orga $5B50
+.dw $7FFF,$7E6F,$7D2D,$0000,$7FFF,$3F8B,$2682,$0000,\
+    $0000,$0000,$0000,$0000,$7FFF,$7D2D,$0D16,$0000,\
+    $7FFF,$22FF,$0200,$0000,$7FFF,$22FF,$7D2D,$0000,\
+    $7FFF,$22FF,$001F,$0000,$7FFF,$034B,$0200,$0000,\
+    $7DE0,$7FFF,$3A94,$0000,$7DE0,$7FFF,$001F,$0000,\
+    $7DE0,$7FFF,$7D2D,$0000,$7DE0,$025F,$001F,$0000,\
+    $7DE0,$3E9C,$08CB,$001D,$7DE0,$7FFF,$02A6,$001D,\
+    $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120
 Data0E5B50:                         ; 0E:5B50
-
-.orga $71D0
+.incbin "data/Tilemaps/Overworld_W1.bin"
+.incbin "data/Tilemaps/Overworld_W2.bin"
+.incbin "data/Tilemaps/Overworld_W3.bin"
+.incbin "data/Tilemaps/Overworld_W4.bin"
+.incbin "data/Tilemaps/Overworld_W5.bin"
+.incbin "data/Tilemaps/Overworld_W6.bin"
+.incbin "data/Tilemaps/Overworld_W7.bin"
+.incbin "data/Tilemaps/Overworld_W8.bin"
 Data0E71D0:                         ; 0E:71D0
-
-.orga $74A0
+.incbin "data/Tilemaps/Data0E71D0.bin"
 Data0E74A0:                         ; 0E:74A0
-
-.orga $7770
+.incbin "data/Tilemaps/Data0E74A0.bin"
 Data0E7770:                         ; 0E:7770
-
-.orga $7A40
+.incbin "data/Tilemaps/Data0E7770.bin"
 Data0E7A40:                         ; 0E:7A40
-
-.orga $7D10
+.incbin "data/Tilemaps/Data0E7A40.bin"
 Data0E7D10:                         ; 0E:7D10
+.incbin "data/Tilemaps/Data0E7D10.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $0F slot 1
 
 .orga $4000
-
-.orga $5800
-Data0F5800:                         ; 0F:5800
-
-.orga $5AD0
-Data0F5AD0:                         ; 0F:5AD0
-
-.orga $5DA0
-Data0F5DA0:                         ; 0F:5DA0
-
-.orga $6DA0
+Gr_FaceSolidSpikedAnim:             ; 0F:4000
+.incbin "data/Graphics/FaceSolidSpikedAnim.bin"
+.incbin "data/Graphics/Unused0F4600.bin"
+Gr_321BlockAnim:                    ; 0F:4800
+.incbin "data/Graphics/321BlockAnim.bin"
+Gr_RedCoinAnim:                     ; 0F:4B00
+.incbin "data/Graphics/RedCoinAnim.bin"
+Gr_WaterLavaAnim:                   ; 0F:4C00
+.incbin "data/Graphics/WaterLavaAnim.bin"
+Gr_UnderwaterAnim:                  ; 0F:4C40
+.incbin "data/Graphics/UnderwaterAnim.bin"
+.incbin "data/Graphics/Unused0F4C80.bin"
+Gr_FaceSolidDottedAnim:             ; 0F:5000
+.incbin "data/Graphics/FaceSolidDottedAnim.bin"
+.incbin "data/Graphics/Unused0F4600.bin"
+Ti_PauseMenu0:                      ; 0F:5800
+.incbin "data/Tilemaps/PauseMenu0.bin"
+Ti_PauseMenuRace:                   ; 0F:5AD0
+.incbin "data/Tilemaps/PauseMenuRace.bin"
+Gr_SPTitle:                         ; 0F:5DA0
+.incbin "data/Graphics/SPTitle.bin"
 Data0F6DA0:                         ; 0F:6DA0
+.incbin "data/Tilemaps/Data0F6DA0.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -114,24 +126,36 @@ Data177900:                         ; 17:7900
 .bank $18 slot 1
 
 .orga $4000
-Gr_Bank18:                          ; 18:4000
-
-.orga $7000
-Data187000:                         ; 18:7000
-
-.orga $7240
-Data187240:                         ; 18:7240
-
-.orga $7480
-Data187480:                         ; 18:7480
-
-.orga $7750
-Data187750:                         ; 18:7750
-
-.orga $7850
-Data187850:                         ; 18:7850
-
-.orga $7890
+Gr_TitleScreen:                     ; 18:4000
+.incbin "data/Graphics/TitleScreen.bin"
+Ti_TitleScreen_Tiles:               ; 18:7000
+.incbin "data/Tilemaps/TitleScreen_Tiles.bin"
+Ti_TitleScreen_Attr:                ; 18:7240
+.incbin "data/Tilemaps/TitleScreen_Attr.bin"
+Ti_PreTitle:                        ; 18:7480
+.incbin "data/Tilemaps/PreTitle.bin"
+Pal_TitleScreen:                    ; 18:7750
+.dw $20C6,$7E6C,$56B3,$7FFD,$20C6,$0240,$0160,$7FFD,\
+    $20C6,$013D,$0097,$7FFD,$20C6,$0058,$0011,$7FFD,\
+    $20C6,$7545,$5CA0,$7FFD,$20C6,$02B5,$01EF,$7FFD,\
+    $6965,$7E6C,$7F73,$7FFD,$7E6C,$03BF,$0255,$090B,\
+    $20C6,$7E6C,$56B3,$7FFD,$20C6,$2348,$1A26,$7FFD,\
+    $20C6,$223F,$195D,$7FFD,$20C6,$215F,$18D7,$7FFD,\
+    $20C6,$7E4D,$7566,$7FFD,$20C6,$23BD,$1AB5,$7FFD,\
+    $6965,$7E6C,$7F73,$7FFD,$7E6C,$03BF,$0255,$090B,\
+    $20C6,$7E6C,$56B3,$7FFD,$20C6,$43F0,$32EC,$7FFD,\
+    $20C6,$433F,$321F,$7FFD,$20C6,$425F,$319D,$7FFD,\
+    $20C6,$7F55,$7E2C,$7FFD,$20C6,$43FF,$337B,$7FFD,\
+    $6965,$7E6C,$7F73,$7FFD,$7E6C,$03BF,$0255,$090B,\
+    $20C6,$7E6C,$56B3,$7FFD,$20C6,$63F8,$4BB2,$7FFD,\
+    $20C6,$63FF,$4ADF,$7FFD,$20C6,$635F,$4A5F,$7FFD,\
+    $20C6,$7FFD,$7EF2,$7FFD,$20C6,$63FF,$4BFF,$7FFD,\
+    $6965,$7E6C,$7F73,$7FFD,$7E6C,$03BF,$0255,$090B
+Pal_PreTitle:                       ; 18:7850
+.dw $07FF,$01FF,$0014,$0000,$07FF,$013B,$0014,$0000,\
+    $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
+    $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
+    $07FF,$01FF,$0014,$0000,$73FF,$01FF,$0014,$0000
 Data187890:                         ; 18:7890
 
 .orga $7B60
@@ -142,21 +166,26 @@ Data187B60:                         ; 18:7B60
 .bank $19 slot 1
 
 .orga $4000
-Gr_Bank19:                          ; 19:4000
-
-.orga $7000
-Data197000:                         ; 19:7000
-
-.orga $72D0
-Data1972D0:                         ; 19:72D0
-
-.orga $75A0
-Data1975A0:                         ; 19:75A0
-
-.orga $7620
-Data197620:                         ; 19:7620
-
-.orga $7660
+Gr_MainMenu_FileSelect:             ; 19:4000
+.incbin "data/Graphics/MainMenu_FileSelect.bin"
+Ti_MainMenu:                        ; 19:7000
+.incbin "data/Tilemaps/MainMenu.bin"
+Ti_FileSelect:                      ; 19:72D0
+.incbin "data/Tilemaps/FileSelect.bin"
+Pal_MainMenu:                       ; 19:75A0
+.dw $7E6C,$7FFF,$6965,$0000,$7FFF,$3ABF,$02E0,$0000,\
+    $7ECF,$7FFF,$0015,$0000,$03FF,$7FFF,$02C6,$0180,\
+    $03FF,$0B12,$7FFF,$0180,$03FF,$0B12,$02C6,$0180,\
+    $7E6C,$7FFF,$6965,$019F,$7D5F,$7814,$500D,$2805,\
+    $02C6,$02BF,$7FFF,$0000,$02C6,$7FFF,$0015,$0000,\
+    $02C6,$02BF,$3819,$0000,$02C6,$7FFF,$56B5,$0000,\
+    $02C6,$7FFF,$56B5,$0000,$02C6,$7FFF,$56B5,$0000,\
+    $02C6,$7FFF,$56B5,$0000,$02C6,$7FFF,$56B5,$0000
+Pal_FileSelect:                     ; 19:7620
+.dw $0000,$7FFF,$7E86,$0000,$0000,$0F5F,$0133,$0000,\
+    $0000,$1BEE,$0222,$0000,$0000,$4F1F,$0133,$0000,\
+    $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 Data197660:                         ; 19:7660
 
 .orga $7930
@@ -196,15 +225,21 @@ Data1B7000:                         ; 1B:7000
 
 .orga $72D0
 Data1B72D0:                         ; 1B:72D0
-
-.orga $7350
+.dw $7FFF,$35AD,$0000,$7D40,$7FFF,$35AD,$0000,$001B,\
+    $7FFF,$56B5,$35AD,$0000,$7FFF,$7D40,$4400,$0000,\
+    $0000,$294A,$56B5,$7FFF,$0000,$294A,$56B5,$7FFF,\
+    $0000,$294A,$56B5,$7FFF,$0000,$294A,$56B5,$7FFF,\
+    $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$35AD,$0000,$001B,\
+    $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$00F0,$7FFF,$7FFF,\
+    $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$00F0,$7FFF,$7FFF,\
+    $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$00F0,$7FFF,$7FFF
 Data1B7350:                         ; 1B:7350
 
 .orga $7750
-Data1B7750:                         ; 1B:7750
-
-.orga $7D50
-Data1B7D50:                         ; 1B:7D50
+Gr_NonGBCError:                     ; 1B:7750
+.incbin "data/Graphics/NonGBCError.bin"
+Ti_NonGBCError:                     ; 1B:7D50
+.incbin "data/Tilemaps/NonGBCError.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -306,22 +341,22 @@ Data207C40:                         ; 20:7C40
 
 .bank $21 slot 1
 
-.orga $4000  
+.orga $4000
 Data214000:                         ; 21:4000
 
 .orga $4B00
 Data214B00:                         ; 21:4B00
 
-.orga $5000  
+.orga $5000
 Data215000:                         ; 21:5000
 
-.orga $5B00  
+.orga $5B00
 Data215B00:                         ; 21:5B00
 
-.orga $6600  
+.orga $6600
 Data216600:                         ; 21:6600
 
-.orga $7100  
+.orga $7100
 Data217100:                         ; 21:7100
 
 .orga $7C00
@@ -358,7 +393,7 @@ Ti_ToadAward:                       ; 22:7BB0
 Data234000:                         ; 23:4000
 
 .orga $5800
-Gr_FortuneCardsBank23:                         ; 23:5800
+Gr_FortuneCardsBank23:              ; 23:5800
 .incbin "data/Graphics/FortuneCardsBank23.bin"
 
 .orga $7000
@@ -441,49 +476,49 @@ Data257000:                         ; 25:7000
 
 .orga $4000
 Ti_YoshiIsHereW1_1:                 ; 26:4000
-.incbin "data/Tilemaps/YoshiIsHereW1_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW1_1.bin"
 Ti_YoshiIsHereW1_2:                 ; 26:42D0
-.incbin "data/Tilemaps/YoshiIsHereW1_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW1_2.bin"
 Ti_YoshiIsHereW1_3:                 ; 26:45A0
-.incbin "data/Tilemaps/YoshiIsHereW1_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW1_3.bin"
 Ti_YoshiIsHereW1_4:                 ; 26:4870
-.incbin "data/Tilemaps/YoshiIsHereW1_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW1_4.bin"
 Ti_YoshiIsHereW2_1:                 ; 26:4B40
-.incbin "data/Tilemaps/YoshiIsHereW2_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW2_1.bin"
 Ti_YoshiIsHereW2_2:                 ; 26:4E10
-.incbin "data/Tilemaps/YoshiIsHereW2_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW2_2.bin"
 Ti_YoshiIsHereW2_3:                 ; 26:50E0
-.incbin "data/Tilemaps/YoshiIsHereW2_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW2_3.bin"
 Ti_YoshiIsHereW2_4:                 ; 26:53B0
-.incbin "data/Tilemaps/YoshiIsHereW2_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW2_4.bin"
 Ti_YoshiIsHereW3_1:                 ; 26:5680
-.incbin "data/Tilemaps/YoshiIsHereW3_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW3_1.bin"
 Ti_YoshiIsHereW3_2:                 ; 26:5950
-.incbin "data/Tilemaps/YoshiIsHereW3_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW3_2.bin"
 Ti_YoshiIsHereW3_3:                 ; 26:5C20
-.incbin "data/Tilemaps/YoshiIsHereW3_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW3_3.bin"
 Ti_YoshiIsHereW3_4:                 ; 26:5EF0
-.incbin "data/Tilemaps/YoshiIsHereW3_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW3_4.bin"
 Ti_YoshiIsHereW4_1:                 ; 26:61C0
-.incbin "data/Tilemaps/YoshiIsHereW4_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW4_1.bin"
 Ti_YoshiIsHereW4_2:                 ; 26:6490
-.incbin "data/Tilemaps/YoshiIsHereW4_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW4_2.bin"
 Ti_YoshiIsHereW4_3:                 ; 26:6760
-.incbin "data/Tilemaps/YoshiIsHereW4_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW4_3.bin"
 Ti_YoshiIsHereW4_4:                 ; 26:6A30
-.incbin "data/Tilemaps/YoshiIsHereW4_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW4_4.bin"
 Ti_YoshiIsHereW5_1:                 ; 26:6D00
-.incbin "data/Tilemaps/YoshiIsHereW5_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW5_1.bin"
 Ti_YoshiIsHereW5_2:                 ; 26:6FD0
-.incbin "data/Tilemaps/YoshiIsHereW5_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW5_2.bin"
 Ti_YoshiIsHereW5_3:                 ; 26:72A0
-.incbin "data/Tilemaps/YoshiIsHereW5_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW5_3.bin"
 Ti_YoshiIsHereW5_4:                 ; 26:7570
-.incbin "data/Tilemaps/YoshiIsHereW5_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW5_4.bin"
 Ti_YoshiIsHereW6_1:                 ; 26:7840
-.incbin "data/Tilemaps/YoshiIsHereW6_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW6_1.bin"
 Ti_YoshiIsHereW6_2:                 ; 26:7B10
-.incbin "data/Tilemaps/YoshiIsHereW6_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW6_2.bin"
 Data267DE0:                         ; 26:7DE0
 .incbin "data/Graphics/Data267DE0.bin"
 
@@ -493,49 +528,49 @@ Data267DE0:                         ; 26:7DE0
 
 .orga $4000
 Ti_YoshiIsHereW6_3:                 ; 27:4000
-.incbin "data/Tilemaps/YoshiIsHereW6_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW6_3.bin"
 Ti_YoshiIsHereW6_4:                 ; 27:42D0
-.incbin "data/Tilemaps/YoshiIsHereW6_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW6_4.bin"
 Ti_YoshiIsHereW7_1:                 ; 27:45A0
-.incbin "data/Tilemaps/YoshiIsHereW7_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW7_1.bin"
 Ti_YoshiIsHereW7_2:                 ; 27:4870
-.incbin "data/Tilemaps/YoshiIsHereW7_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW7_2.bin"
 Ti_YoshiIsHereW7_3:                 ; 27:4B40
-.incbin "data/Tilemaps/YoshiIsHereW7_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW7_3.bin"
 Ti_YoshiIsHereW7_4:                 ; 27:4E10
-.incbin "data/Tilemaps/YoshiIsHereW7_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW7_4.bin"
 Ti_YoshiIsHereW8_1:                 ; 27:50E0
-.incbin "data/Tilemaps/YoshiIsHereW8_1.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW8_1.bin"
 Ti_YoshiIsHereW8_2:                 ; 27:53B0
-.incbin "data/Tilemaps/YoshiIsHereW8_2.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW8_2.bin"
 Ti_YoshiIsHereW8_3:                 ; 27:5680
-.incbin "data/Tilemaps/YoshiIsHereW8_3.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW8_3.bin"
 Ti_YoshiIsHereW8_4:                 ; 27:5950
-.incbin "data/Tilemaps/YoshiIsHereW8_4.bin"      
+.incbin "data/Tilemaps/YoshiIsHereW8_4.bin"
 Ti_MarioAward:                      ; 27:5C20
-.incbin "data/Tilemaps/MarioAward.bin"           
+.incbin "data/Tilemaps/MarioAward.bin"
 Ti_PeachAward:                      ; 27:5EF0
-.incbin "data/Tilemaps/PeachAward.bin"           
+.incbin "data/Tilemaps/PeachAward.bin"
 Ti_BowserAward:                     ; 27:61C0
-.incbin "data/Tilemaps/BowserAward.bin"          
+.incbin "data/Tilemaps/BowserAward.bin"
 Ti_YoshiAward:                      ; 27:6490
-.incbin "data/Tilemaps/YoshiAward.bin"           
+.incbin "data/Tilemaps/YoshiAward.bin"
 Ti_AlbumFireworks:                  ; 27:6760
-.incbin "data/Tilemaps/AlbumFireworks.bin"      
+.incbin "data/Tilemaps/AlbumFireworks.bin"
 Ti_Album1up:                        ; 27:6A30
-.incbin "data/Tilemaps/Album1up.bin"            
+.incbin "data/Tilemaps/Album1up.bin"
 Ti_AlbumVine:                       ; 27:6D00
-.incbin "data/Tilemaps/AlbumVine.bin"           
+.incbin "data/Tilemaps/AlbumVine.bin"
 Ti_AlbumVS:                         ; 27:6FD0
-.incbin "data/Tilemaps/AlbumVS.bin"             
+.incbin "data/Tilemaps/AlbumVS.bin"
 Ti_AlbumPeachKiss:                  ; 27:72A0
-.incbin "data/Tilemaps/AlbumPeachKiss.bin"      
+.incbin "data/Tilemaps/AlbumPeachKiss.bin"
 Ti_AlbumInfrared:                   ; 27:7570
-.incbin "data/Tilemaps/AlbumInfrared.bin"       
+.incbin "data/Tilemaps/AlbumInfrared.bin"
 Ti_AlbumRedCoin:                    ; 27:7840
-.incbin "data/Tilemaps/AlbumRedCoin.bin"        
+.incbin "data/Tilemaps/AlbumRedCoin.bin"
 Ti_AlbumHighScore:                  ; 27:7B10
-.incbin "data/Tilemaps/AlbumHighScore.bin"      
+.incbin "data/Tilemaps/AlbumHighScore.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -543,30 +578,30 @@ Ti_AlbumHighScore:                  ; 27:7B10
 
 .orga $4000
 Ti_AlbumYoshi:                      ; 28:4000
-.incbin "data/Tilemaps/AlbumYoshi.bin"          
+.incbin "data/Tilemaps/AlbumYoshi.bin"
 Ti_AlbumGoomba:                     ; 28:42D0
-.incbin "data/Tilemaps/AlbumGoomba.bin"         
+.incbin "data/Tilemaps/AlbumGoomba.bin"
 Ti_AlbumBlooper:                    ; 28:45A0
-.incbin "data/Tilemaps/AlbumBlooper.bin"        
+.incbin "data/Tilemaps/AlbumBlooper.bin"
 Ti_AlbumLakitu:                     ; 28:4870
-.incbin "data/Tilemaps/AlbumLakitu.bin"         
+.incbin "data/Tilemaps/AlbumLakitu.bin"
 Ti_AlbumCheepCheep:                 ; 28:4B40
-.incbin "data/Tilemaps/AlbumCheepCheep.bin"     
+.incbin "data/Tilemaps/AlbumCheepCheep.bin"
 Ti_AlbumHammerBro:                  ; 28:4E10
-.incbin "data/Tilemaps/AlbumHammerBro.bin"      
+.incbin "data/Tilemaps/AlbumHammerBro.bin"
 Ti_AlbumBulletBill:                 ; 28:50E0
-.incbin "data/Tilemaps/AlbumBulletBill.bin"     
+.incbin "data/Tilemaps/AlbumBulletBill.bin"
 Ti_AlbumKoopa:                      ; 28:53B0
-.incbin "data/Tilemaps/AlbumKoopa.bin"          
+.incbin "data/Tilemaps/AlbumKoopa.bin"
 Ti_AlbumSpiny:                      ; 28:5680
-.incbin "data/Tilemaps/AlbumSpiny.bin"          
+.incbin "data/Tilemaps/AlbumSpiny.bin"
 Ti_AlbumBuzzy:                      ; 28:5950
-.incbin "data/Tilemaps/AlbumBuzzy.bin"          
+.incbin "data/Tilemaps/AlbumBuzzy.bin"
 Ti_AlbumBowser:                     ; 28:5C20
-.incbin "data/Tilemaps/AlbumBowser.bin"         
+.incbin "data/Tilemaps/AlbumBowser.bin"
 Ti_AlbumMarioLuigi:                 ; 28:5EF0
-.incbin "data/Tilemaps/AlbumMarioLuigi.bin"     
-Gr_FortuneCardsBank28:                         ; 28:61C0
+.incbin "data/Tilemaps/AlbumMarioLuigi.bin"
+Gr_FortuneCardsBank28:              ; 28:61C0
 .incbin "data/Graphics/FortuneCardsBank28.bin"
 
 .orga $78A0
@@ -578,21 +613,21 @@ Gr_FortuneCardsBank28:                         ; 28:61C0
 
 .orga $4000
 Gr_ToadAward:                       ; 29:4000
-.incbin "data/Graphics/ToadAward.bin"            
+.incbin "data/Graphics/ToadAward.bin"
 Gr_MarioAward:                      ; 29:4420
-.incbin "data/Graphics/MarioAward.bin"           
+.incbin "data/Graphics/MarioAward.bin"
 Gr_PeachAward:                      ; 29:4920
-.incbin "data/Graphics/PeachAward.bin"           
+.incbin "data/Graphics/PeachAward.bin"
 Gr_BowserAward:                     ; 29:4E80
-.incbin "data/Graphics/BowserAward.bin"          
+.incbin "data/Graphics/BowserAward.bin"
 Gr_YoshiAward:                      ; 29:5410
-.incbin "data/Graphics/YoshiAward.bin"           
+.incbin "data/Graphics/YoshiAward.bin"
 Gr_AlbumFireworks:                  ; 29:58C0
-.incbin "data/Graphics/AlbumFireworks.bin"       
+.incbin "data/Graphics/AlbumFireworks.bin"
 Gr_Album1up:                        ; 29:63C0
-.incbin "data/Graphics/Album1up.bin"             
+.incbin "data/Graphics/Album1up.bin"
 Gr_AlbumVine:                       ; 29:6B60
-.incbin "data/Graphics/AlbumVine.bin"            
+.incbin "data/Graphics/AlbumVine.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -600,17 +635,17 @@ Gr_AlbumVine:                       ; 29:6B60
 
 .orga $4000
 Gr_AlbumVS:                         ; 2A:4000
-.incbin "data/Graphics/AlbumVS.bin"              
+.incbin "data/Graphics/AlbumVS.bin"
 Gr_AlbumPeachKiss:                  ; 2A:4B00
-.incbin "data/Graphics/AlbumPeachKiss.bin"       
+.incbin "data/Graphics/AlbumPeachKiss.bin"
 Gr_AlbumInfrared:                   ; 2A:5640
-.incbin "data/Graphics/AlbumInfrared.bin"        
+.incbin "data/Graphics/AlbumInfrared.bin"
 Gr_AlbumRedCoin:                    ; 2A:6180
-.incbin "data/Graphics/AlbumRedCoin.bin"         
+.incbin "data/Graphics/AlbumRedCoin.bin"
 Gr_AlbumYoshi:                      ; 2A:6E40
-.incbin "data/Graphics/AlbumYoshi.bin"           
+.incbin "data/Graphics/AlbumYoshi.bin"
 Gr_AlbumGoomba:                     ; 2A:79B0
-.incbin "data/Graphics/AlbumGoomba.bin"          
+.incbin "data/Graphics/AlbumGoomba.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -618,21 +653,21 @@ Gr_AlbumGoomba:                     ; 2A:79B0
 
 .orga $4000
 Gr_AlbumBlooper:                    ; 2B:4000
-.incbin "data/Graphics/AlbumBlooper.bin"         
+.incbin "data/Graphics/AlbumBlooper.bin"
 Gr_AlbumLakitu:                     ; 2B:4840
-.incbin "data/Graphics/AlbumLakitu.bin"          
+.incbin "data/Graphics/AlbumLakitu.bin"
 Gr_AlbumCheepCheep:                 ; 2B:4FC0
-.incbin "data/Graphics/AlbumCheepCheep.bin"      
+.incbin "data/Graphics/AlbumCheepCheep.bin"
 Gr_AlbumHammerBro:                  ; 2B:5620
-.incbin "data/Graphics/AlbumHammerBro.bin"       
+.incbin "data/Graphics/AlbumHammerBro.bin"
 Gr_AlbumBulletBill:                 ; 2B:5FB0
-.incbin "data/Graphics/AlbumBulletBill.bin"      
+.incbin "data/Graphics/AlbumBulletBill.bin"
 Gr_AlbumKoopa:                      ; 2B:6590
-.incbin "data/Graphics/AlbumKoopa.bin"           
+.incbin "data/Graphics/AlbumKoopa.bin"
 Gr_AlbumSpiny:                      ; 2B:6CD0
-.incbin "data/Graphics/AlbumSpiny.bin"           
+.incbin "data/Graphics/AlbumSpiny.bin"
 Gr_AlbumBuzzy:                      ; 2B:7570
-.incbin "data/Graphics/AlbumBuzzy.bin"           
+.incbin "data/Graphics/AlbumBuzzy.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -640,9 +675,9 @@ Gr_AlbumBuzzy:                      ; 2B:7570
 
 .orga $4000
 Gr_AlbumBowser:                     ; 2C:4000
-.incbin "data/Graphics/AlbumBowser.bin"          
+.incbin "data/Graphics/AlbumBowser.bin"
 Gr_AlbumMarioLuigi:                 ; 2C:4AC0
-.incbin "data/Graphics/AlbumMarioLuigi.bin"      
+.incbin "data/Graphics/AlbumMarioLuigi.bin"
 Data2C5820:                         ; 2C:5820
 
 .orga $61C0
@@ -770,34 +805,34 @@ Data314800:                         ; 31:4800
 .orga $5000
 Data315000:                         ; 31:5000
 
-.orga $5800  
+.orga $5800
 Data315800:                         ; 31:5800
 
-.orga $5B60  
+.orga $5B60
 Data315B60:                         ; 31:5B60
 
-.orga $5EC0  
+.orga $5EC0
 Data315EC0:                         ; 31:5EC0
 
-.orga $6220  
+.orga $6220
 Data316220:                         ; 31:6220
 
-.orga $6580  
+.orga $6580
 Data316580:                         ; 31:6580
 
-.orga $68E0  
+.orga $68E0
 Data3168E0:                         ; 31:68E0
 
-.orga $6C40  
+.orga $6C40
 Data316C40:                         ; 31:6C40
 
-.orga $6FA0  
+.orga $6FA0
 Data316FA0:                         ; 31:6FA0
 
-.orga $7300  
+.orga $7300
 Data317300:                         ; 31:7300
 
-.orga $7660  
+.orga $7660
 Data317660:                         ; 31:7660
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -857,7 +892,7 @@ Data3557A0:                         ; 35:57A0
 
 .orga $4000
 Gr_AlbumHighScore:                  ; 36:4000
-.incbin "data/Graphics/AlbumHighScore.bin"       
+.incbin "data/Graphics/AlbumHighScore.bin"
 Data364930:                         ; 36:4930
 
 .orga $4F00
@@ -1030,19 +1065,19 @@ Data3B50E0:                         ; 3B:50E0
 .orga $53B0
 Data3B53B0:                         ; 3B:53B0
 
-.orga $5680  
+.orga $5680
 Data3B5680:                         ; 3B:5680
 
-.orga $5950  
+.orga $5950
 Data3B5950:                         ; 3B:5950
 
-.orga $5C20  
+.orga $5C20
 Data3B5C20:                         ; 3B:5C20
 
-.orga $5EF0  
+.orga $5EF0
 Data3B5EF0:                         ; 3B:5EF0
 
-.orga $61C0  
+.orga $61C0
 Data3B61C0:                         ; 3B:61C0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

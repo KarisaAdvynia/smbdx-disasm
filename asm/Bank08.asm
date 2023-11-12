@@ -291,7 +291,7 @@ Code0841D6:
     ret                             ; 08:4200
 
 Code084201:
-    ldh  a,[<$FFB7]                 ; 08:4201
+    ldh  a,[<H_GlobalTimer]         ; 08:4201
     and  $01                        ; 08:4203
     jr   nz,Code08420F              ; 08:4205
     ld   hl,W_SpriteYSpeed          ; 08:4207
@@ -461,7 +461,7 @@ Code08430A:
     ldh  [<SVBK],a                  ; 08:4318
     ld   hl,$D2F9                   ; 08:431A
     ld   [hl],$80                   ; 08:431D
-    ldh  a,[<$FFB7]                 ; 08:431F
+    ldh  a,[<H_GlobalTimer]         ; 08:431F
     and  $01                        ; 08:4321
     jr   z,Code08432F               ; 08:4323
     ld   hl,$D2F9                   ; 08:4325
@@ -773,7 +773,7 @@ Code084505:
     ld   [hl],a                     ; 08:4527
     jr   Code08454F                 ; 08:4528
 Code08452A:
-    ldh  a,[<$FFB7]                 ; 08:452A
+    ldh  a,[<H_GlobalTimer]         ; 08:452A
     srl  a                          ; 08:452C
     jr   nc,Return084568            ; 08:452E
     ld   a,$08                      ; 08:4530
@@ -1028,7 +1028,7 @@ Code0846E9:
     jr   Code08471D                 ; 08:46E9
 Code0846EB:
     ld   e,a                        ; 08:46EB
-    ldh  a,[<$FFB7]                 ; 08:46EC
+    ldh  a,[<H_GlobalTimer]         ; 08:46EC
     and  $07                        ; 08:46EE
     jr   nz,Code084722              ; 08:46F0
     ld   a,e                        ; 08:46F2
@@ -1093,7 +1093,7 @@ Code084750:
     ret                             ; 08:4753
 
 Code084754:
-    ldh  a,[<$FFB7]                 ; 08:4754
+    ldh  a,[<H_GlobalTimer]         ; 08:4754
     srl  a                          ; 08:4756
     jr   nc,Return08476C            ; 08:4758
     ld   a,$08                      ; 08:475A
@@ -1191,7 +1191,7 @@ Code0847D7:
     ret                             ; 08:47F9
 
 Code0847FA:
-    ldh  a,[<$FFB7]                 ; 08:47FA
+    ldh  a,[<H_GlobalTimer]         ; 08:47FA
     srl  a                          ; 08:47FC
     jr   nc,Code08481A              ; 08:47FE
     push bc                         ; 08:4800
@@ -1306,7 +1306,7 @@ Code084890:
     ret                             ; 08:48B8
 
 Code0848B9:
-    ldh  a,[<$FFB7]                 ; 08:48B9
+    ldh  a,[<H_GlobalTimer]         ; 08:48B9
     srl  a                          ; 08:48BB
     jr   nc,Code0848D1              ; 08:48BD
     ld   a,$08                      ; 08:48BF
@@ -1321,10 +1321,10 @@ Code0848C7:
     call Sub001965                  ; 08:48CE
 Code0848D1:
     ld   de,$0001                   ; 08:48D1
-    ldh  a,[<$FFB7]                 ; 08:48D4
+    ldh  a,[<H_GlobalTimer]         ; 08:48D4
     and  $03                        ; 08:48D6
     jr   nz,Code0848F3              ; 08:48D8
-    ldh  a,[<$FFB7]                 ; 08:48DA
+    ldh  a,[<H_GlobalTimer]         ; 08:48DA
     and  $40                        ; 08:48DC
     jr   nz,Code0848E3              ; 08:48DE
     ld   de,IE                      ; 08:48E0
@@ -1342,7 +1342,7 @@ Code0848E3:
     adc  d                          ; 08:48F1
     ld   [hl],a                     ; 08:48F2
 Code0848F3:
-    ldh  a,[<$FFB7]                 ; 08:48F3
+    ldh  a,[<H_GlobalTimer]         ; 08:48F3
     and  $03                        ; 08:48F5
     jr   nz,Return084949            ; 08:48F7
     ld   hl,$D0D2                   ; 08:48F9
@@ -1540,14 +1540,14 @@ Return084A29:
     ret                             ; 08:4A29
 
 Sub084A2A:
-    ld   a,[$C1C5]                  ; 08:4A2A
+    ld   a,[W_PlayerSize]           ; 08:4A2A
     ld   [$D2E4],a                  ; 08:4A2D
     ld   a,$00                      ; 08:4A30
-    ld   [$C1C5],a                  ; 08:4A32
+    ld   [W_PlayerSize],a           ; 08:4A32
     call Sub001D21                  ; 08:4A35
     ld   e,a                        ; 08:4A38
     ld   a,[$D2E4]                  ; 08:4A39
-    ld   [$C1C5],a                  ; 08:4A3C
+    ld   [W_PlayerSize],a           ; 08:4A3C
     jr   nc,Code084A9A              ; 08:4A3F
     ld   a,[$C1DA]                  ; 08:4A41
     ld   hl,$C1DB                   ; 08:4A44
@@ -1582,7 +1582,7 @@ Sub084A2A:
     call Sub002E90                  ; 08:4A77
     jr   Code084A94                 ; 08:4A7A
 Code084A7C:
-    ldh  a,[<$FFB7]                 ; 08:4A7C
+    ldh  a,[<H_GlobalTimer]         ; 08:4A7C
     srl  a                          ; 08:4A7E
     jr   nc,Code084A9A              ; 08:4A80
     ld   a,$08                      ; 08:4A82
@@ -1601,7 +1601,7 @@ Code084A94:
     ret                             ; 08:4A99
 
 Code084A9A:
-    ldh  a,[<$FFB7]                 ; 08:4A9A
+    ldh  a,[<H_GlobalTimer]         ; 08:4A9A
     and  $07                        ; 08:4A9C
     ldh  [<$FF97],a                 ; 08:4A9E
     ld   hl,W_SpriteSubstate        ; 08:4AA0
@@ -2449,7 +2449,7 @@ Sub084FFA:
     ld   hl,$C1DB                   ; 08:5002
     or   [hl]                       ; 08:5005
     jr   nz,Code085016              ; 08:5006
-    ldh  a,[<$FFB7]                 ; 08:5008
+    ldh  a,[<H_GlobalTimer]         ; 08:5008
     srl  a                          ; 08:500A
     jr   nc,Code085020              ; 08:500C
     ld   a,$08                      ; 08:500E
@@ -2621,7 +2621,7 @@ Code085132:
     ld   hl,$C1DB                   ; 08:513A
     or   [hl]                       ; 08:513D
     jr   nz,Code085151              ; 08:513E
-    ldh  a,[<$FFB7]                 ; 08:5140
+    ldh  a,[<H_GlobalTimer]         ; 08:5140
     srl  a                          ; 08:5142
     jr   nc,Code085160              ; 08:5144
     ld   a,$08                      ; 08:5146
@@ -2674,7 +2674,7 @@ Code08519A:
     ld   hl,W_SpriteXSpeed          ; 08:519A
     add  hl,bc                      ; 08:519D
     ld   [hl],a                     ; 08:519E
-    ldh  a,[<$FFB7]                 ; 08:519F
+    ldh  a,[<H_GlobalTimer]         ; 08:519F
     and  $03                        ; 08:51A1
     jr   nz,Return0851A9            ; 08:51A3
     ld   a,[hl]                     ; 08:51A5
@@ -2779,7 +2779,7 @@ Code08520D:
     ld   a,[$C1DD]                  ; 08:523E
     and  a                          ; 08:5241
     jr   nz,Code085248              ; 08:5242
-    ld   a,[$C1C5]                  ; 08:5244
+    ld   a,[W_PlayerSize]           ; 08:5244
     ld   c,a                        ; 08:5247
 Code085248:
     sla  c                          ; 08:5248
@@ -3568,7 +3568,7 @@ Code0859ED:
     call Sub002893                  ; 08:59FA
     call Sub001D21                  ; 08:59FD
     jr   nc,Code085A0E              ; 08:5A00
-    ldh  a,[<$FFB7]                 ; 08:5A02
+    ldh  a,[<H_GlobalTimer]         ; 08:5A02
     srl  a                          ; 08:5A04
     jr   nc,Code085A0E              ; 08:5A06
     ld   a,$08                      ; 08:5A08
@@ -3806,7 +3806,7 @@ Code085B5D:
     ld   [hl],a                     ; 08:5BC9
     call Sub001D21                  ; 08:5BCA
     jr   nc,Code085BDB              ; 08:5BCD
-    ldh  a,[<$FFB7]                 ; 08:5BCF
+    ldh  a,[<H_GlobalTimer]         ; 08:5BCF
     srl  a                          ; 08:5BD1
     jr   nc,Code085BDB              ; 08:5BD3
     ld   a,$08                      ; 08:5BD5
@@ -4043,7 +4043,7 @@ Code085D7D:
     ld   a,[hl]                     ; 08:5D81
     cp   $02                        ; 08:5D82
     jr   c,Code085D94               ; 08:5D84
-    ldh  a,[<$FF8C]                 ; 08:5D86
+    ldh  a,[<H_ButtonsPressed]      ; 08:5D86
     bit  0,a                        ; 08:5D88
     jr   z,Code085D94               ; 08:5D8A
     push hl                         ; 08:5D8C
@@ -4141,13 +4141,13 @@ Code085E1C:
     ld   hl,$D11D                   ; 08:5E1C
     add  hl,bc                      ; 08:5E1F
     ld   [hl],$01                   ; 08:5E20
-    ldh  a,[<H_ButtonFlags]         ; 08:5E22
+    ldh  a,[<H_ButtonsHeld]         ; 08:5E22
     and  $C0                        ; 08:5E24
     jr   z,Code085E2D               ; 08:5E26
     ld   a,$02                      ; 08:5E28
     ld   [$C1C2],a                  ; 08:5E2A
 Code085E2D:
-    ld   a,[$C1C5]                  ; 08:5E2D
+    ld   a,[W_PlayerSize]           ; 08:5E2D
     sla  a                          ; 08:5E30
     ld   l,a                        ; 08:5E32
     ld   h,$00                      ; 08:5E33

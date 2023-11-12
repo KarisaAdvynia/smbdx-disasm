@@ -137,11 +137,15 @@ Code0740CF:
 Return0740D3:
     ret                             ; 07:40D3
 
-Data0740D4:                         ; 07:40D4
-.db $00,$40,$C0,$40,$80,$41,$40,$42,\
-    $00,$43,$C0,$43,$80,$44,$40,$45,\
-    $00,$50,$C0,$50,$80,$51,$40,$52,\
-    $00,$53,$C0,$53,$80,$54,$40,$55
+RaceBlockAnimPtrs:                  ; 07:40D4
+.dw Gr_FaceSolidSpikedAnim,      Gr_FaceSolidSpikedAnim+$0C0,\
+    Gr_FaceSolidSpikedAnim+$180, Gr_FaceSolidSpikedAnim+$240,\
+    Gr_FaceSolidSpikedAnim+$300, Gr_FaceSolidSpikedAnim+$3C0,\
+    Gr_FaceSolidSpikedAnim+$480, Gr_FaceSolidSpikedAnim+$540,\
+    Gr_FaceSolidDottedAnim,      Gr_FaceSolidDottedAnim+$0C0,\
+    Gr_FaceSolidDottedAnim+$180, Gr_FaceSolidDottedAnim+$240,\
+    Gr_FaceSolidDottedAnim+$300, Gr_FaceSolidDottedAnim+$3C0,\
+    Gr_FaceSolidDottedAnim+$480, Gr_FaceSolidDottedAnim+$540
 
 Sub0740F4:
     ld   a,[W_GameMode]             ; 07:40F4
@@ -167,10 +171,10 @@ Code074114:
 Sub07411C:
     push bc                         ; 07:411C
     ld   bc,$0010                   ; 07:411D
-    ld   a,[$C3A2]                  ; 07:4120
-    bit  1,a                        ; 07:4123
-    jr   nz,Code074129              ; 07:4125
-    ld   c,$00                      ; 07:4127
+    ld   a,[W_RaceHeaderFlags]      ; 07:4120
+    bit  1,a                        ; 07:4123  test bit 1
+    jr   nz,Code074129              ; 07:4125  if set, use solid/spiked blocks (offset 10)
+    ld   c,$00                      ; 07:4127  if clear, use solid/dotted blocks (offset 00)
 Code074129:
     ld   a,[$DA6A]                  ; 07:4129
     xor  $01                        ; 07:412C
@@ -185,7 +189,7 @@ Code074129:
     sla  a                          ; 07:413C
     ld   e,a                        ; 07:413E
     ld   d,$00                      ; 07:413F
-    ld   hl,Data0740D4              ; 07:4141
+    ld   hl,RaceBlockAnimPtrs       ; 07:4141
     add  hl,bc                      ; 07:4144
     add  hl,de                      ; 07:4145
     ldi  a,[hl]                     ; 07:4146
@@ -412,7 +416,7 @@ Data0742B8:                         ; 07:42B8
 .db $A4,$0E,$A6,$0E,$A0,$0E,$A2,$0E,\
     $9C,$0E,$9E,$0E,$94,$0E,$96,$0E,\
     $98,$0E,$9A,$0E
-Data0742CC:                         ; 07:42CC
+RaceLevelMusicIDs:                  ; 07:42CC
 .db $7E,$7E,$7E,$68,$7E,$7E,$7E,$68
 Code0742D4:
     ld   hl,$D096                   ; 07:42D4
@@ -457,7 +461,7 @@ Code074301:
     sub  $3A                        ; 07:431A
     ld   e,a                        ; 07:431C
     ld   d,$00                      ; 07:431D
-    ld   hl,Data0742CC              ; 07:431F
+    ld   hl,RaceLevelMusicIDs       ; 07:431F
     add  hl,de                      ; 07:4322
     ld   a,[hl]                     ; 07:4323
     ld   [$DE68],a                  ; 07:4324
@@ -2097,7 +2101,7 @@ Code074ED4:
     ldh  a,[<$FFA9]                 ; 07:4ED5
     cp   $C0                        ; 07:4ED7
     jr   z,Code074EF3               ; 07:4ED9
-    ldh  a,[<$FFB7]                 ; 07:4EDB
+    ldh  a,[<H_GlobalTimer]         ; 07:4EDB
     and  $03                        ; 07:4EDD
     jr   nz,Code074EF3              ; 07:4EDF
     ld   d,$07                      ; 07:4EE1
@@ -2250,7 +2254,7 @@ Code074FC6:
     ld   a,[hl]                     ; 07:4FCB
     cp   $C0                        ; 07:4FCC
     jr   z,Code074FED               ; 07:4FCE
-    ldh  a,[<$FFB7]                 ; 07:4FD0
+    ldh  a,[<H_GlobalTimer]         ; 07:4FD0
     and  $03                        ; 07:4FD2
     jr   nz,Code074FED              ; 07:4FD4
     ld   d,$07                      ; 07:4FD6
@@ -2526,7 +2530,7 @@ Code075165:
     ret                             ; 07:519F
 
 Code0751A0:
-    ldh  a,[<$FFB7]                 ; 07:51A0
+    ldh  a,[<H_GlobalTimer]         ; 07:51A0
     bit  0,a                        ; 07:51A2
     jp   nz,Code0751F2              ; 07:51A4
     ld   hl,$D14A                   ; 07:51A7
@@ -2702,7 +2706,7 @@ Code0752B5:
     ret                             ; 07:52B7
 
 Sub0752B8:
-    ld   a,[$C3A2]                  ; 07:52B8
+    ld   a,[W_RaceHeaderFlags]      ; 07:52B8
     bit  0,a                        ; 07:52BB
     ret  nz                         ; 07:52BD
     ld   hl,$D0B4                   ; 07:52BE
@@ -2839,7 +2843,7 @@ Code075389:
     ret                             ; 07:539B
 
 SubL_07539C:
-    ld   hl,$0000                   ; 07:539C
+    ld   hl,SRAMENABLE              ; 07:539C
     ld   [hl],$0A                   ; 07:539F
     ld   de,$0324                   ; 07:53A1
 Code0753A4:
@@ -2853,12 +2857,12 @@ Code0753A4:
     ld   hl,$A100                   ; 07:53AF
     add  hl,de                      ; 07:53B2
     ld   [hl],$00                   ; 07:53B3
-    ld   hl,$0000                   ; 07:53B5
+    ld   hl,SRAMENABLE              ; 07:53B5
     ld   [hl],$FF                   ; 07:53B8
     rst  $18                        ; 07:53BA
 
 SubL_0753BB:
-    ld   hl,$0000                   ; 07:53BB
+    ld   hl,SRAMENABLE              ; 07:53BB
     ld   [hl],$0A                   ; 07:53BE
     ld   a,$00                      ; 07:53C0
     ld   [$C16B],a                  ; 07:53C2
@@ -2973,7 +2977,7 @@ Code075478:
     dec  b                          ; 07:547A
     jr   nz,Code075478              ; 07:547B
 Code07547D:
-    ld   hl,$0000                   ; 07:547D
+    ld   hl,SRAMENABLE              ; 07:547D
     ld   [hl],$FF                   ; 07:5480
     rst  $18                        ; 07:5482
 
@@ -2981,7 +2985,7 @@ Original_InitialLives:              ; 07:5483
 .db $05,$0A
 
 SubL_075485:
-    ld   hl,$0000                   ; 07:5485
+    ld   hl,SRAMENABLE              ; 07:5485
     ld   [hl],$0A                   ; 07:5488
     ld   a,[$C16B]                  ; 07:548A
     call Sub000FF6                  ; 07:548D
@@ -3002,8 +3006,8 @@ SubL_075485:
     ld   [$C17B],a                  ; 07:54B7
     ld   [$C17C],a                  ; 07:54BA
     ld   [$C1F2],a                  ; 07:54BD
-    ld   [$C1C5],a                  ; 07:54C0
-    ld   [$C1CE],a                  ; 07:54C3
+    ld   [W_PlayerSize],a           ; 07:54C0
+    ld   [W_PlayerFireFlag],a       ; 07:54C3
     ld   [$C287],a                  ; 07:54C6
     ld   [$C288],a                  ; 07:54C9
     ld   [$C289],a                  ; 07:54CC
@@ -3042,8 +3046,8 @@ Code0754FC:
     ld   a,[hl]                     ; 07:5517
     ld   [W_HardFlag],a             ; 07:5518
     xor  a                          ; 07:551B
-    ld   [$C1C5],a                  ; 07:551C
-    ld   [$C1CE],a                  ; 07:551F
+    ld   [W_PlayerSize],a           ; 07:551C
+    ld   [W_PlayerFireFlag],a       ; 07:551F
     xor  a                          ; 07:5522
     ld   [$C17A],a                  ; 07:5523
     ld   [$C17B],a                  ; 07:5526
@@ -3087,7 +3091,7 @@ Code0754FC:
     ldi  a,[hl]                     ; 07:557A
     ld   [$C16F],a                  ; 07:557B
 Code07557E:
-    ld   hl,$0000                   ; 07:557E
+    ld   hl,SRAMENABLE              ; 07:557E
     ld   [hl],$FF                   ; 07:5581
     rst  $18                        ; 07:5583
 
@@ -3106,7 +3110,7 @@ Sub075588:
     jr   c,Code07559B               ; 07:5596
     ld   [$C16A],a                  ; 07:5598
 Code07559B:
-    ld   hl,$0000                   ; 07:559B
+    ld   hl,SRAMENABLE              ; 07:559B
     ld   [hl],$0A                   ; 07:559E
     ld   a,[$C16B]                  ; 07:55A0
     swap a                          ; 07:55A3
@@ -3124,11 +3128,11 @@ Code07559B:
     ld   [hl],a                     ; 07:55BB
     ld   hl,$A10F                   ; 07:55BC
     add  hl,de                      ; 07:55BF
-    ld   a,[$C1C5]                  ; 07:55C0
+    ld   a,[W_PlayerSize]           ; 07:55C0
     ld   [hl],a                     ; 07:55C3
     ld   hl,$A110                   ; 07:55C4
     add  hl,de                      ; 07:55C7
-    ld   a,[$C1CE]                  ; 07:55C8
+    ld   a,[W_PlayerFireFlag]       ; 07:55C8
     ld   [hl],a                     ; 07:55CB
     ld   hl,$A102                   ; 07:55CC
     add  hl,de                      ; 07:55CF
@@ -3206,12 +3210,12 @@ Code07559B:
     ldi  [hl],a                     ; 07:565F
     ldh  a,[<$FF98]                 ; 07:5660
     ld   [hl],a                     ; 07:5662
-    ld   hl,$0000                   ; 07:5663
+    ld   hl,SRAMENABLE              ; 07:5663
     ld   [hl],$FF                   ; 07:5666
     ret                             ; 07:5668
 
 SubL_075669:
-    ld   hl,$0000                   ; 07:5669
+    ld   hl,SRAMENABLE              ; 07:5669
     ld   [hl],$0A                   ; 07:566C
     ld   a,[$C16B]                  ; 07:566E
     swap a                          ; 07:5671
@@ -3236,7 +3240,7 @@ SubL_075669:
     ldi  [hl],a                     ; 07:5697
     ldh  a,[<$FF98]                 ; 07:5698
     ld   [hl],a                     ; 07:569A
-    ld   hl,$0000                   ; 07:569B
+    ld   hl,SRAMENABLE              ; 07:569B
     ld   [hl],$FF                   ; 07:569E
     rst  $18                        ; 07:56A0
 
@@ -3250,7 +3254,7 @@ Data0756A1:                         ; 07:56A1
     $00,$00,$00,$00,$00,$00,$00,$00
 
 SubL_0756D9:
-    ld   hl,$0000                   ; 07:56D9
+    ld   hl,SRAMENABLE              ; 07:56D9
     ld   [hl],$0A                   ; 07:56DC
     call Sub0757CD                  ; 07:56DE
     jp   c,Code07575D               ; 07:56E1
@@ -3368,7 +3372,7 @@ Code0757C1:
     inc  de                         ; 07:57C3
     dec  c                          ; 07:57C4
     jr   nz,Code0757C1              ; 07:57C5
-    ld   hl,$0000                   ; 07:57C7
+    ld   hl,SRAMENABLE              ; 07:57C7
     ld   [hl],$FF                   ; 07:57CA
     rst  $18                        ; 07:57CC
 
@@ -3396,7 +3400,7 @@ Code0757EC:
     ret                             ; 07:57EE
 
 SubL_0757EF:
-    ld   hl,$0000                   ; 07:57EF
+    ld   hl,SRAMENABLE              ; 07:57EF
     ld   [hl],$0A                   ; 07:57F2
 Code0757F4:
     ld   hl,$A370                   ; 07:57F4
@@ -3454,15 +3458,15 @@ Code075858:
     dec  c                          ; 07:585B
     jr   nz,Code075858              ; 07:585C
     call Sub075875                  ; 07:585E
-    ld   hl,$0000                   ; 07:5861
+    ld   hl,SRAMENABLE              ; 07:5861
     ld   [hl],$FF                   ; 07:5864
     rst  $18                        ; 07:5866
 
 UnusedL_075867:
-    ld   hl,$0000                   ; 07:5867
+    ld   hl,SRAMENABLE              ; 07:5867
     ld   [hl],$0A                   ; 07:586A
     call Sub075875                  ; 07:586C
-    ld   hl,$0000                   ; 07:586F
+    ld   hl,SRAMENABLE              ; 07:586F
     ld   [hl],$FF                   ; 07:5872
     rst  $18                        ; 07:5874
 
@@ -3480,7 +3484,7 @@ Sub075875:
     ret                             ; 07:588B
 
 SubL_07588C:
-    ld   hl,$0000                   ; 07:588C
+    ld   hl,SRAMENABLE              ; 07:588C
     ld   [hl],$0A                   ; 07:588F
     call Sub0758B4                  ; 07:5891
     jr   c,Code075899               ; 07:5894
@@ -3499,7 +3503,7 @@ Code0758A5:
     jr   nz,Code0758A5              ; 07:58A9
     xor  a                          ; 07:58AB
     ldh  [<SVBK],a                  ; 07:58AC
-    ld   hl,$0000                   ; 07:58AE
+    ld   hl,SRAMENABLE              ; 07:58AE
     ld   [hl],$FF                   ; 07:58B1
     rst  $18                        ; 07:58B3
 
@@ -3620,7 +3624,7 @@ Code0759D8:
     ret                             ; 07:59E9
 
 SubL_0759EA:
-    ld   hl,$0000                   ; 07:59EA
+    ld   hl,SRAMENABLE              ; 07:59EA
     ld   [hl],$0A                   ; 07:59ED
     ld   a,$07                      ; 07:59EF
     ldh  [<SVBK],a                  ; 07:59F1
@@ -3636,7 +3640,7 @@ Code0759FB:
     jp   Code075AFB                 ; 07:5A01
 
 SubL_075A04:
-    ld   hl,$0000                   ; 07:5A04
+    ld   hl,SRAMENABLE              ; 07:5A04
     ld   [hl],$0A                   ; 07:5A07
     ld   de,$C291                   ; 07:5A09
     ld   a,[$C356]                  ; 07:5A0C
@@ -3804,12 +3808,12 @@ Code075AFB:
     ld   [hl],a                     ; 07:5B06
     xor  a                          ; 07:5B07
     ldh  [<SVBK],a                  ; 07:5B08
-    ld   hl,$0000                   ; 07:5B0A
+    ld   hl,SRAMENABLE              ; 07:5B0A
     ld   [hl],$FF                   ; 07:5B0D
     rst  $18                        ; 07:5B0F
 
 SubL_075B10:
-    ld   hl,$0000                   ; 07:5B10
+    ld   hl,SRAMENABLE              ; 07:5B10
     ld   [hl],$0A                   ; 07:5B13
     call Sub075B61                  ; 07:5B15
     jr   c,Code075B1D               ; 07:5B18
@@ -3848,7 +3852,7 @@ Code075B2E:
     ld   [$C18B],a                  ; 07:5B54
     ld   a,[hl]                     ; 07:5B57
     ld   [$C18C],a                  ; 07:5B58
-    ld   hl,$0000                   ; 07:5B5B
+    ld   hl,SRAMENABLE              ; 07:5B5B
     ld   [hl],$FF                   ; 07:5B5E
     rst  $18                        ; 07:5B60
 
@@ -3868,7 +3872,6 @@ Sub075B61:
     jr   nz,Code075B7C              ; 07:5B78
     scf                             ; 07:5B7A
     ret                             ; 07:5B7B
-
 Code075B7C:
     scf                             ; 07:5B7C
     ccf                             ; 07:5B7D
@@ -3917,7 +3920,7 @@ SubL_075BB7:
     ld   a,[$C193]                  ; 07:5BBB
     or   b                          ; 07:5BBE
     ld   [$C194],a                  ; 07:5BBF
-    ld   hl,$0000                   ; 07:5BC2
+    ld   hl,SRAMENABLE              ; 07:5BC2
     ld   [hl],$0A                   ; 07:5BC5
     ld   a,[W_LevelID]              ; 07:5BC7
     ld   e,a                        ; 07:5BCA
@@ -3956,7 +3959,7 @@ SubL_075BB7:
     ldi  [hl],a                     ; 07:5C0C
     ldh  a,[<$FF98]                 ; 07:5C0D
     ld   [hl],a                     ; 07:5C0F
-    ld   hl,$0000                   ; 07:5C10
+    ld   hl,SRAMENABLE              ; 07:5C10
     ld   [hl],$FF                   ; 07:5C13
     rst  $18                        ; 07:5C15
 
@@ -3966,7 +3969,7 @@ Data075C26:                         ; 07:5C26
 .dw $0C9A,$0BCE,$0BA8,$0D93,$0D2A,$0D80,$0D01,$0E11
 
 Sub075C36:
-    ld   hl,$0000                   ; 07:5C36
+    ld   hl,SRAMENABLE              ; 07:5C36
     ld   [hl],$0A                   ; 07:5C39
     ld   hl,$A3F2                   ; 07:5C3B
     ld   a,$31                      ; 07:5C3E
@@ -4056,7 +4059,7 @@ Code075CB8:
     cp   $10                        ; 07:5CC4
     jr   nz,Code075CB8              ; 07:5CC6
 Code075CC8:
-    ld   hl,$0000                   ; 07:5CC8
+    ld   hl,SRAMENABLE              ; 07:5CC8
     ld   [hl],$FF                   ; 07:5CCB
     ret                             ; 07:5CCD
 
@@ -4126,7 +4129,7 @@ SubL_075D06:
     rst  $18                        ; 07:5D35
 
 Sub075D36:
-    ld   hl,$0000                   ; 07:5D36
+    ld   hl,SRAMENABLE              ; 07:5D36
     ld   [hl],$0A                   ; 07:5D39
     ld   de,$0000                   ; 07:5D3B
 Code075D3E:
@@ -4174,12 +4177,12 @@ Code075D64:
     ldi  [hl],a                     ; 07:5D86
     ldh  a,[<$FF98]                 ; 07:5D87
     ld   [hl],a                     ; 07:5D89
-    ld   hl,$0000                   ; 07:5D8A
+    ld   hl,SRAMENABLE              ; 07:5D8A
     ld   [hl],$FF                   ; 07:5D8D
     ret                             ; 07:5D8F
 
 SubL_075D90:
-    ld   hl,$0000                   ; 07:5D90
+    ld   hl,SRAMENABLE              ; 07:5D90
     ld   [hl],$0A                   ; 07:5D93
     ld   a,[$D900]                  ; 07:5D95
     cp   $03                        ; 07:5D98
@@ -4239,12 +4242,12 @@ Code075DED:
     ld   de,$C471                   ; 07:5DED
     ld   bc,$006C                   ; 07:5DF0
     call CopyBytes                  ; 07:5DF3
-    ld   hl,$0000                   ; 07:5DF6
+    ld   hl,SRAMENABLE              ; 07:5DF6
     ld   [hl],$FF                   ; 07:5DF9
     rst  $18                        ; 07:5DFB
 
 SubL_075DFC:
-    ld   hl,$0000                   ; 07:5DFC
+    ld   hl,SRAMENABLE              ; 07:5DFC
     ld   [hl],$0A                   ; 07:5DFF
     ld   a,[$D900]                  ; 07:5E01
     cp   $03                        ; 07:5E04
@@ -4309,12 +4312,12 @@ Code075E5E:
     ld   hl,$C471                   ; 07:5E5E
     ld   bc,$006C                   ; 07:5E61
     call CopyBytes                  ; 07:5E64
-    ld   hl,$0000                   ; 07:5E67
+    ld   hl,SRAMENABLE              ; 07:5E67
     ld   [hl],$FF                   ; 07:5E6A
     rst  $18                        ; 07:5E6C
 
 SubL_075E6D:
-    ld   hl,$0000                   ; 07:5E6D
+    ld   hl,SRAMENABLE              ; 07:5E6D
     ld   [hl],$0A                   ; 07:5E70
     ld   b,$00                      ; 07:5E72
     ld   a,[$D928]                  ; 07:5E74
@@ -4353,12 +4356,12 @@ SubL_075E6D:
     ld   de,$C471                   ; 07:5EA8
     ld   bc,$006C                   ; 07:5EAB
     call CopyBytes                  ; 07:5EAE
-    ld   hl,$0000                   ; 07:5EB1
+    ld   hl,SRAMENABLE              ; 07:5EB1
     ld   [hl],$FF                   ; 07:5EB4
     rst  $18                        ; 07:5EB6
 
 SubL_075EB7:
-    ld   hl,$0000                   ; 07:5EB7
+    ld   hl,SRAMENABLE              ; 07:5EB7
     ld   [hl],$0A                   ; 07:5EBA
     ld   b,$00                      ; 07:5EBC
     ld   a,[$D928]                  ; 07:5EBE
@@ -4401,22 +4404,21 @@ SubL_075EB7:
     ld   hl,$C471                   ; 07:5EF6
     ld   bc,$006C                   ; 07:5EF9
     call CopyBytes                  ; 07:5EFC
-    ld   hl,$0000                   ; 07:5EFF
+    ld   hl,SRAMENABLE              ; 07:5EFF
     ld   [hl],$FF                   ; 07:5F02
     rst  $18                        ; 07:5F04
 
-Data075F05:                         ; 07:5F05
-.db $1D,$AF,$1D,$AF,$1D,$AF,$89,$AF,\
-    $89,$AF,$F5,$AF,$F5,$AF,$61,$B0
+SRAMPtrs075F05:                     ; 07:5F05
+.dw $AF1D,$AF1D,$AF1D,$AF89,$AF89,$AFF5,$AFF5,$B061
 
 SubL_075F15:
     ld   a,$0A                      ; 07:5F15
-    ld   [$0000],a                  ; 07:5F17
+    ld   [SRAMENABLE],a             ; 07:5F17
     ld   b,$00                      ; 07:5F1A
     ld   a,[$C500]                  ; 07:5F1C
     sla  a                          ; 07:5F1F
     ld   c,a                        ; 07:5F21
-    ld   hl,Data075F05              ; 07:5F22
+    ld   hl,SRAMPtrs075F05          ; 07:5F22
     add  hl,bc                      ; 07:5F25
     ldi  a,[hl]                     ; 07:5F26
     ld   h,[hl]                     ; 07:5F27
@@ -4425,17 +4427,17 @@ SubL_075F15:
     ld   de,$C471                   ; 07:5F2C
     call CopyBytes                  ; 07:5F2F
     ld   a,$FF                      ; 07:5F32
-    ld   [$0000],a                  ; 07:5F34
+    ld   [SRAMENABLE],a             ; 07:5F34
     rst  $18                        ; 07:5F37
 
 SubL_075F38:
     ld   a,$0A                      ; 07:5F38
-    ld   [$0000],a                  ; 07:5F3A
+    ld   [SRAMENABLE],a             ; 07:5F3A
     ld   b,$00                      ; 07:5F3D
     ld   a,[$C500]                  ; 07:5F3F
     sla  a                          ; 07:5F42
     ld   c,a                        ; 07:5F44
-    ld   hl,Data075F05              ; 07:5F45
+    ld   hl,SRAMPtrs075F05          ; 07:5F45
     add  hl,bc                      ; 07:5F48
     ldi  a,[hl]                     ; 07:5F49
     ld   e,a                        ; 07:5F4A
@@ -4443,6 +4445,6 @@ SubL_075F38:
     ld   bc,$006C                   ; 07:5F4C
     ld   hl,$C471                   ; 07:5F4F
     call CopyBytes                  ; 07:5F52
-    ld   hl,$0000                   ; 07:5F55
+    ld   hl,SRAMENABLE              ; 07:5F55
     ld   [hl],$FF                   ; 07:5F58
     rst  $18                        ; 07:5F5A

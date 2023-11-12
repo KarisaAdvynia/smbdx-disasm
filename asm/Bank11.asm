@@ -9,14 +9,14 @@ Data114000:                         ; 11:4000
     $02,$00,$E7,$00,$E8,$00
 
 Sub114026:
+; Game state 1A
     ld   a,[$C362]                  ; 11:4026
     and  a                          ; 11:4029
-    jr   z,Code114032               ; 11:402A
+    jr   z,@Code114032              ; 11:402A
     ld   a,$01                      ; 11:402C
     ld   [$C1B1],a                  ; 11:402E
     ret                             ; 11:4031
-
-Code114032:
+@Code114032:
     call Sub00126D                  ; 11:4032
     ld   a,$00                      ; 11:4035
     ldh  [<IE],a                    ; 11:4037
@@ -34,7 +34,7 @@ Code114032:
     ld   a,$70                      ; 11:4053
     ldh  [<$FFBA],a                 ; 11:4055
     ld   a,$00                      ; 11:4057
-    ld   hl,$DF80                   ; 11:4059
+    ld   hl,W_PaletteBuffer         ; 11:4059
     ldi  [hl],a                     ; 11:405C
     ld   [hl],a                     ; 11:405D
     inc  a                          ; 11:405E
@@ -55,6 +55,7 @@ Data114078:                         ; 11:4078
 .db $CA,$F4,$F4,$F4,$F4,$CA
 
 Sub11407E:
+; Game state 1B
     ldh  a,[<H_GameSubstate]        ; 11:407E
     rst  $00                        ; 11:4080
 .dw Code114089                      ; 11:4081
@@ -62,7 +63,7 @@ Sub11407E:
 .dw Code11414E                      ; 11:4085
 .dw Code1141B8                      ; 11:4087
 Code114089:
-    ldh  a,[<$FF8C]                 ; 11:4089
+    ldh  a,[<H_ButtonsPressed]      ; 11:4089
     and  $C0                        ; 11:408B
     jr   z,Code11409C               ; 11:408D
     ld   a,$47                      ; 11:408F
@@ -99,7 +100,7 @@ Code1140BA:
     dec  b                          ; 11:40C0
     jr   nz,Code1140BA              ; 11:40C1
     ld   [hl],$00                   ; 11:40C3
-    ldh  a,[<$FF8C]                 ; 11:40C5
+    ldh  a,[<H_ButtonsPressed]      ; 11:40C5
     and  $09                        ; 11:40C7
     jr   z,Return1140D3             ; 11:40C9
     ld   a,$44                      ; 11:40CB
@@ -164,7 +165,7 @@ Code11413E:
     ret                             ; 11:414D
 
 Code11414E:
-    ldh  a,[<$FF8C]                 ; 11:414E
+    ldh  a,[<H_ButtonsPressed]      ; 11:414E
     and  $C0                        ; 11:4150
     jr   z,Code114161               ; 11:4152
     ld   a,$47                      ; 11:4154
@@ -201,7 +202,7 @@ Code11417F:
     dec  b                          ; 11:4185
     jr   nz,Code11417F              ; 11:4186
     ld   [hl],$00                   ; 11:4188
-    ldh  a,[<$FF8C]                 ; 11:418A
+    ldh  a,[<H_ButtonsPressed]      ; 11:418A
     and  $02                        ; 11:418C
     jr   z,Code1141A9               ; 11:418E
     ld   a,$63                      ; 11:4190
@@ -215,7 +216,7 @@ Code11417F:
     ld   bc,$0026                   ; 11:41A3
     call CopyBytes                  ; 11:41A6
 Code1141A9:
-    ldh  a,[<$FF8C]                 ; 11:41A9
+    ldh  a,[<H_ButtonsPressed]      ; 11:41A9
     and  $09                        ; 11:41AB
     jr   z,Return1141B7             ; 11:41AD
     ld   a,$44                      ; 11:41AF
@@ -267,29 +268,30 @@ Code1141FB:
     ldh  [<H_GameState],a           ; 11:41FD
     ret                             ; 11:41FF
 
-Sub114200:
+FileSelectInit:
+; Game state 16
     call Sub00126D                  ; 11:4200
     ld   a,$00                      ; 11:4203
     ldh  [<IE],a                    ; 11:4205
-    ld   a,:Gr_Bank19               ; 11:4207
+    ld   a,:Gr_MainMenu_FileSelect  ; 11:4207
     ld   b,$11                      ; 11:4209
     call LoadGraphicsBank           ; 11:420B
-    ld   a,:Data197620              ; 11:420E
+    ld   a,:Pal_FileSelect          ; 11:420E
     ld   b,$11                      ; 11:4210
-    ld   de,Data197620              ; 11:4212
+    ld   de,Pal_FileSelect          ; 11:4212
     call LoadFullPaletteLong        ; 11:4215
     call Sub00128D                  ; 11:4218
-    ld   a,:Data1972D0              ; 11:421B
+    ld   a,:Ti_FileSelect           ; 11:421B
     ld   b,$11                      ; 11:421D
     ld   de,$99C0                   ; 11:421F
-    ld   hl,Data1972D0              ; 11:4222
+    ld   hl,Ti_FileSelect           ; 11:4222
     call LoadScreenTilemapVRAM      ; 11:4225
     ld   a,$00                      ; 11:4228
     ld   [$C174],a                  ; 11:422A
     ld   [$C168],a                  ; 11:422D
     ldh  [<H_GameSubstate],a        ; 11:4230
     ld   [$C1C2],a                  ; 11:4232
-    ld   [$C1CE],a                  ; 11:4235
+    ld   [W_PlayerFireFlag],a       ; 11:4235
     ld   [$C1D5],a                  ; 11:4238
     ld   [$C16B],a                  ; 11:423B
     ld   [$C358],a                  ; 11:423E
@@ -319,7 +321,7 @@ Sub114200:
     ld   a,$02                      ; 11:4276
     ld   [$C1C3],a                  ; 11:4278
     ld   a,$01                      ; 11:427B
-    ld   [$C1C5],a                  ; 11:427D
+    ld   [W_PlayerSize],a           ; 11:427D
     ld   a,$11                      ; 11:4280
     rst  $10                        ; 11:4282
 .dl SubL_0B421E                     ; 11:4283
@@ -351,7 +353,7 @@ Code11428B:
     inc  [hl]                       ; 11:42BD
     ret                             ; 11:42BE
 
-Data1142BF:                         ; 11:42BF
+FileSelect_PlayerXPos:              ; 11:42BF
 .db $18,$48,$78
 
 Sub1142C2:
@@ -377,7 +379,7 @@ Code1142DF:
 .dw Code114559                      ; 11:42E9
 .dw Code114770                      ; 11:42EB
 Code1142ED:
-    ldh  a,[<$FF8C]                 ; 11:42ED
+    ldh  a,[<H_ButtonsPressed]      ; 11:42ED
     and  $08                        ; 11:42EF
     jr   z,Code114304               ; 11:42F1
     ld   a,$31                      ; 11:42F3
@@ -391,7 +393,7 @@ Code1142ED:
     ret                             ; 11:4303
 
 Code114304:
-    ldh  a,[<$FF8C]                 ; 11:4304
+    ldh  a,[<H_ButtonsPressed]      ; 11:4304
     and  $40                        ; 11:4306
     jr   z,Code114316               ; 11:4308
     ld   a,$00                      ; 11:430A
@@ -401,7 +403,7 @@ Code114304:
     ld   [$C358],a                  ; 11:4311
     jr   Code11431C                 ; 11:4314
 Code114316:
-    ldh  a,[<$FF8C]                 ; 11:4316
+    ldh  a,[<H_ButtonsPressed]      ; 11:4316
     and  $81                        ; 11:4318
     jr   z,Code114350               ; 11:431A
 Code11431C:
@@ -433,10 +435,10 @@ Code114333:
 Code11434E:
     jr   Code11439F                 ; 11:434E
 Code114350:
-    ldh  a,[<$FF8C]                 ; 11:4350
+    ldh  a,[<H_ButtonsPressed]      ; 11:4350
     bit  1,a                        ; 11:4352
     jr   z,Code114364               ; 11:4354
-    ld   a,$18                      ; 11:4356
+    ld   a,$18                      ; 11:4356  if B button is pressed, return to main menu
     ldh  [<H_GameState],a           ; 11:4358
     ld   a,$00                      ; 11:435A
     ld   [$C168],a                  ; 11:435C
@@ -445,40 +447,41 @@ Code114350:
     ret                             ; 11:4363
 
 Code114364:
-    ldh  a,[<$FF8C]                 ; 11:4364
-    and  $30                        ; 11:4366
-    jr   z,Return114398             ; 11:4368
-    ld   e,$01                      ; 11:436A
+    ldh  a,[<H_ButtonsPressed]      ; 11:4364
+    and  $30                        ; 11:4366  left/right
+    jr   z,@Return                  ; 11:4368
+                                    ;          if left or right is pressed, change save file
+    ld   e,$01                      ; 11:436A  e = +1 if right is pressed
     and  $10                        ; 11:436C
-    jr   nz,Code114372              ; 11:436E
-    ld   e,$FF                      ; 11:4370
-Code114372:
+    jr   nz,@Code114372             ; 11:436E
+    ld   e,$FF                      ; 11:4370  e = -1 if left is pressed
+@Code114372:
     ld   a,[$C16B]                  ; 11:4372
     add  e                          ; 11:4375
     bit  7,a                        ; 11:4376
-    jr   z,Code11437E               ; 11:4378
+    jr   z,@Code11437E              ; 11:4378
     ld   a,$02                      ; 11:437A
-    jr   Code114384                 ; 11:437C
-Code11437E:
+    jr   @Code114384                ; 11:437C
+@Code11437E:
     cp   $03                        ; 11:437E
-    jr   c,Code114384               ; 11:4380
+    jr   c,@Code114384              ; 11:4380
     ld   a,$00                      ; 11:4382
-Code114384:
+@Code114384:
     ld   [$C16B],a                  ; 11:4384
     ld   a,$47                      ; 11:4387
     ldh  [<$FFF2],a                 ; 11:4389
     ld   a,[$C16B]                  ; 11:438B
     ld   e,a                        ; 11:438E
     ld   d,$00                      ; 11:438F
-    ld   hl,Data1142BF              ; 11:4391
+    ld   hl,FileSelect_PlayerXPos   ; 11:4391
     add  hl,de                      ; 11:4394
     ld   a,[hl]                     ; 11:4395
     ldh  [<$FFA7],a                 ; 11:4396
-Return114398:
+@Return:
     ret                             ; 11:4398
 
 Code114399:
-    ldh  a,[<$FF8C]                 ; 11:4399
+    ldh  a,[<H_ButtonsPressed]      ; 11:4399
     and  $01                        ; 11:439B
     jr   z,Code1143B6               ; 11:439D
 Code11439F:
@@ -495,7 +498,7 @@ Code11439F:
     ret                             ; 11:43B5
 
 Code1143B6:
-    ldh  a,[<$FF8C]                 ; 11:43B6
+    ldh  a,[<H_ButtonsPressed]      ; 11:43B6
     bit  1,a                        ; 11:43B8
     jr   z,Code1143D4               ; 11:43BA
     call Sub11462F                  ; 11:43BC
@@ -513,7 +516,7 @@ Code1143D4:
     xor  a                          ; 11:43D4
     ldh  [<$FF9C],a                 ; 11:43D5
     ld   b,$04                      ; 11:43D7
-    ldh  a,[<H_ButtonFlags]         ; 11:43D9
+    ldh  a,[<H_ButtonsHeld]         ; 11:43D9
     ld   c,a                        ; 11:43DB
 Code1143DC:
     rlc  c                          ; 11:43DC
@@ -752,8 +755,8 @@ Code114559:
     ld   [$C1EF],a                  ; 11:4585
     ld   [$C182],a                  ; 11:4588
     ld   [$C1B3],a                  ; 11:458B
-    ld   [$C1C5],a                  ; 11:458E
-    ld   [$C1CE],a                  ; 11:4591
+    ld   [W_PlayerSize],a           ; 11:458E
+    ld   [W_PlayerFireFlag],a       ; 11:4591
 Code114594:
     ldh  a,[<$FF97]                 ; 11:4594
     ld   [W_HardFlag],a             ; 11:4596
@@ -847,7 +850,7 @@ Code114618:
     ret                             ; 11:462E
 
 Sub11462F:
-    ld   hl,$0000                   ; 11:462F
+    ld   hl,SRAMENABLE              ; 11:462F
     ld   [hl],$0A                   ; 11:4632
     ld   a,[$C16B]                  ; 11:4634
     call Sub000FF6                  ; 11:4637
@@ -857,7 +860,7 @@ Sub11462F:
 Code114641:
     call Sub11464E                  ; 11:4641
 Code114644:
-    ld   hl,$0000                   ; 11:4644
+    ld   hl,SRAMENABLE              ; 11:4644
     ld   [hl],$FF                   ; 11:4647
     ret                             ; 11:4649
 
@@ -1014,10 +1017,10 @@ Data114789:                         ; 11:4789
 .db $04,$02,$01
 
 Code11478C:
-    ldh  a,[<H_ButtonFlags]         ; 11:478C
+    ldh  a,[<H_ButtonsHeld]         ; 11:478C
     and  $04                        ; 11:478E
     jr   z,Code1147AA               ; 11:4790
-    ldh  a,[<$FF8C]                 ; 11:4792
+    ldh  a,[<H_ButtonsPressed]      ; 11:4792
     and  $01                        ; 11:4794
     jr   z,Code1147AA               ; 11:4796
     ld   a,$44                      ; 11:4798
@@ -1032,12 +1035,12 @@ Code11478C:
 
 Code1147AA:
     call Sub114A92                  ; 11:47AA
-    ldh  a,[<$FF8C]                 ; 11:47AD
+    ldh  a,[<H_ButtonsPressed]      ; 11:47AD
     and  $01                        ; 11:47AF
     jp   z,Code11484B               ; 11:47B1
     ld   a,[$C16B]                  ; 11:47B4
     push af                         ; 11:47B7
-    ld   hl,$0000                   ; 11:47B8
+    ld   hl,SRAMENABLE              ; 11:47B8
     ld   [hl],$0A                   ; 11:47BB
     xor  a                          ; 11:47BD
     ld   [$C16B],a                  ; 11:47BE
@@ -1053,7 +1056,7 @@ Code1147C4:
     ld   [$C16B],a                  ; 11:47D6
     cp   $03                        ; 11:47D9
     jr   c,Code1147C4               ; 11:47DB
-    ld   hl,$0000                   ; 11:47DD
+    ld   hl,SRAMENABLE              ; 11:47DD
     ld   [hl],$FF                   ; 11:47E0
     pop  af                         ; 11:47E2
     ld   [$C16B],a                  ; 11:47E3
@@ -1098,7 +1101,7 @@ Code114824:
     ld   a,[$C16B]                  ; 11:4824
     ld   e,a                        ; 11:4827
     ld   d,$00                      ; 11:4828
-    ld   hl,Data1142BF              ; 11:482A
+    ld   hl,FileSelect_PlayerXPos   ; 11:482A
     add  hl,de                      ; 11:482D
     ld   a,[hl]                     ; 11:482E
     ldh  [<$FFA7],a                 ; 11:482F
@@ -1119,7 +1122,7 @@ Code114841:
     ret                             ; 11:484A
 
 Code11484B:
-    ldh  a,[<$FF8C]                 ; 11:484B
+    ldh  a,[<H_ButtonsPressed]      ; 11:484B
     and  $0A                        ; 11:484D
     jr   z,Return11485D             ; 11:484F
     ld   a,$31                      ; 11:4851
@@ -1133,7 +1136,7 @@ Return11485D:
 
 Code11485E:
     call Sub114AE8                  ; 11:485E
-    ldh  a,[<$FF8C]                 ; 11:4861
+    ldh  a,[<H_ButtonsPressed]      ; 11:4861
     and  $01                        ; 11:4863
     jr   z,Code1148A2               ; 11:4865
     ld   a,[$C1B5]                  ; 11:4867
@@ -1168,7 +1171,7 @@ Code114890:
     ret                             ; 11:48A1
 
 Code1148A2:
-    ldh  a,[<$FF8C]                 ; 11:48A2
+    ldh  a,[<H_ButtonsPressed]      ; 11:48A2
     and  $02                        ; 11:48A4
     ret  z                          ; 11:48A6
     ld   a,$63                      ; 11:48A7
@@ -1204,7 +1207,7 @@ Code1148E1:
     ld   [$C16B],a                  ; 11:48E1
     ld   e,a                        ; 11:48E4
     ld   d,$00                      ; 11:48E5
-    ld   hl,Data1142BF              ; 11:48E7
+    ld   hl,FileSelect_PlayerXPos   ; 11:48E7
     add  hl,de                      ; 11:48EA
     ld   a,[hl]                     ; 11:48EB
     ldh  [<$FFA7],a                 ; 11:48EC
@@ -1217,7 +1220,7 @@ Code1148E1:
     ret                             ; 11:48FB
 
 Code1148FC:
-    ldh  a,[<$FF8C]                 ; 11:48FC
+    ldh  a,[<H_ButtonsPressed]      ; 11:48FC
     and  $30                        ; 11:48FE
     jr   z,Code11492B               ; 11:4900
     ld   a,$47                      ; 11:4902
@@ -1241,15 +1244,15 @@ Code11491E:
     ld   [$C16B],a                  ; 11:491E
     ld   e,a                        ; 11:4921
     ld   d,$00                      ; 11:4922
-    ld   hl,Data1142BF              ; 11:4924
+    ld   hl,FileSelect_PlayerXPos   ; 11:4924
     add  hl,de                      ; 11:4927
     ld   a,[hl]                     ; 11:4928
     ldh  [<$FFA7],a                 ; 11:4929
 Code11492B:
-    ldh  a,[<$FF8C]                 ; 11:492B
+    ldh  a,[<H_ButtonsPressed]      ; 11:492B
     and  $03                        ; 11:492D
     ret  z                          ; 11:492F
-    ldh  a,[<$FF8C]                 ; 11:4930
+    ldh  a,[<H_ButtonsPressed]      ; 11:4930
     and  $01                        ; 11:4932
     jr   z,Code114951               ; 11:4934
     ld   a,$44                      ; 11:4936
@@ -1278,7 +1281,7 @@ Code114951:
     ld   a,[$C16B]                  ; 11:4964
     ld   e,a                        ; 11:4967
     ld   d,$00                      ; 11:4968
-    ld   hl,Data1142BF              ; 11:496A
+    ld   hl,FileSelect_PlayerXPos   ; 11:496A
     add  hl,de                      ; 11:496D
     ld   a,[hl]                     ; 11:496E
     ldh  [<$FFA7],a                 ; 11:496F
@@ -1290,10 +1293,10 @@ Code114951:
 
 Code11497A:
     call Sub114ABD                  ; 11:497A
-    ldh  a,[<$FF8C]                 ; 11:497D
+    ldh  a,[<H_ButtonsPressed]      ; 11:497D
     and  $03                        ; 11:497F
     ret  z                          ; 11:4981
-    ldh  a,[<$FF8C]                 ; 11:4982
+    ldh  a,[<H_ButtonsPressed]      ; 11:4982
     and  $01                        ; 11:4984
     jr   z,Code1149BC               ; 11:4986
     ld   a,[$C1B6]                  ; 11:4988
@@ -1336,16 +1339,16 @@ Code1149C9:
 
 Code1149D3:
     call Sub114ABD                  ; 11:49D3
-    ldh  a,[<$FF8C]                 ; 11:49D6
+    ldh  a,[<H_ButtonsPressed]      ; 11:49D6
     and  $03                        ; 11:49D8
     ret  z                          ; 11:49DA
-    ldh  a,[<$FF8C]                 ; 11:49DB
+    ldh  a,[<H_ButtonsPressed]      ; 11:49DB
     and  $01                        ; 11:49DD
     jr   z,Code114A10               ; 11:49DF
     ld   a,[$C1B6]                  ; 11:49E1
     and  a                          ; 11:49E4
     jr   z,Code114A10               ; 11:49E5
-    ld   hl,$0000                   ; 11:49E7
+    ld   hl,SRAMENABLE              ; 11:49E7
     ld   [hl],$0A                   ; 11:49EA
     ld   a,[$C16B]                  ; 11:49EC
     sla  a                          ; 11:49EF
@@ -1356,7 +1359,7 @@ Code1149D3:
     ld   hl,$A118                   ; 11:49F8
     add  hl,bc                      ; 11:49FB
     ld   [hl],$00                   ; 11:49FC
-    ld   hl,$0000                   ; 11:49FE
+    ld   hl,SRAMENABLE              ; 11:49FE
     ld   [hl],$FF                   ; 11:4A01
     call Sub11462F                  ; 11:4A03
     ld   a,$24                      ; 11:4A06
@@ -1380,10 +1383,10 @@ Code114A1D:
 
 Code114A27:
     call Sub114ABD                  ; 11:4A27
-    ldh  a,[<$FF8C]                 ; 11:4A2A
+    ldh  a,[<H_ButtonsPressed]      ; 11:4A2A
     and  $03                        ; 11:4A2C
     ret  z                          ; 11:4A2E
-    ldh  a,[<$FF8C]                 ; 11:4A2F
+    ldh  a,[<H_ButtonsPressed]      ; 11:4A2F
     and  $01                        ; 11:4A31
     jr   z,Code114A5A               ; 11:4A33
     ld   a,[$C1B6]                  ; 11:4A35
@@ -1436,7 +1439,7 @@ Code114A7F:
     ret                             ; 11:4A91
 
 Sub114A92:
-    ldh  a,[<$FF8C]                 ; 11:4A92
+    ldh  a,[<H_ButtonsPressed]      ; 11:4A92
     and  $C0                        ; 11:4A94
     jr   z,Return114ABC             ; 11:4A96
     ld   a,$47                      ; 11:4A98
@@ -1457,7 +1460,7 @@ Return114ABC:
     ret                             ; 11:4ABC
 
 Sub114ABD:
-    ldh  a,[<$FF8C]                 ; 11:4ABD
+    ldh  a,[<H_ButtonsPressed]      ; 11:4ABD
     and  $C0                        ; 11:4ABF
     jr   z,Return114AE7             ; 11:4AC1
     ld   a,$47                      ; 11:4AC3
@@ -1478,13 +1481,13 @@ Return114AE7:
     ret                             ; 11:4AE7
 
 Sub114AE8:
-    ldh  a,[<$FF8C]                 ; 11:4AE8
+    ldh  a,[<H_ButtonsPressed]      ; 11:4AE8
     and  $30                        ; 11:4AEA
     ret  z                          ; 11:4AEC
     ld   a,$47                      ; 11:4AED
     ldh  [<$FFF2],a                 ; 11:4AEF
 Code114AF1:
-    ldh  a,[<$FF8C]                 ; 11:4AF1
+    ldh  a,[<H_ButtonsPressed]      ; 11:4AF1
     and  $20                        ; 11:4AF3
     jr   nz,Code114B03              ; 11:4AF5
     ld   a,[$C16B]                  ; 11:4AF7
@@ -1512,7 +1515,7 @@ Code114B0D:
     ld   a,[$C16B]                  ; 11:4B1E
     ld   e,a                        ; 11:4B21
     ld   d,$00                      ; 11:4B22
-    ld   hl,Data1142BF              ; 11:4B24
+    ld   hl,FileSelect_PlayerXPos   ; 11:4B24
     add  hl,de                      ; 11:4B27
     ld   a,[hl]                     ; 11:4B28
     ldh  [<$FFA7],a                 ; 11:4B29
@@ -1554,18 +1557,18 @@ Sub114B60:
     call Sub00126D                  ; 11:4B64
     ld   a,$00                      ; 11:4B67
     ldh  [<IE],a                    ; 11:4B69
-    ld   a,:Gr_Bank19               ; 11:4B6B
+    ld   a,:Gr_MainMenu_FileSelect  ; 11:4B6B
     ld   b,$11                      ; 11:4B6D
     call LoadGraphicsBank           ; 11:4B6F
-    ld   a,:Data1975A0              ; 11:4B72
+    ld   a,:Pal_MainMenu            ; 11:4B72
     ld   b,$11                      ; 11:4B74
-    ld   de,Data1975A0              ; 11:4B76
+    ld   de,Pal_MainMenu            ; 11:4B76
     call LoadFullPaletteLong        ; 11:4B79
     call Sub00128D                  ; 11:4B7C
-    ld   a,:Data197000              ; 11:4B7F
+    ld   a,:Ti_MainMenu             ; 11:4B7F
     ld   b,$11                      ; 11:4B81
     ld   de,$99C0                   ; 11:4B83
-    ld   hl,Data197000              ; 11:4B86
+    ld   hl,Ti_MainMenu             ; 11:4B86
     call LoadScreenTilemapVRAM      ; 11:4B89
     ld   a,$00                      ; 11:4B8C
     and  a                          ; 11:4B8E
@@ -1760,7 +1763,7 @@ Code114CF2:
     ld   a,[W_GameMode]             ; 11:4CF2
     cp   $02                        ; 11:4CF5
     jp   nz,Code114D07              ; 11:4CF7
-    ldh  a,[<$FF8C]                 ; 11:4CFA
+    ldh  a,[<H_ButtonsPressed]      ; 11:4CFA
     and  $01                        ; 11:4CFC
     jr   z,Code114D07               ; 11:4CFE
     ld   a,$11                      ; 11:4D00
@@ -1769,7 +1772,7 @@ Code114CF2:
     ret                             ; 11:4D06
 
 Code114D07:
-    ldh  a,[<$FF8C]                 ; 11:4D07
+    ldh  a,[<H_ButtonsPressed]      ; 11:4D07
     and  $03                        ; 11:4D09
     ret  z                          ; 11:4D0B
     ld   a,$01                      ; 11:4D0C
@@ -1778,7 +1781,7 @@ Code114D07:
     ldh  [<SC],a                    ; 11:4D12
     ld   a,$00                      ; 11:4D14
     ld   [$DA6E],a                  ; 11:4D16
-    ldh  a,[<$FF8C]                 ; 11:4D19
+    ldh  a,[<H_ButtonsPressed]      ; 11:4D19
     and  $01                        ; 11:4D1B
     jr   nz,Code114D28              ; 11:4D1D
     ld   a,$63                      ; 11:4D1F
@@ -1900,7 +1903,7 @@ Sub114DCC:
     ld   [hl],$0A                   ; 11:4DF2
     inc  hl                         ; 11:4DF4
     ld   [hl],$03                   ; 11:4DF5
-    ldh  a,[<$FF8C]                 ; 11:4DF7
+    ldh  a,[<H_ButtonsPressed]      ; 11:4DF7
     and  $C0                        ; 11:4DF9
     ret  z                          ; 11:4DFB
     ld   a,[W_GameMode]             ; 11:4DFC
@@ -1910,7 +1913,7 @@ Sub114DCC:
     ld   [$C171],a                  ; 11:4E03
     ld   a,$47                      ; 11:4E06
     ldh  [<$FFF2],a                 ; 11:4E08
-    ldh  a,[<$FF8C]                 ; 11:4E0A
+    ldh  a,[<H_ButtonsPressed]      ; 11:4E0A
     and  $80                        ; 11:4E0C
     jr   nz,Code114E1E              ; 11:4E0E
     ld   a,[W_GameMode]             ; 11:4E10
@@ -1963,7 +1966,7 @@ Sub114E3E:
     ld   [hl],$0E                   ; 11:4E5E
     inc  hl                         ; 11:4E60
     ld   [hl],$03                   ; 11:4E61
-    ldh  a,[<$FF8C]                 ; 11:4E63
+    ldh  a,[<H_ButtonsPressed]      ; 11:4E63
     ld   c,a                        ; 11:4E65
     ld   b,$04                      ; 11:4E66
 Code114E68:
@@ -2053,7 +2056,7 @@ Sub114ECF:
     ld   [hl],$0A                   ; 11:4EF3
     inc  hl                         ; 11:4EF5
     ld   [hl],$03                   ; 11:4EF6
-    ldh  a,[<$FF8C]                 ; 11:4EF8
+    ldh  a,[<H_ButtonsPressed]      ; 11:4EF8
     ld   c,a                        ; 11:4EFA
     ld   b,$04                      ; 11:4EFB
 Code114EFD:
@@ -2324,15 +2327,15 @@ BitTable8Asc_1152CA:                ; 11:52CA
 
 Sub1152D2:
     call Sub00128D                  ; 11:52D2
-    ld   a,:Gr_Bank0E               ; 11:52D5
+    ld   a,:Gr_OW_ChalMenu          ; 11:52D5
     ld   b,$11                      ; 11:52D7
     call LoadGraphicsBank           ; 11:52D9
     ld   a,$00                      ; 11:52DC
     ld   [$C0C4],a                  ; 11:52DE
     ld   [W_SublevelID],a           ; 11:52E1
     ld   [W_LevelID],a              ; 11:52E4
-    ld   [$C1CE],a                  ; 11:52E7
-    ld   [$C1C5],a                  ; 11:52EA
+    ld   [W_PlayerFireFlag],a       ; 11:52E7
+    ld   [W_PlayerSize],a           ; 11:52EA
     ld   [$C28E],a                  ; 11:52ED
     ldh  [<H_GameSubstate],a        ; 11:52F0
     ld   [$C168],a                  ; 11:52F2
@@ -2361,7 +2364,7 @@ Sub1152D2:
     ld   a,$01                      ; 11:5327
     ldh  [<H_GameSubstate],a        ; 11:5329
 Code11532B:
-    ld   a,$0E                      ; 11:532B
+    ld   a,:Data0E5AD0              ; 11:532B
     ld   b,$11                      ; 11:532D
     ld   de,Data0E5AD0              ; 11:532F
     call LoadFullPaletteLong        ; 11:5332
@@ -2631,7 +2634,8 @@ Code1154E5:
     ldh  [<$FFC0],a                 ; 11:54ED
     ret                             ; 11:54EF
 
-Sub1154F0:
+ChallengeMenuMain:
+; Game state 1E
     ldh  a,[<H_GameSubstate]        ; 11:54F0
     rst  $00                        ; 11:54F2
 .dw Code1154F7                      ; 11:54F3
@@ -2910,7 +2914,7 @@ Code1156D5:
     ret                             ; 11:56DA
 
 Code1156DB:
-    ldh  a,[<$FF8C]                 ; 11:56DB
+    ldh  a,[<H_ButtonsPressed]      ; 11:56DB
     and  $01                        ; 11:56DD
     jr   nz,Code115703              ; 11:56DF
     ld   hl,$C1A4                   ; 11:56E1
@@ -3117,7 +3121,7 @@ Code11584D:
     ld   a,[$C195]                  ; 11:5852
     and  a                          ; 11:5855
     jr   nz,Code115863              ; 11:5856
-    ldh  a,[<$FF8C]                 ; 11:5858
+    ldh  a,[<H_ButtonsPressed]      ; 11:5858
     and  $04                        ; 11:585A
     jr   z,Code11586C               ; 11:585C
     ld   a,$01                      ; 11:585E
@@ -3135,10 +3139,10 @@ Code11586C:
     jr   z,Code115876               ; 11:5871
     call Sub115A77                  ; 11:5873
 Code115876:
-    ldh  a,[<$FF8C]                 ; 11:5876
+    ldh  a,[<H_ButtonsPressed]      ; 11:5876
     and  $03                        ; 11:5878
     jp   z,Return1158F1             ; 11:587A
-    ldh  a,[<$FF8C]                 ; 11:587D
+    ldh  a,[<H_ButtonsPressed]      ; 11:587D
     and  $01                        ; 11:587F
     jr   nz,Code115890              ; 11:5881
     ld   a,$00                      ; 11:5883
@@ -3424,7 +3428,7 @@ Code115A67:
     ret                             ; 11:5A76
 
 Sub115A77:
-    ldh  a,[<H_ButtonFlags]         ; 11:5A77
+    ldh  a,[<H_ButtonsHeld]         ; 11:5A77
     ld   c,a                        ; 11:5A79
     ld   b,$04                      ; 11:5A7A
 Code115A7C:
@@ -3526,7 +3530,7 @@ Code115B19:
     ld   hl,Data1152C6              ; 11:5B2E
     add  hl,bc                      ; 11:5B31
     ld   e,[hl]                     ; 11:5B32
-    ldh  a,[<$FFB7]                 ; 11:5B33
+    ldh  a,[<H_GlobalTimer]         ; 11:5B33
     and  $0E                        ; 11:5B35
     sla  a                          ; 11:5B37
     sla  a                          ; 11:5B39
@@ -3707,7 +3711,7 @@ Code115D8A:
     ld   a,$01                      ; 11:5D8A
     ld   [$C1BF],a                  ; 11:5D8C
 Code115D8F:
-    ld   a,:Gr_Bank0E               ; 11:5D8F
+    ld   a,:Gr_OW_ChalMenu          ; 11:5D8F
     ld   b,$11                      ; 11:5D91
     call LoadGraphicsBank           ; 11:5D93
     ld   a,$11                      ; 11:5D96
@@ -3789,10 +3793,10 @@ Code115E02:
     ld   a,$11                      ; 11:5E2C
     rst  $10                        ; 11:5E2E
 .dl SubL_075B10                     ; 11:5E2F
-    ld   a,[$C1CE]                  ; 11:5E32
+    ld   a,[W_PlayerFireFlag]       ; 11:5E32
     ld   [$C1AF],a                  ; 11:5E35
     xor  a                          ; 11:5E38
-    ld   [$C1CE],a                  ; 11:5E39
+    ld   [W_PlayerFireFlag],a       ; 11:5E39
     ld   a,$11                      ; 11:5E3C
     rst  $10                        ; 11:5E3E
 .dl SubL_0B421E                     ; 11:5E3F
@@ -4277,7 +4281,7 @@ Sub1161D7:
 .dw Code1161E1                      ; 11:61DD
 .dw Code1163F5                      ; 11:61DF
 Code1161E1:
-    ldh  a,[<$FF8C]                 ; 11:61E1
+    ldh  a,[<H_ButtonsPressed]      ; 11:61E1
     and  $04                        ; 11:61E3
     jr   z,Code1161F9               ; 11:61E5
     ld   a,$45                      ; 11:61E7
@@ -4313,7 +4317,7 @@ Code11621A:
     ld   a,[$C1B7]                  ; 11:6223
     and  a                          ; 11:6226
     ret  nz                         ; 11:6227
-    ldh  a,[<$FFB7]                 ; 11:6228
+    ldh  a,[<H_GlobalTimer]         ; 11:6228
     and  $01                        ; 11:622A
     ret  nz                         ; 11:622C
     call Sub11627C                  ; 11:622D
@@ -4853,7 +4857,7 @@ Code1165AA:
     and  a                          ; 11:65AD
     ret  nz                         ; 11:65AE
     ld   a,[$C1AF]                  ; 11:65AF
-    ld   [$C1CE],a                  ; 11:65B2
+    ld   [W_PlayerFireFlag],a       ; 11:65B2
     ld   hl,W_LevelID               ; 11:65B5
     inc  [hl]                       ; 11:65B8
     xor  a                          ; 11:65B9
@@ -5226,7 +5230,8 @@ Code116902:
     inc  [hl]                       ; 11:691D
     ret                             ; 11:691E
 
-Sub11691F:
+ChallengeResultsMain:
+; Game state 21
     ld   a,$11                      ; 11:691F
     rst  $10                        ; 11:6921
 .dl SubL_034157                     ; 11:6922
@@ -5593,7 +5598,7 @@ Code116BAF:
     ret                             ; 11:6BBF
 
 Code116BC0:
-    ldh  a,[<$FF8C]                 ; 11:6BC0
+    ldh  a,[<H_ButtonsPressed]      ; 11:6BC0
     and  $01                        ; 11:6BC2
     jr   z,Code116BD5               ; 11:6BC4
     xor  a                          ; 11:6BC6
@@ -5729,7 +5734,7 @@ Code116C96:
     ret                             ; 11:6CA9
 
 Code116CAA:
-    ldh  a,[<$FF8C]                 ; 11:6CAA
+    ldh  a,[<H_ButtonsPressed]      ; 11:6CAA
     and  $01                        ; 11:6CAC
     ret  z                          ; 11:6CAE
     ld   a,$74                      ; 11:6CAF
@@ -5818,7 +5823,7 @@ Code116D48:
     dec  a                          ; 11:6D4B
     ld   [$C326],a                  ; 11:6D4C
     jr   z,Code116D5A               ; 11:6D4F
-    ldh  a,[<$FF8C]                 ; 11:6D51
+    ldh  a,[<H_ButtonsPressed]      ; 11:6D51
     and  $01                        ; 11:6D53
     ret  z                          ; 11:6D55
     xor  a                          ; 11:6D56
@@ -6003,7 +6008,8 @@ Code116E7E:
 Return116E85:
     ret                             ; 11:6E85
 
-Sub116E86:
+ChallengeYoshiHatchMain:
+; Game state 1F
     ldh  a,[<H_GameSubstate]        ; 11:6E86
     rst  $00                        ; 11:6E88
 .dw Code116E8D                      ; 11:6E89
@@ -6043,7 +6049,7 @@ Code116E8D:
     ret                             ; 11:6ED3
 
 Code116ED4:
-    ldh  a,[<$FF8C]                 ; 11:6ED4
+    ldh  a,[<H_ButtonsPressed]      ; 11:6ED4
     and  $09                        ; 11:6ED6
     jr   nz,Code116EE4              ; 11:6ED8
     ld   a,[$C326]                  ; 11:6EDA
@@ -6072,6 +6078,7 @@ Data116F08:                         ; 11:6F08
     $D1,$00
 
 Sub116F12:
+; Game state 31
     ldh  a,[<$FFB8]                 ; 11:6F12
     ld   [$C175],a                  ; 11:6F14
     ldh  a,[<$FFBA]                 ; 11:6F17
@@ -6079,7 +6086,7 @@ Sub116F12:
     call Sub00126D                  ; 11:6F1C
     ld   a,$00                      ; 11:6F1F
     ldh  [<IE],a                    ; 11:6F21
-    ld   a,:Gr_Bank0E               ; 11:6F23
+    ld   a,:Gr_OW_ChalMenu          ; 11:6F23
     ld   b,$11                      ; 11:6F25
     call LoadGraphicsBank           ; 11:6F27
     ld   a,:Data115C6A              ; 11:6F2A
@@ -6119,7 +6126,7 @@ Sub116F12:
     ret                             ; 11:6F7A
 
 Sub116F7B:
-    ldh  a,[<H_ButtonFlags]         ; 11:6F7B
+    ldh  a,[<H_ButtonsHeld]         ; 11:6F7B
     and  $C0                        ; 11:6F7D
     jr   nz,Code116F86              ; 11:6F7F
     ld   a,$01                      ; 11:6F81
@@ -6132,7 +6139,7 @@ Code116F86:
     ldh  [<$FFA6],a                 ; 11:6F89
     and  $07                        ; 11:6F8B
     jr   nz,Return116FDA            ; 11:6F8D
-    ldh  a,[<H_ButtonFlags]         ; 11:6F8F
+    ldh  a,[<H_ButtonsHeld]         ; 11:6F8F
     and  $80                        ; 11:6F91
     jr   nz,Code116FA6              ; 11:6F93
     ld   a,[W_SublevelID]           ; 11:6F95

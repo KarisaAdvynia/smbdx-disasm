@@ -29,16 +29,16 @@
 .orga $0150
 CodeStart:
     cp   $11                        ; 00:0150  if GBC or GBA, A starts with 11
-    jr   nz,Code000168              ; 00:0152 
+    jr   nz,Code000168              ; 00:0152
     ldh  a,[<KEY1]                  ; 00:0154  GBC speed register
     bit  7,a                        ; 00:0156 \ if already fast mode, don't switch
     jr   nz,Code000167              ; 00:0158 /
     ld   a,$30                      ; 00:015A \ set joypad register to 30
     ldh  [<JOYP],a                  ; 00:015C /  (part of speed switching, apparently)
     ld   a,$81                      ; 00:015E \ prepare speed switch
-    ldh  [<KEY1],a                  ; 00:0160 / 
+    ldh  [<KEY1],a                  ; 00:0160 /
     xor  a                          ; 00:0162 \ disable interrupts
-    ldh  [<IE],a                    ; 00:0163 / 
+    ldh  [<IE],a                    ; 00:0163 /
     stop                            ; 00:0165  switch to fast mode
     nop                             ; 00:0166
 Code000167:
@@ -79,7 +79,7 @@ MainLoop:
     ld   a,:Sub04492A               ; 00:01AE
     call SetROMBank                 ; 00:01B0
     call Sub04492A                  ; 00:01B3
-    ld   hl,$FFB7                   ; 00:01B6
+    ld   hl,H_GlobalTimer           ; 00:01B6
     inc  [hl]                       ; 00:01B9
     ldh  a,[<H_GameState]           ; 00:01BA
     cp   $23                        ; 00:01BC
@@ -100,7 +100,7 @@ MainLoop:
     ld   a,$00                      ; 00:01DA
     and  a                          ; 00:01DC
     jr   z,Code0001EA               ; 00:01DD
-    ldh  a,[<H_ButtonFlags]         ; 00:01DF
+    ldh  a,[<H_ButtonsHeld]         ; 00:01DF
     and  $0F                        ; 00:01E1
     cp   $0F                        ; 00:01E3
     jr   nz,Code0001EA              ; 00:01E5
@@ -171,74 +171,75 @@ Code00025B:
 RunGameState:
     ldh  a,[<H_GameState]           ; 00:0263
     rst  $00                        ; 00:0265
-.dw Code0009C5                      ; 00:0266
-.dw Code0009D6                      ; 00:0268
-.dw Code0009E7                      ; 00:026A
-.dw Code0009F8                      ; 00:026C
-.dw Code0038BD                      ; 00:026E
-.dw Code0038F8                      ; 00:0270
-.dw Code0002EA                      ; 00:0272
-.dw Code0038BD                      ; 00:0274
-.dw Code0038F8                      ; 00:0276
-.dw Code0002EA                      ; 00:0278
-.dw Code0002EA                      ; 00:027A
-.dw Code000418                      ; 00:027C
-.dw Code0009BC                      ; 00:027E
-.dw Code000473                      ; 00:0280
-.dw Code000A09                      ; 00:0282
-.dw Code000A12                      ; 00:0284
-.dw Code000A1B                      ; 00:0286
-.dw Code000A24                      ; 00:0288
-.dw Code000A2D                      ; 00:028A
-.dw Code000A36                      ; 00:028C
-.dw Code000A3F                      ; 00:028E
-.dw Code000A60                      ; 00:0290
-.dw Code000AA7                      ; 00:0292
-.dw Code000AB0                      ; 00:0294
-.dw Code000AE8                      ; 00:0296
-.dw Code000B05                      ; 00:0298
-.dw Code000B16                      ; 00:029A
-.dw Code000B1F                      ; 00:029C
-.dw Code000B4D                      ; 00:029E
-.dw Code000B28                      ; 00:02A0
-.dw Code000B44                      ; 00:02A2
-.dw Code000B90                      ; 00:02A4
-.dw Code000B56                      ; 00:02A6
-.dw Code000B87                      ; 00:02A8
-.dw Code000B99                      ; 00:02AA
-.dw Code0004E5                      ; 00:02AC
-.dw Code0005FB                      ; 00:02AE
-.dw Code000BA2                      ; 00:02B0
-.dw Code000BD4                      ; 00:02B2
-.dw Code00069B                      ; 00:02B4
-.dw Code0006C0                      ; 00:02B6
-.dw Code000A69                      ; 00:02B8
-.dw Code000A7A                      ; 00:02BA
-.dw Code000A83                      ; 00:02BC
-.dw Code000A8C                      ; 00:02BE
-.dw Code000A95                      ; 00:02C0
-.dw Code000A9E                      ; 00:02C2
-.dw Code000BF2                      ; 00:02C4
-.dw Code000BFB                      ; 00:02C6
-.dw Code0039C2                      ; 00:02C8
-.dw Code0039CB                      ; 00:02CA
-.dw Code0006F4                      ; 00:02CC
-.dw Code000705                      ; 00:02CE
-.dw Code00070E                      ; 00:02D0
-.dw Code000784                      ; 00:02D2
-.dw Code000C0D                      ; 00:02D4
-.dw Code000C15                      ; 00:02D6
-.dw Code000C1D                      ; 00:02D8
-.dw Code000C04                      ; 00:02DA
-.dw Code0007FE                      ; 00:02DC
-.dw Code000879                      ; 00:02DE
-.dw Code0008B1                      ; 00:02E0
-.dw Code000974                      ; 00:02E2
-.dw Code00099E                      ; 00:02E4
-.dw Code0009B3                      ; 00:02E6
-.dw Code000C25                      ; 00:02E8
+.dw Code0009C5                      ; 00
+.dw Code0009D6                      ; 01
+.dw Code0009E7                      ; 02
+.dw Code0009F8                      ; 03
+.dw OverworldInit                   ; 04
+.dw OverworldMain                   ; 05
+.dw Code0002EA                      ; 06
+.dw OverworldInit                   ; 07
+.dw OverworldMain                   ; 08
+.dw Code0002EA                      ; 09
+.dw Code0002EA                      ; 0A
+.dw NormalGameplay                  ; 0B
+.dw PauseWrapper                    ; 0C
+.dw Code000473                      ; 0D
+.dw Code000A09                      ; 0E
+.dw GameOverWrapper                 ; 0F
+.dw Code000A1B                      ; 10
+.dw Code000A24                      ; 11
+.dw Code000A2D                      ; 12
+.dw Code000A36                      ; 13
+.dw Code000A3F                      ; 14
+.dw Code000A60                      ; 15
+.dw FileSelectInitWrapper           ; 16
+.dw FileSelectMain                  ; 17
+.dw MainMenu_Init                   ; 18
+.dw MainMenu_Main                   ; 19
+.dw Code000B16                      ; 1A
+.dw Code000B1F                      ; 1B
+.dw AwardCutsceneWrapper            ; 1C
+.dw ChallengeMenuInit               ; 1D
+.dw ChallengeMenuWrapper            ; 1E
+.dw ChallengeYoshiHatchWrapper      ; 1F
+.dw Code000B56                      ; 20
+.dw ChallengeResultsWrapper         ; 21
+.dw Code000B99                      ; 22
+.dw Code0004E5                      ; 23
+.dw Code0005FB                      ; 24
+.dw Code000BA2                      ; 25
+.dw Code000BD4                      ; 26
+.dw Code00069B                      ; 27
+.dw Code0006C0                      ; 28
+.dw Code000A69                      ; 29
+.dw Code000A7A                      ; 2A
+.dw RankingWrapper                  ; 2B
+.dw AlbumWrapper                    ; 2C
+.dw ToyBoxWrapper                   ; 2D
+.dw PrintMenuBank00Wrapper          ; 2E
+.dw Code000BF2                      ; 2F
+.dw Code000BFB                      ; 30
+.dw Code0039C2                      ; 31
+.dw Code0039CB                      ; 32
+.dw Code0006F4                      ; 33
+.dw Code000705                      ; 34
+.dw Code00070E                      ; 35
+.dw Code000784                      ; 36
+.dw NonGBCErrorWrapper              ; 37
+.dw SPTitleWrapper                  ; 38
+.dw CreditsWrapper                  ; 39
+.dw Code000C04                      ; 3A
+.dw Code0007FE                      ; 3B
+.dw Code000879                      ; 3C
+.dw Code0008B1                      ; 3D
+.dw Code000974                      ; 3E
+.dw Code00099E                      ; 3F
+.dw Code0009B3                      ; 40
+.dw Code000C25                      ; 41
 
 Code0002EA:
+; Game state 06/09/0A
     ld   a,[$0003]                  ; 00:02EA
     and  a                          ; 00:02ED
     jr   z,Code0002F5               ; 00:02EE
@@ -333,8 +334,8 @@ Sub00036B:
 
 Sub0003A4:
     ldh  a,[<H_GameState]           ; 00:03A4
-    sub  $06                        ; 00:03A6
-    srl  a                          ; 00:03A8
+    sub  $06                        ; 00:03A6  06/09/0A -> 00/03/04
+    srl  a                          ; 00:03A8  06/09/0A -> 00/01/02
     rst  $00                        ; 00:03AA
 .dw Sub0003B1                       ; 00:03AB
 .dw Code0003E5                      ; 00:03AD
@@ -388,8 +389,9 @@ Code000414:
     call Sub037178                  ; 00:0414
     ret                             ; 00:0417
 
-Code000418:
-    ldh  a,[<$FF8C]                 ; 00:0418
+NormalGameplay:
+; Game state 0B
+    ldh  a,[<H_ButtonsPressed]      ; 00:0418
     and  $08                        ; 00:041A
     jr   z,Code000434               ; 00:041C
     ld   a,[$C1F3]                  ; 00:041E
@@ -432,6 +434,7 @@ Code000445:
     ret                             ; 00:0472
 
 Code000473:
+; Game state 0D
     ldh  a,[<$FFB8]                 ; 00:0473
     ld   [$C175],a                  ; 00:0475
     ldh  a,[<$FFBA]                 ; 00:0478
@@ -482,6 +485,7 @@ Code0004AC:
     ret                             ; 00:04E4
 
 Code0004E5:
+; Game state 23
     ld   a,$01                      ; 00:04E5
     ld   [$C0C1],a                  ; 00:04E7
     call Sub0004EE                  ; 00:04EA
@@ -622,6 +626,7 @@ Sub0005F2:
     ret                             ; 00:05FA
 
 Code0005FB:
+; Game state 24
     ld   a,:Sub064B87               ; 00:05FB
     call SetROMBank                 ; 00:05FD
     call Sub064B87                  ; 00:0600
@@ -664,10 +669,10 @@ Code00062F:
     inc  [hl]                       ; 00:064B
     jr   Code000625                 ; 00:064C
 Code00064E:
-    ldh  a,[<$FFB7]                 ; 00:064E
+    ldh  a,[<H_GlobalTimer]         ; 00:064E
     push af                         ; 00:0650
     ld   a,[$DA79]                  ; 00:0651
-    ldh  [<$FFB7],a                 ; 00:0654
+    ldh  [<H_GlobalTimer],a         ; 00:0654
     ld   a,:Sub034033               ; 00:0656
     call SetROMBank                 ; 00:0658
     call Sub034033                  ; 00:065B
@@ -676,7 +681,7 @@ Code00064E:
     call SetROMBank                 ; 00:0663
     call Sub037863                  ; 00:0666
     pop  af                         ; 00:0669
-    ldh  [<$FFB7],a                 ; 00:066A
+    ldh  [<H_GlobalTimer],a         ; 00:066A
     call Sub003643                  ; 00:066C
     call Sub003AB0                  ; 00:066F
     call Sub003BBB                  ; 00:0672
@@ -705,10 +710,12 @@ Return00069A:
     ret                             ; 00:069A
 
 Code00069B:
+; Game state 27 wrapper
     call Sub00069F                  ; 00:069B
     ret                             ; 00:069E
 
 Sub00069F:
+; Game state 27
     ld   a,[$C168]                  ; 00:069F
     rst  $00                        ; 00:06A2
 .dw Code0004FA                      ; 00:06A3
@@ -731,6 +738,7 @@ Code0006B7:
     ret                             ; 00:06BF
 
 Code0006C0:
+; Game state 28
     ld   a,[$C168]                  ; 00:06C0
     rst  $00                        ; 00:06C3
 .dw Code0006DD                      ; 00:06C4
@@ -764,6 +772,7 @@ Return0006F3:
     ret                             ; 00:06F3
 
 Code0006F4:
+; Game state 33
     ld   a,:Sub075C36               ; 00:06F4
     call SetROMBank                 ; 00:06F6
     call Sub075C36                  ; 00:06F9
@@ -774,12 +783,14 @@ Code0006FC:
     ret                             ; 00:0704
 
 Code000705:
+; Game state 34 wrapper
     ld   a,:Sub0B5A4D               ; 00:0705
     call SetROMBank                 ; 00:0707
     call Sub0B5A4D                  ; 00:070A
     ret                             ; 00:070D
 
 Code00070E:
+; Game state 35
     ld   a,:Sub0B6204               ; 00:070E
     call SetROMBank                 ; 00:0710
     call Sub0B6204                  ; 00:0713
@@ -829,6 +840,7 @@ Code00070E:
     ret                             ; 00:0783
 
 Code000784:
+; Game state 36
     ldh  a,[<$FFB8]                 ; 00:0784
     ld   [$C175],a                  ; 00:0786
     ldh  a,[<$FFBA]                 ; 00:0789
@@ -849,7 +861,7 @@ Code0007A0:
     call Sub044AC3                  ; 00:07A5
     jr   Return0007FD               ; 00:07A8
 Code0007AA:
-    ldh  a,[<$FF8C]                 ; 00:07AA
+    ldh  a,[<H_ButtonsPressed]      ; 00:07AA
     and  $08                        ; 00:07AC
     jr   z,Code0007C0               ; 00:07AE
     ld   a,[$C1F3]                  ; 00:07B0
@@ -888,6 +900,7 @@ Return0007FD:
     ret                             ; 00:07FD
 
 Code0007FE:
+; Game state 3B
     ld   a,:Sub064CF8               ; 00:07FE
     call SetROMBank                 ; 00:0800
     call Sub064CF8                  ; 00:0803
@@ -902,8 +915,8 @@ Code0007FE:
     ld   [$C185],a                  ; 00:081C
     ld   [$C186],a                  ; 00:081F
     ld   [$C410],a                  ; 00:0822
-    ld   [$C1CE],a                  ; 00:0825
-    ld   [$C1C5],a                  ; 00:0828
+    ld   [W_PlayerFireFlag],a       ; 00:0825
+    ld   [W_PlayerSize],a           ; 00:0828
     ld   [W_HardFlag],a             ; 00:082B
     ld   a,:Sub0B61AC               ; 00:082E
     call SetROMBank                 ; 00:0830
@@ -937,6 +950,7 @@ Code0007FE:
     ret                             ; 00:0878
 
 Code000879:
+; Game state 3C
     ldh  a,[<$FFB8]                 ; 00:0879
     ld   [$C175],a                  ; 00:087B
     ldh  a,[<$FFBA]                 ; 00:087E
@@ -960,6 +974,7 @@ Code000879:
     ret                             ; 00:08B0
 
 Code0008B1:
+; Game state 3D
     ld   a,:Sub064CF8               ; 00:08B1
     call SetROMBank                 ; 00:08B3
     call Sub064CF8                  ; 00:08B6
@@ -992,8 +1007,8 @@ Code0008B1:
     call Sub00036B                  ; 00:08FE
     xor  a                          ; 00:0901
     ld   [$C1F2],a                  ; 00:0902
-    ld   [$C1CE],a                  ; 00:0905
-    ld   [$C1C5],a                  ; 00:0908
+    ld   [W_PlayerFireFlag],a       ; 00:0905
+    ld   [W_PlayerSize],a           ; 00:0908
     ld   a,:Sub0371C5               ; 00:090B
     call SetROMBank                 ; 00:090D
     call Sub0371C5                  ; 00:0910
@@ -1038,6 +1053,7 @@ Code0008B1:
     ret                             ; 00:0973
 
 Code000974:
+; Game state 3E
     ldh  a,[<$FFB8]                 ; 00:0974
     ld   [$C175],a                  ; 00:0976
     ldh  a,[<$FFBA]                 ; 00:0979
@@ -1056,6 +1072,7 @@ Code000974:
     ret                             ; 00:099D
 
 Code00099E:
+; Game state 3F
     ld   a,:Sub064CF8               ; 00:099E
     call SetROMBank                 ; 00:09A0
     call Sub064CF8                  ; 00:09A3
@@ -1067,18 +1084,21 @@ Code00099E:
     ret                             ; 00:09B2
 
 Code0009B3:
+; Game state 40 wrapper
     ld   a,:Sub094D63               ; 00:09B3
     call SetROMBank                 ; 00:09B5
     call Sub094D63                  ; 00:09B8
     ret                             ; 00:09BB
 
-Code0009BC:
-    ld   a,:Sub044BF7               ; 00:09BC
+PauseWrapper:
+; Game state 0C
+    ld   a,:PauseMain               ; 00:09BC
     call SetROMBank                 ; 00:09BE
-    call Sub044BF7                  ; 00:09C1
+    call PauseMain                  ; 00:09C1
     ret                             ; 00:09C4
 
 Code0009C5:
+; Game state 00
     ld   a,:Sub094000               ; 00:09C5
     call SetROMBank                 ; 00:09C7
     call Sub094000                  ; 00:09CA
@@ -1088,6 +1108,7 @@ Code0009C5:
     ret                             ; 00:09D5
 
 Code0009D6:
+; Game state 01
     ld   a,:Sub0940A8               ; 00:09D6
     call SetROMBank                 ; 00:09D8
     call Sub0940A8                  ; 00:09DB
@@ -1097,6 +1118,7 @@ Code0009D6:
     ret                             ; 00:09E6
 
 Code0009E7:
+; Game state 02
     ld   a,:Sub094105               ; 00:09E7
     call SetROMBank                 ; 00:09E9
     call Sub094105                  ; 00:09EC
@@ -1106,6 +1128,7 @@ Code0009E7:
     ret                             ; 00:09F7
 
 Code0009F8:
+; Game state 03
     ld   a,:Sub094396               ; 00:09F8
     call SetROMBank                 ; 00:09FA
     call Sub094396                  ; 00:09FD
@@ -1115,67 +1138,75 @@ Code0009F8:
     ret                             ; 00:0A08
 
 Code000A09:
+; Game state 0E wrapper
     ld   a,:Sub09465D               ; 00:0A09
     call SetROMBank                 ; 00:0A0B
     call Sub09465D                  ; 00:0A0E
     ret                             ; 00:0A11
 
-Code000A12:
-    ld   a,:Sub09476B               ; 00:0A12
+GameOverWrapper:
+; Game state 0F wrapper
+    ld   a,:GameOverMain            ; 00:0A12
     call SetROMBank                 ; 00:0A14
-    call Sub09476B                  ; 00:0A17
+    call GameOverMain               ; 00:0A17
     ret                             ; 00:0A1A
 
 Code000A1B:
+; Game state 10 wrapper
     ld   a,:Sub0947CE               ; 00:0A1B
     call SetROMBank                 ; 00:0A1D
     call Sub0947CE                  ; 00:0A20
     ret                             ; 00:0A23
 
 Code000A24:
+; Game state 11 wrapper
     ld   a,:Sub09481F               ; 00:0A24
     call SetROMBank                 ; 00:0A26
     call Sub09481F                  ; 00:0A29
     ret                             ; 00:0A2C
 
 Code000A2D:
+; Game state 12 wrapper
     ld   a,:Sub094B7B               ; 00:0A2D
     call SetROMBank                 ; 00:0A2F
     call Sub094B7B                  ; 00:0A32
     ret                             ; 00:0A35
 
 Code000A36:
+; Game state 13 wrapper
     ld   a,:Sub094BC8               ; 00:0A36
     call SetROMBank                 ; 00:0A38
     call Sub094BC8                  ; 00:0A3B
     ret                             ; 00:0A3E
 
 Code000A3F:
+; Game state 14
     ld   a,:Sub0950E7               ; 00:0A3F
     call SetROMBank                 ; 00:0A41
     call Sub0950E7                  ; 00:0A44
     ld   a,[$C356]                  ; 00:0A47
     cp   $0A                        ; 00:0A4A
-    jr   c,Code000A57               ; 00:0A4C
+    jr   c,@Code000A57              ; 00:0A4C
     ld   a,$00                      ; 00:0A4E
     ldh  [<H_GameSubstate],a        ; 00:0A50
     ld   a,$1A                      ; 00:0A52
     ldh  [<H_GameState],a           ; 00:0A54
     ret                             ; 00:0A56
-
-Code000A57:
+@Code000A57:
     ld   a,:Sub0950F1               ; 00:0A57
     call SetROMBank                 ; 00:0A59
     call Sub0950F1                  ; 00:0A5C
     ret                             ; 00:0A5F
 
 Code000A60:
+; Game state 15 wrapper
     ld   a,:Sub095370               ; 00:0A60
     call SetROMBank                 ; 00:0A62
     call Sub095370                  ; 00:0A65
     ret                             ; 00:0A68
 
 Code000A69:
+; Game state 29
     ld   a,[$C168]                  ; 00:0A69
     rst  $00                        ; 00:0A6C
 .dw Code000BB4                      ; 00:0A6D
@@ -1188,71 +1219,79 @@ Code000A71:
     ret                             ; 00:0A79
 
 Code000A7A:
+; Game state 2A wrapper
     ld   a,:Sub064B28               ; 00:0A7A
     call SetROMBank                 ; 00:0A7C
     call Sub064B28                  ; 00:0A7F
     ret                             ; 00:0A82
 
-Code000A83:
-    ld   a,:Sub146ABF               ; 00:0A83
+RankingWrapper:
+; Game state 2B wrapper
+    ld   a,:RankingMain             ; 00:0A83
     call SetROMBank                 ; 00:0A85
-    call Sub146ABF                  ; 00:0A88
+    call RankingMain                ; 00:0A88
     ret                             ; 00:0A8B
 
-Code000A8C:
-    ld   a,:Sub0A4EA4               ; 00:0A8C
+AlbumWrapper:
+; Game state 2C wrapper
+    ld   a,:AlbumMain               ; 00:0A8C
     call SetROMBank                 ; 00:0A8E
-    call Sub0A4EA4                  ; 00:0A91
+    call AlbumMain                  ; 00:0A91
     ret                             ; 00:0A94
 
-Code000A95:
-    ld   a,:Sub144000               ; 00:0A95
+ToyBoxWrapper:
+; Game state 2D wrapper
+    ld   a,:ToyBoxMain              ; 00:0A95
     call SetROMBank                 ; 00:0A97
-    call Sub144000                  ; 00:0A9A
+    call ToyBoxMain                 ; 00:0A9A
     ret                             ; 00:0A9D
 
-Code000A9E:
-    ld   a,:Sub154000               ; 00:0A9E
+PrintMenuBank00Wrapper:
+; Game state 2E wrapper (of a wrapper)
+    ld   a,:PrintMenuBank15Wrapper  ; 00:0A9E
     call SetROMBank                 ; 00:0AA0
-    call Sub154000                  ; 00:0AA3
+    call PrintMenuBank15Wrapper     ; 00:0AA3
     ret                             ; 00:0AA6
 
-Code000AA7:
-    ld   a,:Sub114200               ; 00:0AA7
+FileSelectInitWrapper:
+; Game state 16 wrapper
+    ld   a,:FileSelectInit          ; 00:0AA7
     call SetROMBank                 ; 00:0AA9
-    call Sub114200                  ; 00:0AAC
+    call FileSelectInit             ; 00:0AAC
     ret                             ; 00:0AAF
 
-Code000AB0:
+FileSelectMain:
+; Game state 17
     ld   a,:Sub1142C2               ; 00:0AB0
     call SetROMBank                 ; 00:0AB2
     call Sub1142C2                  ; 00:0AB5
     ldh  a,[<H_GameSubstate]        ; 00:0AB8
     cp   $01                        ; 00:0ABA
-    jr   z,Return000AE7             ; 00:0ABC
+    jr   z,@Return                  ; 00:0ABC
     cp   $08                        ; 00:0ABE
-    jr   z,Return000AE7             ; 00:0AC0
+    jr   z,@Return                  ; 00:0AC0
     cp   $0A                        ; 00:0AC2
-    jr   z,Return000AE7             ; 00:0AC4
-    ld   a,[$C1C5]                  ; 00:0AC6
+    jr   z,@Return                  ; 00:0AC4
+    ld   a,[W_PlayerSize]           ; 00:0AC6
     push af                         ; 00:0AC9
-    ld   a,[$C1CE]                  ; 00:0ACA
+    ld   a,[W_PlayerFireFlag]       ; 00:0ACA
     push af                         ; 00:0ACD
     ld   a,$00                      ; 00:0ACE
-    ld   [$C1CE],a                  ; 00:0AD0
+    ld   [W_PlayerFireFlag],a       ; 00:0AD0
     inc  a                          ; 00:0AD3
-    ld   [$C1C5],a                  ; 00:0AD4
+    ld   [W_PlayerSize],a           ; 00:0AD4
     ld   a,:Sub037376               ; 00:0AD7
     call SetROMBank                 ; 00:0AD9
     call Sub037376                  ; 00:0ADC
     pop  af                         ; 00:0ADF
-    ld   [$C1CE],a                  ; 00:0AE0
+    ld   [W_PlayerFireFlag],a       ; 00:0AE0
     pop  af                         ; 00:0AE3
-    ld   [$C1C5],a                  ; 00:0AE4
-Return000AE7:
+    ld   [W_PlayerSize],a           ; 00:0AE4
+@Return:
     ret                             ; 00:0AE7
 
-Code000AE8:
+MainMenu_Init:
+; Game state 18
     ld   a,$00                      ; 00:0AE8
     ldh  [<SVBK],a                  ; 00:0AEA
     ld   a,:Sub064B33               ; 00:0AEC
@@ -1266,7 +1305,8 @@ Code000AE8:
     call Sub064D0C                  ; 00:0B01
     ret                             ; 00:0B04
 
-Code000B05:
+MainMenu_Main:
+; Game state 19
     ld   a,:Sub114CB9               ; 00:0B05
     call SetROMBank                 ; 00:0B07
     call Sub114CB9                  ; 00:0B0A
@@ -1276,18 +1316,21 @@ Code000B05:
     ret                             ; 00:0B15
 
 Code000B16:
+; Game state 1A wrapper
     ld   a,:Sub114026               ; 00:0B16
     call SetROMBank                 ; 00:0B18
     call Sub114026                  ; 00:0B1B
     ret                             ; 00:0B1E
 
 Code000B1F:
+; Game state 1B wrapper
     ld   a,:Sub11407E               ; 00:0B1F
     call SetROMBank                 ; 00:0B21
     call Sub11407E                  ; 00:0B24
     ret                             ; 00:0B27
 
-Code000B28:
+ChallengeMenuInit:
+; Game state 1D
     call Sub00126D                  ; 00:0B28
     ld   a,$00                      ; 00:0B2B
     ldh  [<IE],a                    ; 00:0B2D
@@ -1302,19 +1345,22 @@ Code000B28:
     inc  [hl]                       ; 00:0B42
     ret                             ; 00:0B43
 
-Code000B44:
-    ld   a,:Sub1154F0               ; 00:0B44
+ChallengeMenuWrapper:
+; Game state 1E wrapper
+    ld   a,:ChallengeMenuMain       ; 00:0B44
     call SetROMBank                 ; 00:0B46
-    call Sub1154F0                  ; 00:0B49
+    call ChallengeMenuMain          ; 00:0B49
     ret                             ; 00:0B4C
 
-Code000B4D:
-    ld   a,:Sub0659AE               ; 00:0B4D
+AwardCutsceneWrapper:
+; Game state 1C wrapper
+    ld   a,:AwardCutsceneMain       ; 00:0B4D
     call SetROMBank                 ; 00:0B4F
-    call Sub0659AE                  ; 00:0B52
+    call AwardCutsceneMain          ; 00:0B52
     ret                             ; 00:0B55
 
 Code000B56:
+; Game state 20
     call Sub00126D                  ; 00:0B56
     ld   a,$00                      ; 00:0B59
     ldh  [<IE],a                    ; 00:0B5B
@@ -1323,14 +1369,14 @@ Code000B56:
     call Sub0448E8                  ; 00:0B62
     ld   a,$00                      ; 00:0B65
     ldh  [<H_GameSubstate],a        ; 00:0B67
-Code000B69:
+@Loop000B69:
     ld   a,:Sub116878               ; 00:0B69
     call SetROMBank                 ; 00:0B6B
     call Sub116878                  ; 00:0B6E
     call Sub0014AA                  ; 00:0B71
     ldh  a,[<H_GameSubstate]        ; 00:0B74
     cp   $03                        ; 00:0B76
-    jr   c,Code000B69               ; 00:0B78
+    jr   c,@Loop000B69              ; 00:0B78
     ld   a,$01                      ; 00:0B7A
     ldh  [<IE],a                    ; 00:0B7C
     ld   a,$87                      ; 00:0B7E
@@ -1339,29 +1385,34 @@ Code000B69:
     inc  [hl]                       ; 00:0B85
     ret                             ; 00:0B86
 
-Code000B87:
-    ld   a,:Sub11691F               ; 00:0B87
+ChallengeResultsWrapper:
+; Game state 21 wrapper
+    ld   a,:ChallengeResultsMain    ; 00:0B87
     call SetROMBank                 ; 00:0B89
-    call Sub11691F                  ; 00:0B8C
+    call ChallengeResultsMain       ; 00:0B8C
     ret                             ; 00:0B8F
 
-Code000B90:
-    ld   a,:Sub116E86               ; 00:0B90
+ChallengeYoshiHatchWrapper:
+; Game state 1F
+    ld   a,:ChallengeYoshiHatchMain ; 00:0B90
     call SetROMBank                 ; 00:0B92
-    call Sub116E86                  ; 00:0B95
+    call ChallengeYoshiHatchMain    ; 00:0B95
     ret                             ; 00:0B98
 
 Code000B99:
+; Game state 22 wrapper
     ld   a,:Sub06590E               ; 00:0B99
     call SetROMBank                 ; 00:0B9B
     call Sub06590E                  ; 00:0B9E
     ret                             ; 00:0BA1
 
 Code000BA2:
+; Game state 25 wrapper
     call Sub000BA6                  ; 00:0BA2
     ret                             ; 00:0BA5
 
 Sub000BA6:
+; Game state 25
     ld   a,[$C168]                  ; 00:0BA6
     rst  $00                        ; 00:0BA9
 .dw Code000BB4                      ; 00:0BAA
@@ -1391,6 +1442,7 @@ Code000BCB:
     ret                             ; 00:0BD3
 
 Code000BD4:
+; Game state 26
     ld   a,[W_GameMode]             ; 00:0BD4
     cp   $07                        ; 00:0BD7
     jr   z,Code000BE9               ; 00:0BD9
@@ -1408,36 +1460,46 @@ Return000BF1:
     ret                             ; 00:0BF1
 
 Code000BF2:
+; Game state 2F wrapper
     ld   a,:Sub06555A               ; 00:0BF2
     call SetROMBank                 ; 00:0BF4
     call Sub06555A                  ; 00:0BF7
     ret                             ; 00:0BFA
 
 Code000BFB:
+; Game state 30 wrapper
     ld   a,:Sub065616               ; 00:0BFB
     call SetROMBank                 ; 00:0BFD
     call Sub065616                  ; 00:0C00
     ret                             ; 00:0C03
 
 Code000C04:
+; Game state 3A wrapper
     ld   a,:Sub065C84               ; 00:0C04
     call SetROMBank                 ; 00:0C06
     call Sub065C84                  ; 00:0C09
     ret                             ; 00:0C0C
 
-Code000C0D:
-    ld   a,:Code0955DB              ; 00:0C0D
+NonGBCErrorWrapper:
+; Game state 37 wrapper
+    ld   a,:NonGBCErrorMain         ; 00:0C0D
     call SetROMBank                 ; 00:0C0F
-    jp   Code0955DB                 ; 00:0C12
-Code000C15:
-    ld   a,:Code095AE9              ; 00:0C15
+    jp   NonGBCErrorMain            ; 00:0C12
+
+SPTitleWrapper:
+; Game state 38 wrapper
+    ld   a,:SPTitleMain             ; 00:0C15
     call SetROMBank                 ; 00:0C17
-    jp   Code095AE9                 ; 00:0C1A
-Code000C1D:
-    ld   a,:Code04681B              ; 00:0C1D
+    jp   SPTitleMain                ; 00:0C1A
+
+CreditsWrapper:
+; Game state 39 wrapper
+    ld   a,:CreditsMain             ; 00:0C1D
     call SetROMBank                 ; 00:0C1F
-    jp   Code04681B                 ; 00:0C22
+    jp   CreditsMain                ; 00:0C22
+
 Code000C25:
+; Game state 41 wrapper
     ld   a,:Code15636C              ; 00:0C25
     call SetROMBank                 ; 00:0C27
     jp   Code15636C                 ; 00:0C2A
@@ -1500,17 +1562,17 @@ Code000C8D:
     ld   a,[W_GameMode]             ; 00:0C97
     cp   $07                        ; 00:0C9A
     jr   nz,Code000CA1              ; 00:0C9C
-    call Sub0013CB                  ; 00:0C9E
+    call LoadAnimGr_Race            ; 00:0C9E
 Code000CA1:
     call Sub003D1B                  ; 00:0CA1
     call Sub000E29                  ; 00:0CA4
     call Sub000E4F                  ; 00:0CA7
     call Sub000EBE                  ; 00:0CAA
     call Sub0014AA                  ; 00:0CAD
-    call Sub0012CC                  ; 00:0CB0
+    call LoadAnimGr_1Player         ; 00:0CB0
     call H_DMATransferOAM           ; 00:0CB3
-    call Sub001368                  ; 00:0CB6
-    call Sub001334                  ; 00:0CB9
+    call LoadAnimGr_Global          ; 00:0CB6
+    call LoadAnimGr_RedCoin         ; 00:0CB9
 Code000CBC:
     ld   a,$01                      ; 00:0CBC
     ldh  [<$FF91],a                 ; 00:0CBE
@@ -1521,6 +1583,7 @@ Code000CC0:
     pop  bc                         ; 00:0CC3
     pop  af                         ; 00:0CC4
     reti                            ; 00:0CC5
+
 Code000CC6:
     call Sub001677                  ; 00:0CC6
     call Sub000E29                  ; 00:0CC9
@@ -1556,18 +1619,19 @@ Code000D03:
     ldh  [<WY],a                    ; 00:0D06
     ld   a,[$C177]                  ; 00:0D08
     ldh  [<WX],a                    ; 00:0D0B
-    call Sub0013CB                  ; 00:0D0D
+    call LoadAnimGr_Race            ; 00:0D0D
     call Sub003D1B                  ; 00:0D10
     call Sub000E29                  ; 00:0D13
     call Sub000E4F                  ; 00:0D16
     call Sub000EBE                  ; 00:0D19
     call Sub0014AA                  ; 00:0D1C
-    call Sub001368                  ; 00:0D1F
-    call Sub0012F5                  ; 00:0D22
+    call LoadAnimGr_Global          ; 00:0D1F
+    call LoadAnimGr_2Player         ; 00:0D22
     call H_DMATransferOAM           ; 00:0D25
     ld   a,$01                      ; 00:0D28
     ldh  [<$FF91],a                 ; 00:0D2A
     jp   Code000CC0                 ; 00:0D2C
+
 Code000D2F:
     call H_DMATransferOAM           ; 00:0D2F
     ld   a,[$C423]                  ; 00:0D32
@@ -1688,7 +1752,7 @@ Sub000E02:
     ldh  [<BGPI],a                  ; 00:0E0B
     ldh  [<OBPI],a                  ; 00:0E0D
     ld   e,$20                      ; 00:0E0F
-    ld   hl,$DF80                   ; 00:0E11
+    ld   hl,W_PaletteBuffer         ; 00:0E11
 Code000E14:
     ldi  a,[hl]                     ; 00:0E14
     ldh  [<BGPD],a                  ; 00:0E15
@@ -1717,7 +1781,7 @@ Sub000E29:
     ldh  [<OBPI],a                  ; 00:0E35
     ld   de,$0000                   ; 00:0E37
 Code000E3A:
-    ld   hl,$DF80                   ; 00:0E3A
+    ld   hl,W_PaletteBuffer         ; 00:0E3A
     add  hl,de                      ; 00:0E3D
     ld   a,[hl]                     ; 00:0E3E
     ldh  [<BGPD],a                  ; 00:0E3F
@@ -1792,7 +1856,7 @@ Code000EA0:
     ld   de,$000A                   ; 00:0EAC
     ld   c,$0C                      ; 00:0EAF
 Code000EB1:
-    ld   hl,$DF80                   ; 00:0EB1
+    ld   hl,W_PaletteBuffer         ; 00:0EB1
     add  hl,de                      ; 00:0EB4
     ld   a,[hl]                     ; 00:0EB5
     ldh  [<BGPD],a                  ; 00:0EB6
@@ -1871,7 +1935,7 @@ Sub000F13:
 
 LoadFullPaletteLong:
     ld   [ROMBANK],a                ; 00:0F28
-    ld   hl,$DF80                   ; 00:0F2B
+    ld   hl,W_PaletteBuffer         ; 00:0F2B
     ld   c,$80                      ; 00:0F2E
 Code000F30:
     ld   a,[de]                     ; 00:0F30
@@ -2009,47 +2073,46 @@ Sub000FE5:
     ret                             ; 00:0FF5
 
 Sub000FF6:
+; A: save file number
     swap a                          ; 00:0FF6
     sla  a                          ; 00:0FF8
     sla  a                          ; 00:0FFA
-    ld   e,a                        ; 00:0FFC
+    ld   e,a                        ; 00:0FFC  e = a*40
     ld   d,$00                      ; 00:0FFD
     ld   hl,$A100                   ; 00:0FFF
-    add  hl,de                      ; 00:1002
+    add  hl,de                      ; 00:1002  hl = pointer to save file
     call Sub001025                  ; 00:1003
     ldh  a,[<$FF97]                 ; 00:1006
     ld   hl,$A119                   ; 00:1008
     add  hl,de                      ; 00:100B
     cp   [hl]                       ; 00:100C
-    jr   nz,Code001022              ; 00:100D
+    jr   nz,@Code001022             ; 00:100D
     inc  hl                         ; 00:100F
     ldh  a,[<$FF98]                 ; 00:1010
     cp   [hl]                       ; 00:1012
-    jr   nz,Code001022              ; 00:1013
+    jr   nz,@Code001022             ; 00:1013
     ld   hl,$A118                   ; 00:1015
     add  hl,de                      ; 00:1018
     ld   a,[hl]                     ; 00:1019
     cp   $01                        ; 00:101A
-    jr   nz,Code001022              ; 00:101C
+    jr   nz,@Code001022             ; 00:101C
     ld   a,$00                      ; 00:101E
     scf                             ; 00:1020
     ret                             ; 00:1021
-
-Code001022:
+@Code001022:
     scf                             ; 00:1022
     ccf                             ; 00:1023
     ret                             ; 00:1024
 
 Sub001025:
     ld   a,$19                      ; 00:1025
-
 Sub001027:
     ld   c,a                        ; 00:1027
     xor  a                          ; 00:1028
     ldh  [<$FF97],a                 ; 00:1029
     ldh  [<$FF98],a                 ; 00:102B
     ld   b,a                        ; 00:102D
-Code00102E:
+@Loop:
     ldh  a,[<$FF97]                 ; 00:102E
     add  [hl]                       ; 00:1030
     ldh  [<$FF97],a                 ; 00:1031
@@ -2060,7 +2123,7 @@ Code00102E:
     inc  b                          ; 00:103A
     ld   a,b                        ; 00:103B
     cp   c                          ; 00:103C
-    jr   nz,Code00102E              ; 00:103D
+    jr   nz,@Loop                   ; 00:103D
     ret                             ; 00:103F
 
 Unused001040:                       ; 00:1040
@@ -2165,7 +2228,7 @@ Sub0010E4:
     ld   a,[W_GameMode]             ; 00:10E5
     cp   $02                        ; 00:10E8
     jr   z,Code0010FB               ; 00:10EA
-    ldh  a,[<$FFB7]                 ; 00:10EC
+    ldh  a,[<H_GlobalTimer]         ; 00:10EC
     ld   hl,$FFBC                   ; 00:10EE
     add  [hl]                       ; 00:10F1
     ld   hl,LY                      ; 00:10F2
@@ -2176,7 +2239,7 @@ Sub0010E4:
     ret                             ; 00:10FA
 
 Code0010FB:
-    ldh  a,[<$FFB7]                 ; 00:10FB
+    ldh  a,[<H_GlobalTimer]         ; 00:10FB
     ldh  [<$FFBC],a                 ; 00:10FD
     pop  hl                         ; 00:10FF
     ret                             ; 00:1100
@@ -2208,9 +2271,9 @@ Sub001124:
     rl   d                          ; 00:112B
     sla  e                          ; 00:112D
     rl   d                          ; 00:112F
-    ld   a,:Data124000              ; 00:1131
+    ld   a,:Ti_16x16Tiles              ; 00:1131
     ld   [ROMBANK],a                ; 00:1133
-    ld   hl,Data124000              ; 00:1136
+    ld   hl,Ti_16x16Tiles              ; 00:1136
     add  hl,de                      ; 00:1139
     ld   a,h                        ; 00:113A
     ldh  [<$FF99],a                 ; 00:113B
@@ -2335,12 +2398,12 @@ Sub0011C8:
     and  $0F                        ; 00:11E7
     or   b                          ; 00:11E9
     ld   c,a                        ; 00:11EA
-    ldh  a,[<H_ButtonFlags]         ; 00:11EB
+    ldh  a,[<H_ButtonsHeld]         ; 00:11EB
     xor  c                          ; 00:11ED
     and  c                          ; 00:11EE
-    ldh  [<$FF8C],a                 ; 00:11EF
+    ldh  [<H_ButtonsPressed],a      ; 00:11EF
     ld   a,c                        ; 00:11F1
-    ldh  [<H_ButtonFlags],a         ; 00:11F2
+    ldh  [<H_ButtonsHeld],a         ; 00:11F2
     ld   a,$30                      ; 00:11F4
     ldh  [<JOYP],a                  ; 00:11F6
     ret                             ; 00:11F8
@@ -2506,8 +2569,8 @@ Code0012C3:
     jr   nz,Code0012C3              ; 00:12C9
     ret                             ; 00:12CB
 
-Sub0012CC:
-    ld   a,$01                      ; 00:12CC
+LoadAnimGr_1Player:
+    ld   a,:Gr_PlayerSuper          ; 00:12CC
     ld   [ROMBANK],a                ; 00:12CE
     ldh  a,[<VBK]                   ; 00:12D1
     push af                         ; 00:12D3
@@ -2529,8 +2592,8 @@ Sub0012CC:
     ld   [ROMBANK],a                ; 00:12F1
     ret                             ; 00:12F4
 
-Sub0012F5:
-    ld   a,$01                      ; 00:12F5
+LoadAnimGr_2Player:
+    ld   a,:Gr_PlayerSuper          ; 00:12F5
     ld   [ROMBANK],a                ; 00:12F7
     ldh  a,[<VBK]                   ; 00:12FA
     push af                         ; 00:12FC
@@ -2562,13 +2625,13 @@ Sub0012F5:
     ld   [ROMBANK],a                ; 00:1330
     ret                             ; 00:1333
 
-Sub001334:
+LoadAnimGr_RedCoin:
     ld   hl,$C376                   ; 00:1334
     ld   a,[hl]                     ; 00:1337
     and  a                          ; 00:1338
     jr   z,@Return                  ; 00:1339
     ld   [hl],$00                   ; 00:133B
-    ld   a,$0F                      ; 00:133D
+    ld   a,:Gr_RedCoinAnim          ; 00:133D
     ld   [ROMBANK],a                ; 00:133F
     ldh  a,[<VBK]                   ; 00:1342
     push af                         ; 00:1344
@@ -2591,13 +2654,13 @@ Sub001334:
 @Return:
     ret                             ; 00:1367
 
-Sub001368:
+LoadAnimGr_Global:
     ld   hl,$C379                   ; 00:1368
     ld   a,[hl]                     ; 00:136B
     and  a                          ; 00:136C
-    jr   z,Code001399               ; 00:136D
-    ld   [hl],$00                   ; 00:136F
-    ld   a,$0F                      ; 00:1371
+    jr   z,@Code001399              ; 00:136D
+    ld   [hl],$00                   ; 00:136F \ update dynamic graphics for underwater surface
+    ld   a,:Gr_UnderwaterAnim       ; 00:1371
     ld   [ROMBANK],a                ; 00:1373
     ldh  a,[<VBK]                   ; 00:1376
     push af                         ; 00:1378
@@ -2616,14 +2679,14 @@ Sub001368:
     pop  af                         ; 00:1391
     ldh  [<VBK],a                   ; 00:1392
     ldh  a,[<$FFBE]                 ; 00:1394
-    ld   [ROMBANK],a                ; 00:1396
-Code001399:
+    ld   [ROMBANK],a                ; 00:1396 /
+@Code001399:
     ld   hl,$C37D                   ; 00:1399
     ld   a,[hl]                     ; 00:139C
     and  a                          ; 00:139D
-    jr   z,Return0013CA             ; 00:139E
-    ld   [hl],$00                   ; 00:13A0
-    ld   a,$0F                      ; 00:13A2
+    jr   z,@Return                  ; 00:139E
+    ld   [hl],$00                   ; 00:13A0 \ update dynamic graphics for water/lava
+    ld   a,:Gr_WaterLavaAnim        ; 00:13A2
     ld   [ROMBANK],a                ; 00:13A4
     ldh  a,[<VBK]                   ; 00:13A7
     push af                         ; 00:13A9
@@ -2642,17 +2705,17 @@ Code001399:
     pop  af                         ; 00:13C2
     ldh  [<VBK],a                   ; 00:13C3
     ldh  a,[<$FFBE]                 ; 00:13C5
-    ld   [ROMBANK],a                ; 00:13C7
-Return0013CA:
+    ld   [ROMBANK],a                ; 00:13C7 /
+@Return:
     ret                             ; 00:13CA
 
-Sub0013CB:
+LoadAnimGr_Race:
     ld   hl,$C376                   ; 00:13CB
     ld   a,[hl]                     ; 00:13CE
     and  a                          ; 00:13CF
-    jr   z,Code0013FE               ; 00:13D0
-    ld   [hl],$00                   ; 00:13D2
-    ld   a,$0F                      ; 00:13D4
+    jr   z,@Code0013FE              ; 00:13D0
+    ld   [hl],$00                   ; 00:13D2 \ update dynamic graphics for most race blocks
+    ld   a,:Gr_FaceSolidSpikedAnim  ; 00:13D4
     ld   [ROMBANK],a                ; 00:13D6
     ldh  a,[<VBK]                   ; 00:13D9
     push af                         ; 00:13DB
@@ -2671,14 +2734,14 @@ Sub0013CB:
     pop  af                         ; 00:13F6
     ldh  [<VBK],a                   ; 00:13F7
     ldh  a,[<$FFBE]                 ; 00:13F9
-    ld   [ROMBANK],a                ; 00:13FB
-Code0013FE:
+    ld   [ROMBANK],a                ; 00:13FB /
+@Code0013FE:
     ld   hl,$C388                   ; 00:13FE
     ld   a,[hl]                     ; 00:1401
     and  a                          ; 00:1402
-    jr   z,Return001431             ; 00:1403
-    ld   [hl],$00                   ; 00:1405
-    ld   a,$0F                      ; 00:1407
+    jr   z,@Return                  ; 00:1403
+    ld   [hl],$00                   ; 00:1405 \ update 3-2-1 block graphics
+    ld   a,:Gr_321BlockAnim         ; 00:1407
     ld   [ROMBANK],a                ; 00:1409
     ldh  a,[<VBK]                   ; 00:140C
     push af                         ; 00:140E
@@ -2697,8 +2760,8 @@ Code0013FE:
     pop  af                         ; 00:1429
     ldh  [<VBK],a                   ; 00:142A
     ldh  a,[<$FFBE]                 ; 00:142C
-    ld   [ROMBANK],a                ; 00:142E
-Return001431:
+    ld   [ROMBANK],a                ; 00:142E /
+@Return:
     ret                             ; 00:1431
 
 CopyBytesLong:
@@ -3314,7 +3377,6 @@ Code0017C2:
     ld   a,$10                      ; 00:17C2
     ld   [$CDE2],a                  ; 00:17C4
     ret                             ; 00:17C7
-
 Code0017C8:
     push bc                         ; 00:17C8
     push de                         ; 00:17C9
@@ -3341,7 +3403,6 @@ Code0017E9:
     pop  de                         ; 00:17EA
     pop  bc                         ; 00:17EB
     ret                             ; 00:17EC
-
 Code0017ED:
     ld   a,[hl]                     ; 00:17ED
     ld   bc,$FFE0                   ; 00:17EE
@@ -3364,12 +3425,12 @@ Sub001802:
     push af                         ; 00:1802
     push bc                         ; 00:1803
     ld   a,h                        ; 00:1804
-Code001805:
+@Loop001805:
     sla  a                          ; 00:1805
     sla  l                          ; 00:1807
     adc  $00                        ; 00:1809
     dec  c                          ; 00:180B
-    jr   nz,Code001805              ; 00:180C
+    jr   nz,@Loop001805             ; 00:180C
     ld   d,a                        ; 00:180E
     ld   e,l                        ; 00:180F
     pop  bc                         ; 00:1810
@@ -3430,7 +3491,7 @@ Code001876:
 Code00187C:
     ld   hl,Data001821              ; 00:187C
 Code00187F:
-    ldh  a,[<$FFB7]                 ; 00:187F
+    ldh  a,[<H_GlobalTimer]         ; 00:187F
     and  $07                        ; 00:1881
     ld   e,a                        ; 00:1883
     ld   d,$00                      ; 00:1884
@@ -4134,7 +4195,7 @@ Sub001D9F:
     ld   de,$0000                   ; 00:1DA6
     jr   Code001DB1                 ; 00:1DA9
 Code001DAB:
-    ld   a,[$C1C5]                  ; 00:1DAB
+    ld   a,[W_PlayerSize]           ; 00:1DAB
     ld   e,a                        ; 00:1DAE
     ld   d,$00                      ; 00:1DAF
 Code001DB1:
@@ -4329,7 +4390,7 @@ Code001F0B:
     ld   de,$0000                   ; 00:1F23
     jr   Code001F2E                 ; 00:1F26
 Code001F28:
-    ld   a,[$C1C5]                  ; 00:1F28
+    ld   a,[W_PlayerSize]           ; 00:1F28
     ld   e,a                        ; 00:1F2B
     ld   d,$00                      ; 00:1F2C
 Code001F2E:
@@ -4401,7 +4462,7 @@ Sub001F75:
     ld   hl,$C50D                   ; 00:1F99
     add  hl,de                      ; 00:1F9C
     ld   a,[hl]                     ; 00:1F9D
-    ld   [$C1C5],a                  ; 00:1F9E
+    ld   [W_PlayerSize],a           ; 00:1F9E
     ld   hl,$C525                   ; 00:1FA1
     add  hl,de                      ; 00:1FA4
     ld   a,[hl]                     ; 00:1FA5
@@ -4459,7 +4520,7 @@ Code001FD5:
     ld   de,$0000                   ; 00:1FFF
     jr   Code00200A                 ; 00:2002
 Code002004:
-    ld   a,[$C1C5]                  ; 00:2004
+    ld   a,[W_PlayerSize]           ; 00:2004
     ld   e,a                        ; 00:2007
     ld   d,$00                      ; 00:2008
 Code00200A:
@@ -4601,7 +4662,7 @@ Code0020FA:
     ld   de,$0000                   ; 00:211C
     jr   Code002127                 ; 00:211F
 Code002121:
-    ld   a,[$C1C5]                  ; 00:2121
+    ld   a,[W_PlayerSize]           ; 00:2121
     ld   e,a                        ; 00:2124
     ld   d,$00                      ; 00:2125
 Code002127:
@@ -6850,7 +6911,7 @@ Sub002FEF:
     ret                             ; 00:2FFF
 
 Sub003000:
-    ld   a,[$C1C5]                  ; 00:3000
+    ld   a,[W_PlayerSize]           ; 00:3000
     and  a                          ; 00:3003
     jr   nz,Code00300B              ; 00:3004
     ld   a,[$C1D5]                  ; 00:3006
@@ -7131,7 +7192,7 @@ LoadSublevelHeader:
     ldh  [<SVBK],a                  ; 00:31E3
     inc  de                         ; 00:31E5
     ld   a,[de]                     ; 00:31E6
-    ld   [$C3A2],a                  ; 00:31E7
+    ld   [W_RaceHeaderFlags],a      ; 00:31E7
 @Code0031EA:
     ld   a,$00                      ; 00:31EA
     ldh  [<SVBK],a                  ; 00:31EC
@@ -7831,9 +7892,9 @@ Code0035BA:
 Code0035BE:
     push de                         ; 00:35BE
     push hl                         ; 00:35BF
-    ld   a,:Data124000              ; 00:35C0
+    ld   a,:Ti_16x16Tiles              ; 00:35C0
     call SetROMBank                 ; 00:35C2
-    ld   hl,Data124000              ; 00:35C5
+    ld   hl,Ti_16x16Tiles              ; 00:35C5
     ld   a,[de]                     ; 00:35C8
     ld   c,a                        ; 00:35C9
     cp   $3F                        ; 00:35CA
@@ -8009,7 +8070,7 @@ Code0036CA:
     add  l                          ; 00:36CC
     ld   l,a                        ; 00:36CD
     ld   de,$C120                   ; 00:36CE
-    ld   a,:Data124000              ; 00:36D1
+    ld   a,:Ti_16x16Tiles              ; 00:36D1
     ld   [ROMBANK],a                ; 00:36D3
     ld   a,$10                      ; 00:36D6
     ldh  [<$FFA2],a                 ; 00:36D8
@@ -8033,7 +8094,7 @@ Code0036EB:
     rl   b                          ; 00:36F3
     sla  c                          ; 00:36F5
     rl   b                          ; 00:36F7
-    ld   hl,Data124000              ; 00:36F9
+    ld   hl,Ti_16x16Tiles              ; 00:36F9
     add  hl,bc                      ; 00:36FC
     ldh  a,[<$FFC8]                 ; 00:36FD
     sla  a                          ; 00:36FF
@@ -8325,7 +8386,8 @@ Code0038B1:
     ldh  [<SVBK],a                  ; 00:38BA
     ret                             ; 00:38BC
 
-Code0038BD:
+OverworldInit:
+; Game state 04/07
     call Sub00126D                  ; 00:38BD
     ld   a,$00                      ; 00:38C0
     ldh  [<IE],a                    ; 00:38C2
@@ -8355,7 +8417,8 @@ Code0038D2:
     inc  [hl]                       ; 00:38F6
     ret                             ; 00:38F7
 
-Code0038F8:
+OverworldMain:
+; Game state 05/08
     ld   a,[$C283]                  ; 00:38F8
     cp   $01                        ; 00:38FB
     jr   z,Code00390E               ; 00:38FD
@@ -8372,13 +8435,13 @@ Code00390E:
     ld   a,[$C283]                  ; 00:3916
     cp   $01                        ; 00:3919
     jr   z,Code00396C               ; 00:391B
-    ldh  a,[<$FF8C]                 ; 00:391D
+    ldh  a,[<H_ButtonsPressed]      ; 00:391D
     and  $08                        ; 00:391F
     jr   nz,Code00392F              ; 00:3921
     ld   a,[$C1B8]                  ; 00:3923
     and  a                          ; 00:3926
     ret  z                          ; 00:3927
-    ldh  a,[<$FF8C]                 ; 00:3928
+    ldh  a,[<H_ButtonsPressed]      ; 00:3928
     and  $01                        ; 00:392A
     jr   nz,Code003949              ; 00:392C
     ret                             ; 00:392E
@@ -8388,7 +8451,7 @@ Code00392F:
     and  $01                        ; 00:3932
     jr   z,Code003949               ; 00:3934
     ld   a,[$C1AF]                  ; 00:3936
-    ld   [$C1CE],a                  ; 00:3939
+    ld   [W_PlayerFireFlag],a       ; 00:3939
     ld   hl,W_LevelID               ; 00:393C
     inc  [hl]                       ; 00:393F
     xor  a                          ; 00:3940
@@ -8408,16 +8471,16 @@ Code003949:
     ld   de,$0008                   ; 00:395B
     call Return0010B2               ; 00:395E
     ld   a,[$C1AF]                  ; 00:3961
-    ld   [$C1CE],a                  ; 00:3964
+    ld   [W_PlayerFireFlag],a       ; 00:3964
     ld   hl,H_GameState             ; 00:3967
     inc  [hl]                       ; 00:396A
     ret                             ; 00:396B
 
 Code00396C:
-    ldh  a,[<$FF8C]                 ; 00:396C
+    ldh  a,[<H_ButtonsPressed]      ; 00:396C
     and  $0B                        ; 00:396E
     ret  z                          ; 00:3970
-    ldh  a,[<$FF8C]                 ; 00:3971
+    ldh  a,[<H_ButtonsPressed]      ; 00:3971
     and  $09                        ; 00:3973
     jr   nz,Code00397C              ; 00:3975
     ld   a,$1D                      ; 00:3977
@@ -8465,19 +8528,21 @@ Code00399B:
     ret                             ; 00:39C1
 
 Code0039C2:
+; Game state 31 wrapper
     ld   a,:Sub116F12               ; 00:39C2
     call SetROMBank                 ; 00:39C4
     call Sub116F12                  ; 00:39C7
     ret                             ; 00:39CA
 
 Code0039CB:
+; Game state 32
     ld   a,:Sub116F7B               ; 00:39CB
     call SetROMBank                 ; 00:39CD
     call Sub116F7B                  ; 00:39D0
     ld   a,:Sub045096               ; 00:39D3
     call SetROMBank                 ; 00:39D5
     call Sub045096                  ; 00:39D8
-    ldh  a,[<$FF8C]                 ; 00:39DB
+    ldh  a,[<H_ButtonsPressed]      ; 00:39DB
     and  $01                        ; 00:39DD
     jr   nz,Code0039E2              ; 00:39DF
     ret                             ; 00:39E1

@@ -81,6 +81,11 @@ if __name__ == "__main__":
         sys.exit()
 
     print("Extracting from: " + str(sourcepath.resolve()))
-    exportbin(sourcepath,
-              "../data/",
-              "../binptrs.txt")
+    try:
+        exportbin(sourcepath,
+                  "../data/",
+                  "../binptrs.txt")
+    except Exception:
+        from traceback import print_exc
+        print_exc()
+        input()

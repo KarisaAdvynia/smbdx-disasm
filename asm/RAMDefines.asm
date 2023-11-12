@@ -59,16 +59,19 @@
 .define IE                   $FFFF
 
 ; Cartridge registers
+.define SRAMENABLE           $0000
 .define ROMBANK              $2100
 .define SRAMBANK             $4100
 
 ; HRAM
 .define H_DMATransferOAM     $FF80
-.define H_ButtonFlags        $FF8B
+.define H_ButtonsHeld        $FF8B
+.define H_ButtonsPressed     $FF8C
 .define H_PlAnimPtrLow       $FFAF
 .define H_PlAnimPtrHigh      $FFB0
 .define H_GameState          $FFB5
 .define H_GameSubstate       $FFB6
+.define H_GlobalTimer        $FFB7
 .define H_PlInitY_SubLvType  $FFC2  ; high digit is player initial Y, low digit is sublevel type
 
 ; WRAM bank 0
@@ -77,9 +80,12 @@
 .define W_LevelID            $C163
 .define W_HardFlag           $C166
 .define W_PlayerLives        $C17F
+.define W_PlayerSize         $C1C5
+.define W_PlayerFireFlag     $C1CE
 .define W_GameMode           $C1A8
 .define W_PlayerState        $C1C1
 .define W_CurrentPlayer      $C383
+.define W_RaceHeaderFlags    $C3A2
 
 ; WRAM bank 1
 .enum $D000
@@ -131,6 +137,8 @@ W_SpriteD294         dsb $0F        ; $1:D294
 W_SpriteD2A3         dsb $0F        ; $1:D2A3
 W_SpriteD2B2         dsb $0F        ; $1:D2B2
 .ende
+
+.define W_PaletteBuffer      $DF80
 
 ; WRAM bank 2-3
 .define W_SubLvSprTilemap    $D000
