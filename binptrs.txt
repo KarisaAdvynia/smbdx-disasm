@@ -184,8 +184,8 @@
 0D7989        Sublevels/SP53_Main.bin
 0D7A60        Sublevels/SP54_Main.bin
 0D7B44 0D7BB7 Sublevels/SP63_Main.bin
-0E4000        Graphics/Overworld_ChallengeMenu.bin
-0E5800 0E5AD0 Tilemaps/Data0E5800.bin
+0E4000        Graphics/Overworld_ChalMenu.bin
+0E5800 0E5AD0 Tilemaps/ChalMenu.bin
 0E5B50        Tilemaps/Overworld_W1.bin
 0E5E20        Tilemaps/Overworld_W2.bin
 0E60F0        Tilemaps/Overworld_W3.bin
@@ -401,12 +401,20 @@
 187000        Tilemaps/TitleScreen_Tiles.bin
 187240        Tilemaps/TitleScreen_Attr.bin
 187480 187750 Tilemaps/PreTitle.bin
+
 194000        Graphics/MainMenu_FileSelect.bin
 197000        Tilemaps/MainMenu.bin
 1972D0 1975A0 Tilemaps/FileSelect.bin
 
+1A4000        Graphics/ChallengeResults.bin
+1A7000        Tilemaps/ChalResultsNormal.bin
+1A72D0 1A75A0 Tilemaps/ChalResultsCastle.bin
+
 1B7750        Graphics/NonGBCError.bin
 1B7D50 1B7F90 Tilemaps/NonGBCError.bin
+1C4000        Graphics/ChalMissYoshiHatch.bin
+1C7000        Tilemaps/ChalMiss.bin
+1C72D0 1C75A0 Tilemaps/ChalYoshiHatch.bin
 
 204000        Graphics/PeachGivesMarioAward.bin
 205800        Graphics/PeachGivesLuigiAward.bin

@@ -6,7 +6,7 @@ wla-gb smbdx.asm
 wlalink smbdx-linkfile smbdx-disasm.gbc
 ```
 
-Work in progress. Produces an exact match for the 0x10 banks that contain code (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), the 6 banks that contain level data (05, 0C, 0D, 10, 12, 32) and certain graphics banks (01, 0E, 20, 26-2B), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
+Work in progress. Produces an exact match for the 0x10 banks that contain code (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), the 6 banks that contain level data (05, 0C, 0D, 10, 12, 32), and certain graphics banks (01, 0E, 1A, 20, 26-2B), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
 
 Remaining regions:
 - Bank 1D: Music. While this mixed code/data bank does assemble to an exact match, much of this bank's data seems to contain pointers, in a yet-to-be-documented format.

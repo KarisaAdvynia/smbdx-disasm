@@ -66,6 +66,7 @@ Code0B4047:
     ret                             ; 0B:4073
 
 SubL_0B4074:
+; subroutine (24-bit): Called by many sprites?
     ld   a,[W_GameMode]             ; 0B:4074
     cp   $02                        ; 0B:4077
     jp   z,Code0B40FF               ; 0B:4079
@@ -113,7 +114,7 @@ SubL_0B407C:
     ld   de,$0030                   ; 0B:40CF
     ld   a,$01                      ; 0B:40D2
     call Return0010B2               ; 0B:40D4
-    rst  $18                        ; 0B:40D7
+    rst  $18                        ; 0B:40D7  Return from 24-bit call
 
 Code0B40D8:
     ld   a,$03                      ; 0B:40D8
@@ -134,7 +135,7 @@ Code0B40D8:
     ld   a,$49                      ; 0B:40FA
     ldh  [<$FFF2],a                 ; 0B:40FC
 ReturnL_0B40FE:
-    rst  $18                        ; 0B:40FE
+    rst  $18                        ; 0B:40FE  Return from 24-bit call
 
 Code0B40FF:
     ld   a,[$D2F5]                  ; 0B:40FF
@@ -201,7 +202,7 @@ Code0B40FF:
     ld   de,$0030                   ; 0B:4174
     ld   a,$01                      ; 0B:4177
     call Return0010B2               ; 0B:4179
-    rst  $18                        ; 0B:417C
+    rst  $18                        ; 0B:417C  Return from 24-bit call
 
 Code0B417D:
     ld   hl,$C509                   ; 0B:417D
@@ -219,7 +220,7 @@ Code0B417D:
     ld   a,$49                      ; 0B:4195
     ldh  [<$FFF2],a                 ; 0B:4197
 ReturnL_0B4199:
-    rst  $18                        ; 0B:4199
+    rst  $18                        ; 0B:4199  Return from 24-bit call
 
 Data0B419A:                         ; 0B:419A
 .db $E0,$7D,$FF,$7F,$DF,$0A,$1B,$00,\
@@ -243,7 +244,7 @@ Data0B421A:                         ; 0B:421A
 
 SubL_0B421E:
     call Sub0B4222                  ; 0B:421E
-    rst  $18                        ; 0B:4221
+    rst  $18                        ; 0B:4221  Return from 24-bit call
 
 Sub0B4222:
     ld   a,[W_GameMode]             ; 0B:4222
@@ -324,16 +325,16 @@ Code0B427C:
 
 SubL_0B42A2:
     call Sub0B426B                  ; 0B:42A2
-    rst  $18                        ; 0B:42A5
+    rst  $18                        ; 0B:42A5  Return from 24-bit call
 
 SubL_0B42A6:
     call Sub0B426F                  ; 0B:42A6
-    rst  $18                        ; 0B:42A9
+    rst  $18                        ; 0B:42A9  Return from 24-bit call
 
 SubL_0B42AA:
     call Sub0B426B                  ; 0B:42AA
     call Sub0B426F                  ; 0B:42AD
-    rst  $18                        ; 0B:42B0
+    rst  $18                        ; 0B:42B0  Return from 24-bit call
 
 Sub0B42B1:
     call Sub0B426B                  ; 0B:42B1
@@ -368,7 +369,7 @@ Data0B42EC:                         ; 0B:42EC
 
 SubL_0B42F4:
     call Sub0B42F8                  ; 0B:42F4
-    rst  $18                        ; 0B:42F7
+    rst  $18                        ; 0B:42F7  Return from 24-bit call
 
 Sub0B42F8:
     ld   a,[$C1D4]                  ; 0B:42F8
@@ -413,7 +414,7 @@ Code0B4338:
 
 SubL_0B433F:
     call Sub0B4343                  ; 0B:433F
-    rst  $18                        ; 0B:4342
+    rst  $18                        ; 0B:4342  Return from 24-bit call
 
 Sub0B4343:
     ld   a,[$C1DC]                  ; 0B:4343
@@ -660,7 +661,7 @@ Code0B48A9:
     xor  a                          ; 0B:48C1
     ldh  [<H_GameSubstate],a        ; 0B:48C2
 ReturnL_0B48C4:
-    rst  $18                        ; 0B:48C4
+    rst  $18                        ; 0B:48C4  Return from 24-bit call
 
 Data0B48C5:                         ; 0B:48C5
 .db $12,$12,$12,$12,$12,$12,$12,$12,\
@@ -989,7 +990,7 @@ SubL_0B52C5:
     ld   a,[$C38D]                  ; 0B:52C5
     and  a                          ; 0B:52C8
     jp   nz,Code0B52CD              ; 0B:52C9
-    rst  $18                        ; 0B:52CC
+    rst  $18                        ; 0B:52CC  Return from 24-bit call
 
 Code0B52CD:
     ld   a,[$C3EF]                  ; 0B:52CD
@@ -1026,29 +1027,29 @@ SubL_0B5302:
     ld   hl,$C3ED                   ; 0B:5302
     ld   e,[hl]                     ; 0B:5305
     inc  hl                         ; 0B:5306
-    ld   d,[hl]                     ; 0B:5307
+    ld   d,[hl]                     ; 0B:5307  de = 16-bit value from $C3ED
     ld   a,d                        ; 0B:5308
     cp   $04                        ; 0B:5309
     jr   nz,Code0B5312              ; 0B:530B
     ld   a,e                        ; 0B:530D
     cp   $B0                        ; 0B:530E
-    jr   nc,ReturnL_0B5327          ; 0B:5310
+    jr   nc,ReturnL_0B5327          ; 0B:5310  if $C3ED reached 04B0, return
 Code0B5312:
     ld   a,$04                      ; 0B:5312
     ldh  [<SVBK],a                  ; 0B:5314
     ld   hl,$D000                   ; 0B:5316
     add  hl,de                      ; 0B:5319
     ldh  a,[<H_ButtonsHeld]         ; 0B:531A
-    ld   [hl],a                     ; 0B:531C
+    ld   [hl],a                     ; 0B:531C  store buttons to $4:D000+[$C3ED]
     xor  a                          ; 0B:531D
     ldh  [<SVBK],a                  ; 0B:531E
-    inc  de                         ; 0B:5320
-    ld   hl,$C3ED                   ; 0B:5321
-    ld   [hl],e                     ; 0B:5324
-    inc  hl                         ; 0B:5325
-    ld   [hl],d                     ; 0B:5326
+    inc  de                         ; 0B:5320 \
+    ld   hl,$C3ED                   ; 0B:5321 |
+    ld   [hl],e                     ; 0B:5324 | increment $C3ED
+    inc  hl                         ; 0B:5325 |
+    ld   [hl],d                     ; 0B:5326 /
 ReturnL_0B5327:
-    rst  $18                        ; 0B:5327
+    rst  $18                        ; 0B:5327  Return from 24-bit call
 
 SubL_0B5328:
     ld   a,[$C366]                  ; 0B:5328
@@ -1082,12 +1083,12 @@ Code0B5347:
     ld   [hl],a                     ; 0B:535B
     xor  a                          ; 0B:535C
     ldh  [<$FFA6],a                 ; 0B:535D
-    rst  $18                        ; 0B:535F
+    rst  $18                        ; 0B:535F  Return from 24-bit call
 
 Code0B5360:
     ld   a,$01                      ; 0B:5360
     ldh  [<$FFA6],a                 ; 0B:5362
-    rst  $18                        ; 0B:5364
+    rst  $18                        ; 0B:5364  Return from 24-bit call
 
 Data0B5365:                         ; 0B:5365
 .db $2B,$7F,$FF,$7F,$DF,$0A,$00,$0A
@@ -1112,7 +1113,7 @@ Code0B538A:
     ld   hl,Data0B5365              ; 0B:538A
     add  hl,bc                      ; 0B:538D
     ld   a,[hl]                     ; 0B:538E
-    ld   hl,$DFC0                   ; 0B:538F
+    ld   hl,W_PaletteBufferSpr      ; 0B:538F
     add  hl,de                      ; 0B:5392
     ld   [hl],a                     ; 0B:5393
     inc  bc                         ; 0B:5394
@@ -1124,7 +1125,7 @@ Code0B538A:
     set  1,[hl]                     ; 0B:539E
     pop  bc                         ; 0B:53A0
 ReturnL_0B53A1:
-    rst  $18                        ; 0B:53A1
+    rst  $18                        ; 0B:53A1  Return from 24-bit call
 
 Data0B53A2:                         ; 0B:53A2
 .incbin "data/Tilemaps/Data0B53A2.bin"
@@ -1176,26 +1177,26 @@ Code0B5759:
     ld   a,e                        ; 0B:5759
     ld   [$C3E7],a                  ; 0B:575A
 ReturnL_0B575D:
-    rst  $18                        ; 0B:575D
+    rst  $18                        ; 0B:575D  Return from 24-bit call
 
 Sub0B575E:
     call Sub00126D                  ; 0B:575E
     xor  a                          ; 0B:5761
     ldh  [<IE],a                    ; 0B:5762
     ldh  [<$FF93],a                 ; 0B:5764
-    ldh  [<$FFB8],a                 ; 0B:5766
-    ldh  [<$FFB9],a                 ; 0B:5768
+    ldh  [<H_CameraXLow],a          ; 0B:5766
+    ldh  [<H_CameraXHigh],a         ; 0B:5768
     ldh  [<$FFBB],a                 ; 0B:576A
     ld   [$C38E],a                  ; 0B:576C
     ld   [$C3A3],a                  ; 0B:576F
     ldh  [<H_GameSubstate],a        ; 0B:5772
     ld   [$C3A4],a                  ; 0B:5774
     ld   a,$08                      ; 0B:5777
-    ldh  [<$FFBA],a                 ; 0B:5779
+    ldh  [<H_CameraY],a             ; 0B:5779
     ld   a,$FC                      ; 0B:577B
-    ldh  [<$FFB8],a                 ; 0B:577D
+    ldh  [<H_CameraXLow],a          ; 0B:577D
     ld   a,$FF                      ; 0B:577F
-    ldh  [<$FFB9],a                 ; 0B:5781
+    ldh  [<H_CameraXHigh],a         ; 0B:5781
     call Sub00128D                  ; 0B:5783
     ld   b,$0B                      ; 0B:5786
     ld   a,:Gr_Bank17               ; 0B:5788
@@ -1212,7 +1213,7 @@ Sub0B575E:
     ld   a,[$C36C]                  ; 0B:57A2
     ld   [$C36D],a                  ; 0B:57A5
     ld   a,$0B                      ; 0B:57A8
-    rst  $10                        ; 0B:57AA
+    rst  $10                        ; 0B:57AA  24-bit call
 .dl SubL_0B42AA                     ; 0B:57AB
     ld   a,$0B                      ; 0B:57AE
     ld   b,a                        ; 0B:57B0
@@ -1244,7 +1245,7 @@ Sub0B575E:
 
 Code0B57EA:
     ld   a,$0B                      ; 0B:57EA
-    rst  $10                        ; 0B:57EC
+    rst  $10                        ; 0B:57EC  24-bit call
 .dl SubL_0B421E                     ; 0B:57ED
     call Sub0B58AD                  ; 0B:57F0
     ld   a,$0B                      ; 0B:57F3
@@ -1277,7 +1278,7 @@ Code0B57EA:
     ret                             ; 0B:5833
 
 Sub0B5834:
-    ld   hl,$DF01                   ; 0B:5834
+    ld   hl,W_TilemapUploadBuffer   ; 0B:5834
     ld   de,$0000                   ; 0B:5837
 Code0B583A:
     push hl                         ; 0B:583A
@@ -1340,7 +1341,7 @@ Code0B58A1:
     ret                             ; 0B:58AC
 
 Sub0B58AD:
-    ld   hl,$DF01                   ; 0B:58AD
+    ld   hl,W_TilemapUploadBuffer   ; 0B:58AD
     ld   de,$0000                   ; 0B:58B0
 Code0B58B3:
     push hl                         ; 0B:58B3
@@ -1458,13 +1459,15 @@ Data0B5A3F:                         ; 0B:5A3F
 Data0B5A4B:                         ; 0B:5A4B
 .db $18,$78
 
-Sub0B5A4D:
+YouVsBooMenu_Main:
 ; Game state 34
     ldh  a,[<H_GameSubstate]        ; 0B:5A4D
-    rst  $00                        ; 0B:5A4F
+    rst  $00                        ; 0B:5A4F  Execute from 16-bit pointer table
 .dw Code0B5A54                      ; 0B:5A50
 .dw Code0B5EA7                      ; 0B:5A52
+
 Code0B5A54:
+; You vs Boo menu substate 0
     ld   a,[W_GameMode]             ; 0B:5A54
     cp   $07                        ; 0B:5A57
     jr   nz,Code0B5AB2              ; 0B:5A59
@@ -1558,7 +1561,7 @@ Code0B5B09:
     cp   $07                        ; 0B:5B0C
     jr   nz,Code0B5B18              ; 0B:5B0E
     ld   a,$0B                      ; 0B:5B10
-    rst  $10                        ; 0B:5B12
+    rst  $10                        ; 0B:5B12  24-bit call
 .dl SubL_0B421E                     ; 0B:5B13
     jr   Code0B5B2D                 ; 0B:5B16
 Code0B5B18:
@@ -1566,12 +1569,12 @@ Code0B5B18:
     cp   $01                        ; 0B:5B1B
     jr   nz,Code0B5B27              ; 0B:5B1D
     ld   a,$0B                      ; 0B:5B1F
-    rst  $10                        ; 0B:5B21
+    rst  $10                        ; 0B:5B21  24-bit call
 .dl SubL_0B42A2                     ; 0B:5B22
     jr   Code0B5B2D                 ; 0B:5B25
 Code0B5B27:
     ld   a,$0B                      ; 0B:5B27
-    rst  $10                        ; 0B:5B29
+    rst  $10                        ; 0B:5B29  24-bit call
 .dl SubL_0B42A6                     ; 0B:5B2A
 Code0B5B2D:
     pop  de                         ; 0B:5B2D
@@ -1601,12 +1604,12 @@ Code0B5B54:
     cp   $00                        ; 0B:5B57
     jr   nz,Code0B5B63              ; 0B:5B59
     ld   a,$0B                      ; 0B:5B5B
-    rst  $10                        ; 0B:5B5D
+    rst  $10                        ; 0B:5B5D  24-bit call
 .dl SubL_0B42A2                     ; 0B:5B5E
     jr   Code0B5B69                 ; 0B:5B61
 Code0B5B63:
     ld   a,$0B                      ; 0B:5B63
-    rst  $10                        ; 0B:5B65
+    rst  $10                        ; 0B:5B65  24-bit call
 .dl SubL_0B42A6                     ; 0B:5B66
 Code0B5B69:
     pop  de                         ; 0B:5B69
@@ -1669,12 +1672,12 @@ Code0B5BC2:
     cp   $07                        ; 0B:5BCE
     jr   z,Code0B5BDA               ; 0B:5BD0
     ld   a,$0B                      ; 0B:5BD2
-    rst  $10                        ; 0B:5BD4
+    rst  $10                        ; 0B:5BD4  24-bit call
 .dl SubL_0B42AA                     ; 0B:5BD5
     jr   Code0B5BE0                 ; 0B:5BD8
 Code0B5BDA:
     ld   a,$0B                      ; 0B:5BDA
-    rst  $10                        ; 0B:5BDC
+    rst  $10                        ; 0B:5BDC  24-bit call
 .dl SubL_0B421E                     ; 0B:5BDD
 Code0B5BE0:
     call Sub0B5FA3                  ; 0B:5BE0
@@ -1871,7 +1874,7 @@ Sub0B5D0A:
     ld   hl,Data0B5A19              ; 0B:5D12
     add  hl,de                      ; 0B:5D15
     ld   a,[hl]                     ; 0B:5D16
-    ldh  [<$FFA7],a                 ; 0B:5D17
+    ldh  [<H_PlayerXLow],a          ; 0B:5D17
     ld   hl,Data0B5A1D              ; 0B:5D19
     add  hl,de                      ; 0B:5D1C
     ld   a,[hl]                     ; 0B:5D1D
@@ -1886,10 +1889,10 @@ Code0B5D29:
     ld   hl,Data0B5A1B              ; 0B:5D2D
     add  hl,de                      ; 0B:5D30
     ld   a,[hl]                     ; 0B:5D31
-    ldh  [<$FFA9],a                 ; 0B:5D32
+    ldh  [<H_PlayerYLow],a          ; 0B:5D32
     xor  a                          ; 0B:5D34
-    ldh  [<$FFA8],a                 ; 0B:5D35
-    ldh  [<$FFAA],a                 ; 0B:5D37
+    ldh  [<H_PlayerXHigh],a         ; 0B:5D35
+    ldh  [<H_PlayerYHigh],a         ; 0B:5D37
     ld   [$C1E3],a                  ; 0B:5D39
     ld   [$C369],a                  ; 0B:5D3C
     ld   [$C1C2],a                  ; 0B:5D3F
@@ -1898,7 +1901,7 @@ Code0B5D29:
     xor  $01                        ; 0B:5D48
     ldh  [<$FF97],a                 ; 0B:5D4A
     ld   a,$0B                      ; 0B:5D4C
-    rst  $10                        ; 0B:5D4E
+    rst  $10                        ; 0B:5D4E  24-bit call
 .dl SubL_037370                     ; 0B:5D4F
     ld   a,[W_GameMode]             ; 0B:5D52
     cp   $07                        ; 0B:5D55
@@ -1914,13 +1917,13 @@ Code0B5D61:
     ld   hl,Data0B5A1B              ; 0B:5D67
     add  hl,de                      ; 0B:5D6A
     ld   a,[hl]                     ; 0B:5D6B
-    ldh  [<$FFA9],a                 ; 0B:5D6C
+    ldh  [<H_PlayerYLow],a          ; 0B:5D6C
     ld   a,[$DA6A]                  ; 0B:5D6E
     ld   e,a                        ; 0B:5D71
     ld   hl,Data0B5A19              ; 0B:5D72
     add  hl,de                      ; 0B:5D75
     ld   a,[hl]                     ; 0B:5D76
-    ldh  [<$FFA7],a                 ; 0B:5D77
+    ldh  [<H_PlayerXLow],a          ; 0B:5D77
     ld   a,[$C1C3]                  ; 0B:5D79
     xor  $02                        ; 0B:5D7C
     ld   [$C1C3],a                  ; 0B:5D7E
@@ -1931,7 +1934,7 @@ Code0B5D61:
     ld   a,[$DA6A]                  ; 0B:5D89
     ldh  [<$FF97],a                 ; 0B:5D8C
     ld   a,$0B                      ; 0B:5D8E
-    rst  $10                        ; 0B:5D90
+    rst  $10                        ; 0B:5D90  24-bit call
 .dl SubL_037370                     ; 0B:5D91
     ret                             ; 0B:5D94
 
@@ -1948,7 +1951,7 @@ Data0B5DB1:                         ; 0B:5DB1
 
 SubL_0B5DCD:
     call Sub0B5DD1                  ; 0B:5DCD
-    rst  $18                        ; 0B:5DD0
+    rst  $18                        ; 0B:5DD0  Return from 24-bit call
 
 Sub0B5DD1:
     ldh  a,[<H_GlobalTimer]         ; 0B:5DD1
@@ -2028,16 +2031,19 @@ Data0B5E52:                         ; 0B:5E52
 Data0B5E9C:                         ; 0B:5E9C
 .db $9A,$45,$01,$06,$EC,$9A,$48,$01,\
     $01,$C0,$00
+
 Code0B5EA7:
+; You vs Boo menu substate 1
     call Sub0B5BE3                  ; 0B:5EA7
     ld   a,[$C360]                  ; 0B:5EAA
-    rst  $00                        ; 0B:5EAD
+    rst  $00                        ; 0B:5EAD  Execute from 16-bit pointer table
 .dw Code0B5EB4                      ; 0B:5EAE
 .dw Code0B5EDC                      ; 0B:5EB0
 .dw Code0B5F51                      ; 0B:5EB2
+
 Code0B5EB4:
     ld   hl,Data0B5E52              ; 0B:5EB4
-    ld   de,$DF01                   ; 0B:5EB7
+    ld   de,W_TilemapUploadBuffer   ; 0B:5EB7
     ld   bc,$0055                   ; 0B:5EBA
     call CopyBytes                  ; 0B:5EBD
     xor  a                          ; 0B:5EC0
@@ -2065,7 +2071,7 @@ Code0B5EDC:
     ld   a,$47                      ; 0B:5EE2
     ldh  [<$FFF2],a                 ; 0B:5EE4
     ld   hl,Data0B5E9C              ; 0B:5EE6
-    ld   de,$DF01                   ; 0B:5EE9
+    ld   de,W_TilemapUploadBuffer   ; 0B:5EE9
     ld   bc,$000B                   ; 0B:5EEC
     call CopyBytes                  ; 0B:5EEF
     ld   a,[$C361]                  ; 0B:5EF2
@@ -2102,7 +2108,7 @@ Code0B5F09:
     ldi  [hl],a                     ; 0B:5F2F
     ld   [hl],a                     ; 0B:5F30
     ld   a,$0B                      ; 0B:5F31
-    rst  $10                        ; 0B:5F33
+    rst  $10                        ; 0B:5F33  24-bit call
 .dl SubL_075CCE                     ; 0B:5F34
     call Sub0B5FA3                  ; 0B:5F37
     ld   a,$24                      ; 0B:5F3A
@@ -2144,7 +2150,7 @@ Data0B5F7F:                         ; 0B:5F7F
 
 SubL_0B5F9F:
     call Sub0B5FA3                  ; 0B:5F9F
-    rst  $18                        ; 0B:5FA2
+    rst  $18                        ; 0B:5FA2  Return from 24-bit call
 
 Sub0B5FA3:
     ld   a,[W_GameMode]             ; 0B:5FA3
@@ -2200,7 +2206,7 @@ SubL_0B6002:
     call Sub0B602D                  ; 0B:6002
     ld   a,[$C36C]                  ; 0B:6005
     call Sub0B601C                  ; 0B:6008
-    rst  $18                        ; 0B:600B
+    rst  $18                        ; 0B:600B  Return from 24-bit call
 
 Sub0B600C:
     call Sub0B602D                  ; 0B:600C
@@ -2294,7 +2300,7 @@ Code0B6084:
     ld   [$C17A],a                  ; 0B:60AB
     ld   [$C17B],a                  ; 0B:60AE
     ld   [$C17C],a                  ; 0B:60B1
-    ld   [$C1F2],a                  ; 0B:60B4
+    ld   [W_PlayerCoins],a          ; 0B:60B4
     ld   [W_PlayerLives],a          ; 0B:60B7
     ld   [$C180],a                  ; 0B:60BA
     ld   [$C287],a                  ; 0B:60BD
@@ -2305,11 +2311,11 @@ Code0B6084:
     ld   [$C28C],a                  ; 0B:60CC
     ld   [$C28E],a                  ; 0B:60CF
     ld   [$C16B],a                  ; 0B:60D2
-    ld   [$C283],a                  ; 0B:60D5
-    ld   [$C18E],a                  ; 0B:60D8
-    ld   [$C18F],a                  ; 0B:60DB
-    ld   [$C190],a                  ; 0B:60DE
-    ld   [$C191],a                  ; 0B:60E1
+    ld   [W_ChallengeFlag],a        ; 0B:60D5
+    ld   [W_ChalUnlockFlags],a      ; 0B:60D8
+    ld   [W_ChalUnlockFlags_x_2],a  ; 0B:60DB
+    ld   [W_ChalUnlockFlags_x_3],a  ; 0B:60DE
+    ld   [W_ChalUnlockFlags_x_4],a  ; 0B:60E1
     ld   [$C37C],a                  ; 0B:60E4
     ld   [$C380],a                  ; 0B:60E7
     ld   [W_GameMode],a             ; 0B:60EA
@@ -2330,7 +2336,7 @@ Code0B6084:
     ld   a,$44                      ; 0B:6111
     ldh  [<STAT],a                  ; 0B:6113
     xor  a                          ; 0B:6115
-    ldh  [<$FFB8],a                 ; 0B:6116
+    ldh  [<H_CameraXLow],a          ; 0B:6116
     ld   [W_SublevelID],a           ; 0B:6118
     ldh  [<$FFC3],a                 ; 0B:611B
     ld   a,$0D                      ; 0B:611D
@@ -2338,9 +2344,9 @@ Code0B6084:
     ld   a,$0A                      ; 0B:6121
     ld   [$C356],a                  ; 0B:6123
     ld   a,$70                      ; 0B:6126
-    ldh  [<$FFBA],a                 ; 0B:6128
+    ldh  [<H_CameraY],a             ; 0B:6128
     ld   a,$0B                      ; 0B:612A
-    rst  $10                        ; 0B:612C
+    rst  $10                        ; 0B:612C  24-bit call
 .dl Sub0B572E                       ; 0B:612D
     ld   hl,SRAMENABLE              ; 0B:6130
     ld   [hl],$0A                   ; 0B:6133
@@ -2378,7 +2384,7 @@ Code0B6167:
     ld   [hl],$FF                   ; 0B:616A
     call Sub0B7580                  ; 0B:616C
     ld   a,$0B                      ; 0B:616F
-    rst  $10                        ; 0B:6171
+    rst  $10                        ; 0B:6171  24-bit call
 .dl SubL_0753BB                     ; 0B:6172
     ret                             ; 0B:6175
 
@@ -2420,8 +2426,8 @@ Sub0B61AC:
     ld   [$C3A8],a                  ; 0B:61C9
     ld   [$C3A9],a                  ; 0B:61CC
     ld   [$C174],a                  ; 0B:61CF
-    ldh  [<$FFB8],a                 ; 0B:61D2
-    ldh  [<$FFB9],a                 ; 0B:61D4
+    ldh  [<H_CameraXLow],a          ; 0B:61D2
+    ldh  [<H_CameraXHigh],a         ; 0B:61D4
     ldh  [<$FFBB],a                 ; 0B:61D6
     ld   [$C177],a                  ; 0B:61D8
     ld   [$C1F8],a                  ; 0B:61DB
@@ -2430,7 +2436,7 @@ Sub0B61AC:
     ld   [$C3ED],a                  ; 0B:61E4
     ld   [$C3EE],a                  ; 0B:61E7
     ld   a,$70                      ; 0B:61EA
-    ldh  [<$FFBA],a                 ; 0B:61EC
+    ldh  [<H_CameraY],a             ; 0B:61EC
     ld   a,$90                      ; 0B:61EE
     ld   [$C178],a                  ; 0B:61F0
     xor  a                          ; 0B:61F3
@@ -2468,9 +2474,9 @@ Sub0B6204:
     ld   [$C385],a                  ; 0B:623F
     ld   [$C37C],a                  ; 0B:6242
     ld   [$C380],a                  ; 0B:6245
-    ldh  [<$FFB8],a                 ; 0B:6248
+    ldh  [<H_CameraXLow],a          ; 0B:6248
     ld   [$C367],a                  ; 0B:624A
-    ldh  [<$FFB9],a                 ; 0B:624D
+    ldh  [<H_CameraXHigh],a         ; 0B:624D
     ld   [$C368],a                  ; 0B:624F
     ldh  [<$FFBB],a                 ; 0B:6252
     ld   [$C177],a                  ; 0B:6254
@@ -2479,11 +2485,11 @@ Sub0B6204:
     ld   [$C1B3],a                  ; 0B:625D
     ld   [$C1ED],a                  ; 0B:6260
     ld   [$C1EE],a                  ; 0B:6263
-    ld   [$C283],a                  ; 0B:6266
+    ld   [W_ChallengeFlag],a        ; 0B:6266
     ld   [$C38D],a                  ; 0B:6269
     ld   [$C175],a                  ; 0B:626C
     ld   a,$70                      ; 0B:626F
-    ldh  [<$FFBA],a                 ; 0B:6271
+    ldh  [<H_CameraY],a             ; 0B:6271
     ld   [$C176],a                  ; 0B:6273
     ld   a,$90                      ; 0B:6276
     ld   [$C178],a                  ; 0B:6278
@@ -2495,7 +2501,7 @@ Sub0B6204:
     ld   hl,Ti_PauseMenuRace        ; 0B:6285
     call LoadScreenTilemapVRAM      ; 0B:6288
     ld   a,$0B                      ; 0B:628B
-    rst  $10                        ; 0B:628D
+    rst  $10                        ; 0B:628D  24-bit call
 .dl SubL_0B6002                     ; 0B:628E
     ld   a,[W_GameMode]             ; 0B:6291
     cp   $07                        ; 0B:6294
@@ -2504,13 +2510,13 @@ Sub0B6204:
     cp   $3D                        ; 0B:629A
     jr   z,Return0B62B2             ; 0B:629C
     ld   a,$0B                      ; 0B:629E
-    rst  $10                        ; 0B:62A0
+    rst  $10                        ; 0B:62A0  24-bit call
 .dl SubL_0756D9                     ; 0B:62A1
     ld   a,[$C42A]                  ; 0B:62A4
     or   $80                        ; 0B:62A7
     ld   [$C42A],a                  ; 0B:62A9
     ld   a,$0B                      ; 0B:62AC
-    rst  $10                        ; 0B:62AE
+    rst  $10                        ; 0B:62AE  24-bit call
 .dl SubL_0757EF                     ; 0B:62AF
 Return0B62B2:
     ret                             ; 0B:62B2
@@ -3179,4 +3185,4 @@ SubL_0B75A6:
     ld   hl,SRAMENABLE              ; 0B:75B2
     ld   [hl],$FF                   ; 0B:75B5
     call Sub0B7580                  ; 0B:75B7
-    rst  $18                        ; 0B:75BA
+    rst  $18                        ; 0B:75BA  Return from 24-bit call

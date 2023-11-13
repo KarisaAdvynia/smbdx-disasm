@@ -1,81 +1,89 @@
 .bank $04 slot 1
 .orga $4000
 
-Data044000:                         ; 04:4000
+Pal_SublevelBGs:                    ; 04:4000
+; Layer palette 0
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$1BEE,$0222,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
-Data044040:                         ; 04:4040
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+; Layer palette 1
 .dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$4620,\
     $0000,$1BEE,$0222,$0120,$0000,$7BF7,$4620,$0000,\
     $0F5F,$0133,$0009,$0000,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data044080:                         ; 04:4080
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+; Layer palette 2
 .dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$3A52,$0000,\
     $7D47,$3FF3,$0204,$0000,$7D47,$7FFF,$3A52,$0000,\
     $7D47,$3018,$7D47,$515F,$7D47,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180
-Data0440C0:                         ; 04:40C0
+    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180,\
+; Layer palette 3
 .dw $0000,$7FFF,$7F53,$50A6,$0000,$0F5F,$0133,$31AC,\
     $0000,$7FFF,$5AF6,$31AC,$0000,$7FFF,$5AF6,$31AC,\
     $0000,$7FFF,$00FD,$3E0F,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data044100:                         ; 04:4100
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+; Layer palette 4
 .dw $0000,$7FFF,$7E86,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$7FFF,$35AD,$4A94,$0000,$4F1F,$0133,$0000,\
     $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data044140:                         ; 04:4140
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+; Layer palette 5
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$7FFF,$35AD,$4A94,$7E2D,$4F1F,$0133,$0000,\
     $7E2D,$0173,$0173,$0173,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
-Data044180:                         ; 04:4180
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+; Layer palette 6
 .dw $0000,$7FFF,$7E86,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$1BEE,$0222,$0000,$0000,$4F1F,$0133,$0000,\
     $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data0441C0:                         ; 04:41C0
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+; Layer palette 7
 .dw $0000,$7FFF,$00D9,$31AC,$0000,$0F5F,$0133,$0000,\
     $0000,$7FFF,$5AF6,$318B,$0000,$7FFF,$5AF6,$318B,\
     $0000,$03EC,$03EC,$03EC,$0000,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
-    $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
+; Layer palette 8
+.dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$1BEE,$0222,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$3A10,$0000,\
-    $0000,$7FFF,$7F53,$50A6,$0000,$0F5F,$0133,$31AC,\
+; Layer palette 9
+.dw $0000,$7FFF,$7F53,$50A6,$0000,$0F5F,$0133,$31AC,\
     $0000,$7FFF,$5AF6,$31AC,$0000,$7FFF,$5AF6,$31AC,\
     $0000,$7FFF,$00FD,$3E0F,$0000,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4DEE,$3000,\
-    $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$3A52,$0000,\
+; Layer palette A
+.dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$3A52,$0000,\
     $7D47,$3FF3,$0204,$0000,$7D47,$7FFF,$3A52,$0000,\
     $7D47,$2C17,$7D47,$557F,$7D47,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$46A0,$2000,\
-    $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$0000,\
+; Layer palette B
+.dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$1BEE,$0222,$0000,$0000,$7BF7,$4620,$0000,\
     $0000,$0000,$0000,$0000,$0000,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$2EE6,$1CE0,\
-    $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$4620,\
+; Layer palette C
+.dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$4620,\
     $0000,$1BEE,$0222,$0120,$0000,$7BF7,$4620,$0000,\
     $035E,$0133,$0009,$0000,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4583,$0008
-Data044340:                         ; 04:4340
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4583,$0008,\
+; Layer palette D
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$0A9F,$0019,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
-Data044380:                         ; 04:4380
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+; Layer palette E
 .dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$0133,$0000,\
     $7E6F,$3018,$7D47,$515F,$7E6F,$4BF4,$0204,$0000,\
     $7D47,$7FFF,$3A52,$0000,$7D47,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180,\
-    $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$7D47,$0000,\
+; Layer palette F
+.dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$7D47,$0000,\
     $0000,$7FFF,$5F17,$35CD,$0000,$7FFF,$5F17,$35CD,\
     $0000,$7FFF,$3A52,$0000,$0000,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data044400:                         ; 04:4400
+SublevelPalIndexes0:                ; 04:4400
+; Palette indexes *4, standard
 .db $00,$04,$00,$0C,$00,$08,$00,$0C,\
     $10,$10,$18,$0C,$00,$04,$34,$0C,\
     $14,$14,$00,$0C,$18,$18,$1C,$0C,\
@@ -85,7 +93,8 @@ Data044400:                         ; 04:4400
     $34,$08,$08,$04,$00,$00,$0C,$0C,\
     $38,$0C,$20,$30,$34,$24,$20,$28,\
     $2C,$24
-Data044442:                         ; 04:4442
+SublevelPalIndexesSP:               ; 04:4442
+; Palette indexes *4, Super Players
 .db $00,$04,$00,$0C,$18,$18,$18,$0C,\
     $14,$08,$14,$0C,$00,$00,$00,$0C,\
     $14,$04,$00,$0C,$00,$08,$00,$0C,\
@@ -101,11 +110,11 @@ Data044442:                         ; 04:4442
     $04,$0C,$00,$00
 
 Sub0444A6:
-    ld   hl,Data044400              ; 04:44A6
+    ld   hl,SublevelPalIndexes0     ; 04:44A6
     ld   a,[W_SPFlag]               ; 04:44A9
     and  a                          ; 04:44AC
     jr   z,Code0444B2               ; 04:44AD
-    ld   hl,Data044442              ; 04:44AF
+    ld   hl,SublevelPalIndexesSP    ; 04:44AF
 Code0444B2:
     ld   a,[W_SublevelID]           ; 04:44B2
     ld   c,a                        ; 04:44B5
@@ -124,7 +133,7 @@ Code0444B2:
     rl   d                          ; 04:44CB
     ld   bc,$0000                   ; 04:44CD
 Code0444D0:
-    ld   hl,Data044000              ; 04:44D0
+    ld   hl,Pal_SublevelBGs         ; 04:44D0
     add  hl,de                      ; 04:44D3
     ld   a,[hl]                     ; 04:44D4
     ld   hl,W_PaletteBuffer         ; 04:44D5
@@ -139,78 +148,94 @@ Code0444D0:
     ldh  [<$FFC0],a                 ; 04:44E3
     jp   Sub0448E8                  ; 04:44E5
 
-Data0444E8:                         ; 04:44E8
+Pal_SublevelSprites:                ; 04:44E8
+; Sprite palette 0
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
+; Sprite palette 1
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
-    $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
+; Sprite palette 2
+.dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
     $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
+; Sprite palette 3
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
-    $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
+; Sprite palette 4
+.dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
+; Sprite palette 5
+.dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
+; Sprite palette 6
+.dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $7EA8,$7FFF,$0A00,$0000,$7EA8,$7FFF,$5AF6,$318B,\
+; Sprite palette 7
+.dw $7EA8,$7FFF,$0A00,$0000,$7EA8,$7FFF,$5AF6,$318B,\
     $7EA8,$72BF,$3C7C,$4620,$7EA8,$0ADF,$01AE,$02C0,\
     $7EA8,$0ADF,$01AE,$001B,$7EA8,$7B5F,$001F,$0C0A,\
     $7EA8,$7FFF,$0ADF,$001B,$7EA8,$5B7F,$0133,$4620,\
-    $7E2D,$1BEE,$0222,$0000,$7F2B,$4F1F,$0133,$0000,\
+; Sprite palette 8
+.dw $7E2D,$1BEE,$0222,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
+; Sprite palette 9
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
-    $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
+; Sprite palette A
+.dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
     $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
+; Sprite palette B
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
+; Sprite palette C
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
-    $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
+; Sprite palette D
+.dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
     $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
-    $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
+; Sprite palette E
+.dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
     $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
-    $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
+; Sprite palette F
+.dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
     $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 
 Sub0448E8:
-    ld   hl,Data044400              ; 04:48E8
+    ld   hl,SublevelPalIndexes0     ; 04:48E8
     ld   a,[W_SPFlag]               ; 04:48EB
     and  a                          ; 04:48EE
     jr   z,Code0448F4               ; 04:48EF
-    ld   hl,Data044442              ; 04:48F1
+    ld   hl,SublevelPalIndexesSP    ; 04:48F1
 Code0448F4:
     ld   a,[W_SublevelID]           ; 04:48F4
     ld   c,a                        ; 04:48F7
@@ -229,10 +254,10 @@ Code0448F4:
     rl   d                          ; 04:490D
     ld   bc,$0000                   ; 04:490F
 Code044912:
-    ld   hl,Data0444E8              ; 04:4912
+    ld   hl,Pal_SublevelSprites     ; 04:4912
     add  hl,de                      ; 04:4915
     ld   a,[hl]                     ; 04:4916
-    ld   hl,$DFC0                   ; 04:4917
+    ld   hl,W_PaletteBufferSpr      ; 04:4917
     add  hl,bc                      ; 04:491A
     ld   [hl],a                     ; 04:491B
     inc  e                          ; 04:491C
@@ -241,7 +266,7 @@ Code044912:
     cp   $40                        ; 04:491F
     jr   nz,Code044912              ; 04:4921
     ld   a,$04                      ; 04:4923
-    rst  $10                        ; 04:4925
+    rst  $10                        ; 04:4925  24-bit call
 .dl SubL_0B421E                     ; 04:4926
     ret                             ; 04:4929
 
@@ -261,11 +286,13 @@ Code044931:
 SublevelTypeMusicIDs:               ; 04:4939
 .db $62,$63,$66,$62,$68,$62
 LevelTimers0:                       ; 04:493F
+; Original/Challenge timers
 .dw 400, 400, 300, 300, 400, 400, 300, 300,\
     400, 300, 300, 300, 400, 400, 300, 400,\
     300, 400, 300, 300, 400, 400, 300, 300,\
     400, 400, 300, 400, 300, 400, 300, 400,
 LevelTimersSP:                      ; 04:497F
+; Super Players timers
 .dw 400, 400, 300, 300, 400, 400, 300, 300,\
     400, 300, 300, 300, 400, 400, 300, 400,\
     300, 400, 300, 300, 400, 400, 300, 300,\
@@ -276,111 +303,115 @@ LevelTimersSP:                      ; 04:497F
 
 Sub0449E7:
     ld   a,[W_SublevelID]           ; 04:49E7
-    cp   $34                        ; 04:49EA
-    jr   z,Code044A4C               ; 04:49EC
-    cp   $62                        ; 04:49EE
-    jr   z,Code044A4C               ; 04:49F0
-    call Sub044A64                  ; 04:49F2
+    cp   $34                        ; 04:49EA  34: Original pipe intro
+    jr   z,SetPipeIntroMusicAndTimer; 04:49EC
+    cp   $62                        ; 04:49EE  62: SP pipe intro
+    jr   z,SetPipeIntroMusicAndTimer; 04:49F0
+    call SetLevelTimer0             ; 04:49F2
 
-Sub0449F5:
+SetSublevelMusic:
+; subroutine: Set sublevel music (Original/Challenge/Super Players)
     ld   a,[W_SPFlag]               ; 04:49F5
     and  a                          ; 04:49F8
-    jr   z,Code044A14               ; 04:49F9
-    ld   a,[W_SublevelID]           ; 04:49FB
-    cp   $39                        ; 04:49FE
-    jr   z,Code044A3A               ; 04:4A00
-    cp   $3C                        ; 04:4A02
-    jr   z,Code044A3A               ; 04:4A04
-    cp   $3F                        ; 04:4A06
-    jr   z,Code044A3A               ; 04:4A08
-    cp   $42                        ; 04:4A0A
-    jr   z,Code044A3A               ; 04:4A0C
-    cp   $50                        ; 04:4A0E
-    jr   z,Code044A3A               ; 04:4A10
-    jr   Code044A27                 ; 04:4A12
-Code044A14:
-    ld   a,[W_SublevelID]           ; 04:4A14
-    cp   $26                        ; 04:4A17
-    jr   z,Code044A3A               ; 04:4A19
-    cp   $27                        ; 04:4A1B
-    jr   z,Code044A3A               ; 04:4A1D
-    cp   $2A                        ; 04:4A1F
-    jr   z,Code044A3A               ; 04:4A21
-    cp   $2D                        ; 04:4A23
-    jr   z,Code044A3A               ; 04:4A25
-Code044A27:
+    jr   z,@NotSP                   ; 04:49F9
+    ld   a,[W_SublevelID]           ; 04:49FB \ runs if Super Players mode
+    cp   $39                        ; 04:49FE |
+    jr   z,@SetCloudBonusMusic      ; 04:4A00 |
+    cp   $3C                        ; 04:4A02 |
+    jr   z,@SetCloudBonusMusic      ; 04:4A04 |
+    cp   $3F                        ; 04:4A06 | music override for cloud bonuses
+    jr   z,@SetCloudBonusMusic      ; 04:4A08 |
+    cp   $42                        ; 04:4A0A |
+    jr   z,@SetCloudBonusMusic      ; 04:4A0C |
+    cp   $50                        ; 04:4A0E |
+    jr   z,@SetCloudBonusMusic      ; 04:4A10 |
+    jr   @Code044A27                ; 04:4A12 /
+@NotSP:
+    ld   a,[W_SublevelID]           ; 04:4A14 \ runs if not Super Players mode
+    cp   $26                        ; 04:4A17 |
+    jr   z,@SetCloudBonusMusic      ; 04:4A19 |
+    cp   $27                        ; 04:4A1B |
+    jr   z,@SetCloudBonusMusic      ; 04:4A1D | music override for cloud bonuses
+    cp   $2A                        ; 04:4A1F |
+    jr   z,@SetCloudBonusMusic      ; 04:4A21 |
+    cp   $2D                        ; 04:4A23 |
+    jr   z,@SetCloudBonusMusic      ; 04:4A25 /
+@Code044A27:
     ldh  a,[<H_PlInitY_SubLvType]   ; 04:4A27
     and  $0F                        ; 04:4A29
-    ld   e,a                        ; 04:4A2B
-    ld   d,$00                      ; 04:4A2C
-    ld   hl,SublevelTypeMusicIDs    ; 04:4A2E
-    add  hl,de                      ; 04:4A31
-    ld   a,[hl]                     ; 04:4A32
+    ld   e,a                        ; 04:4A2B \
+    ld   d,$00                      ; 04:4A2C |
+    ld   hl,SublevelTypeMusicIDs    ; 04:4A2E | load music ID depending on sublevel type
+    add  hl,de                      ; 04:4A31 |
+    ld   a,[hl]                     ; 04:4A32 /
     ld   [$DE68],a                  ; 04:4A33
     ld   [$C36F],a                  ; 04:4A36
     ret                             ; 04:4A39
 
-Code044A3A:
-    ld   a,$65                      ; 04:4A3A
+@SetCloudBonusMusic:
+    ld   a,$65                      ; 04:4A3A  65: Star/Cloud bonus
     ld   [$DE68],a                  ; 04:4A3C
     ld   [$C36F],a                  ; 04:4A3F
     ret                             ; 04:4A42
 
 Unused044A43:
-    ld   a,$68                      ; 04:4A43
+    ld   a,$68                      ; 04:4A43  68: Castle level
     ld   [$DE68],a                  ; 04:4A45
     ld   [$C36F],a                  ; 04:4A48
     ret                             ; 04:4A4B
 
-Code044A4C:
+SetPipeIntroMusicAndTimer:
+; set starting timer to main level's timer, then set music to pipe intro
     ld   a,[W_LevelID]              ; 04:4A4C
-    call Sub044A64                  ; 04:4A4F
-    ld   a,$72                      ; 04:4A52
+    call SetLevelTimer0             ; 04:4A4F
+    ld   a,$72                      ; 04:4A52  72: Pipe intro
     ld   [$DE68],a                  ; 04:4A54
     ld   [$C36F],a                  ; 04:4A57
     ret                             ; 04:4A5A
 
 Unused044A5B:
-    ld   a,$7E                      ; 04:4A5B
+    ld   a,$7E                      ; 04:4A5B  7E: Race level
     ld   [$DE68],a                  ; 04:4A5D
     ld   [$C36F],a                  ; 04:4A60
     ret                             ; 04:4A63
 
-Sub044A64:
+SetLevelTimer0:
+; subroutine: Set starting timer (Original/Challenge/Super Players)
     ld   e,a                        ; 04:4A64
     sla  e                          ; 04:4A65
     ld   d,$00                      ; 04:4A67
     ld   hl,LevelTimers0            ; 04:4A69
     ld   a,[W_SPFlag]               ; 04:4A6C
     and  a                          ; 04:4A6F
-    jr   z,Code044A75               ; 04:4A70
+    jr   z,@Code044A75              ; 04:4A70
     ld   hl,LevelTimersSP           ; 04:4A72
-Code044A75:
+@Code044A75:
     add  hl,de                      ; 04:4A75
     ldi  a,[hl]                     ; 04:4A76
-    ld   [$C17D],a                  ; 04:4A77
+    ld   [W_LevelTimerLow],a        ; 04:4A77
     ld   a,[hl]                     ; 04:4A7A
-    ld   [$C17E],a                  ; 04:4A7B
+    ld   [W_LevelTimerHigh],a       ; 04:4A7B
     ld   a,$00                      ; 04:4A7E
     ld   [$DED0],a                  ; 04:4A80
     ret                             ; 04:4A83
 
-RaceLevelTimers:                    ; 04:4A84
+LevelTimersRace:                    ; 04:4A84
 .dw 280, 300, 300, 250, 300, 300, 300, 250
 
-Sub044A94:
+SetLevelTimerRace:
+; subroutine: Set starting timer (race levels)
     ld   a,[W_SublevelID]           ; 04:4A94
     sub  $3A                        ; 04:4A97
-    and  $07                        ; 04:4A99
+    and  $07                        ; 04:4A99  index with (sublevelID-3A) & 7
     sla  a                          ; 04:4A9B
     ld   e,a                        ; 04:4A9D
     ld   d,$00                      ; 04:4A9E
-    ld   hl,RaceLevelTimers         ; 04:4AA0
+    ld   hl,LevelTimersRace         ; 04:4AA0
     add  hl,de                      ; 04:4AA3
     ldi  a,[hl]                     ; 04:4AA4
-    ld   [$C17D],a                  ; 04:4AA5
+    ld   [W_LevelTimerLow],a        ; 04:4AA5
     ld   a,[hl]                     ; 04:4AA8
-    ld   [$C17E],a                  ; 04:4AA9
+    ld   [W_LevelTimerHigh],a       ; 04:4AA9
     ld   a,$00                      ; 04:4AAC
     ld   [$DED0],a                  ; 04:4AAE
     ret                             ; 04:4AB1
@@ -398,7 +429,7 @@ Sub044AC3:
 Sub044AC7:
     ld   a,[$C168]                  ; 04:4AC7
     dec  a                          ; 04:4ACA
-    rst  $00                        ; 04:4ACB
+    rst  $00                        ; 04:4ACB  Execute from 16-bit pointer table
 .dw Code044AD6                      ; 04:4ACC
 .dw Code044AE8                      ; 04:4ACE
 .dw Code044B00                      ; 04:4AD0
@@ -498,7 +529,7 @@ Code044B71:
     ld   hl,Data044AB3              ; 04:4B71
     add  hl,de                      ; 04:4B74
     ld   a,[hl]                     ; 04:4B75
-    ld   hl,$DF01                   ; 04:4B76
+    ld   hl,W_TilemapUploadBuffer   ; 04:4B76
     add  hl,bc                      ; 04:4B79
     ld   [hl],a                     ; 04:4B7A
     inc  e                          ; 04:4B7B
@@ -582,7 +613,7 @@ PauseMain:
     ld   a,[$C168]                  ; 04:4BFA
     and  a                          ; 04:4BFD
     jr   z,Return044C0F             ; 04:4BFE
-    ld   a,[$C283]                  ; 04:4C00
+    ld   a,[W_ChallengeFlag]        ; 04:4C00
     cp   $01                        ; 04:4C03
     jr   nz,Code044C0C              ; 04:4C05
     call Sub044FB5                  ; 04:4C07
@@ -594,7 +625,7 @@ Return044C0F:
 
 Sub044C10:
     ld   a,[$C168]                  ; 04:4C10
-    rst  $00                        ; 04:4C13
+    rst  $00                        ; 04:4C13  Execute from 16-bit pointer table
 .dw Code044C48                      ; 04:4C14
 .dw Code044E4F                      ; 04:4C16
 .dw Code044CB3                      ; 04:4C18
@@ -621,7 +652,7 @@ Code044C4E:
     ld   hl,Data044C2A              ; 04:4C4E
     add  hl,de                      ; 04:4C51
     ld   a,[hl]                     ; 04:4C52
-    ld   hl,$DF01                   ; 04:4C53
+    ld   hl,W_TilemapUploadBuffer   ; 04:4C53
     add  hl,bc                      ; 04:4C56
     ld   [hl],a                     ; 04:4C57
     inc  e                          ; 04:4C58
@@ -657,7 +688,7 @@ Code044C6A:
     ldh  [<$FFF3],a                 ; 04:4C8E
     ld   hl,$C168                   ; 04:4C90
     inc  [hl]                       ; 04:4C93
-    ld   a,[$C283]                  ; 04:4C94
+    ld   a,[W_ChallengeFlag]        ; 04:4C94
     cp   $01                        ; 04:4C97
     jr   z,Code044C9C               ; 04:4C99
     inc  [hl]                       ; 04:4C9B
@@ -667,10 +698,10 @@ Code044C9C:
     xor  a                          ; 04:4CA2
     ld   [W_PlayerFireFlag],a       ; 04:4CA3
     ld   a,$04                      ; 04:4CA6
-    rst  $10                        ; 04:4CA8
+    rst  $10                        ; 04:4CA8  24-bit call
 .dl SubL_0B421E                     ; 04:4CA9
     ld   a,$04                      ; 04:4CAC
-    rst  $10                        ; 04:4CAE
+    rst  $10                        ; 04:4CAE  24-bit call
 .dl SubL_0B421E                     ; 04:4CAF
     ret                             ; 04:4CB2
 
@@ -681,7 +712,7 @@ Code044CB3:
     jr   c,Code044CD5               ; 04:4CBA
     ld   a,$00                      ; 04:4CBC
     ld   [$C322],a                  ; 04:4CBE
-    ld   a,[$C283]                  ; 04:4CC1
+    ld   a,[W_ChallengeFlag]        ; 04:4CC1
     cp   $01                        ; 04:4CC4
     jr   nz,Code044CCF              ; 04:4CC6
     ld   a,$08                      ; 04:4CC8
@@ -727,12 +758,12 @@ Code044D0C:
     ld   a,[$C1AF]                  ; 04:4D0C
     ld   [W_PlayerFireFlag],a       ; 04:4D0F
     ld   a,$04                      ; 04:4D12
-    rst  $10                        ; 04:4D14
+    rst  $10                        ; 04:4D14  24-bit call
 .dl SubL_075584                     ; 04:4D15
     xor  a                          ; 04:4D18
     ld   [W_PlayerFireFlag],a       ; 04:4D19
     ld   a,$04                      ; 04:4D1C
-    rst  $10                        ; 04:4D1E
+    rst  $10                        ; 04:4D1E  24-bit call
 .dl SubL_0757EF                     ; 04:4D1F
     ld   a,$0A                      ; 04:4D22
     ld   [$C168],a                  ; 04:4D24
@@ -740,7 +771,7 @@ Code044D0C:
     ld   [$C326],a                  ; 04:4D29
     ld   a,$44                      ; 04:4D2C
     ldh  [<$FFF2],a                 ; 04:4D2E
-    ld   hl,$DF01                   ; 04:4D30
+    ld   hl,W_TilemapUploadBuffer   ; 04:4D30
     ld   [hl],$9D                   ; 04:4D33
     inc  hl                         ; 04:4D35
     ld   [hl],$86                   ; 04:4D36
@@ -758,7 +789,7 @@ Code044D45:
     ld   a,$24                      ; 04:4D45
     ldh  [<$FFF3],a                 ; 04:4D47
     ld   a,$04                      ; 04:4D49
-    rst  $10                        ; 04:4D4B
+    rst  $10                        ; 04:4D4B  24-bit call
 .dl SubL_0757EF                     ; 04:4D4C
     ld   a,$09                      ; 04:4D4F
     ld   [$C168],a                  ; 04:4D51
@@ -801,7 +832,7 @@ Code044D94:
     ld   hl,Data044C38              ; 04:4D94
     add  hl,de                      ; 04:4D97
     ld   a,[hl]                     ; 04:4D98
-    ld   hl,$DF01                   ; 04:4D99
+    ld   hl,W_TilemapUploadBuffer   ; 04:4D99
     add  hl,bc                      ; 04:4D9C
     ld   [hl],a                     ; 04:4D9D
     inc  e                          ; 04:4D9E
@@ -838,7 +869,7 @@ Code044DC6:
     ld   [$C322],a                  ; 04:4DD2
     ld   [$C168],a                  ; 04:4DD5
     ldh  [<H_GameSubstate],a        ; 04:4DD8
-    ld   a,[$C283]                  ; 04:4DDA
+    ld   a,[W_ChallengeFlag]        ; 04:4DDA
     and  a                          ; 04:4DDD
     jr   nz,Code044DEE              ; 04:4DDE
     ld   a,[W_SPFlag]               ; 04:4DE0
@@ -880,7 +911,7 @@ Data044E10:                         ; 04:4E10
     $04,$0E,$5D,$0E,$6A,$0E,$5C,$06,\
     $F4,$9D,$C7,$43,$06,$F4,$00
 Code044E4F:
-    ld   hl,$DF01                   ; 04:4E4F
+    ld   hl,W_TilemapUploadBuffer   ; 04:4E4F
     ld   de,Data044E10              ; 04:4E52
     ld   b,$3F                      ; 04:4E55
 Code044E57:
@@ -938,7 +969,7 @@ Code044EAA:
     ld   hl,Data044C38              ; 04:4EAA
     add  hl,de                      ; 04:4EAD
     ld   a,[hl]                     ; 04:4EAE
-    ld   hl,$DF01                   ; 04:4EAF
+    ld   hl,W_TilemapUploadBuffer   ; 04:4EAF
     add  hl,bc                      ; 04:4EB2
     ld   [hl],a                     ; 04:4EB3
     inc  e                          ; 04:4EB4
@@ -991,7 +1022,7 @@ Code044EF8:
     ld   [W_PlayerFireFlag],a       ; 04:4F0B
 Code044F0E:
     ld   a,$04                      ; 04:4F0E
-    rst  $10                        ; 04:4F10
+    rst  $10                        ; 04:4F10  24-bit call
 .dl SubL_0B421E                     ; 04:4F11
     ld   a,$00                      ; 04:4F14
     ld   [$C168],a                  ; 04:4F16
@@ -1024,7 +1055,7 @@ Code044F6D:
     ld   hl,Data044F2F              ; 04:4F6D
     add  hl,de                      ; 04:4F70
     ld   a,[hl]                     ; 04:4F71
-    ld   hl,$DF01                   ; 04:4F72
+    ld   hl,W_TilemapUploadBuffer   ; 04:4F72
     add  hl,bc                      ; 04:4F75
     ld   [hl],a                     ; 04:4F76
     inc  c                          ; 04:4F77
@@ -1096,7 +1127,7 @@ Code044FDF:
     ld   hl,$C168                   ; 04:4FDF
     inc  [hl]                       ; 04:4FE2
     ld   a,$04                      ; 04:4FE3
-    rst  $10                        ; 04:4FE5
+    rst  $10                        ; 04:4FE5  24-bit call
 .dl SubL_075584                     ; 04:4FE6
     ret                             ; 04:4FE9
 
@@ -1327,7 +1358,7 @@ Code0451A2:
 
 SubL_0451A4:
     call Sub0451B8                  ; 04:51A4
-    rst  $18                        ; 04:51A7
+    rst  $18                        ; 04:51A7  Return from 24-bit call
 
 SubL_0451A8:
     ld   a,[$C1AE]                  ; 04:51A8
@@ -1337,7 +1368,7 @@ SubL_0451A8:
     add  hl,bc                      ; 04:51B1
     ld   d,$01                      ; 04:51B2
     call Sub0451BD                  ; 04:51B4
-    rst  $18                        ; 04:51B7
+    rst  $18                        ; 04:51B7  Return from 24-bit call
 
 Sub0451B8:
     ld   hl,W_PaletteBuffer         ; 04:51B8
@@ -1414,7 +1445,7 @@ Code045200:
 
 SubL_045221:
     call Sub045242                  ; 04:5221
-    rst  $18                        ; 04:5224
+    rst  $18                        ; 04:5224  Return from 24-bit call
 
 SubL_045225:
     ld   a,[$C1AE]                  ; 04:5225
@@ -1425,14 +1456,14 @@ SubL_045225:
     ld   a,$01                      ; 04:522F
     ldh  [<$FF9A],a                 ; 04:5231
     call Sub045249                  ; 04:5233
-    rst  $18                        ; 04:5236
+    rst  $18                        ; 04:5236  Return from 24-bit call
 
 SubL_045237:
-    ld   hl,$DFC0                   ; 04:5237
+    ld   hl,W_PaletteBufferSpr      ; 04:5237
     ld   a,$0C                      ; 04:523A
     ldh  [<$FF9A],a                 ; 04:523C
     call Sub045249                  ; 04:523E
-    rst  $18                        ; 04:5241
+    rst  $18                        ; 04:5241  Return from 24-bit call
 
 Sub045242:
     ld   hl,W_PaletteBuffer         ; 04:5242
@@ -1985,10 +2016,10 @@ Data046722:                         ; 04:6722
     $3C,$3D,$3E,$3F,$00,$00,$00,$00,\
     $00
 
-CreditsMain:
+Credits_Main:
 ; Game state 39
     ldh  a,[<H_GameSubstate]        ; 04:681B
-    rst  $00                        ; 04:681D
+    rst  $00                        ; 04:681D  Execute from 16-bit pointer table
 .dw Code04682E                      ; 04:681E
 .dw Code04686E                      ; 04:6820
 .dw Code046897                      ; 04:6822
@@ -1997,7 +2028,9 @@ CreditsMain:
 .dw Code04694A                      ; 04:6828
 .dw Code04695F                      ; 04:682A
 .dw Code0469AF                      ; 04:682C
+
 Code04682E:
+; Credits substate 0
     call Sub00126D                  ; 04:682E
     xor  a                          ; 04:6831
     ldh  [<IE],a                    ; 04:6832
@@ -2028,12 +2061,13 @@ Code04682E:
     ret                             ; 04:686D
 
 Code04686E:
+; Credits substate 1
     ld   a,[$C1AD]                  ; 04:686E
     dec  a                          ; 04:6871
     ld   [$C1AD],a                  ; 04:6872
     jr   z,Code04687E               ; 04:6875
     ld   a,$04                      ; 04:6877
-    rst  $10                        ; 04:6879
+    rst  $10                        ; 04:6879  24-bit call
 .dl SubL_045221                     ; 04:687A
     ret                             ; 04:687D
 
@@ -2051,6 +2085,7 @@ Code04687E:
     ret                             ; 04:6896
 
 Code046897:
+; Credits substate 2
     ld   a,[$C3FB]                  ; 04:6897
     ld   b,a                        ; 04:689A
     and  a                          ; 04:689B
@@ -2077,21 +2112,22 @@ Return0468BF:
     ret                             ; 04:68BF
 
 Code0468C0:
+; Credits substate 3
     ld   a,$04                      ; 04:68C0
-    rst  $10                        ; 04:68C2
+    rst  $10                        ; 04:68C2  24-bit call
 .dl SubL_0451A4                     ; 04:68C3
     ld   a,[$C1AD]                  ; 04:68C6
     dec  a                          ; 04:68C9
     ld   [$C1AD],a                  ; 04:68CA
     jr   z,Code0468D0               ; 04:68CD
     ret                             ; 04:68CF
-
 Code0468D0:
     ld   hl,H_GameSubstate          ; 04:68D0
     inc  [hl]                       ; 04:68D3
     ret                             ; 04:68D4
 
 Code0468D5:
+; Credits substate 4
     call Sub00126D                  ; 04:68D5
     xor  a                          ; 04:68D8
     ldh  [<IE],a                    ; 04:68D9
@@ -2152,12 +2188,13 @@ Code0468F9:
     ret                             ; 04:6949
 
 Code04694A:
+; Credits substate 5
     ld   a,[$C1AD]                  ; 04:694A
     dec  a                          ; 04:694D
     ld   [$C1AD],a                  ; 04:694E
     jr   z,Code04695A               ; 04:6951
     ld   a,$04                      ; 04:6953
-    rst  $10                        ; 04:6955
+    rst  $10                        ; 04:6955  24-bit call
 .dl SubL_045221                     ; 04:6956
     ret                             ; 04:6959
 
@@ -2167,6 +2204,7 @@ Code04695A:
     ret                             ; 04:695E
 
 Code04695F:
+; Credits substate 6
     ldh  a,[<H_GlobalTimer]         ; 04:695F
     and  $01                        ; 04:6961
     ret  nz                         ; 04:6963
@@ -2192,7 +2230,6 @@ Code04695F:
     ld   [$C3F5],a                  ; 04:698D
 Return046990:
     ret                             ; 04:6990
-
 Code046991:
     ld   a,$FF                      ; 04:6991
     ld   [$C3F4],a                  ; 04:6993
@@ -2209,6 +2246,7 @@ Code046991:
     ret                             ; 04:69AE
 
 Code0469AF:
+; Credits substate 7
     xor  a                          ; 04:69AF
     ld   [$C168],a                  ; 04:69B0
     ldh  [<H_GameSubstate],a        ; 04:69B3

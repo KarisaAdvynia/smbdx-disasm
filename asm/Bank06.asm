@@ -68,10 +68,10 @@ Code064050:
     push hl                         ; 06:4069
     ld   hl,W_SpriteXLow            ; 06:406A
     add  hl,de                      ; 06:406D
-    ldh  a,[<$FFA7]                 ; 06:406E
+    ldh  a,[<H_PlayerXLow]          ; 06:406E
     sub  [hl]                       ; 06:4070
     pop  hl                         ; 06:4071
-    ldh  a,[<$FFA8]                 ; 06:4072
+    ldh  a,[<H_PlayerXHigh]         ; 06:4072
     sbc  [hl]                       ; 06:4074
     bit  7,a                        ; 06:4075
     jr   nz,Code06408F              ; 06:4077
@@ -146,12 +146,12 @@ BitTable8Asc_0640E1:                ; 06:40E1
 
 Sub0640E9:
     ld   a,$05                      ; 06:40E9
-    call Sub0026BE                  ; 06:40EB
+    call LoadSpriteAnySlot          ; 06:40EB
     jp   c,Return064196             ; 06:40EE
-    ldh  a,[<$FFB8]                 ; 06:40F1
+    ldh  a,[<H_CameraXLow]          ; 06:40F1
     add  $A0                        ; 06:40F3
     ldh  [<$FF97],a                 ; 06:40F5
-    ldh  a,[<$FFB9]                 ; 06:40F7
+    ldh  a,[<H_CameraXHigh]         ; 06:40F7
     adc  $00                        ; 06:40F9
     ld   hl,W_SpriteXHigh           ; 06:40FB
     add  hl,de                      ; 06:40FE
@@ -268,14 +268,14 @@ Sub0641AC:
     ld   hl,W_SpriteSubstate        ; 06:41AC
     add  hl,bc                      ; 06:41AF
     ld   a,[hl]                     ; 06:41B0
-    rst  $00                        ; 06:41B1
+    rst  $00                        ; 06:41B1  Execute from 16-bit pointer table
 .dw Code0641BC                      ; 06:41B2
 
 Sub0641B4:
     ld   hl,W_SpriteSubstate        ; 06:41B4
     add  hl,bc                      ; 06:41B7
     ld   a,[hl]                     ; 06:41B8
-    rst  $00                        ; 06:41B9
+    rst  $00                        ; 06:41B9  Execute from 16-bit pointer table
 .dw Code06422A                      ; 06:41BA
 Code0641BC:
     call Sub002920                  ; 06:41BC
@@ -286,7 +286,7 @@ Code0641BC:
     srl  a                          ; 06:41C9
     jr   nc,Code0641D3              ; 06:41CB
     ld   a,$06                      ; 06:41CD
-    rst  $10                        ; 06:41CF
+    rst  $10                        ; 06:41CF  24-bit call
 .dl SubL_0B4074                     ; 06:41D0
 Code0641D3:
     ld   hl,$D096                   ; 06:41D3
@@ -363,7 +363,7 @@ Code06422A:
     add  hl,de                      ; 06:424E
     ld   de,Data06421A              ; 06:424F
     add  hl,de                      ; 06:4252
-    call Sub0027BD                  ; 06:4253
+    call Disp16x16Sprite            ; 06:4253
     ret                             ; 06:4256
 
     ret                             ; 06:4257
@@ -414,7 +414,7 @@ Sub06429B:
     ld   hl,W_SpriteSubstate        ; 06:429B
     add  hl,bc                      ; 06:429E
     ld   a,[hl]                     ; 06:429F
-    rst  $00                        ; 06:42A0
+    rst  $00                        ; 06:42A0  Execute from 16-bit pointer table
 .dw Code0642AF                      ; 06:42A1
 .dw Code0642E4                      ; 06:42A3
 
@@ -422,7 +422,7 @@ Sub0642A5:
     ld   hl,W_SpriteSubstate        ; 06:42A5
     add  hl,bc                      ; 06:42A8
     ld   a,[hl]                     ; 06:42A9
-    rst  $00                        ; 06:42AA
+    rst  $00                        ; 06:42AA  Execute from 16-bit pointer table
 .dw Code064324                      ; 06:42AB
 .dw Return06434B                    ; 06:42AD
 Code0642AF:
@@ -434,7 +434,7 @@ Code0642AF:
     srl  a                          ; 06:42BC
     jr   nc,Code0642C6              ; 06:42BE
     ld   a,$06                      ; 06:42C0
-    rst  $10                        ; 06:42C2
+    rst  $10                        ; 06:42C2  24-bit call
 .dl SubL_0B4074                     ; 06:42C3
 Code0642C6:
     ld   hl,W_SpriteYSpeed          ; 06:42C6
@@ -510,7 +510,7 @@ Code064339:
     add  hl,de                      ; 06:4342
     ld   de,Data064314              ; 06:4343
     add  hl,de                      ; 06:4346
-    call Sub0027BD                  ; 06:4347
+    call Disp16x16Sprite            ; 06:4347
     ret                             ; 06:434A
 
 Return06434B:
@@ -566,7 +566,7 @@ Code064377:
     srl  a                          ; 06:439E
     jr   nc,Code0643BC              ; 06:43A0
     ld   a,$06                      ; 06:43A2
-    rst  $10                        ; 06:43A4
+    rst  $10                        ; 06:43A4  24-bit call
 .dl SubL_0B4074                     ; 06:43A5
     jr   Code0643BC                 ; 06:43A8
 Code0643AA:
@@ -603,7 +603,7 @@ Sub0643D7:
     ld   hl,W_SpriteSubstate        ; 06:43D7
     add  hl,bc                      ; 06:43DA
     ld   a,[hl]                     ; 06:43DB
-    rst  $00                        ; 06:43DC
+    rst  $00                        ; 06:43DC  Execute from 16-bit pointer table
 .dw Code0643E7                      ; 06:43DD
 .dw Code0643FD                      ; 06:43DF
 .dw Code064422                      ; 06:43E1
@@ -710,7 +710,7 @@ Sub064475:
     and  a                          ; 06:447A
     jr   z,Return0644B5             ; 06:447B
     ld   hl,Data064471              ; 06:447D
-    call Sub0027BD                  ; 06:4480
+    call Disp16x16Sprite            ; 06:4480
     ld   hl,W_SpriteYLow            ; 06:4483
     add  hl,bc                      ; 06:4486
     ld   a,[hl]                     ; 06:4487
@@ -739,7 +739,7 @@ Sub064475:
 Code0644AB:
     ld   hl,Data064461              ; 06:44AB
     add  hl,de                      ; 06:44AE
-    call Sub0027BD                  ; 06:44AF
+    call Disp16x16Sprite            ; 06:44AF
     pop  af                         ; 06:44B2
     pop  hl                         ; 06:44B3
     ld   [hl],a                     ; 06:44B4
@@ -749,7 +749,7 @@ Return0644B5:
 Data0644B6:                         ; 06:44B6
 .dsb $10, $00
 Code0644C6:
-    ld   a,[$C283]                  ; 06:44C6
+    ld   a,[W_ChallengeFlag]        ; 06:44C6
     and  a                          ; 06:44C9
     jr   nz,Code06451F              ; 06:44CA
     ld   a,[W_LevelID]              ; 06:44CC
@@ -835,7 +835,7 @@ Data064559:                         ; 06:4559
 .db $86,$00,$86,$00,$86,$00,$86,$00,\
     $8C,$01,$8C,$01
 Code064565:
-    ld   a,[$C283]                  ; 06:4565
+    ld   a,[W_ChallengeFlag]        ; 06:4565
     and  a                          ; 06:4568
     jr   nz,Code0645BE              ; 06:4569
     ld   a,[W_LevelID]              ; 06:456B
@@ -857,7 +857,7 @@ Code06458E:
     push de                         ; 06:458E
     ld   hl,Data064541              ; 06:458F
     add  hl,de                      ; 06:4592
-    call Sub0027BD                  ; 06:4593
+    call Disp16x16Sprite            ; 06:4593
     pop  de                         ; 06:4596
     ld   hl,W_SpriteYLow            ; 06:4597
     add  hl,bc                      ; 06:459A
@@ -888,7 +888,7 @@ Code0645BE:
     xor  a                          ; 06:45C1
     ldh  [<$FFC1],a                 ; 06:45C2
     ld   hl,Data064559              ; 06:45C4
-    call Sub0027BD                  ; 06:45C7
+    call Disp16x16Sprite            ; 06:45C7
     ld   hl,W_SpriteYLow            ; 06:45CA
     add  hl,bc                      ; 06:45CD
     ld   a,[hl]                     ; 06:45CE
@@ -935,7 +935,7 @@ Sub064618:
     ld   hl,W_SpriteSubstate        ; 06:4618
     add  hl,bc                      ; 06:461B
     ld   a,[hl]                     ; 06:461C
-    rst  $00                        ; 06:461D
+    rst  $00                        ; 06:461D  Execute from 16-bit pointer table
 .dw Code064622                      ; 06:461E
 .dw Code064634                      ; 06:4620
 Code064622:
@@ -992,7 +992,7 @@ Sub06466C:
     ld   hl,W_SpriteSubstate        ; 06:466C
     add  hl,bc                      ; 06:466F
     ld   a,[hl]                     ; 06:4670
-    rst  $00                        ; 06:4671
+    rst  $00                        ; 06:4671  Execute from 16-bit pointer table
 .dw Code06467E                      ; 06:4672
 .dw Code064694                      ; 06:4674
 .dw Code0646B6                      ; 06:4676
@@ -1244,7 +1244,7 @@ Data06482A:                         ; 06:482A
 
 Sub06482C:
     ld   a,$48                      ; 06:482C
-    call Sub0026BE                  ; 06:482E
+    call LoadSpriteAnySlot          ; 06:482E
     ret  c                          ; 06:4831
     ld   hl,Data06482A              ; 06:4832
     ld   a,[W_PlayerSize]           ; 06:4835
@@ -1259,7 +1259,7 @@ Code06483C:
     ld   hl,W_SpriteYHigh           ; 06:4842
     add  hl,de                      ; 06:4845
     ld   [hl],$00                   ; 06:4846
-    ldh  a,[<$FFA7]                 ; 06:4848
+    ldh  a,[<H_PlayerXLow]          ; 06:4848
     add  $0A                        ; 06:484A
     push af                         ; 06:484C
     ld   hl,W_SpriteXLow            ; 06:484D
@@ -1268,7 +1268,7 @@ Code06483C:
     ld   hl,$D1B3                   ; 06:4852
     add  hl,de                      ; 06:4855
     ld   [hl],a                     ; 06:4856
-    ld   hl,$FFA8                   ; 06:4857
+    ld   hl,H_PlayerXHigh           ; 06:4857
     pop  af                         ; 06:485A
     ld   a,[hl]                     ; 06:485B
     adc  $00                        ; 06:485C
@@ -1422,7 +1422,7 @@ Code06493E:
 Code064940:
     push de                         ; 06:4940
     ldh  a,[<$FF97]                 ; 06:4941
-    call Sub0026BE                  ; 06:4943
+    call LoadSpriteAnySlot          ; 06:4943
     jr   c,Code06499A               ; 06:4946
     push bc                         ; 06:4948
     push de                         ; 06:4949
@@ -1434,12 +1434,12 @@ Code064940:
     cp   $03                        ; 06:4951
     jr   nz,Code06495D              ; 06:4953
     ld   a,$06                      ; 06:4955
-    rst  $10                        ; 06:4957
+    rst  $10                        ; 06:4957  24-bit call
 .dl SubL_024E89                     ; 06:4958
     jr   Code064963                 ; 06:495B
 Code06495D:
     ld   a,$06                      ; 06:495D
-    rst  $10                        ; 06:495F
+    rst  $10                        ; 06:495F  24-bit call
 .dl SubL_025754                     ; 06:4960
 Code064963:
     pop  de                         ; 06:4963
@@ -1485,15 +1485,15 @@ Code06499B:
 
 SubL_06499F:
     ld   a,$0A                      ; 06:499F
-    call Sub0026BE                  ; 06:49A1
+    call LoadSpriteAnySlot          ; 06:49A1
     jr   c,ReturnL_0649DB           ; 06:49A4
-    ldh  a,[<$FFA7]                 ; 06:49A6
+    ldh  a,[<H_PlayerXLow]          ; 06:49A6
     add  $F0                        ; 06:49A8
     ldh  [<$FF97],a                 ; 06:49AA
-    ldh  a,[<$FFA8]                 ; 06:49AC
+    ldh  a,[<H_PlayerXHigh]         ; 06:49AC
     adc  $FF                        ; 06:49AE
     ldh  [<$FF98],a                 ; 06:49B0
-    ldh  a,[<$FFA9]                 ; 06:49B2
+    ldh  a,[<H_PlayerYLow]          ; 06:49B2
     add  $D8                        ; 06:49B4
     ldh  [<$FF99],a                 ; 06:49B6
     ld   hl,W_SpriteXLow            ; 06:49B8
@@ -1517,21 +1517,21 @@ SubL_06499F:
     ld   a,$F8                      ; 06:49D8
     ld   [hl],a                     ; 06:49DA
 ReturnL_0649DB:
-    rst  $18                        ; 06:49DB
+    rst  $18                        ; 06:49DB  Return from 24-bit call
 
 Data0649DC:                         ; 06:49DC
 .db $30,$86,$32,$86
 Code0649E0:
     call Sub0649EA                  ; 06:49E0
     ld   hl,Data0649DC              ; 06:49E3
-    call Sub0027BD                  ; 06:49E6
+    call Disp16x16Sprite            ; 06:49E6
     ret                             ; 06:49E9
 
 Sub0649EA:
     ld   hl,W_SpriteSubstate        ; 06:49EA
     add  hl,bc                      ; 06:49ED
     ld   a,[hl]                     ; 06:49EE
-    rst  $00                        ; 06:49EF
+    rst  $00                        ; 06:49EF  Execute from 16-bit pointer table
 .dw Code0649F4                      ; 06:49F0
 .dw Code064000                      ; 06:49F2
 Code0649F4:
@@ -1558,7 +1558,7 @@ Return064A0E:
 SubL_064A0F:
     push bc                         ; 06:4A0F
     ld   a,$21                      ; 06:4A10
-    call Sub0026BE                  ; 06:4A12
+    call LoadSpriteAnySlot          ; 06:4A12
     jr   c,Code064A36               ; 06:4A15
     ld   hl,W_SpriteXLow            ; 06:4A17
     add  hl,de                      ; 06:4A1A
@@ -1579,7 +1579,7 @@ SubL_064A0F:
     ldh  [<$FFF2],a                 ; 06:4A34
 Code064A36:
     pop  bc                         ; 06:4A36
-    rst  $18                        ; 06:4A37
+    rst  $18                        ; 06:4A37  Return from 24-bit call
 
 Data064A38:                         ; 06:4A38
 .db $20,$06,$20,$26,$1E,$06,$1E,$26,\
@@ -1616,7 +1616,7 @@ Code064A66:
     sla  e                          ; 06:4A6F
     ld   hl,Data064A38              ; 06:4A71
     add  hl,de                      ; 06:4A74
-    call Sub0027BD                  ; 06:4A75
+    call Disp16x16Sprite            ; 06:4A75
     ret                             ; 06:4A78
 
 Data064A79:                         ; 06:4A79
@@ -1636,11 +1636,11 @@ Sub064AA0:
     call LoadGraphicsBank           ; 06:4AAD
     call Sub00128D                  ; 06:4AB0
     ld   a,$00                      ; 06:4AB3
-    ldh  [<$FFB8],a                 ; 06:4AB5
-    ldh  [<$FFB9],a                 ; 06:4AB7
+    ldh  [<H_CameraXLow],a          ; 06:4AB5
+    ldh  [<H_CameraXHigh],a         ; 06:4AB7
     ldh  [<$FFBB],a                 ; 06:4AB9
     ld   a,$70                      ; 06:4ABB
-    ldh  [<$FFBA],a                 ; 06:4ABD
+    ldh  [<H_CameraY],a             ; 06:4ABD
     call Sub064AD1                  ; 06:4ABF
     ld   a,$01                      ; 06:4AC2
     ldh  [<IE],a                    ; 06:4AC4
@@ -1658,7 +1658,7 @@ Sub064AD1:
     ld   [hl],a                     ; 06:4AD7
     inc  a                          ; 06:4AD8
     ldh  [<$FFC0],a                 ; 06:4AD9
-    ld   de,$DF01                   ; 06:4ADB
+    ld   de,W_TilemapUploadBuffer   ; 06:4ADB
     ld   hl,Data064A79              ; 06:4ADE
     ld   bc,$0027                   ; 06:4AE1
     call CopyBytes                  ; 06:4AE4
@@ -1937,7 +1937,7 @@ SubL_064CD3:
     call Sub06503D                  ; 06:4CE2
     ld   a,$01                      ; 06:4CE5
     ld   [$DA73],a                  ; 06:4CE7
-    rst  $18                        ; 06:4CEA
+    rst  $18                        ; 06:4CEA  Return from 24-bit call
 
 SubL_064CEB:
     ld   a,$00                      ; 06:4CEB
@@ -1945,7 +1945,7 @@ SubL_064CEB:
     ld   [$DA69],a                  ; 06:4CF0
     ld   a,$01                      ; 06:4CF3
     ldh  [<IE],a                    ; 06:4CF5
-    rst  $18                        ; 06:4CF7
+    rst  $18                        ; 06:4CF7  Return from 24-bit call
 
 Sub064CF8:
     ldh  a,[<IE]                    ; 06:4CF8
@@ -2432,7 +2432,7 @@ Code06505C:
 
 Unused06507C:
     ld   a,$06                      ; 06:507C
-    rst  $10                        ; 06:507E
+    rst  $10                        ; 06:507E  24-bit call
 .dl SubL_064CD3                     ; 06:507F
     ret                             ; 06:5082
 
@@ -3175,7 +3175,7 @@ Sub06555A:
 ; Game state 2F
     ld   a,[$C168]                  ; 06:555A
     ldh  a,[<H_GameSubstate]        ; 06:555D
-    rst  $00                        ; 06:555F
+    rst  $00                        ; 06:555F  Execute from 16-bit pointer table
 .dw Code065566                      ; 06:5560
 .dw Code0655E7                      ; 06:5562
 .dw Code0655F9                      ; 06:5564
@@ -3207,13 +3207,13 @@ Code065566:
     ld   hl,Data1B7000              ; 06:5595
     call LoadScreenTilemapVRAM      ; 06:5598
     ld   a,$00                      ; 06:559B
-    ldh  [<$FFB8],a                 ; 06:559D
-    ldh  [<$FFB9],a                 ; 06:559F
+    ldh  [<H_CameraXLow],a          ; 06:559D
+    ldh  [<H_CameraXHigh],a         ; 06:559F
     ldh  [<$FFBB],a                 ; 06:55A1
     ld   a,$70                      ; 06:55A3
-    ldh  [<$FFBA],a                 ; 06:55A5
+    ldh  [<H_CameraY],a             ; 06:55A5
     ld   a,$06                      ; 06:55A7
-    rst  $10                        ; 06:55A9
+    rst  $10                        ; 06:55A9  24-bit call
 .dl SubL_07588C                     ; 06:55AA
     ld   a,$07                      ; 06:55AD
     ldh  [<SVBK],a                  ; 06:55AF
@@ -3281,7 +3281,7 @@ Return065615:
 Sub065616:
 ; Game state 30
     ldh  a,[<H_GameSubstate]        ; 06:5616
-    rst  $00                        ; 06:5618
+    rst  $00                        ; 06:5618  Execute from 16-bit pointer table
 .dw Code065672                      ; 06:5619
 .dw Code0656E6                      ; 06:561B
 .dw Code065759                      ; 06:561D
@@ -3301,7 +3301,7 @@ Data065623:                         ; 06:5623
     $0A,$A4,$0A,$A4,$0A,$A4,$00
 
 Code065672:
-    ld   de,$DF01                   ; 06:5672
+    ld   de,W_TilemapUploadBuffer   ; 06:5672
     ld   hl,Data065623              ; 06:5675
     ld   bc,$004F                   ; 06:5678
     call CopyBytes                  ; 06:567B
@@ -3355,7 +3355,7 @@ Code065713:
     call Sub065382                  ; 06:5713
     ld   a,$00                      ; 06:5716
     ldh  [<SVBK],a                  ; 06:5718
-    ld   de,$DF01                   ; 06:571A
+    ld   de,W_TilemapUploadBuffer   ; 06:571A
     ld   hl,Data065697              ; 06:571D
     ld   bc,$004F                   ; 06:5720
     call CopyBytes                  ; 06:5723
@@ -3369,7 +3369,7 @@ Code06572E:
     ld   [$DA0C],a                  ; 06:5733
     ld   a,$00                      ; 06:5736
     ldh  [<SVBK],a                  ; 06:5738
-    ld   de,$DF01                   ; 06:573A
+    ld   de,W_TilemapUploadBuffer   ; 06:573A
     ld   hl,Data065697              ; 06:573D
     ld   bc,$004F                   ; 06:5740
     call CopyBytes                  ; 06:5743
@@ -3472,13 +3472,13 @@ Code06580B:
     ld   a,$00                      ; 06:5813
     ldh  [<SVBK],a                  ; 06:5815
     ld   a,$06                      ; 06:5817
-    rst  $10                        ; 06:5819
+    rst  $10                        ; 06:5819  24-bit call
 .dl SubL_0756D9                     ; 06:581A
     ld   a,[$C42A]                  ; 06:581D
     or   $20                        ; 06:5820
     ld   [$C42A],a                  ; 06:5822
     ld   a,$06                      ; 06:5825
-    rst  $10                        ; 06:5827
+    rst  $10                        ; 06:5827  24-bit call
 .dl SubL_0757EF                     ; 06:5828
     ld   a,$07                      ; 06:582B
     ldh  [<SVBK],a                  ; 06:582D
@@ -3583,37 +3583,38 @@ Return0658FB:
     $EC,$00,$EC,$00,$CE,$00,$CE,$00,\
     $CE,$00
 
-Sub06590E:
+ChalMiss_Main:
 ; Game state 22
     ld   a,[$C168]                  ; 06:590E
-    rst  $00                        ; 06:5911
-.dw Code065916                      ; 06:5912
-.dw Code06596B                      ; 06:5914
-Code065916:
+    rst  $00                        ; 06:5911  Execute from 16-bit pointer table
+.dw ChallMiss_LoadGraphics          ; 06:5912
+.dw ChallMiss_CallSubstate          ; 06:5914
+
+ChallMiss_LoadGraphics:
     call Sub00126D                  ; 06:5916
     ld   a,$00                      ; 06:5919
     ldh  [<IE],a                    ; 06:591B
-    ld   a,:Gr_Bank1C               ; 06:591D
+    ld   a,:Gr_ChalMissYoshiHatch   ; 06:591D
     ld   b,$06                      ; 06:591F
     call LoadGraphicsBank           ; 06:5921
-    ld   a,:Data1C75A0              ; 06:5924
+    ld   a,:Pal_ChalMiss            ; 06:5924
     ld   b,$06                      ; 06:5926
-    ld   de,Data1C75A0              ; 06:5928
+    ld   de,Pal_ChalMiss            ; 06:5928
     call LoadFullPaletteLong        ; 06:592B
     call Sub00128D                  ; 06:592E
-    ld   a,:Data1C7000              ; 06:5931
+    ld   a,:Ti_ChalMiss             ; 06:5931
     ld   b,$06                      ; 06:5933
     ld   de,$99C0                   ; 06:5935
-    ld   hl,Data1C7000              ; 06:5938
+    ld   hl,Ti_ChalMiss             ; 06:5938
     call LoadScreenTilemapVRAM      ; 06:593B
     ld   a,$00                      ; 06:593E
     ld   [$C0C4],a                  ; 06:5940
     ldh  [<H_GameSubstate],a        ; 06:5943
-    ldh  [<$FFB8],a                 ; 06:5945
-    ldh  [<$FFB9],a                 ; 06:5947
+    ldh  [<H_CameraXLow],a          ; 06:5945
+    ldh  [<H_CameraXHigh],a         ; 06:5947
     ldh  [<$FFBB],a                 ; 06:5949
     ld   a,$70                      ; 06:594B
-    ldh  [<$FFBA],a                 ; 06:594D
+    ldh  [<H_CameraY],a             ; 06:594D
     ld   a,$40                      ; 06:594F
     ld   [$C285],a                  ; 06:5951
     ld   a,$00                      ; 06:5954
@@ -3628,9 +3629,9 @@ Code065916:
     inc  [hl]                       ; 06:5969
     ret                             ; 06:596A
 
-Code06596B:
+ChallMiss_CallSubstate:
     ldh  a,[<H_GameSubstate]        ; 06:596B
-    rst  $00                        ; 06:596D
+    rst  $00                        ; 06:596D  Execute from 16-bit pointer table
 .dw Code065972                      ; 06:596E
 .dw Code065991                      ; 06:5970
 Code065972:
@@ -3672,17 +3673,17 @@ Code06599F:
 Return0659AD:
     ret                             ; 06:59AD
 
-AwardCutsceneMain:
+AwardCutscene_Main:
 ; Game state 1C
     ld   a,[$C168]                  ; 06:59AE
-    rst  $00                        ; 06:59B1
+    rst  $00                        ; 06:59B1  Execute from 16-bit pointer table
 .dw Code0659BA                      ; 06:59B2
 .dw Code0659ED                      ; 06:59B4
 .dw Code065AB9                      ; 06:59B6
-.dw Code065ADF                      ; 06:59B8
+.dw AwardCutscene_CallSubstate      ; 06:59B8
 Code0659BA:
     ld   a,$06                      ; 06:59BA
-    rst  $10                        ; 06:59BC
+    rst  $10                        ; 06:59BC  24-bit call
 .dl SubL_0451A4                     ; 06:59BD
     ld   a,[$C1AD]                  ; 06:59C0
     dec  a                          ; 06:59C3
@@ -3794,11 +3795,11 @@ Code065A8A:
     ld   [$C0C4],a                  ; 06:5A95
     ldh  [<H_GameSubstate],a        ; 06:5A98
     ld   [$C0C1],a                  ; 06:5A9A
-    ldh  [<$FFB8],a                 ; 06:5A9D
-    ldh  [<$FFB9],a                 ; 06:5A9F
+    ldh  [<H_CameraXLow],a          ; 06:5A9D
+    ldh  [<H_CameraXHigh],a         ; 06:5A9F
     ldh  [<$FFBB],a                 ; 06:5AA1
     ld   a,$70                      ; 06:5AA3
-    ldh  [<$FFBA],a                 ; 06:5AA5
+    ldh  [<H_CameraY],a             ; 06:5AA5
     ld   a,$20                      ; 06:5AA7
     ld   [$C1AD],a                  ; 06:5AA9
     ld   a,$01                      ; 06:5AAC
@@ -3812,10 +3813,10 @@ Code065A8A:
 Code065AB9:
     call Sub065C52                  ; 06:5AB9
     ld   a,$06                      ; 06:5ABC
-    rst  $10                        ; 06:5ABE
+    rst  $10                        ; 06:5ABE  24-bit call
 .dl SubL_045221                     ; 06:5ABF
     ld   a,$06                      ; 06:5AC2
-    rst  $10                        ; 06:5AC4
+    rst  $10                        ; 06:5AC4  24-bit call
 .dl SubL_045237                     ; 06:5AC5
     ld   a,[$C1AD]                  ; 06:5AC8
     dec  a                          ; 06:5ACB
@@ -3831,9 +3832,9 @@ Code065AD2:
     inc  [hl]                       ; 06:5ADD
     ret                             ; 06:5ADE
 
-Code065ADF:
+AwardCutscene_CallSubstate:
     ldh  a,[<H_GameSubstate]        ; 06:5ADF
-    rst  $00                        ; 06:5AE1
+    rst  $00                        ; 06:5AE1  Execute from 16-bit pointer table
 .dw Code065AEC                      ; 06:5AE2
 .dw Code065B13                      ; 06:5AE4
 .dw Code065B62                      ; 06:5AE6
@@ -3851,7 +3852,7 @@ Code065AFB:
     dec  a                          ; 06:5AFE
     ld   [$C326],a                  ; 06:5AFF
     ret  nz                         ; 06:5B02
-    ldh  a,[<$FFBA]                 ; 06:5B03
+    ldh  a,[<H_CameraY]             ; 06:5B03
     dec  a                          ; 06:5B05
     and  $F8                        ; 06:5B06
     ldh  [<$FFC5],a                 ; 06:5B08
@@ -3862,21 +3863,21 @@ Code065AFB:
     ret                             ; 06:5B12
 
 Code065B13:
-    ldh  a,[<$FFBA]                 ; 06:5B13
+    ldh  a,[<H_CameraY]             ; 06:5B13
     dec  a                          ; 06:5B15
-    ldh  [<$FFBA],a                 ; 06:5B16
+    ldh  [<H_CameraY],a             ; 06:5B16
     cp   $70                        ; 06:5B18
     jr   nc,Code065B1F              ; 06:5B1A
     call Sub065C52                  ; 06:5B1C
 Code065B1F:
     ldh  a,[<$FFC5]                 ; 06:5B1F
     ld   b,a                        ; 06:5B21
-    ldh  a,[<$FFBA]                 ; 06:5B22
+    ldh  a,[<H_CameraY]             ; 06:5B22
     and  $F8                        ; 06:5B24
     cp   b                          ; 06:5B26
     jr   z,Code065B4F               ; 06:5B27
     ldh  [<$FFC5],a                 ; 06:5B29
-    ld   hl,$DF01                   ; 06:5B2B
+    ld   hl,W_TilemapUploadBuffer   ; 06:5B2B
     ldh  a,[<$FFC4]                 ; 06:5B2E
     and  $F0                        ; 06:5B30
     swap a                          ; 06:5B32
@@ -3897,7 +3898,7 @@ Code065B1F:
     sub  $02                        ; 06:5B4B
     ldh  [<$FFC4],a                 ; 06:5B4D
 Code065B4F:
-    ldh  a,[<$FFBA]                 ; 06:5B4F
+    ldh  a,[<H_CameraY]             ; 06:5B4F
     cp   $D8                        ; 06:5B51
     jr   nz,Return065B61            ; 06:5B53
     ld   hl,$C164                   ; 06:5B55
@@ -3910,9 +3911,9 @@ Return065B61:
     ret                             ; 06:5B61
 
 Code065B62:
-    ldh  a,[<$FFBA]                 ; 06:5B62
+    ldh  a,[<H_CameraY]             ; 06:5B62
     dec  a                          ; 06:5B64
-    ldh  [<$FFBA],a                 ; 06:5B65
+    ldh  [<H_CameraY],a             ; 06:5B65
     cp   $48                        ; 06:5B67
     jp   c,Code065B9F               ; 06:5B69
     cp   $E0                        ; 06:5B6C
@@ -3938,7 +3939,7 @@ Code065B62:
 Code065B8E:
     ldh  a,[<$FFC5]                 ; 06:5B8E
     ld   b,a                        ; 06:5B90
-    ldh  a,[<$FFBA]                 ; 06:5B91
+    ldh  a,[<H_CameraY]             ; 06:5B91
     and  $F8                        ; 06:5B93
     cp   b                          ; 06:5B95
     jr   z,Code065B9F               ; 06:5B96
@@ -3946,7 +3947,7 @@ Code065B8E:
     ld   a,$03                      ; 06:5B9A
     ld   [$C172],a                  ; 06:5B9C
 Code065B9F:
-    ldh  a,[<$FFBA]                 ; 06:5B9F
+    ldh  a,[<H_CameraY]             ; 06:5B9F
     cp   $E0                        ; 06:5BA1
     jr   nz,Return065BB1            ; 06:5BA3
     ld   hl,$C164                   ; 06:5BA5
@@ -4040,7 +4041,7 @@ Code065C65:
     inc  b                          ; 06:5C6C
     jr   Code065C65                 ; 06:5C6D
 Code065C6F:
-    ldh  a,[<$FFBA]                 ; 06:5C6F
+    ldh  a,[<H_CameraY]             ; 06:5C6F
     ld   c,a                        ; 06:5C71
     ld   de,$0004                   ; 06:5C72
     ld   hl,$C000                   ; 06:5C75
@@ -4058,14 +4059,15 @@ Code065C7C:
 Sub065C84:
 ; Game state 3A
     ldh  a,[<H_GameSubstate]        ; 06:5C84
-    rst  $00                        ; 06:5C86
+    rst  $00                        ; 06:5C86  Execute from 16-bit pointer table
 .dw Code065C8F                      ; 06:5C87
 .dw Code066280                      ; 06:5C89
 .dw Code0662EB                      ; 06:5C8B
 .dw Code0662FE                      ; 06:5C8D
+
 Code065C8F:
     ld   a,$06                      ; 06:5C8F
-    rst  $10                        ; 06:5C91
+    rst  $10                        ; 06:5C91  24-bit call
 .dl SubL_0451A4                     ; 06:5C92
     ld   a,[$C1AD]                  ; 06:5C95
     dec  a                          ; 06:5C98
@@ -4089,6 +4091,7 @@ Data065CB0:                         ; 06:5CB0
 .incbin "data/Graphics/Data065CB0.bin"
 Data065FB0:                         ; 06:5FB0
 .incbin "data/Tilemaps/Data065FB0.bin"
+
 Code066280:
     call Sub00126D                  ; 06:6280
     ld   a,$00                      ; 06:6283
@@ -4130,11 +4133,11 @@ Code0662B2:
     call LoadScreenTilemapVRAM      ; 06:62C7
     ld   a,$00                      ; 06:62CA
     ld   [$C0C4],a                  ; 06:62CC
-    ldh  [<$FFB8],a                 ; 06:62CF
-    ldh  [<$FFB9],a                 ; 06:62D1
+    ldh  [<H_CameraXLow],a          ; 06:62CF
+    ldh  [<H_CameraXHigh],a         ; 06:62D1
     ldh  [<$FFBB],a                 ; 06:62D3
     ld   a,$70                      ; 06:62D5
-    ldh  [<$FFBA],a                 ; 06:62D7
+    ldh  [<H_CameraY],a             ; 06:62D7
     ld   a,$20                      ; 06:62D9
     ld   [$C1AD],a                  ; 06:62DB
     ld   a,$01                      ; 06:62DE
@@ -4147,7 +4150,7 @@ Code0662B2:
 
 Code0662EB:
     ld   a,$06                      ; 06:62EB
-    rst  $10                        ; 06:62ED
+    rst  $10                        ; 06:62ED  24-bit call
 .dl SubL_045221                     ; 06:62EE
     ld   a,[$C1AD]                  ; 06:62F1
     dec  a                          ; 06:62F4
@@ -4193,6 +4196,7 @@ Code066323:
     ret                             ; 06:6335
 
 SprInitPtrs:                        ; 06:6336
+; indexed by sprite ID -1
 .dl Return024000                    ; 01
 .dl Sub024E8D                       ; 02
 .dl Sub024E8D                       ; 03
@@ -4293,7 +4297,9 @@ SprInitPtrs:                        ; 06:6336
 .dl Code027C9A                      ; 62
 .dl Code027C9A                      ; 63
 .dl Code02704A                      ; 64
+
 SprMainPtrs:                        ; 06:6462
+; indexed by sprite ID -1
 .dl Code0244F5                      ; 01
 .dl Code024EDF                      ; 02
 .dl Code024EDF                      ; 03

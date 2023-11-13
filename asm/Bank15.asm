@@ -9,7 +9,7 @@ PrintMenuBank15Wrapper:
 PrintMenuMain:
 ; Game state 2E
     ldh  a,[<H_GameSubstate]        ; 15:4004
-    rst  $00                        ; 15:4006
+    rst  $00                        ; 15:4006  Execute from 16-bit pointer table
 .dw Code154249                      ; 15:4007
 .dw Code154297                      ; 15:4009
 .dw Code154432                      ; 15:400B
@@ -231,7 +231,7 @@ Code154304:
 
 Sub154307:
     ld   a,[$C432]                  ; 15:4307
-    rst  $00                        ; 15:430A
+    rst  $00                        ; 15:430A  Execute from 16-bit pointer table
 .dw Code15431D                      ; 15:430B
 .dw Return154325                    ; 15:430D
 .dw Code154326                      ; 15:430F
@@ -334,7 +334,7 @@ Sub1543C5:
     ld   a,[$D930]                  ; 15:4402
     ld   [$D908],a                  ; 15:4405
     ld   a,$15                      ; 15:4408
-    rst  $10                        ; 15:440A
+    rst  $10                        ; 15:440A  24-bit call
 .dl SubL_0757EF                     ; 15:440B
     ld   de,Data154359              ; 15:440E
     ld   hl,$C471                   ; 15:4411
@@ -346,7 +346,7 @@ Code154416:
     dec  c                          ; 15:4419
     jr   nz,Code154416              ; 15:441A
     ld   a,$15                      ; 15:441C
-    rst  $10                        ; 15:441E
+    rst  $10                        ; 15:441E  24-bit call
 .dl SubL_075EB7                     ; 15:441F
     ret                             ; 15:4422
 
@@ -644,9 +644,9 @@ Code154EA1:
     ld   a,$15                      ; 15:4EE1
     call LoadScreenTilemapD480      ; 15:4EE3
     ld   a,$15                      ; 15:4EE6
-    rst  $10                        ; 15:4EE8
+    rst  $10                        ; 15:4EE8  24-bit call
 .dl SubL_0756D9                     ; 15:4EE9
-    ld   a,[$C191]                  ; 15:4EEC
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:4EEC
     and  $A0                        ; 15:4EEF
     jr   nz,Code154EFD              ; 15:4EF1
     ld   hl,$D684                   ; 15:4EF3
@@ -695,9 +695,9 @@ Code154EFD:
     ld   [$C4EA],a                  ; 15:4F5B
     call Sub1552DD                  ; 15:4F5E
     xor  a                          ; 15:4F61
-    ldh  [<$FFB8],a                 ; 15:4F62
-    ldh  [<$FFB9],a                 ; 15:4F64
-    ldh  [<$FFBA],a                 ; 15:4F66
+    ldh  [<H_CameraXLow],a          ; 15:4F62
+    ldh  [<H_CameraXHigh],a         ; 15:4F64
+    ldh  [<H_CameraY],a             ; 15:4F66
     ldh  [<$FFBB],a                 ; 15:4F68
     ld   [$C177],a                  ; 15:4F6A
     ld   a,$90                      ; 15:4F6D
@@ -713,7 +713,7 @@ Code154EFD:
 
 Sub154F81:
     ld   a,[$C432]                  ; 15:4F81
-    rst  $00                        ; 15:4F84
+    rst  $00                        ; 15:4F84  Execute from 16-bit pointer table
 .dw Return154F97                    ; 15:4F85
 .dw Return154F98                    ; 15:4F87
 .dw Code154F99                      ; 15:4F89
@@ -1088,7 +1088,7 @@ Sub1552DD:
     cp   $05                        ; 15:52F2
     ld   a,[hl]                     ; 15:52F4
     jr   nc,Code15531B              ; 15:52F5
-    ld   a,[$C191]                  ; 15:52F7
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:52F7
     and  $A0                        ; 15:52FA
     ld   a,[hl]                     ; 15:52FC
     jr   nz,Code15531B              ; 15:52FD
@@ -1267,7 +1267,7 @@ Code155425:
 Code155429:
     ld   a,[$C421]                  ; 15:5429
     and  $0F                        ; 15:542C
-    rst  $00                        ; 15:542E
+    rst  $00                        ; 15:542E  Execute from 16-bit pointer table
 .dw Code15543B                      ; 15:542F
 .dw Code15544B                      ; 15:5431
 .dw Code1554A4                      ; 15:5433
@@ -1410,7 +1410,7 @@ Code155514:
     ld   a,$3D                      ; 15:5514
     ldh  [<$FFF3],a                 ; 15:5516
     ld   a,[$C432]                  ; 15:5518
-    rst  $00                        ; 15:551B
+    rst  $00                        ; 15:551B  Execute from 16-bit pointer table
 .dw Return15552E                    ; 15:551C
 .dw Return15552F                    ; 15:551E
 .dw Code155530                      ; 15:5520
@@ -1429,7 +1429,7 @@ Return15552F:
 Code155530:
     call Sub15554F                  ; 15:5530
     ld   a,$15                      ; 15:5533
-    rst  $10                        ; 15:5535
+    rst  $10                        ; 15:5535  24-bit call
 .dl SubL_075DFC                     ; 15:5536
     ld   a,[$C416]                  ; 15:5539
     ldh  [<H_GameState],a           ; 15:553C
@@ -1491,7 +1491,7 @@ Code155575:
 Sub155588:
     call Sub15554F                  ; 15:5588
     ld   a,$15                      ; 15:558B
-    rst  $10                        ; 15:558D
+    rst  $10                        ; 15:558D  24-bit call
 .dl SubL_075EB7                     ; 15:558E
     ld   a,[$C416]                  ; 15:5591
     ldh  [<H_GameState],a           ; 15:5594
@@ -1507,7 +1507,7 @@ Return15559F:
 Code1555A0:
     call Sub15554F                  ; 15:55A0
     ld   a,$15                      ; 15:55A3
-    rst  $10                        ; 15:55A5
+    rst  $10                        ; 15:55A5  24-bit call
 .dl SubL_075F38                     ; 15:55A6
     ld   a,[$C416]                  ; 15:55A9
     ldh  [<H_GameState],a           ; 15:55AC
@@ -1571,7 +1571,7 @@ Code15560D:
     ld   a,$09                      ; 15:560D
     ld   [$CDF4],a                  ; 15:560F
     ld   a,[$C432]                  ; 15:5612
-    rst  $00                        ; 15:5615
+    rst  $00                        ; 15:5615  Execute from 16-bit pointer table
 .dw Code155628                      ; 15:5616
 .dw Code15563F                      ; 15:5618
 .dw Code155652                      ; 15:561A
@@ -1706,7 +1706,7 @@ Code1556DF:
 
 Code1556F2:
     ld   a,[$C500]                  ; 15:56F2
-    rst  $00                        ; 15:56F5
+    rst  $00                        ; 15:56F5  Execute from 16-bit pointer table
 .dw Code155706                      ; 15:56F6
 .dw Code15571E                      ; 15:56F8
 .dw Return155749                    ; 15:56FA
@@ -3114,7 +3114,7 @@ Sub15612F:
     push de                         ; 15:6131
     push bc                         ; 15:6132
     ld   a,[$CDE0]                  ; 15:6133
-    rst  $00                        ; 15:6136
+    rst  $00                        ; 15:6136  Execute from 16-bit pointer table
 .dw Code156149                      ; 15:6137
 .dw Code156149                      ; 15:6139
 .dw Code156149                      ; 15:613B
@@ -3437,10 +3437,10 @@ Sub156349:
     ld   [$CB15],a                  ; 15:6368
     ret                             ; 15:636B
 
-Code15636C:
+ToadPeachRoom_Main:
 ; Game state 41
     ldh  a,[<H_GameSubstate]        ; 15:636C
-    rst  $00                        ; 15:636E
+    rst  $00                        ; 15:636E  Execute from 16-bit pointer table
 .dw Code1563F9                      ; 15:636F
 .dw Code156439                      ; 15:6371
 .dw Code156864                      ; 15:6373
@@ -3464,11 +3464,11 @@ Code1563F9:
     ldh  [<$FF93],a                 ; 15:63FF
     ld   [$C4DF],a                  ; 15:6401
     ld   a,$15                      ; 15:6404
-    rst  $10                        ; 15:6406
+    rst  $10                        ; 15:6406  24-bit call
 .dl SubL_0756D9                     ; 15:6407
     ld   c,$00                      ; 15:640A
     ld   b,$01                      ; 15:640C
-    ld   hl,$C191                   ; 15:640E
+    ld   hl,W_ChalUnlockFlags_x_4   ; 15:640E
 Code156411:
     ld   a,[hl]                     ; 15:6411
     and  b                          ; 15:6412
@@ -3502,7 +3502,7 @@ Code156439:
     ldh  [<IE],a                    ; 15:643D
     ldh  [<$FF93],a                 ; 15:643F
     ld   a,$15                      ; 15:6441
-    rst  $10                        ; 15:6443
+    rst  $10                        ; 15:6443  24-bit call
 .dl SubL_0756D9                     ; 15:6444
 Code156447:
     ld   a,$3C                      ; 15:6447
@@ -3523,9 +3523,9 @@ Code156447:
     call LoadFullPaletteLong        ; 15:646E
     call Sub000E29                  ; 15:6471
     xor  a                          ; 15:6474
-    ldh  [<$FFB8],a                 ; 15:6475
-    ldh  [<$FFB9],a                 ; 15:6477
-    ldh  [<$FFBA],a                 ; 15:6479
+    ldh  [<H_CameraXLow],a          ; 15:6475
+    ldh  [<H_CameraXHigh],a         ; 15:6477
+    ldh  [<H_CameraY],a             ; 15:6479
     ldh  [<$FFBB],a                 ; 15:647B
     ld   a,$7F                      ; 15:647D
     ld   [$DE68],a                  ; 15:647F
@@ -3632,7 +3632,7 @@ Sub156655:
     ldh  [<$FF98],a                 ; 15:665A
 Code15665C:
     ldh  a,[<$FF97]                 ; 15:665C
-    ld   hl,$C191                   ; 15:665E
+    ld   hl,W_ChalUnlockFlags_x_4   ; 15:665E
     and  [hl]                       ; 15:6661
     jr   z,Code1566DB               ; 15:6662
     ldh  a,[<$FF98]                 ; 15:6664
@@ -3845,7 +3845,7 @@ Code1568AB:
     ld   d,a                        ; 15:68C6
     ld   a,[de]                     ; 15:68C7
     ld   e,a                        ; 15:68C8
-    ld   a,[$C191]                  ; 15:68C9
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:68C9
     and  e                          ; 15:68CC
     jr   z,Code1568AB               ; 15:68CD
     ld   a,[$C4FF]                  ; 15:68CF
@@ -3892,7 +3892,7 @@ Code156910:
     ld   d,a                        ; 15:691D
     ld   a,[de]                     ; 15:691E
     ld   d,a                        ; 15:691F
-    ld   a,[$C191]                  ; 15:6920
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:6920
     and  d                          ; 15:6923
     jr   nz,Code15692A              ; 15:6924
     inc  hl                         ; 15:6926
@@ -3952,7 +3952,7 @@ Code156963:
     dec  a                          ; 15:6973
     ldh  [<$FF97],a                 ; 15:6974
     jr   nz,Code156963              ; 15:6976
-    ld   a,[$C191]                  ; 15:6978
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:6978
     bit  7,a                        ; 15:697B
     ret  z                          ; 15:697D
     ld   de,Data156814              ; 15:697E
@@ -4061,9 +4061,9 @@ Code156AFB:
 Code156B89:
     call Sub000E29                  ; 15:6B89
     xor  a                          ; 15:6B8C
-    ldh  [<$FFB8],a                 ; 15:6B8D
-    ldh  [<$FFB9],a                 ; 15:6B8F
-    ldh  [<$FFBA],a                 ; 15:6B91
+    ldh  [<H_CameraXLow],a          ; 15:6B8D
+    ldh  [<H_CameraXHigh],a         ; 15:6B8F
+    ldh  [<H_CameraY],a             ; 15:6B91
     ldh  [<$FFBB],a                 ; 15:6B93
     ld   [$C4E9],a                  ; 15:6B95
     ld   a,$00                      ; 15:6B98
@@ -4083,7 +4083,7 @@ Code156B89:
 
 Sub156BB9:
     ld   a,[$C500]                  ; 15:6BB9
-    rst  $00                        ; 15:6BBC
+    rst  $00                        ; 15:6BBC  Execute from 16-bit pointer table
 .dw Code156BCD                      ; 15:6BBD
 .dw Code156BFD                      ; 15:6BBF
 .dw Code156C34                      ; 15:6BC1
@@ -4164,7 +4164,7 @@ Code156C6A:
     ld   a,$02                      ; 15:6C6E
     ld   [$C4E0],a                  ; 15:6C70
     ld   a,$15                      ; 15:6C73
-    rst  $10                        ; 15:6C75
+    rst  $10                        ; 15:6C75  24-bit call
 .dl SubL_075F15                     ; 15:6C76
     ld   a,[$C4DF]                  ; 15:6C79
     ld   c,a                        ; 15:6C7C
@@ -4269,7 +4269,7 @@ Code156D4A:
     ld   a,$04                      ; 15:6D4E
     ld   [$C4E0],a                  ; 15:6D50
     ld   a,$15                      ; 15:6D53
-    rst  $10                        ; 15:6D55
+    rst  $10                        ; 15:6D55  24-bit call
 .dl SubL_075F15                     ; 15:6D56
     ld   a,[$C4DF]                  ; 15:6D59
     ld   c,a                        ; 15:6D5C
@@ -4324,7 +4324,7 @@ Code156DBA:
     ld   a,$06                      ; 15:6DBE
     ld   [$C4E0],a                  ; 15:6DC0
     ld   a,$15                      ; 15:6DC3
-    rst  $10                        ; 15:6DC5
+    rst  $10                        ; 15:6DC5  24-bit call
 .dl SubL_075F15                     ; 15:6DC6
     ld   a,[$C4DF]                  ; 15:6DC9
     ld   c,a                        ; 15:6DCC
@@ -4364,7 +4364,7 @@ Code156DBA:
 
 Sub156E05:
     ld   a,[$C500]                  ; 15:6E05
-    rst  $00                        ; 15:6E08
+    rst  $00                        ; 15:6E08  Execute from 16-bit pointer table
 .dw Code156E19                      ; 15:6E09
 .dw Code156E45                      ; 15:6E0B
 .dw Return156E77                    ; 15:6E0D
@@ -4433,7 +4433,7 @@ Code156E78:
 
 Sub156E8B:
     ld   a,[$C500]                  ; 15:6E8B
-    rst  $00                        ; 15:6E8E
+    rst  $00                        ; 15:6E8E  Execute from 16-bit pointer table
 .dw Code156EA9                      ; 15:6E8F
 .dw Code1571A0                      ; 15:6E91
 .dw Code1571F7                      ; 15:6E93
@@ -4451,7 +4451,7 @@ Code156EA9:
     ld   a,$00                      ; 15:6EA9
     ld   [$C4E0],a                  ; 15:6EAB
     ld   a,$15                      ; 15:6EAE
-    rst  $10                        ; 15:6EB0
+    rst  $10                        ; 15:6EB0  24-bit call
 .dl SubL_075F15                     ; 15:6EB1
     call Sub157008                  ; 15:6EB4
     ld   a,$40                      ; 15:6EB7
@@ -5104,7 +5104,7 @@ Code15739F:
 
 Sub1573C1:
     ld   a,[$C500]                  ; 15:73C1
-    rst  $00                        ; 15:73C4
+    rst  $00                        ; 15:73C4  Execute from 16-bit pointer table
 .dw Code1573E4                      ; 15:73C5
 .dw Code15743D                      ; 15:73C7
 .dw Return15745D                    ; 15:73C9
@@ -5218,7 +5218,7 @@ Code157492:
     ld   a,$01                      ; 15:749F
     ldh  [<H_GameSubstate],a        ; 15:74A1
     ld   a,$15                      ; 15:74A3
-    rst  $10                        ; 15:74A5
+    rst  $10                        ; 15:74A5  24-bit call
 .dl SubL_0757EF                     ; 15:74A6
     jp   Code1574AF                 ; 15:74A9
 Code1574AC:
@@ -5254,7 +5254,7 @@ Data1574D1:                         ; 15:74D1
 
 Sub1574D3:
     ld   a,[$C500]                  ; 15:74D3
-    rst  $00                        ; 15:74D6
+    rst  $00                        ; 15:74D6  Execute from 16-bit pointer table
 .dw Code1574EB                      ; 15:74D7
 .dw Code15755C                      ; 15:74D9
 .dw Code157598                      ; 15:74DB
@@ -6084,7 +6084,7 @@ Data157A3E:                         ; 15:7A3E
     $00,$19,$01,$0C
 
 Sub157A4A:
-    ld   a,[$C191]                  ; 15:7A4A
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 15:7A4A
     and  $A0                        ; 15:7A4D
     ret  z                          ; 15:7A4F
     ld   a,[$C4F5]                  ; 15:7A50
@@ -6278,8 +6278,8 @@ SubL_157B22:
     xor  a                          ; 15:7B81
     ldh  [<H_GameSubstate],a        ; 15:7B82
     ld   [$C1B4],a                  ; 15:7B84
-    ldh  [<$FFB8],a                 ; 15:7B87
-    ldh  [<$FFB9],a                 ; 15:7B89
-    ldh  [<$FFBA],a                 ; 15:7B8B
+    ldh  [<H_CameraXLow],a          ; 15:7B87
+    ldh  [<H_CameraXHigh],a         ; 15:7B89
+    ldh  [<H_CameraY],a             ; 15:7B8B
     ldh  [<$FFBB],a                 ; 15:7B8D
-    rst  $18                        ; 15:7B8F
+    rst  $18                        ; 15:7B8F  Return from 24-bit call

@@ -4,7 +4,7 @@
 ToyBoxMain:
 ; Game state 2D
     ldh  a,[<H_GameSubstate]        ; 14:4000
-    rst  $00                        ; 14:4002
+    rst  $00                        ; 14:4002  Execute from 16-bit pointer table
 .dw Code1440B7                      ; 14:4003
 .dw Code144110                      ; 14:4005
 .dw Code1441D4                      ; 14:4007
@@ -43,6 +43,7 @@ Data144037:                         ; 14:4037
     $63FF,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
 
 Code1440B7:
+; Toy box substate 00
     call Sub00126D                  ; 14:40B7
     xor  a                          ; 14:40BA
     ldh  [<IE],a                    ; 14:40BB
@@ -51,16 +52,16 @@ Code1440B7:
     ld   bc,$0DFF                   ; 14:40C2
     call ClearBytes                 ; 14:40C5
     ld   a,$14                      ; 14:40C8
-    rst  $10                        ; 14:40CA
+    rst  $10                        ; 14:40CA  24-bit call
 .dl SubL_0756D9                     ; 14:40CB
-    ld   a,[$C191]                  ; 14:40CE
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 14:40CE
     ld   [$C4F9],a                  ; 14:40D1
     xor  a                          ; 14:40D4
     ld   [W_LevelID],a              ; 14:40D5
 Code1440D8:
     ld   a,$14                      ; 14:40D8
-    rst  $10                        ; 14:40DA
-.dl SubL_075B10                     ; 14:40DB
+    rst  $10                        ; 14:40DA  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 14:40DB
     ld   a,[$C194]                  ; 14:40DE
     and  a                          ; 14:40E1
     jr   nz,Code1440EF              ; 14:40E2
@@ -84,7 +85,9 @@ Code1440EF:
     ld   [$C41D],a                  ; 14:4108
     call Sub144189                  ; 14:410B
     jr   Code144118                 ; 14:410E
+
 Code144110:
+; Toy box substate 01
     call Sub001258                  ; 14:4110
     xor  a                          ; 14:4113
     ldh  [<IE],a                    ; 14:4114
@@ -111,9 +114,9 @@ Code144118:
     ld   a,$90                      ; 14:4147
     ld   [$C178],a                  ; 14:4149
     xor  a                          ; 14:414C
-    ldh  [<$FFB8],a                 ; 14:414D
-    ldh  [<$FFB9],a                 ; 14:414F
-    ldh  [<$FFBA],a                 ; 14:4151
+    ldh  [<H_CameraXLow],a          ; 14:414D
+    ldh  [<H_CameraXHigh],a         ; 14:414F
+    ldh  [<H_CameraY],a             ; 14:4151
     ldh  [<$FFBB],a                 ; 14:4153
     ld   [$C177],a                  ; 14:4155
     ld   [$C4EC],a                  ; 14:4158
@@ -157,7 +160,9 @@ Data1441BC:                         ; 14:41BC
 .db $70,$6C,$04,$00,$70,$74,$06,$00,\
     $70,$7C,$08,$00,$80,$6C,$0A,$00,\
     $80,$74,$0C,$00,$80,$7C,$0E,$00
+
 Code1441D4:
+; Toy box substate 02
     ldh  a,[<H_ButtonsPressed]      ; 14:41D4
     bit  1,a                        ; 14:41D6
     jr   z,Code1441EB               ; 14:41D8
@@ -347,7 +352,9 @@ Data1442F3:                         ; 14:42F3
     $7DE0,$025F,$001F,$0000,$7DE0,$7FFF,$02A6,$001D,\
     $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120,\
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
+
 Code144373:
+; Toy box substate 03
     call Sub00126D                  ; 14:4373
     xor  a                          ; 14:4376
     ldh  [<IE],a                    ; 14:4377
@@ -383,10 +390,10 @@ Code144373:
     ld   [$C4EC],a                  ; 14:43C2
     call Sub144412                  ; 14:43C5
     ld   a,$FC                      ; 14:43C8
-    ldh  [<$FFB8],a                 ; 14:43CA
+    ldh  [<H_CameraXLow],a          ; 14:43CA
     xor  a                          ; 14:43CC
-    ldh  [<$FFB9],a                 ; 14:43CD
-    ldh  [<$FFBA],a                 ; 14:43CF
+    ldh  [<H_CameraXHigh],a         ; 14:43CD
+    ldh  [<H_CameraY],a             ; 14:43CF
     ldh  [<$FFBB],a                 ; 14:43D1
     ld   [$D90E],a                  ; 14:43D3
     ld   [$D90D],a                  ; 14:43D6
@@ -517,7 +524,9 @@ Data144579:                         ; 14:4579
 .db $00,$01,$01,$00,$00
 Data14457E:                         ; 14:457E
 .db $00,$00,$04,$01,$03,$02
+
 Code144584:
+; Toy box substate 04
     ldh  a,[<H_ButtonsPressed]      ; 14:4584
     bit  1,a                        ; 14:4586
     jr   z,Code144593               ; 14:4588
@@ -750,6 +759,7 @@ Data1448C6:                         ; 14:48C6
 .db $E0
 
 Code1448C7:
+; Toy box substate 05
     ld   a,[$D901]                  ; 14:48C7
     and  a                          ; 14:48CA
     jr   z,Code144905               ; 14:48CB
@@ -960,9 +970,9 @@ Code144921:
     ld   a,$09                      ; 14:4A71
     ld   [$CDF4],a                  ; 14:4A73
     xor  a                          ; 14:4A76
-    ldh  [<$FFB8],a                 ; 14:4A77
-    ldh  [<$FFB9],a                 ; 14:4A79
-    ldh  [<$FFBA],a                 ; 14:4A7B
+    ldh  [<H_CameraXLow],a          ; 14:4A77
+    ldh  [<H_CameraXHigh],a         ; 14:4A79
+    ldh  [<H_CameraY],a             ; 14:4A7B
     ldh  [<$FFBB],a                 ; 14:4A7D
     ld   a,$09                      ; 14:4A7F
     ldh  [<IE],a                    ; 14:4A81
@@ -974,7 +984,7 @@ Code144921:
 
 Sub144A8E:
     ldh  a,[<$FF97]                 ; 14:4A8E
-    rst  $00                        ; 14:4A90
+    rst  $00                        ; 14:4A90  Execute from 16-bit pointer table
 .dw Code144A9B                      ; 14:4A91
 .dw Code144AB6                      ; 14:4A93
 .dw Code144ABB                      ; 14:4A95
@@ -1036,6 +1046,7 @@ Code144AD2:
     ret                             ; 14:4AE3
 
 Code144AE4:
+; Toy box substate 06
     ldh  a,[<H_ButtonsPressed]      ; 14:4AE4
     bit  1,a                        ; 14:4AE6
     jr   z,Code144AF3               ; 14:4AE8
@@ -1069,7 +1080,9 @@ Data144B13:                         ; 14:4B13
     $28,$78,$28,$02,$18,$80,$2A,$02,\
     $28,$80,$2C,$02,$18,$88,$2E,$02,\
     $28,$88,$30,$02
+
 Code144B37:
+; Toy box substate 07
     ld   a,[$C4E6]                  ; 14:4B37
     sub  $02                        ; 14:4B3A
     ld   [$C4E6],a                  ; 14:4B3C
@@ -1105,6 +1118,7 @@ Code144B5B:
     ret                             ; 14:4B6B
 
 Code144B6C:
+; Toy box substate 08
     ld   a,[$C4E8]                  ; 14:4B6C
     dec  a                          ; 14:4B6F
     ld   [$C4E8],a                  ; 14:4B70
@@ -1187,6 +1201,7 @@ Data144B7D:                         ; 14:4B7D
     $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000
 
 Code144FBD:
+; Toy box substate 15
     call Sub001258                  ; 14:4FBD
     xor  a                          ; 14:4FC0
     ldh  [<IE],a                    ; 14:4FC1
@@ -1250,6 +1265,7 @@ Data14504D:                         ; 14:504D
     $98,$98,$5E,$01,$98,$A0,$5F,$01
 
 Code1450B5:
+; Toy box substate 16
     call Sub145110                  ; 14:50B5
     ldh  a,[<H_ButtonsPressed]      ; 14:50B8
     bit  1,a                        ; 14:50BA
@@ -1314,6 +1330,7 @@ Code145100:
     ret                             ; 14:510F
 
 Sub145110:
+; Toy box substate 17
     ld   a,[$D90C]                  ; 14:5110
     dec  a                          ; 14:5113
     ld   [$D90C],a                  ; 14:5114
@@ -1355,8 +1372,8 @@ Code145136:
     ld   [W_LevelID],a              ; 14:515C
 Code14515F:
     ld   a,$14                      ; 14:515F
-    rst  $10                        ; 14:5161
-.dl SubL_075B10                     ; 14:5162
+    rst  $10                        ; 14:5161  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 14:5162
     ld   a,[$C194]                  ; 14:5165
     and  a                          ; 14:5168
     jr   z,Code14517D               ; 14:5169
@@ -1399,16 +1416,17 @@ YoshiIsHereTilemapPtrs:             ; 14:51A2
     Ti_YoshiIsHereW7_1, Ti_YoshiIsHereW7_2, Ti_YoshiIsHereW7_3, Ti_YoshiIsHereW7_4,\
     Ti_YoshiIsHereW8_1, Ti_YoshiIsHereW8_2, Ti_YoshiIsHereW8_3, Ti_YoshiIsHereW8_4
 YoshiIsHerePalettePtrs:             ; 14:5202
-.dl Data044000, Data044040, Data044000, Data0440C0,\
-    Data044000, Data044080, Data044000, Data0440C0,\
-    Data044100, Data044100, Data044180, Data0440C0,\
-    Data044000, Data044040, Data044340, Data0440C0,\
-    Data044140, Data044140, Data044000, Data0440C0,\
-    Data044180, Data044180, Data0441C0, Data0440C0,\
-    Data044140, Data044080, Data044000, Data0440C0,\
-    Data044000, Data044000, Data044000, Data044380
+.dl Pal_SublevelBGs+$000, Pal_SublevelBGs+$040, Pal_SublevelBGs+$000, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$000, Pal_SublevelBGs+$080, Pal_SublevelBGs+$000, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$100, Pal_SublevelBGs+$100, Pal_SublevelBGs+$180, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$000, Pal_SublevelBGs+$040, Pal_SublevelBGs+$340, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$140, Pal_SublevelBGs+$140, Pal_SublevelBGs+$000, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$180, Pal_SublevelBGs+$180, Pal_SublevelBGs+$1C0, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$140, Pal_SublevelBGs+$080, Pal_SublevelBGs+$000, Pal_SublevelBGs+$C0,\
+    Pal_SublevelBGs+$000, Pal_SublevelBGs+$000, Pal_SublevelBGs+$000, Pal_SublevelBGs+$380
 
 Code145262:
+; Toy box substate 18
     ld   a,[$D90C]                  ; 14:5262
     dec  a                          ; 14:5265
     ld   [$D90C],a                  ; 14:5266
@@ -1468,7 +1486,9 @@ Code145262:
     ldh  [<$FFF2],a                 ; 14:52CC
     call Sub145306                  ; 14:52CE
     jp   Sub144189                  ; 14:52D1
+
 Code1452D4:
+; Toy box substate 19
     ldh  a,[<H_ButtonsPressed]      ; 14:52D4
     bit  1,a                        ; 14:52D6
     jr   z,Code1452E3               ; 14:52D8
@@ -1522,6 +1542,7 @@ Data145397:                         ; 14:5397
 .incbin "data/Tilemaps/Data145397.bin"
 
 Code145667:
+; Toy box substate 09/0C
     call Sub00126D                  ; 14:5667
     xor  a                          ; 14:566A
     ldh  [<IE],a                    ; 14:566B
@@ -1584,7 +1605,7 @@ Code145667:
     ld   bc,$0240                   ; 14:56F7
     call CopyBytes                  ; 14:56FA
     ld   a,$14                      ; 14:56FD
-    rst  $10                        ; 14:56FF
+    rst  $10                        ; 14:56FF  24-bit call
 .dl SubL_0756D9                     ; 14:5700
     xor  a                          ; 14:5703
     ld   [$C4EC],a                  ; 14:5704
@@ -1592,9 +1613,9 @@ Code145667:
     ld   [$C432],a                  ; 14:5709
     call Sub144412                  ; 14:570C
     xor  a                          ; 14:570F
-    ldh  [<$FFB8],a                 ; 14:5710
-    ldh  [<$FFB9],a                 ; 14:5712
-    ldh  [<$FFBA],a                 ; 14:5714
+    ldh  [<H_CameraXLow],a          ; 14:5710
+    ldh  [<H_CameraXHigh],a         ; 14:5712
+    ldh  [<H_CameraY],a             ; 14:5714
     ldh  [<$FFBB],a                 ; 14:5716
     ld   [$D929],a                  ; 14:5718
     ld   [$D975],a                  ; 14:571B
@@ -1878,7 +1899,7 @@ Code145922:
 
 Sub14592B:
     ld   a,[$D90D]                  ; 14:592B
-    rst  $00                        ; 14:592E
+    rst  $00                        ; 14:592E  Execute from 16-bit pointer table
 .dw Code145901                      ; 14:592F
 .dw Code1458F5                      ; 14:5931
 .dw Code1458E9                      ; 14:5933
@@ -1893,6 +1914,7 @@ Data14593D:                         ; 14:593D
 .db $04,$00
 
 Code14593F:
+; Toy box substate 0A
     ld   a,[$D92A]                  ; 14:593F
     ld   c,a                        ; 14:5942
     ld   hl,$D92B                   ; 14:5943
@@ -2021,7 +2043,9 @@ Data145A44:                         ; 14:5A44
 Data145A52:                         ; 14:5A52
 .db $31,$28,$31,$30,$31,$30,$31,$31,\
     $30,$31,$30,$31,$29
+
 Code145A5F:
+; Toy box substate 0B/0E
     call Sub145D0C                  ; 14:5A5F
     call Sub145F36                  ; 14:5A62
     ld   a,$01                      ; 14:5A65
@@ -2317,6 +2341,7 @@ Code145C51:
     ret                             ; 14:5C57
 
 Code145C58:
+; Toy box substate 0D
     call Sub145ACA                  ; 14:5C58
     ldh  a,[<H_ButtonsPressed]      ; 14:5C5B
     bit  1,a                        ; 14:5C5D
@@ -3268,7 +3293,7 @@ Sub14624A:
     ld   [$D928],a                  ; 14:6253
 Code146256:
     ld   a,$14                      ; 14:6256
-    rst  $10                        ; 14:6258
+    rst  $10                        ; 14:6258  24-bit call
 .dl SubL_075E6D                     ; 14:6259
     pop  af                         ; 14:625C
     ld   [$D928],a                  ; 14:625D
@@ -3517,13 +3542,15 @@ Data146524:                         ; 14:6524
     $43,$43,$43,$43,$63,$43,$43,$43,\
     $43,$43,$43,$43,$43,$43,$43,$43,\
     $43,$43,$43,$43,$43,$43,$43,$43
+
 Code14668C:
+; Toy box substate 0F/12
     call Sub00126D                  ; 14:668C
     xor  a                          ; 14:668F
     ldh  [<IE],a                    ; 14:6690
     ldh  [<$FF93],a                 ; 14:6692
     ld   a,$14                      ; 14:6694
-    rst  $10                        ; 14:6696
+    rst  $10                        ; 14:6696  24-bit call
 .dl SubL_0756D9                     ; 14:6697
     call Sub1462D8                  ; 14:669A
     ld   a,[$D96E]                  ; 14:669D
@@ -3628,9 +3655,9 @@ Code146771:
     ld   a,$09                      ; 14:6788
     ld   [$CDF4],a                  ; 14:678A
     xor  a                          ; 14:678D
-    ldh  [<$FFB8],a                 ; 14:678E
-    ldh  [<$FFB9],a                 ; 14:6790
-    ldh  [<$FFBA],a                 ; 14:6792
+    ldh  [<H_CameraXLow],a          ; 14:678E
+    ldh  [<H_CameraXHigh],a         ; 14:6790
+    ldh  [<H_CameraY],a             ; 14:6792
     ldh  [<$FFBB],a                 ; 14:6794
     ld   [$D92A],a                  ; 14:6796
     ld   [$D929],a                  ; 14:6799
@@ -3725,11 +3752,12 @@ Sub14683C:
     ld   a,$03                      ; 14:6844
     ld   [$C432],a                  ; 14:6846
     ld   a,$14                      ; 14:6849
-    rst  $10                        ; 14:684B
+    rst  $10                        ; 14:684B  24-bit call
 .dl SubL_0757EF                     ; 14:684C
     ret                             ; 14:684F
 
 Code146850:
+; Toy box substate 10
     ld   a,$90                      ; 14:6850
     ld   [$C178],a                  ; 14:6852
     ld   hl,$D960                   ; 14:6855
@@ -3835,14 +3863,15 @@ Sub1468EB:
     ldh  [<LCDC],a                  ; 14:690A
     call Sub0010AD                  ; 14:690C
     ld   a,$14                      ; 14:690F
-    rst  $10                        ; 14:6911
+    rst  $10                        ; 14:6911  24-bit call
 .dl SubL_0757EF                     ; 14:6912
     ld   a,$14                      ; 14:6915
-    rst  $10                        ; 14:6917
+    rst  $10                        ; 14:6917  24-bit call
 .dl SubL_075E6D                     ; 14:6918
     ret                             ; 14:691B
 
 Code14691C:
+; Toy box substate 11/14
     call Sub145EF1                  ; 14:691C
     ldh  a,[<H_GameSubstate]        ; 14:691F
     cp   $13                        ; 14:6921
@@ -3999,6 +4028,7 @@ Code146A30:
     ret                             ; 14:6A36
 
 Code146A37:
+; Toy box substate 13
     ld   a,$90                      ; 14:6A37
     ld   [$C178],a                  ; 14:6A39
     call Sub146930                  ; 14:6A3C
@@ -4073,7 +4103,7 @@ Return146ABE:
 RankingMain:
 ; Game state 2B
     ldh  a,[<H_GameSubstate]        ; 14:6ABF
-    rst  $00                        ; 14:6AC1
+    rst  $00                        ; 14:6AC1  Execute from 16-bit pointer table
 .dw Code146B76                      ; 14:6AC2
 .dw Code146BA1                      ; 14:6AC4
 .dw Code147123                      ; 14:6AC6
@@ -4123,7 +4153,7 @@ Code146B76:
     ld   bc,$0DFF                   ; 14:6B89
     call ClearBytes                 ; 14:6B8C
     ld   a,$14                      ; 14:6B8F
-    rst  $10                        ; 14:6B91
+    rst  $10                        ; 14:6B91  24-bit call
 .dl SubL_0756D9                     ; 14:6B92
     xor  a                          ; 14:6B95
     ld   [$C432],a                  ; 14:6B96
@@ -4179,9 +4209,9 @@ Code146BA9:
     ldh  [<$FFC0],a                 ; 14:6C10
     call Sub000E29                  ; 14:6C12
     xor  a                          ; 14:6C15
-    ldh  [<$FFB8],a                 ; 14:6C16
-    ldh  [<$FFB9],a                 ; 14:6C18
-    ldh  [<$FFBA],a                 ; 14:6C1A
+    ldh  [<H_CameraXLow],a          ; 14:6C16
+    ldh  [<H_CameraXHigh],a         ; 14:6C18
+    ldh  [<H_CameraY],a             ; 14:6C1A
     ldh  [<$FFBB],a                 ; 14:6C1C
     ld   [$D90C],a                  ; 14:6C1E
     ld   a,$02                      ; 14:6C21
@@ -4614,7 +4644,7 @@ Code146EFB:
     call Sub146D33                  ; 14:6F6F
     call Sub001558                  ; 14:6F72
     ld   a,$14                      ; 14:6F75
-    rst  $10                        ; 14:6F77
+    rst  $10                        ; 14:6F77  24-bit call
 .dl SubL_07588C                     ; 14:6F78
     xor  a                          ; 14:6F7B
     ld   [$D931],a                  ; 14:6F7C
@@ -5043,7 +5073,7 @@ Code147236:
     ld   a,$44                      ; 14:7241
     ldh  [<$FFF2],a                 ; 14:7243
     ld   a,$14                      ; 14:7245
-    rst  $10                        ; 14:7247
+    rst  $10                        ; 14:7247  24-bit call
 .dl SubL_0759EA                     ; 14:7248
 Code14724B:
     xor  a                          ; 14:724B
@@ -5090,7 +5120,7 @@ Code14724F:
     ldh  [<SVBK],a                  ; 14:72A9
     ld   a,$0E                      ; 14:72AB
     ld   [$C415],a                  ; 14:72AD
-    ld   hl,Data0E5800              ; 14:72B0
+    ld   hl,Ti_ChalMenu             ; 14:72B0
     ld   a,$14                      ; 14:72B3
     call LoadScreenTilemapD000      ; 14:72B5
     ld   hl,$D014                   ; 14:72B8
@@ -5110,7 +5140,7 @@ Code1472C1:
     call Sub146AD0                  ; 14:72CF
     ld   a,$0E                      ; 14:72D2
     ld   [$C415],a                  ; 14:72D4
-    ld   hl,Data0E5AD0              ; 14:72D7
+    ld   hl,Pal_ChalMenu            ; 14:72D7
     ld   de,W_PaletteBuffer         ; 14:72DA
     ld   bc,$0038                   ; 14:72DD
     ld   a,$14                      ; 14:72E0
@@ -5119,14 +5149,14 @@ Code1472C1:
     ldh  [<$FFC0],a                 ; 14:72E7
     call Sub000E29                  ; 14:72E9
     xor  a                          ; 14:72EC
-    ldh  [<$FFB9],a                 ; 14:72ED
+    ldh  [<H_CameraXHigh],a         ; 14:72ED
     ldh  [<$FFBB],a                 ; 14:72EF
     ld   a,$01                      ; 14:72F1
     ld   [$C177],a                  ; 14:72F3
     ld   a,$FC                      ; 14:72F6
-    ldh  [<$FFB8],a                 ; 14:72F8
+    ldh  [<H_CameraXLow],a          ; 14:72F8
     ld   a,$FE                      ; 14:72FA
-    ldh  [<$FFBA],a                 ; 14:72FC
+    ldh  [<H_CameraY],a             ; 14:72FC
     call Sub14741A                  ; 14:72FE
     ld   a,$09                      ; 14:7301
     ldh  [<IE],a                    ; 14:7303
@@ -5152,13 +5182,13 @@ Sub147358:
     ld   [W_LevelID],a              ; 14:7359
 Code14735C:
     ld   a,$14                      ; 14:735C
-    rst  $10                        ; 14:735E
-.dl SubL_075B10                     ; 14:735F
+    rst  $10                        ; 14:735E  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 14:735F
     ld   a,[W_LevelID]              ; 14:7362
     and  $03                        ; 14:7365
     ld   c,a                        ; 14:7367
     ld   b,$00                      ; 14:7368
-    ld   hl,$C18E                   ; 14:736A
+    ld   hl,W_ChalUnlockFlags       ; 14:736A
     add  hl,bc                      ; 14:736D
     ld   a,[W_LevelID]              ; 14:736E
     srl  a                          ; 14:7371
@@ -5271,13 +5301,13 @@ Code1473FF:
     ldi  [hl],a                     ; 14:7411
     ld   [hl],a                     ; 14:7412
     ld   a,$14                      ; 14:7413
-    rst  $10                        ; 14:7415
-.dl SubL_075B10                     ; 14:7416
+    rst  $10                        ; 14:7415  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 14:7416
     ret                             ; 14:7419
 
 Sub14741A:
     call Sub147457                  ; 14:741A
-    ld   de,$C1A1                   ; 14:741D
+    ld   de,W_ChalTotalScoreLow     ; 14:741D
     call Sub003DFB                  ; 14:7420
     ld   hl,$D20C                   ; 14:7423
     ld   de,$C34F                   ; 14:7426
@@ -5312,11 +5342,11 @@ Data147453:                         ; 14:7453
 .db $0F,$7F,$2D,$7D
 
 Sub147457:
-    ld   hl,$C1A1                   ; 14:7457
+    ld   hl,W_ChalTotalScoreLow     ; 14:7457
     ldi  a,[hl]                     ; 14:745A
     cp   [hl]                       ; 14:745B
     ret  z                          ; 14:745C
-    ld   hl,$C1A1                   ; 14:745D
+    ld   hl,W_ChalTotalScoreLow     ; 14:745D
     xor  a                          ; 14:7460
     ldi  a,[hl]                     ; 14:7461
     ld   e,a                        ; 14:7462
@@ -5393,7 +5423,7 @@ Code1474C4:
     inc  de                         ; 14:74C6
     dec  c                          ; 14:74C7
     jr   nz,Code1474C4              ; 14:74C8
-    ld   hl,$C1A3                   ; 14:74CA
+    ld   hl,W_ChalTotalScoreHigh    ; 14:74CA
     ld   a,$01                      ; 14:74CD
     cp   [hl]                       ; 14:74CF
     jr   z,Code1474D6               ; 14:74D0

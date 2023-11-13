@@ -9,9 +9,9 @@ Sub094000:
     ldh  [<SB],a                    ; 09:4005
     call Sub00126D                  ; 09:4007
     ld   a,$09                      ; 09:400A
-    rst  $10                        ; 09:400C
+    rst  $10                        ; 09:400C  24-bit call
 .dl SubL_0756D9                     ; 09:400D
-    ld   a,[$C191]                  ; 09:4010
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 09:4010
     and  $80                        ; 09:4013
     jr   z,Code09401D               ; 09:4015
     ld   a,[$C4FB]                  ; 09:4017
@@ -34,13 +34,13 @@ Code09401D:
     ld   a,$00                      ; 09:403E
     ldh  [<H_GameSubstate],a        ; 09:4040
     ld   [$C1B4],a                  ; 09:4042
-    ldh  [<$FFB9],a                 ; 09:4045
+    ldh  [<H_CameraXHigh],a         ; 09:4045
     ldh  [<$FFBB],a                 ; 09:4047
     ld   a,$04                      ; 09:4049
-    ldh  [<$FFB8],a                 ; 09:404B
+    ldh  [<H_CameraXLow],a          ; 09:404B
     ld   a,$70                      ; 09:404D
-    ldh  [<$FFBA],a                 ; 09:404F
-    ld   hl,$DF01                   ; 09:4051
+    ldh  [<H_CameraY],a             ; 09:404F
+    ld   hl,W_TilemapUploadBuffer   ; 09:4051
     ld   [hl],$99                   ; 09:4054
     inc  hl                         ; 09:4056
     ld   [hl],$D4                   ; 09:4057
@@ -59,10 +59,10 @@ Code09406C:
     ld   a,$07                      ; 09:406C
     ld   [$C500],a                  ; 09:406E
     ld   a,$09                      ; 09:4071
-    rst  $10                        ; 09:4073
+    rst  $10                        ; 09:4073  24-bit call
 .dl SubL_075F15                     ; 09:4074
     ld   a,$09                      ; 09:4077
-    rst  $10                        ; 09:4079
+    rst  $10                        ; 09:4079  24-bit call
 .dl SubL_157B22                     ; 09:407A
     ld   hl,$C471                   ; 09:407D
     ld   a,[hl]                     ; 09:4080
@@ -88,13 +88,14 @@ Code094096:
     ld   [$DA6E],a                  ; 09:40A4
     ret                             ; 09:40A7
 
-Sub0940A8:
+PreTitleMain_CallSubstate:
 ; called by game state 01
     ldh  a,[<H_GameSubstate]        ; 09:40A8
-    rst  $00                        ; 09:40AA
+    rst  $00                        ; 09:40AA  Execute from 16-bit pointer table
 .dw Code0940B1                      ; 09:40AB
 .dw Code0940CB                      ; 09:40AD
 .dw Code0940E0                      ; 09:40AF
+
 Code0940B1:
     ld   a,[$C164]                  ; 09:40B1
     dec  a                          ; 09:40B4
@@ -113,7 +114,7 @@ Code0940B1:
 
 Code0940CB:
     ld   a,$09                      ; 09:40CB
-    rst  $10                        ; 09:40CD
+    rst  $10                        ; 09:40CD  24-bit call
 .dl SubL_0451A4                     ; 09:40CE
     ld   a,[$C1AD]                  ; 09:40D1
     dec  a                          ; 09:40D4
@@ -168,7 +169,7 @@ Code09412C:
     inc  hl                         ; 09:4131
     dec  b                          ; 09:4132
     jr   nz,Code09412C              ; 09:4133
-    ld   hl,$DFC0                   ; 09:4135
+    ld   hl,W_PaletteBufferSpr      ; 09:4135
     ld   de,Data0940F5              ; 09:4138
     ld   b,$10                      ; 09:413B
 Code09413D:
@@ -206,7 +207,7 @@ Code09413D:
     ld   [W_GameMode],a             ; 09:4185
     ld   [$C0C1],a                  ; 09:4188
     ld   [$C170],a                  ; 09:418B
-    ld   [$C1F2],a                  ; 09:418E
+    ld   [W_PlayerCoins],a          ; 09:418E
     ld   [$C17A],a                  ; 09:4191
     ld   [$C17B],a                  ; 09:4194
     ld   [$C17C],a                  ; 09:4197
@@ -215,14 +216,14 @@ Code09413D:
     ld   [W_LevelID],a              ; 09:41A0
     ld   [$C362],a                  ; 09:41A3
     ld   [$C35C],a                  ; 09:41A6
-    ldh  [<$FFB8],a                 ; 09:41A9
-    ldh  [<$FFB9],a                 ; 09:41AB
+    ldh  [<H_CameraXLow],a          ; 09:41A9
+    ldh  [<H_CameraXHigh],a         ; 09:41AB
     ldh  [<$FFBB],a                 ; 09:41AD
     ld   [$C175],a                  ; 09:41AF
     ld   [$C178],a                  ; 09:41B2
     ld   [$C177],a                  ; 09:41B5
     ld   a,$70                      ; 09:41B8
-    ldh  [<$FFBA],a                 ; 09:41BA
+    ldh  [<H_CameraY],a             ; 09:41BA
     ld   [$C176],a                  ; 09:41BC
     ld   a,$0A                      ; 09:41BF
     ld   [$C356],a                  ; 09:41C1
@@ -231,7 +232,7 @@ Code09413D:
     ld   a,$20                      ; 09:41C9
     ld   [$C1AD],a                  ; 09:41CB
     ld   a,$09                      ; 09:41CE
-    rst  $10                        ; 09:41D0
+    rst  $10                        ; 09:41D0  24-bit call
 .dl SubL_0756D9                     ; 09:41D1
     ld   a,$0B                      ; 09:41D4
     ldh  [<IE],a                    ; 09:41D6
@@ -321,19 +322,20 @@ Data094382:                         ; 09:4382
     $01,$04,$00,$04,$01,$04,$00,$04,\
     $01,$04,$00,$04
 
-Sub094396:
+TitleScreenMain_CallSubstate:
 ; called by game state 03
     ldh  a,[<H_GameSubstate]        ; 09:4396
-    rst  $00                        ; 09:4398
+    rst  $00                        ; 09:4398  Execute from 16-bit pointer table
 .dw Code09439D                      ; 09:4399
 .dw Code0943C9                      ; 09:439B
+
 Code09439D:
     ld   a,[$C1AD]                  ; 09:439D
     dec  a                          ; 09:43A0
     ld   [$C1AD],a                  ; 09:43A1
     jr   z,Code0943B7               ; 09:43A4
     ld   a,$09                      ; 09:43A6
-    rst  $10                        ; 09:43A8
+    rst  $10                        ; 09:43A8  24-bit call
 .dl SubL_045221                     ; 09:43A9
     ldh  a,[<H_GlobalTimer]         ; 09:43AC
     and  $01                        ; 09:43AE
@@ -720,7 +722,7 @@ Sub094624:
     ld   hl,SRAMENABLE              ; 09:462D
     ld   [hl],$FF                   ; 09:4630
     ld   a,$09                      ; 09:4632
-    rst  $10                        ; 09:4634
+    rst  $10                        ; 09:4634  24-bit call
 .dl SubL_0B75A6                     ; 09:4635
     ret                             ; 09:4638
 
@@ -752,11 +754,11 @@ Sub09465D:
     ld   [$C174],a                  ; 09:466D
     ld   [$C168],a                  ; 09:4670
     ldh  [<H_GameSubstate],a        ; 09:4673
-    ldh  [<$FFB8],a                 ; 09:4675
-    ldh  [<$FFB9],a                 ; 09:4677
+    ldh  [<H_CameraXLow],a          ; 09:4675
+    ldh  [<H_CameraXHigh],a         ; 09:4677
     ldh  [<$FFBB],a                 ; 09:4679
     ld   a,$70                      ; 09:467B
-    ldh  [<$FFBA],a                 ; 09:467D
+    ldh  [<H_CameraY],a             ; 09:467D
     ld   a,$01                      ; 09:467F
     ld   [$C171],a                  ; 09:4681
     ld   a,$09                      ; 09:4684
@@ -807,7 +809,7 @@ Code0946DB:
     ld   [$C192],a                  ; 09:46E0
 Code0946E3:
     ld   a,$09                      ; 09:46E3
-    rst  $10                        ; 09:46E5
+    rst  $10                        ; 09:46E5  24-bit call
 .dl SubL_0757EF                     ; 09:46E6
 Code0946E9:
     ld   a,$69                      ; 09:46E9
@@ -849,7 +851,7 @@ Code094720:
     ldi  a,[hl]                     ; 09:472B
     ld   [$C16F],a                  ; 09:472C
     ld   a,$09                      ; 09:472F
-    rst  $10                        ; 09:4731
+    rst  $10                        ; 09:4731  24-bit call
 .dl SubL_075669                     ; 09:4732
 Return094735:
     ret                             ; 09:4735
@@ -883,14 +885,15 @@ Code09475B:
     ldi  a,[hl]                     ; 09:4766
     ld   [$C16F],a                  ; 09:4767
 ReturnL_09476A:
-    rst  $18                        ; 09:476A
+    rst  $18                        ; 09:476A  Return from 24-bit call
 
 GameOverMain:
 ; Game state 0F
     ldh  a,[<H_GameSubstate]        ; 09:476B
-    rst  $00                        ; 09:476D
+    rst  $00                        ; 09:476D  Execute from 16-bit pointer table
 .dw Code094772                      ; 09:476E
 .dw Code094791                      ; 09:4770
+
 Code094772:
     ld   hl,$C285                   ; 09:4772
     ld   a,[hl]                     ; 09:4775
@@ -925,7 +928,7 @@ Code09479F:
     ld   [$C285],a                  ; 09:47A0
     ld   [$C286],a                  ; 09:47A3
     ldh  [<H_GameSubstate],a        ; 09:47A6
-    ld   [$C283],a                  ; 09:47A8
+    ld   [W_ChallengeFlag],a        ; 09:47A8
     ld   a,[W_SPFlag]               ; 09:47AB
     and  a                          ; 09:47AE
     jr   nz,Code0947B7              ; 09:47AF
@@ -953,12 +956,12 @@ Sub0947CE:
     ld   a,$00                      ; 09:47DA
     ld   [$C0C4],a                  ; 09:47DC
     ldh  [<H_GameSubstate],a        ; 09:47DF
-    ldh  [<$FFB8],a                 ; 09:47E1
-    ldh  [<$FFB9],a                 ; 09:47E3
+    ldh  [<H_CameraXLow],a          ; 09:47E1
+    ldh  [<H_CameraXHigh],a         ; 09:47E3
     ldh  [<$FFBB],a                 ; 09:47E5
     ld   a,$70                      ; 09:47E7
-    ldh  [<$FFBA],a                 ; 09:47E9
-    ld   de,$DF01                   ; 09:47EB
+    ldh  [<H_CameraY],a             ; 09:47E9
+    ld   de,W_TilemapUploadBuffer   ; 09:47EB
     ld   hl,Data0947BC              ; 09:47EE
     ld   bc,$0012                   ; 09:47F1
     call CopyBytes                  ; 09:47F4
@@ -986,9 +989,10 @@ Sub0947CE:
 Sub09481F:
 ; Game state 11
     ldh  a,[<H_GameSubstate]        ; 09:481F
-    rst  $00                        ; 09:4821
+    rst  $00                        ; 09:4821  Execute from 16-bit pointer table
 .dw Code094826                      ; 09:4822
 .dw Code094845                      ; 09:4824
+
 Code094826:
     ld   hl,$C285                   ; 09:4826
     ld   a,[hl]                     ; 09:4829
@@ -1023,7 +1027,7 @@ Code094853:
     ld   [$C285],a                  ; 09:4855
     ld   [$C286],a                  ; 09:4858
     ldh  [<H_GameSubstate],a        ; 09:485B
-    ld   a,[$C283]                  ; 09:485D
+    ld   a,[W_ChallengeFlag]        ; 09:485D
     and  a                          ; 09:4860
     jr   z,Code094868               ; 09:4861
     ld   a,$1D                      ; 09:4863
@@ -1081,11 +1085,11 @@ Code094B82:
     ld   a,$00                      ; 09:4B85
     ld   [W_SublevelID],a           ; 09:4B87
     ldh  [<H_GameSubstate],a        ; 09:4B8A
-    ldh  [<$FFB8],a                 ; 09:4B8C
-    ldh  [<$FFB9],a                 ; 09:4B8E
+    ldh  [<H_CameraXLow],a          ; 09:4B8C
+    ldh  [<H_CameraXHigh],a         ; 09:4B8E
     ldh  [<$FFBB],a                 ; 09:4B90
     ld   a,$70                      ; 09:4B92
-    ldh  [<$FFBA],a                 ; 09:4B94
+    ldh  [<H_CameraY],a             ; 09:4B94
     ld   a,$30                      ; 09:4B96
     ld   [$C326],a                  ; 09:4B98
     ld   a,$09                      ; 09:4B9B
@@ -1100,7 +1104,7 @@ Code094B82:
     ld   hl,Data09488E              ; 09:4BAF
     call LoadScreenTilemapVRAM      ; 09:4BB2
     ld   a,:Code094B82              ; 09:4BB5
-    rst  $10                        ; 09:4BB7
+    rst  $10                        ; 09:4BB7  24-bit call
 .dl SubL_07588C                     ; 09:4BB8
     ld   a,$01                      ; 09:4BBB
     ldh  [<IE],a                    ; 09:4BBD
@@ -1113,10 +1117,11 @@ Code094B82:
 Sub094BC8:
 ; Game state 13
     ldh  a,[<H_GameSubstate]        ; 09:4BC8
-    rst  $00                        ; 09:4BCA
+    rst  $00                        ; 09:4BCA  Execute from 16-bit pointer table
 .dw Code094BD1                      ; 09:4BCB
 .dw Code094C1D                      ; 09:4BCD
 .dw Code094C0A                      ; 09:4BCF
+
 Code094BD1:
     ldh  a,[<H_ButtonsPressed]      ; 09:4BD1
     and  $01                        ; 09:4BD3
@@ -1330,7 +1335,7 @@ Sub094D0C:
     add  hl,bc                      ; 09:4D23
     ld   c,l                        ; 09:4D24
     ld   b,h                        ; 09:4D25
-    ld   hl,$DF01                   ; 09:4D26
+    ld   hl,W_TilemapUploadBuffer   ; 09:4D26
     ld   [hl],b                     ; 09:4D29
     inc  hl                         ; 09:4D2A
     ld   [hl],c                     ; 09:4D2B
@@ -1359,7 +1364,7 @@ Sub094D3E:
     add  hl,bc                      ; 09:4D4D
     ld   c,l                        ; 09:4D4E
     ld   b,h                        ; 09:4D4F
-    ld   hl,$DF01                   ; 09:4D50
+    ld   hl,W_TilemapUploadBuffer   ; 09:4D50
     ld   [hl],b                     ; 09:4D53
     inc  hl                         ; 09:4D54
     ld   [hl],c                     ; 09:4D55
@@ -1376,9 +1381,10 @@ Sub094D3E:
 Sub094D63:
 ; Game state 40
     ldh  a,[<H_GameSubstate]        ; 09:4D63
-    rst  $00                        ; 09:4D65
+    rst  $00                        ; 09:4D65  Execute from 16-bit pointer table
 .dw Code094D6A                      ; 09:4D66
 .dw Code094D94                      ; 09:4D68
+
 Code094D6A:
     ldh  a,[<H_ButtonsPressed]      ; 09:4D6A
     and  $0B                        ; 09:4D6C
@@ -1440,7 +1446,7 @@ Data0950A7:                         ; 09:50A7
 
 Sub0950E7:
     ld   a,$09                      ; 09:50E7
-    rst  $10                        ; 09:50E9
+    rst  $10                        ; 09:50E9  24-bit call
 .dl SubL_07588C                     ; 09:50EA
     call Sub0951D9                  ; 09:50ED
     ret                             ; 09:50F0
@@ -1462,11 +1468,11 @@ Sub0950F1:
     ld   [$C325],a                  ; 09:5112
     ldh  [<$FFA3],a                 ; 09:5115
     ldh  [<$FFA4],a                 ; 09:5117
-    ldh  [<$FFB8],a                 ; 09:5119
-    ldh  [<$FFB9],a                 ; 09:511B
+    ldh  [<H_CameraXLow],a          ; 09:5119
+    ldh  [<H_CameraXHigh],a         ; 09:511B
     ldh  [<$FFBB],a                 ; 09:511D
     ld   a,$70                      ; 09:511F
-    ldh  [<$FFBA],a                 ; 09:5121
+    ldh  [<H_CameraY],a             ; 09:5121
     ld   a,$60                      ; 09:5123
     ld   [$C326],a                  ; 09:5125
     ld   a,:Sub0950F1               ; 09:5128
@@ -1522,7 +1528,7 @@ Code09517C:
     add  $D1                        ; 09:518B
     ld   e,a                        ; 09:518D
     ld   a,$04                      ; 09:518E
-    ld   hl,$DF01                   ; 09:5190
+    ld   hl,W_TilemapUploadBuffer   ; 09:5190
     ld   [hl],$9A                   ; 09:5193
     inc  hl                         ; 09:5195
     ld   [hl],$41                   ; 09:5196
@@ -1683,9 +1689,10 @@ Data095364:                         ; 09:5364
 Sub095370:
 ; Game state 15
     ldh  a,[<H_GameSubstate]        ; 09:5370
-    rst  $00                        ; 09:5372
+    rst  $00                        ; 09:5372  Execute from 16-bit pointer table
 .dw Code095377                      ; 09:5373
 .dw Code0954E1                      ; 09:5375
+
 Code095377:
     call Sub0954F9                  ; 09:5377
     ld   a,[$C28F]                  ; 09:537A
@@ -1877,7 +1884,7 @@ Code0954B8:
     ret                             ; 09:54C6
 
 Code0954C7:
-    ld   hl,$DF01                   ; 09:54C7
+    ld   hl,W_TilemapUploadBuffer   ; 09:54C7
     ld   [hl],$9A                   ; 09:54CA
     inc  hl                         ; 09:54CC
     ld   [hl],$4D                   ; 09:54CD
@@ -1901,7 +1908,7 @@ Code0954E1:
     ld   [$C326],a                  ; 09:54E5
     jr   nz,Return0954F8            ; 09:54E8
     ld   a,$09                      ; 09:54EA
-    rst  $10                        ; 09:54EC
+    rst  $10                        ; 09:54EC  24-bit call
 .dl SubL_075A04                     ; 09:54ED
     ld   a,$00                      ; 09:54F0
     ldh  [<H_GameSubstate],a        ; 09:54F2
@@ -2060,13 +2067,15 @@ Code0955D3:
 Data0955DA:                         ; 09:55DA
 .db $00
 
-NonGBCErrorMain:
+NonGBCError_Main:
 ; Game state 37
     ldh  a,[<H_GameSubstate]        ; 09:55DB
-    rst  $00                        ; 09:55DD
-.dw Code0955E2                      ; 09:55DE
+    rst  $00                        ; 09:55DD  Execute from 16-bit pointer table
+.dw NonGBCError_LoadGraphics        ; 09:55DE
 .dw Return095628                    ; 09:55E0
-Code0955E2:
+
+NonGBCError_LoadGraphics:
+; Non-GBC error substate 0
     call Sub00126D                  ; 09:55E2
     xor  a                          ; 09:55E5
     ldh  [<IE],a                    ; 09:55E6
@@ -2080,14 +2089,14 @@ Code0955E2:
     ld   bc,$0600                   ; 09:55F9
     ld   a,:Gr_NonGBCError          ; 09:55FC
     ld   [$C415],a                  ; 09:55FE
-    ld   a,:Code0955E2              ; 09:5601
+    ld   a,:NonGBCError_LoadGraphics; 09:5601
     call CopyBytesLong              ; 09:5603
     ld   hl,Ti_NonGBCError          ; 09:5606
     ld   de,$9800                   ; 09:5609
     ld   bc,$0240                   ; 09:560C
     ld   a,:Ti_NonGBCError          ; 09:560F
     ld   [$C415],a                  ; 09:5611
-    ld   a,:Code0955E2              ; 09:5614
+    ld   a,:NonGBCError_LoadGraphics; 09:5614
     call CopyBytesLong              ; 09:5616
     ld   a,$01                      ; 09:5619
     ldh  [<IE],a                    ; 09:561B
@@ -2099,6 +2108,7 @@ Code0955E2:
     ret                             ; 09:5627
 
 Return095628:
+; Non-GBC error substate 1: infinite loop
     ret                             ; 09:5628
 
 Ti_SPTitle_Tiles:                   ; 09:5629
@@ -2111,15 +2121,17 @@ Pal_SPTitle:                        ; 09:5AA9
     $07FF,$013B,$0014,$0000,$0000,$0000,$0000,$0000,\
     $0000,$0000,$0000,$0000,$73FF,$01FF,$0000,$0000
 
-SPTitleMain:
+SPTitle_Main:
 ; Game state 38
     ldh  a,[<H_GameSubstate]        ; 09:5AE9
-    rst  $00                        ; 09:5AEB
+    rst  $00                        ; 09:5AEB  Execute from 16-bit pointer table
 .dw Code095AF4                      ; 09:5AEC
 .dw Code095B32                      ; 09:5AEE
 .dw Code095B4B                      ; 09:5AF0
 .dw Code095B58                      ; 09:5AF2
+
 Code095AF4:
+; SP title screen substate 0
     call Sub00126D                  ; 09:5AF4
     ld   a,$FF                      ; 09:5AF7
     ld   [$DE68],a                  ; 09:5AF9
@@ -2129,7 +2141,7 @@ Code095AF4:
     ld   a,$04                      ; 09:5B01
     ldh  [<SCX],a                   ; 09:5B03
     ld   a,$09                      ; 09:5B05
-    rst  $10                        ; 09:5B07
+    rst  $10                        ; 09:5B07  24-bit call
 .dl SubL_075485                     ; 09:5B08
     call SPTitle_LoadGraphics       ; 09:5B0B
     call Sub095D37                  ; 09:5B0E
@@ -2151,6 +2163,7 @@ Code095AF4:
     ret                             ; 09:5B31
 
 Code095B32:
+; SP title screen substate 1
     ld   a,[$C40F]                  ; 09:5B32
     dec  a                          ; 09:5B35
     ld   [$C40F],a                  ; 09:5B36
@@ -2166,6 +2179,7 @@ Return095B4A:
     ret                             ; 09:5B4A
 
 Code095B4B:
+; SP title screen substate 2
     ldh  a,[<$FF99]                 ; 09:5B4B
     and  a                          ; 09:5B4D
     jr   z,Code095B54               ; 09:5B4E
@@ -2177,13 +2191,14 @@ Code095B54:
     ret                             ; 09:5B57
 
 Code095B58:
+; SP title screen substate 3
     ld   a,[$C40F]                  ; 09:5B58
     dec  a                          ; 09:5B5B
     ld   [$C40F],a                  ; 09:5B5C
-    jr   nz,Return095B65            ; 09:5B5F
+    jr   nz,@Return                 ; 09:5B5F
     ld   a,$04                      ; 09:5B61
     ldh  [<H_GameState],a           ; 09:5B63
-Return095B65:
+@Return:
     ret                             ; 09:5B65
 
 Sub095B66:

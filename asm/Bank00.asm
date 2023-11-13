@@ -26,6 +26,8 @@
     nop                             ; 00:0100
     jp   CodeStart                  ; 00:0101
 
+; Internal header goes here
+
 .orga $0150
 CodeStart:
     cp   $11                        ; 00:0150  if GBC or GBA, A starts with 11
@@ -46,7 +48,7 @@ Code000167:
 Code000168:
     ld   [$C0C0],a                  ; 00:0168
     call Sub00126D                  ; 00:016B
-    ld   sp,$CFFF                   ; 00:016E
+    ld   sp,$CFFF                   ; 00:016E  set stack pointer
     ld   a,:Sub0B6074               ; 00:0171
     call SetROMBank                 ; 00:0173
     call Sub0B6074                  ; 00:0176
@@ -111,7 +113,7 @@ Code0001EA:
     jr   z,Code0001F3               ; 00:01EE
     jp   Code000167                 ; 00:01F0
 Code0001F3:
-    call RunGameState               ; 00:01F3
+    call RunGameState               ; 00:01F3  execute code for current game state
     call Return001048               ; 00:01F6
     call Sub001101                  ; 00:01F9
     call Sub000F13                  ; 00:01FC
@@ -170,11 +172,11 @@ Code00025B:
 
 RunGameState:
     ldh  a,[<H_GameState]           ; 00:0263
-    rst  $00                        ; 00:0265
-.dw Code0009C5                      ; 00
-.dw Code0009D6                      ; 01
-.dw Code0009E7                      ; 02
-.dw Code0009F8                      ; 03
+    rst  $00                        ; 00:0265  Execute from 16-bit pointer table
+.dw PreTitleInit                    ; 00
+.dw PreTitleMain                    ; 01
+.dw TitleScreenInit                 ; 02
+.dw TitleScreenMain                 ; 03
 .dw OverworldInit                   ; 04
 .dw OverworldMain                   ; 05
 .dw Code0002EA                      ; 06
@@ -200,12 +202,12 @@ RunGameState:
 .dw Code000B16                      ; 1A
 .dw Code000B1F                      ; 1B
 .dw AwardCutsceneWrapper            ; 1C
-.dw ChallengeMenuInit               ; 1D
-.dw ChallengeMenuWrapper            ; 1E
-.dw ChallengeYoshiHatchWrapper      ; 1F
-.dw Code000B56                      ; 20
-.dw ChallengeResultsWrapper         ; 21
-.dw Code000B99                      ; 22
+.dw ChalMenuInit                    ; 1D
+.dw ChalMenu_Wrapper                ; 1E
+.dw ChalYoshiHatch_Wrapper          ; 1F
+.dw ChalResultsInit                 ; 20
+.dw ChalResultsMain_Wrapper         ; 21
+.dw ChalMiss_Wrapper                ; 22
 .dw Code0004E5                      ; 23
 .dw Code0005FB                      ; 24
 .dw Code000BA2                      ; 25
@@ -222,13 +224,13 @@ RunGameState:
 .dw Code000BFB                      ; 30
 .dw Code0039C2                      ; 31
 .dw Code0039CB                      ; 32
-.dw Code0006F4                      ; 33
-.dw Code000705                      ; 34
-.dw Code00070E                      ; 35
-.dw Code000784                      ; 36
-.dw NonGBCErrorWrapper              ; 37
-.dw SPTitleWrapper                  ; 38
-.dw CreditsWrapper                  ; 39
+.dw YouVsBooMenu_Init               ; 33
+.dw YouVsBooMenu_Wrapper            ; 34
+.dw YouVsBooRace_Init               ; 35
+.dw YouVsBooRace_Main               ; 36
+.dw NonGBCError_Wrapper             ; 37
+.dw SPTitle_Wrapper                 ; 38
+.dw Credits_Wrapper                 ; 39
 .dw Code000C04                      ; 3A
 .dw Code0007FE                      ; 3B
 .dw Code000879                      ; 3C
@@ -236,7 +238,7 @@ RunGameState:
 .dw Code000974                      ; 3E
 .dw Code00099E                      ; 3F
 .dw Code0009B3                      ; 40
-.dw Code000C25                      ; 41
+.dw ToadPeachRoom_Wrapper           ; 41
 
 Code0002EA:
 ; Game state 06/09/0A
@@ -276,9 +278,9 @@ Code00031D:
 Code00032F:
     inc  [hl]                       ; 00:032F
 Code000330:
-    ldh  a,[<$FFB8]                 ; 00:0330
+    ldh  a,[<H_CameraXLow]          ; 00:0330
     ld   [$C175],a                  ; 00:0332
-    ldh  a,[<$FFBA]                 ; 00:0335
+    ldh  a,[<H_CameraY]             ; 00:0335
     ld   [$C176],a                  ; 00:0337
     xor  a                          ; 00:033A
     ldh  [<SCX],a                   ; 00:033B
@@ -298,7 +300,7 @@ Code000330:
     ld   a,$87                      ; 00:035C
     ldh  [<LCDC],a                  ; 00:035E
     call Sub0449E7                  ; 00:0360
-    call Sub003A80                  ; 00:0363
+    call StatusBarInit              ; 00:0363
     ld   a,$0B                      ; 00:0366
     ldh  [<H_GameState],a           ; 00:0368
     ret                             ; 00:036A
@@ -336,7 +338,7 @@ Sub0003A4:
     ldh  a,[<H_GameState]           ; 00:03A4
     sub  $06                        ; 00:03A6  06/09/0A -> 00/03/04
     srl  a                          ; 00:03A8  06/09/0A -> 00/01/02
-    rst  $00                        ; 00:03AA
+    rst  $00                        ; 00:03AA  Execute from 16-bit pointer table
 .dw Sub0003B1                       ; 00:03AB
 .dw Code0003E5                      ; 00:03AD
 .dw Sub0003B1                       ; 00:03AF
@@ -350,10 +352,10 @@ Sub0003B1:
     call SetROMBank                 ; 00:03BE
     call Sub04514D                  ; 00:03C1
     call Sub00375A                  ; 00:03C4
-    ld   a,[$C283]                  ; 00:03C7
+    ld   a,[W_ChallengeFlag]        ; 00:03C7
     and  a                          ; 00:03CA
     jr   z,Code0003D0               ; 00:03CB
-    call Sub0037AE                  ; 00:03CD
+    call LoadChallengeObjData       ; 00:03CD
 Code0003D0:
     call Sub002A18                  ; 00:03D0
     call Sub003593                  ; 00:03D3
@@ -376,10 +378,10 @@ Code0003E5:
     call SetROMBank                 ; 00:03F7
     call Sub04514D                  ; 00:03FA
     call Sub00375A                  ; 00:03FD
-    ld   a,[$C283]                  ; 00:0400
+    ld   a,[W_ChallengeFlag]        ; 00:0400
     and  a                          ; 00:0403
     jr   z,Code000409               ; 00:0404
-    call Sub0037AE                  ; 00:0406
+    call LoadChallengeObjData       ; 00:0406
 Code000409:
     call Sub002A18                  ; 00:0409
     call Sub003593                  ; 00:040C
@@ -410,9 +412,9 @@ Code000434:
     ldh  a,[<H_GameState]           ; 00:0434
     cp   $24                        ; 00:0436
     jp   z,Code000445               ; 00:0438
-    ldh  a,[<$FFB8]                 ; 00:043B
+    ldh  a,[<H_CameraXLow]          ; 00:043B
     ld   [$C175],a                  ; 00:043D
-    ldh  a,[<$FFBA]                 ; 00:0440
+    ldh  a,[<H_CameraY]             ; 00:0440
     ld   [$C176],a                  ; 00:0442
 Code000445:
     ld   a,:Sub0341C2               ; 00:0445
@@ -435,9 +437,9 @@ Code000445:
 
 Code000473:
 ; Game state 0D
-    ldh  a,[<$FFB8]                 ; 00:0473
+    ldh  a,[<H_CameraXLow]          ; 00:0473
     ld   [$C175],a                  ; 00:0475
-    ldh  a,[<$FFBA]                 ; 00:0478
+    ldh  a,[<H_CameraY]             ; 00:0478
     ld   [$C176],a                  ; 00:047A
     call Sub00126D                  ; 00:047D
     ld   a,$00                      ; 00:0480
@@ -455,10 +457,10 @@ Code000473:
     call Sub00375A                  ; 00:049C
     pop  af                         ; 00:049F
     ld   [$C181],a                  ; 00:04A0
-    ld   a,[$C283]                  ; 00:04A3
+    ld   a,[W_ChallengeFlag]        ; 00:04A3
     and  a                          ; 00:04A6
     jr   z,Code0004AC               ; 00:04A7
-    call Sub0037AE                  ; 00:04A9
+    call LoadChallengeObjData       ; 00:04A9
 Code0004AC:
     call Sub002A18                  ; 00:04AC
     ld   a,:Sub0444A6               ; 00:04AF
@@ -469,9 +471,9 @@ Code0004AC:
     ld   a,:Sub037376               ; 00:04BD
     call SetROMBank                 ; 00:04BF
     call Sub037376                  ; 00:04C2
-    ldh  a,[<$FFB8]                 ; 00:04C5
+    ldh  a,[<H_CameraXLow]          ; 00:04C5
     ld   [$C175],a                  ; 00:04C7
-    ldh  a,[<$FFBA]                 ; 00:04CA
+    ldh  a,[<H_CameraY]             ; 00:04CA
     ld   [$C176],a                  ; 00:04CC
     ld   a,$01                      ; 00:04CF
     ld   [$C0C4],a                  ; 00:04D1
@@ -479,9 +481,9 @@ Code0004AC:
     ldh  [<IE],a                    ; 00:04D6
     ld   a,$87                      ; 00:04D8
     ldh  [<LCDC],a                  ; 00:04DA
-    ld   a,:Sub0449F5               ; 00:04DC
+    ld   a,:SetSublevelMusic        ; 00:04DC
     call SetROMBank                 ; 00:04DE
-    call Sub0449F5                  ; 00:04E1
+    call SetSublevelMusic           ; 00:04E1
     ret                             ; 00:04E4
 
 Code0004E5:
@@ -493,7 +495,7 @@ Code0004E5:
 
 Sub0004EE:
     ld   a,[$C168]                  ; 00:04EE
-    rst  $00                        ; 00:04F1
+    rst  $00                        ; 00:04F1  Execute from 16-bit pointer table
 .dw Sub000529                       ; 00:04F2
 .dw Code000536                      ; 00:04F4
 .dw Code0005C2                      ; 00:04F6
@@ -538,7 +540,7 @@ Code000536:
     call Sub0003B1                  ; 00:053E
     call Sub00036B                  ; 00:0541
     xor  a                          ; 00:0544
-    ld   [$C1F2],a                  ; 00:0545
+    ld   [W_PlayerCoins],a          ; 00:0545
     ld   a,:Sub0371C5               ; 00:0548
     call SetROMBank                 ; 00:054A
     call Sub0371C5                  ; 00:054D
@@ -580,10 +582,10 @@ Code000593:
     ldh  a,[<IE]                    ; 00:05A4
     or   $0F                        ; 00:05A6
     ldh  [<IE],a                    ; 00:05A8
-    ld   a,:Sub044A94               ; 00:05AA
+    ld   a,:SetLevelTimerRace       ; 00:05AA
     call SetROMBank                 ; 00:05AC
-    call Sub044A94                  ; 00:05AF
-    call Sub003A80                  ; 00:05B2
+    call SetLevelTimerRace          ; 00:05AF
+    call StatusBarInit              ; 00:05B2
     ld   a,$82                      ; 00:05B5
     ldh  [<SC],a                    ; 00:05B7
     xor  a                          ; 00:05B9
@@ -633,9 +635,9 @@ Code0005FB:
     and  a                          ; 00:0603
     jr   nz,Return00067D            ; 00:0604
     call Sub00067E                  ; 00:0606
-    ldh  a,[<$FFB8]                 ; 00:0609
+    ldh  a,[<H_CameraXLow]          ; 00:0609
     ld   [$C175],a                  ; 00:060B
-    ldh  a,[<$FFBA]                 ; 00:060E
+    ldh  a,[<H_CameraY]             ; 00:060E
     ld   [$C176],a                  ; 00:0610
     ld   a,[$C38D]                  ; 00:0613
     and  a                          ; 00:0616
@@ -717,7 +719,7 @@ Code00069B:
 Sub00069F:
 ; Game state 27
     ld   a,[$C168]                  ; 00:069F
-    rst  $00                        ; 00:06A2
+    rst  $00                        ; 00:06A2  Execute from 16-bit pointer table
 .dw Code0004FA                      ; 00:06A3
 .dw Sub000529                       ; 00:06A5
 .dw Code0006AD                      ; 00:06A7
@@ -740,7 +742,7 @@ Code0006B7:
 Code0006C0:
 ; Game state 28
     ld   a,[$C168]                  ; 00:06C0
-    rst  $00                        ; 00:06C3
+    rst  $00                        ; 00:06C3  Execute from 16-bit pointer table
 .dw Code0006DD                      ; 00:06C4
 .dw Code0006C8                      ; 00:06C6
 
@@ -765,13 +767,13 @@ Code0006DD:
     and  a                          ; 00:06E5
     jr   nz,Return0006F3            ; 00:06E6
     call Sub00067E                  ; 00:06E8
-    ld   a,:Sub0B5A4D               ; 00:06EB
+    ld   a,:YouVsBooMenu_Main       ; 00:06EB
     call SetROMBank                 ; 00:06ED
-    call Sub0B5A4D                  ; 00:06F0
+    call YouVsBooMenu_Main          ; 00:06F0
 Return0006F3:
     ret                             ; 00:06F3
 
-Code0006F4:
+YouVsBooMenu_Init:
 ; Game state 33
     ld   a,:Sub075C36               ; 00:06F4
     call SetROMBank                 ; 00:06F6
@@ -782,14 +784,14 @@ Code0006FC:
     call Sub0B575E                  ; 00:0701
     ret                             ; 00:0704
 
-Code000705:
+YouVsBooMenu_Wrapper:
 ; Game state 34 wrapper
-    ld   a,:Sub0B5A4D               ; 00:0705
+    ld   a,:YouVsBooMenu_Main       ; 00:0705
     call SetROMBank                 ; 00:0707
-    call Sub0B5A4D                  ; 00:070A
+    call YouVsBooMenu_Main          ; 00:070A
     ret                             ; 00:070D
 
-Code00070E:
+YouVsBooRace_Init:
 ; Game state 35
     ld   a,:Sub0B6204               ; 00:070E
     call SetROMBank                 ; 00:0710
@@ -803,11 +805,11 @@ Code00070E:
     call Sub0003B1                  ; 00:0726
     call Sub00036B                  ; 00:0729
     xor  a                          ; 00:072C
-    ld   [$C1F2],a                  ; 00:072D
+    ld   [W_PlayerCoins],a          ; 00:072D
     ld   a,:Sub0444A6               ; 00:0730
     call SetROMBank                 ; 00:0732
     call Sub0444A6                  ; 00:0735
-    call Sub044A94                  ; 00:0738
+    call SetLevelTimerRace          ; 00:0738
     ld   a,$07                      ; 00:073B
     call SetROMBank                 ; 00:073D
     ld   d,$00                      ; 00:0740
@@ -827,7 +829,7 @@ Code00070E:
     ldh  a,[<IE]                    ; 00:0764
     or   $03                        ; 00:0766
     ldh  [<IE],a                    ; 00:0768
-    call Sub003A80                  ; 00:076A
+    call StatusBarInit              ; 00:076A
     xor  a                          ; 00:076D
     ld   [$C181],a                  ; 00:076E
     ld   [$C3ED],a                  ; 00:0771
@@ -839,11 +841,11 @@ Code00070E:
     ld   [$C36F],a                  ; 00:0780
     ret                             ; 00:0783
 
-Code000784:
+YouVsBooRace_Main:
 ; Game state 36
-    ldh  a,[<$FFB8]                 ; 00:0784
+    ldh  a,[<H_CameraXLow]          ; 00:0784
     ld   [$C175],a                  ; 00:0786
-    ldh  a,[<$FFBA]                 ; 00:0789
+    ldh  a,[<H_CameraY]             ; 00:0789
     ld   [$C176],a                  ; 00:078B
     ld   a,[$C38D]                  ; 00:078E
     and  a                          ; 00:0791
@@ -938,7 +940,7 @@ Code0007FE:
     ld   a,$87                      ; 00:085A
     ldh  [<LCDC],a                  ; 00:085C
     call Sub0449E7                  ; 00:085E
-    call Sub003A80                  ; 00:0861
+    call StatusBarInit              ; 00:0861
     ld   a,:Sub0B4383               ; 00:0864
     call SetROMBank                 ; 00:0866
     call Sub0B4383                  ; 00:0869
@@ -951,9 +953,9 @@ Code0007FE:
 
 Code000879:
 ; Game state 3C
-    ldh  a,[<$FFB8]                 ; 00:0879
+    ldh  a,[<H_CameraXLow]          ; 00:0879
     ld   [$C175],a                  ; 00:087B
-    ldh  a,[<$FFBA]                 ; 00:087E
+    ldh  a,[<H_CameraY]             ; 00:087E
     ld   [$C176],a                  ; 00:0880
     ld   a,:Sub034000               ; 00:0883
     call SetROMBank                 ; 00:0885
@@ -1006,7 +1008,7 @@ Code0008B1:
     call Sub0003B1                  ; 00:08FB
     call Sub00036B                  ; 00:08FE
     xor  a                          ; 00:0901
-    ld   [$C1F2],a                  ; 00:0902
+    ld   [W_PlayerCoins],a          ; 00:0902
     ld   [W_PlayerFireFlag],a       ; 00:0905
     ld   [W_PlayerSize],a           ; 00:0908
     ld   a,:Sub0371C5               ; 00:090B
@@ -1038,13 +1040,13 @@ Code0008B1:
     ld   a,:Sub0449E7               ; 00:094E
     call SetROMBank                 ; 00:0950
     call Sub0449E7                  ; 00:0953
-    call Sub044A94                  ; 00:0956
-    call Sub003A80                  ; 00:0959
+    call SetLevelTimerRace          ; 00:0956
+    call StatusBarInit              ; 00:0959
     xor  a                          ; 00:095C
     ld   [$C181],a                  ; 00:095D
     ld   [$C1EF],a                  ; 00:0960
-    ldh  [<$FFB8],a                 ; 00:0963
-    ldh  [<$FFB9],a                 ; 00:0965
+    ldh  [<H_CameraXLow],a          ; 00:0963
+    ldh  [<H_CameraXHigh],a         ; 00:0965
     ld   hl,H_GameState             ; 00:0967
     inc  [hl]                       ; 00:096A
     ld   a,$FF                      ; 00:096B
@@ -1054,9 +1056,9 @@ Code0008B1:
 
 Code000974:
 ; Game state 3E
-    ldh  a,[<$FFB8]                 ; 00:0974
+    ldh  a,[<H_CameraXLow]          ; 00:0974
     ld   [$C175],a                  ; 00:0976
-    ldh  a,[<$FFBA]                 ; 00:0979
+    ldh  a,[<H_CameraY]             ; 00:0979
     ld   [$C176],a                  ; 00:097B
     ld   a,:Sub034011               ; 00:097E
     call SetROMBank                 ; 00:0980
@@ -1097,7 +1099,7 @@ PauseWrapper:
     call PauseMain                  ; 00:09C1
     ret                             ; 00:09C4
 
-Code0009C5:
+PreTitleInit:
 ; Game state 00
     ld   a,:Sub094000               ; 00:09C5
     call SetROMBank                 ; 00:09C7
@@ -1107,17 +1109,17 @@ Code0009C5:
     call Sub064D0C                  ; 00:09D2
     ret                             ; 00:09D5
 
-Code0009D6:
+PreTitleMain:
 ; Game state 01
-    ld   a,:Sub0940A8               ; 00:09D6
+    ld   a,:PreTitleMain_CallSubstate; 00:09D6
     call SetROMBank                 ; 00:09D8
-    call Sub0940A8                  ; 00:09DB
+    call PreTitleMain_CallSubstate  ; 00:09DB
     ld   a,:Sub064D0C               ; 00:09DE
     call SetROMBank                 ; 00:09E0
     call Sub064D0C                  ; 00:09E3
     ret                             ; 00:09E6
 
-Code0009E7:
+TitleScreenInit:
 ; Game state 02
     ld   a,:Sub094105               ; 00:09E7
     call SetROMBank                 ; 00:09E9
@@ -1127,11 +1129,11 @@ Code0009E7:
     call Sub064D0C                  ; 00:09F4
     ret                             ; 00:09F7
 
-Code0009F8:
+TitleScreenMain:
 ; Game state 03
-    ld   a,:Sub094396               ; 00:09F8
+    ld   a,:TitleScreenMain_CallSubstate; 00:09F8
     call SetROMBank                 ; 00:09FA
-    call Sub094396                  ; 00:09FD
+    call TitleScreenMain_CallSubstate; 00:09FD
     ld   a,:Sub064D0C               ; 00:0A00
     call SetROMBank                 ; 00:0A02
     call Sub064D0C                  ; 00:0A05
@@ -1208,7 +1210,7 @@ Code000A60:
 Code000A69:
 ; Game state 29
     ld   a,[$C168]                  ; 00:0A69
-    rst  $00                        ; 00:0A6C
+    rst  $00                        ; 00:0A6C  Execute from 16-bit pointer table
 .dw Code000BB4                      ; 00:0A6D
 .dw Code000A71                      ; 00:0A6F
 
@@ -1329,7 +1331,7 @@ Code000B1F:
     call Sub11407E                  ; 00:0B24
     ret                             ; 00:0B27
 
-ChallengeMenuInit:
+ChalMenuInit:
 ; Game state 1D
     call Sub00126D                  ; 00:0B28
     ld   a,$00                      ; 00:0B2B
@@ -1345,21 +1347,21 @@ ChallengeMenuInit:
     inc  [hl]                       ; 00:0B42
     ret                             ; 00:0B43
 
-ChallengeMenuWrapper:
+ChalMenu_Wrapper:
 ; Game state 1E wrapper
-    ld   a,:ChallengeMenuMain       ; 00:0B44
+    ld   a,:ChalMenu_Main           ; 00:0B44
     call SetROMBank                 ; 00:0B46
-    call ChallengeMenuMain          ; 00:0B49
+    call ChalMenu_Main              ; 00:0B49
     ret                             ; 00:0B4C
 
 AwardCutsceneWrapper:
 ; Game state 1C wrapper
-    ld   a,:AwardCutsceneMain       ; 00:0B4D
+    ld   a,:AwardCutscene_Main      ; 00:0B4D
     call SetROMBank                 ; 00:0B4F
-    call AwardCutsceneMain          ; 00:0B52
+    call AwardCutscene_Main         ; 00:0B52
     ret                             ; 00:0B55
 
-Code000B56:
+ChalResultsInit:
 ; Game state 20
     call Sub00126D                  ; 00:0B56
     ld   a,$00                      ; 00:0B59
@@ -1370,9 +1372,9 @@ Code000B56:
     ld   a,$00                      ; 00:0B65
     ldh  [<H_GameSubstate],a        ; 00:0B67
 @Loop000B69:
-    ld   a,:Sub116878               ; 00:0B69
+    ld   a,:ChalResultsInit_CallSubstate; 00:0B69
     call SetROMBank                 ; 00:0B6B
-    call Sub116878                  ; 00:0B6E
+    call ChalResultsInit_CallSubstate; 00:0B6E
     call Sub0014AA                  ; 00:0B71
     ldh  a,[<H_GameSubstate]        ; 00:0B74
     cp   $03                        ; 00:0B76
@@ -1385,25 +1387,25 @@ Code000B56:
     inc  [hl]                       ; 00:0B85
     ret                             ; 00:0B86
 
-ChallengeResultsWrapper:
+ChalResultsMain_Wrapper:
 ; Game state 21 wrapper
     ld   a,:ChallengeResultsMain    ; 00:0B87
     call SetROMBank                 ; 00:0B89
     call ChallengeResultsMain       ; 00:0B8C
     ret                             ; 00:0B8F
 
-ChallengeYoshiHatchWrapper:
+ChalYoshiHatch_Wrapper:
 ; Game state 1F
-    ld   a,:ChallengeYoshiHatchMain ; 00:0B90
+    ld   a,:ChalYoshiHatch_Main     ; 00:0B90
     call SetROMBank                 ; 00:0B92
-    call ChallengeYoshiHatchMain    ; 00:0B95
+    call ChalYoshiHatch_Main        ; 00:0B95
     ret                             ; 00:0B98
 
-Code000B99:
+ChalMiss_Wrapper:
 ; Game state 22 wrapper
-    ld   a,:Sub06590E               ; 00:0B99
+    ld   a,:ChalMiss_Main           ; 00:0B99
     call SetROMBank                 ; 00:0B9B
-    call Sub06590E                  ; 00:0B9E
+    call ChalMiss_Main              ; 00:0B9E
     ret                             ; 00:0BA1
 
 Code000BA2:
@@ -1414,7 +1416,7 @@ Code000BA2:
 Sub000BA6:
 ; Game state 25
     ld   a,[$C168]                  ; 00:0BA6
-    rst  $00                        ; 00:0BA9
+    rst  $00                        ; 00:0BA9  Execute from 16-bit pointer table
 .dw Code000BB4                      ; 00:0BAA
 .dw Code000BC2                      ; 00:0BAC
 .dw Code000BCB                      ; 00:0BAE
@@ -1480,29 +1482,29 @@ Code000C04:
     call Sub065C84                  ; 00:0C09
     ret                             ; 00:0C0C
 
-NonGBCErrorWrapper:
+NonGBCError_Wrapper:
 ; Game state 37 wrapper
-    ld   a,:NonGBCErrorMain         ; 00:0C0D
+    ld   a,:NonGBCError_Main        ; 00:0C0D
     call SetROMBank                 ; 00:0C0F
-    jp   NonGBCErrorMain            ; 00:0C12
+    jp   NonGBCError_Main           ; 00:0C12
 
-SPTitleWrapper:
+SPTitle_Wrapper:
 ; Game state 38 wrapper
-    ld   a,:SPTitleMain             ; 00:0C15
+    ld   a,:SPTitle_Main            ; 00:0C15
     call SetROMBank                 ; 00:0C17
-    jp   SPTitleMain                ; 00:0C1A
+    jp   SPTitle_Main               ; 00:0C1A
 
-CreditsWrapper:
+Credits_Wrapper:
 ; Game state 39 wrapper
-    ld   a,:CreditsMain             ; 00:0C1D
+    ld   a,:Credits_Main            ; 00:0C1D
     call SetROMBank                 ; 00:0C1F
-    jp   CreditsMain                ; 00:0C22
+    jp   Credits_Main               ; 00:0C22
 
-Code000C25:
+ToadPeachRoom_Wrapper:
 ; Game state 41 wrapper
-    ld   a,:Code15636C              ; 00:0C25
+    ld   a,:ToadPeachRoom_Main      ; 00:0C25
     call SetROMBank                 ; 00:0C27
-    jp   Code15636C                 ; 00:0C2A
+    jp   ToadPeachRoom_Main         ; 00:0C2A
 
 VBlankInterrupt:
     push af                         ; 00:0C2D
@@ -1528,9 +1530,9 @@ VBlankInterrupt:
     ld   a,[$C0C4]                  ; 00:0C55
     and  a                          ; 00:0C58
     jr   nz,Code000C65              ; 00:0C59
-    ldh  a,[<$FFB8]                 ; 00:0C5B
+    ldh  a,[<H_CameraXLow]          ; 00:0C5B
     ldh  [<SCX],a                   ; 00:0C5D
-    ldh  a,[<$FFBA]                 ; 00:0C5F
+    ldh  a,[<H_CameraY]             ; 00:0C5F
     ldh  [<SCY],a                   ; 00:0C61
     jr   Code000C8D                 ; 00:0C63
 Code000C65:
@@ -1539,7 +1541,7 @@ Code000C65:
     jr   z,Code000C83               ; 00:0C69
     ld   a,$00                      ; 00:0C6B
     ldh  [<SCX],a                   ; 00:0C6D
-    ldh  a,[<$FFBA]                 ; 00:0C6F
+    ldh  a,[<H_CameraY]             ; 00:0C6F
     ldh  [<SCY],a                   ; 00:0C71
     xor  a                          ; 00:0C73
     ld   [$C40B],a                  ; 00:0C74
@@ -1596,9 +1598,9 @@ Code000CD8:
     ld   a,[$C0C4]                  ; 00:0CD8
     and  a                          ; 00:0CDB
     jr   nz,Code000CE8              ; 00:0CDC
-    ldh  a,[<$FFB8]                 ; 00:0CDE
+    ldh  a,[<H_CameraXLow]          ; 00:0CDE
     ldh  [<SCX],a                   ; 00:0CE0
-    ldh  a,[<$FFBA]                 ; 00:0CE2
+    ldh  a,[<H_CameraY]             ; 00:0CE2
     ldh  [<SCY],a                   ; 00:0CE4
     jr   Code000D03                 ; 00:0CE6
 Code000CE8:
@@ -1610,9 +1612,9 @@ Code000CE8:
     ldh  a,[<H_GameState]           ; 00:0CF2
     cp   $24                        ; 00:0CF4
     jp   nz,Code000D03              ; 00:0CF6
-    ldh  a,[<$FFB8]                 ; 00:0CF9
+    ldh  a,[<H_CameraXLow]          ; 00:0CF9
     ld   [$C175],a                  ; 00:0CFB
-    ldh  a,[<$FFBA]                 ; 00:0CFE
+    ldh  a,[<H_CameraY]             ; 00:0CFE
     ld   [$C176],a                  ; 00:0D00
 Code000D03:
     ld   a,[$C178]                  ; 00:0D03
@@ -1732,9 +1734,9 @@ Code000DDD:
     call Sub156174                  ; 00:0DE5
     ldh  a,[<$FFBE]                 ; 00:0DE8
     ld   [ROMBANK],a                ; 00:0DEA
-    ldh  a,[<$FFB8]                 ; 00:0DED
+    ldh  a,[<H_CameraXLow]          ; 00:0DED
     ldh  [<SCX],a                   ; 00:0DEF
-    ldh  a,[<$FFBA]                 ; 00:0DF1
+    ldh  a,[<H_CameraY]             ; 00:0DF1
     ldh  [<SCY],a                   ; 00:0DF3
     ld   a,[$C178]                  ; 00:0DF5
     ldh  [<WY],a                    ; 00:0DF8
@@ -1771,28 +1773,29 @@ Code000E1F:
     ret                             ; 00:0E28
 
 Sub000E29:
+; subroutine: Load palette buffer at $1:DF80 to palette RAM
     ld   hl,$FFC0                   ; 00:0E29
     ld   a,[hl]                     ; 00:0E2C
     and  a                          ; 00:0E2D
-    ret  z                          ; 00:0E2E
+    ret  z                          ; 00:0E2E  if $FFC0 is clear, return
     ld   [hl],$00                   ; 00:0E2F
-    ld   a,$80                      ; 00:0E31
+    ld   a,$80                      ; 00:0E31  80: start from offset 0, auto increment
     ldh  [<BGPI],a                  ; 00:0E33
     ldh  [<OBPI],a                  ; 00:0E35
     ld   de,$0000                   ; 00:0E37
-Code000E3A:
-    ld   hl,W_PaletteBuffer         ; 00:0E3A
+@Loop:
+    ld   hl,W_PaletteBuffer         ; 00:0E3A \ loop: load 0x40 colors each to BG/sprite palette
     add  hl,de                      ; 00:0E3D
     ld   a,[hl]                     ; 00:0E3E
     ldh  [<BGPD],a                  ; 00:0E3F
-    ld   hl,$DFC0                   ; 00:0E41
+    ld   hl,W_PaletteBufferSpr      ; 00:0E41
     add  hl,de                      ; 00:0E44
     ld   a,[hl]                     ; 00:0E45
     ldh  [<OBPD],a                  ; 00:0E46
     inc  e                          ; 00:0E48
     ld   a,e                        ; 00:0E49
     cp   $40                        ; 00:0E4A
-    jr   nz,Code000E3A              ; 00:0E4C
+    jr   nz,@Loop                   ; 00:0E4C /
     ret                             ; 00:0E4E
 
 Sub000E4F:
@@ -1819,7 +1822,7 @@ Code000E73:
     ld   a,b                        ; 00:0E73
     ldh  [<OBPI],a                  ; 00:0E74
 Code000E76:
-    ld   hl,$DFC0                   ; 00:0E76
+    ld   hl,W_PaletteBufferSpr      ; 00:0E76
     add  hl,de                      ; 00:0E79
     ld   a,[hl]                     ; 00:0E7A
     ldh  [<OBPD],a                  ; 00:0E7B
@@ -1837,7 +1840,7 @@ Code000E82:
     ld   a,$B8                      ; 00:0E8F
     ldh  [<OBPI],a                  ; 00:0E91
 Code000E93:
-    ld   hl,$DFC0                   ; 00:0E93
+    ld   hl,W_PaletteBufferSpr      ; 00:0E93
     add  hl,de                      ; 00:0E96
     ld   a,[hl]                     ; 00:0E97
     ldh  [<OBPD],a                  ; 00:0E98
@@ -1878,7 +1881,7 @@ Return000ECD:
 
 Sub000ECE:
     dec  a                          ; 00:0ECE
-    rst  $00                        ; 00:0ECF
+    rst  $00                        ; 00:0ECF  Execute from 16-bit pointer table
 .dw Sub00128D                       ; 00:0ED0
 .dw Code003729                      ; 00:0ED2
 .dw Code003E2F                      ; 00:0ED4
@@ -1951,7 +1954,7 @@ Code000F30:
 
 LoadSprPaletteLong:
     ld   [ROMBANK],a                ; 00:0F3F
-    ld   hl,$DFC0                   ; 00:0F42
+    ld   hl,W_PaletteBufferSpr      ; 00:0F42
     ld   c,$40                      ; 00:0F45
 Code000F47:
     ld   a,[de]                     ; 00:0F47
@@ -1966,6 +1969,10 @@ Code000F47:
     ret                             ; 00:0F55
 
 LoadScreenTilemapVRAM:
+; subroutine: Copy full-screen tilemap at ROM (A:HL), to VRAM starting at (DE),
+;  then return to bank B.
+; copies 0x168 bytes of tile numbers to VRAM bank 0, then 0x168 bytes of PYX0VCCC
+;   attributes to VRAM bank 1
     ld   [ROMBANK],a                ; 00:0F56
     push bc                         ; 00:0F59
     ld   b,$00                      ; 00:0F5A
@@ -2199,12 +2206,12 @@ Unused0010B3:
     ld   [$C370],a                  ; 00:10B3
     ld   a,[$C381]                  ; 00:10B6
     and  a                          ; 00:10B9
-    jr   nz,Return0010DD            ; 00:10BA
+    jr   nz,@Return                 ; 00:10BA
     ldh  a,[<H_GameState]           ; 00:10BC
     cp   $3C                        ; 00:10BE
-    jr   z,Return0010DD             ; 00:10C0
+    jr   z,@Return                  ; 00:10C0
     cp   $3E                        ; 00:10C2
-    jr   z,Return0010DD             ; 00:10C4
+    jr   z,@Return                  ; 00:10C4
     ld   a,e                        ; 00:10C6
     ld   [$C371],a                  ; 00:10C7
     ld   a,d                        ; 00:10CA
@@ -2215,7 +2222,7 @@ Unused0010B3:
     ld   [SRAMBANK],a               ; 00:10D5
     ld   a,$02                      ; 00:10D8
     ld   [$C373],a                  ; 00:10DA
-Return0010DD:
+@Return:
     ret                             ; 00:10DD
 
 SetROMBank:
@@ -2271,9 +2278,9 @@ Sub001124:
     rl   d                          ; 00:112B
     sla  e                          ; 00:112D
     rl   d                          ; 00:112F
-    ld   a,:Ti_16x16Tiles              ; 00:1131
+    ld   a,:Ti_16x16Tiles           ; 00:1131
     ld   [ROMBANK],a                ; 00:1133
-    ld   hl,Ti_16x16Tiles              ; 00:1136
+    ld   hl,Ti_16x16Tiles           ; 00:1136
     add  hl,de                      ; 00:1139
     ld   a,h                        ; 00:113A
     ldh  [<$FF99],a                 ; 00:113B
@@ -2412,12 +2419,12 @@ Sub0011F9:
     ld   c,<H_DMATransferOAM        ; 00:11F9
     ld   b,ROM_DMATransferOAM_End-ROM_DMATransferOAM; 00:11FB
     ld   hl,ROM_DMATransferOAM      ; 00:11FD
-@Loop001200:
+@Loop:
     ldi  a,[hl]                     ; 00:1200
     ldh  [c],a                      ; 00:1201
     inc  c                          ; 00:1202
     dec  b                          ; 00:1203
-    jr   nz,@Loop001200             ; 00:1204
+    jr   nz,@Loop                   ; 00:1204
     ret                             ; 00:1206
 
 ROM_DMATransferOAM:
@@ -2430,65 +2437,77 @@ ROM_DMATransferOAM:
 ROM_DMATransferOAM_End:
 
 rst_ExecutePtrTable:
-    ld   e,a                        ; 00:1211
-    ld   d,$00                      ; 00:1212
-    sla  e                          ; 00:1214
-    rl   d                          ; 00:1216
-    pop  hl                         ; 00:1218
-    add  hl,de                      ; 00:1219
-    ld   e,[hl]                     ; 00:121A
-    inc  hl                         ; 00:121B
-    ld   d,[hl]                     ; 00:121C
-    push de                         ; 00:121D
-    pop  hl                         ; 00:121E
-    jp   hl                         ; 00:121F
+; rst $00
+; Execute from pointer table: Jump to a 16-bit pointer from a table at [SP], indexed by A
+; This is called as a subroutine, but does not return
+    ld   e,a                        ; 00:1211 \ de = 2*a
+    ld   d,$00                      ; 00:1212 |
+    sla  e                          ; 00:1214 |
+    rl   d                          ; 00:1216 /
+    pop  hl                         ; 00:1218  pull return address (start of pointer table)
+    add  hl,de                      ; 00:1219  add index
+    ld   e,[hl]                     ; 00:121A \
+    inc  hl                         ; 00:121B |
+    ld   d,[hl]                     ; 00:121C | hl = pointer from table
+    push de                         ; 00:121D |
+    pop  hl                         ; 00:121E /
+    jp   hl                         ; 00:121F  jump to pointer
 
 rst_ExecutePtrTableLong:
-    ld   e,a                        ; 00:1220
-    ld   d,$00                      ; 00:1221
-    ld   l,a                        ; 00:1223
-    ld   h,$00                      ; 00:1224
-    sla  e                          ; 00:1226
-    rl   d                          ; 00:1228
-    add  hl,de                      ; 00:122A
-    ld   d,h                        ; 00:122B
-    ld   e,l                        ; 00:122C
-    pop  hl                         ; 00:122D
-    add  hl,de                      ; 00:122E
-    ld   e,[hl]                     ; 00:122F
-    inc  hl                         ; 00:1230
-    ld   d,[hl]                     ; 00:1231
-    inc  hl                         ; 00:1232
-    ld   a,[hl]                     ; 00:1233
-    ld   [ROMBANK],a                ; 00:1234
-    ldh  [<$FFBE],a                 ; 00:1237
-    push de                         ; 00:1239
-    pop  hl                         ; 00:123A
-    jp   hl                         ; 00:123B
+; rst $08 (actually unused)
+; Execute from pointer table long: Jump to a 24-bit pointer from a table at [SP], indexed by A
+; This is called as a subroutine, but does not return
+    ld   e,a                        ; 00:1220 \ de = 3*a
+    ld   d,$00                      ; 00:1221 |
+    ld   l,a                        ; 00:1223 |
+    ld   h,$00                      ; 00:1224 |
+    sla  e                          ; 00:1226 |
+    rl   d                          ; 00:1228 |
+    add  hl,de                      ; 00:122A |
+    ld   d,h                        ; 00:122B |
+    ld   e,l                        ; 00:122C /
+    pop  hl                         ; 00:122D  pull return address (start of pointer table)
+    add  hl,de                      ; 00:122E  add index
+    ld   e,[hl]                     ; 00:122F \
+    inc  hl                         ; 00:1230 |
+    ld   d,[hl]                     ; 00:1231 | de = lower bytes of pointer from table
+    inc  hl                         ; 00:1232 /
+    ld   a,[hl]                     ; 00:1233  load bank byte
+    ld   [ROMBANK],a                ; 00:1234  change ROM bank
+    ldh  [<$FFBE],a                 ; 00:1237  set current bank in RAM
+    push de                         ; 00:1239 \
+    pop  hl                         ; 00:123A | jump to loaded pointer
+    jp   hl                         ; 00:123B /
 
 rst_CallLong:
-    ldh  [<$FFBF],a                 ; 00:123C
-    pop  hl                         ; 00:123E
-    ld   e,[hl]                     ; 00:123F
-    inc  hl                         ; 00:1240
-    ld   d,[hl]                     ; 00:1241
-    inc  hl                         ; 00:1242
-    ld   a,[hl]                     ; 00:1243
-    ld   [ROMBANK],a                ; 00:1244
-    ldh  [<$FFBE],a                 ; 00:1247
-    inc  hl                         ; 00:1249
-    push hl                         ; 00:124A
-    push de                         ; 00:124B
-    pop  hl                         ; 00:124C
-    jp   hl                         ; 00:124D
+; rst $10
+; 24-bit call: Run subroutine at a 24-bit pointer at [SP]
+; Register A should contain the return bank byte
+    ldh  [<$FFBF],a                 ; 00:123C  store old ROM bank
+    pop  hl                         ; 00:123E  pull "return" address (address of 24-bit pointer)
+    ld   e,[hl]                     ; 00:123F \
+    inc  hl                         ; 00:1240 | load lower bytes of pointer
+    ld   d,[hl]                     ; 00:1241 |
+    inc  hl                         ; 00:1242 /
+    ld   a,[hl]                     ; 00:1243  load bank byte
+    ld   [ROMBANK],a                ; 00:1244  change ROM bank
+    ldh  [<$FFBE],a                 ; 00:1247  set current bank in RAM
+    inc  hl                         ; 00:1249 \ push next byte after pointer,
+    push hl                         ; 00:124A /  as the subroutine's return address
+    push de                         ; 00:124B \
+    pop  hl                         ; 00:124C | jump to loaded pointer
+    jp   hl                         ; 00:124D /
 
 rst_ReturnLong:
-    pop  hl                         ; 00:124E
-    pop  hl                         ; 00:124F
-    ldh  a,[<$FFBF]                 ; 00:1250
-    ld   [ROMBANK],a                ; 00:1252
-    ldh  [<$FFBE],a                 ; 00:1255
-    jp   hl                         ; 00:1257
+; rst $18
+; Return from 24-bit call
+; This is called as a subroutine, but does not use its return address
+    pop  hl                         ; 00:124E  pop return address from rst $18 (unused)
+    pop  hl                         ; 00:124F  pop return address from rst $10
+    ldh  a,[<$FFBF]                 ; 00:1250  retrieve old ROM bank
+    ld   [ROMBANK],a                ; 00:1252  change ROM bank
+    ldh  [<$FFBE],a                 ; 00:1255  set current bank in RAM
+    jp   hl                         ; 00:1257  jump to popped return address
 
 Sub001258:
     ldh  a,[<$FFBE]                 ; 00:1258
@@ -2518,6 +2537,7 @@ Code001273:
     ret                             ; 00:1283
 
 ClearBytes:
+; subroutine: Clear BC bytes of memory, starting at [HL]
     ld   a,$00                      ; 00:1284
     ldi  [hl],a                     ; 00:1286
     dec  bc                         ; 00:1287
@@ -2774,6 +2794,7 @@ CopyBytesLong:
     ret                             ; 00:1440
 
 CopyBytes:
+; subroutine: Copy BC bytes from [HL] to [DE]
     ldi  a,[hl]                     ; 00:1441
     ld   [de],a                     ; 00:1442
     inc  de                         ; 00:1443
@@ -2814,7 +2835,7 @@ Code001489:
     jr   nz,Code0014A5              ; 00:149C
     xor  a                          ; 00:149E
     ld   [$DF00],a                  ; 00:149F
-    ld   [$DF01],a                  ; 00:14A2
+    ld   [W_TilemapUploadBuffer],a  ; 00:14A2
 Code0014A5:
     xor  a                          ; 00:14A5
     ld   [$C171],a                  ; 00:14A6
@@ -2840,7 +2861,7 @@ Sub0014AA:
     jr   nz,Code001489              ; 00:14C3
     xor  a                          ; 00:14C5
     ld   [$DF00],a                  ; 00:14C6
-    ld   [$DF01],a                  ; 00:14C9
+    ld   [W_TilemapUploadBuffer],a  ; 00:14C9
     ret                             ; 00:14CC
 
 Sub0014CD:
@@ -3469,20 +3490,20 @@ Sub001831:
 Code001854:
     ld   hl,W_SpriteID              ; 00:1854
     add  hl,bc                      ; 00:1857
-    ld   a,[hl]                     ; 00:1858
+    ld   a,[hl]                     ; 00:1858  sprite ID in slot BC
     cp   $58                        ; 00:1859
     jr   c,Code001876               ; 00:185B
     cp   $65                        ; 00:185D
     jr   nc,Code001876              ; 00:185F
-    call Sub02741E                  ; 00:1861
+    call Sub02741E                  ; 00:1861 \ run if 58 <= sprite ID < 65 (sprite platform)
     jr   nc,Code001876              ; 00:1864
     cp   $01                        ; 00:1866
     jr   nz,Code001876              ; 00:1868
     ld   a,[$C27D]                  ; 00:186A
-    ldh  [<$FFBA],a                 ; 00:186D
+    ldh  [<H_CameraY],a             ; 00:186D
     ld   a,[$C27E]                  ; 00:186F
     ldh  [<$FFBB],a                 ; 00:1872
-    jr   Code00187C                 ; 00:1874
+    jr   Code00187C                 ; 00:1874 /
 Code001876:
     inc  c                          ; 00:1876
     ld   a,c                        ; 00:1877
@@ -3524,7 +3545,7 @@ Sub0018B0:
     add  hl,bc                      ; 00:18B3
     ld   a,[hl]                     ; 00:18B4
     dec  a                          ; 00:18B5
-    rst  $00                        ; 00:18B6
+    rst  $00                        ; 00:18B6  Execute from 16-bit pointer table
 .dw Code0018C6                      ; 00:18B7
 .dw Code00191A                      ; 00:18B9
 .dw Code0019DE                      ; 00:18BB
@@ -3537,7 +3558,7 @@ Code0018C6:
     ld   hl,W_SpriteStatus          ; 00:18C6
     add  hl,bc                      ; 00:18C9
     inc  [hl]                       ; 00:18CA
-    ld   a,[$C283]                  ; 00:18CB
+    ld   a,[W_ChallengeFlag]        ; 00:18CB
     and  a                          ; 00:18CE
     jr   z,Code0018F0               ; 00:18CF
     ld   de,$0000                   ; 00:18D1
@@ -3565,41 +3586,43 @@ Code0018F0:
     ld   [ROMBANK],a                ; 00:18F2
     ld   hl,W_SpriteID              ; 00:18F5
     add  hl,bc                      ; 00:18F8
-    ld   e,[hl]                     ; 00:18F9
-    dec  e                          ; 00:18FA
+    ld   e,[hl]                     ; 00:18F9  sprite ID in slot BC
+    dec  e                          ; 00:18FA  index pointer table with sprID -1
     ld   d,$00                      ; 00:18FB
     ld   hl,SprInitPtrs             ; 00:18FD
-Code001900:
+ExecutePtrTableLong_E:
+; Jump to a 24-bit pointer from a table at [HL], indexed by E
     push hl                         ; 00:1900
-    ld   l,e                        ; 00:1901
-    ld   h,$00                      ; 00:1902
-    sla  e                          ; 00:1904
-    rl   d                          ; 00:1906
-    add  hl,de                      ; 00:1908
-    ld   d,h                        ; 00:1909
-    ld   e,l                        ; 00:190A
+    ld   l,e                        ; 00:1901 \
+    ld   h,$00                      ; 00:1902 |
+    sla  e                          ; 00:1904 |
+    rl   d                          ; 00:1906 |
+    add  hl,de                      ; 00:1908 | DE = 3 * E
+    ld   d,h                        ; 00:1909 |
+    ld   e,l                        ; 00:190A /
     pop  hl                         ; 00:190B
-    add  hl,de                      ; 00:190C
-    ld   e,[hl]                     ; 00:190D
-    inc  hl                         ; 00:190E
-    ld   d,[hl]                     ; 00:190F
-    inc  hl                         ; 00:1910
-    ld   a,[hl]                     ; 00:1911
-    ld   [ROMBANK],a                ; 00:1912
-    ldh  [<$FFBE],a                 ; 00:1915
-    push de                         ; 00:1917
-    pop  hl                         ; 00:1918
+    add  hl,de                      ; 00:190C  HL = original HL + 3 * original E
+    ld   e,[hl]                     ; 00:190D \
+    inc  hl                         ; 00:190E |
+    ld   d,[hl]                     ; 00:190F | load 24-bit pointer into ADE
+    inc  hl                         ; 00:1910 |
+    ld   a,[hl]                     ; 00:1911 /
+    ld   [ROMBANK],a                ; 00:1912  change ROM bank
+    ldh  [<$FFBE],a                 ; 00:1915  set current bank in RAM
+    push de                         ; 00:1917 \
+    pop  hl                         ; 00:1918 / move address to HL
     jp   hl                         ; 00:1919
+
 Code00191A:
     ld   a,:SprMainPtrs             ; 00:191A
     ld   [ROMBANK],a                ; 00:191C
     ld   hl,W_SpriteID              ; 00:191F
     add  hl,bc                      ; 00:1922
-    ld   e,[hl]                     ; 00:1923
-    dec  e                          ; 00:1924
+    ld   e,[hl]                     ; 00:1923  sprite ID in slot BC
+    dec  e                          ; 00:1924  index pointer table with sprID -1
     ld   d,$00                      ; 00:1925
     ld   hl,SprMainPtrs             ; 00:1927
-    jr   Code001900                 ; 00:192A
+    jr   ExecutePtrTableLong_E      ; 00:192A
 
 Sub00192C:
     ld   hl,$D2B2                   ; 00:192C
@@ -3631,8 +3654,8 @@ Sub00192C:
     ld   a,[hl]                     ; 00:1958
     ldh  [<$FF98],a                 ; 00:1959
     push bc                         ; 00:195B
-    call Sub002E30                  ; 00:195C
-    call Sub002ED7                  ; 00:195F
+    call GivePointsFF97             ; 00:195C
+    call SpawnScoreSprite           ; 00:195F
     pop  bc                         ; 00:1962
 Code001963:
     pop  de                         ; 00:1963
@@ -3673,8 +3696,8 @@ Sub001965:
     ld   a,[hl]                     ; 00:1999
     ldh  [<$FF98],a                 ; 00:199A
     push bc                         ; 00:199C
-    call Sub002E30                  ; 00:199D
-    call Sub002ED7                  ; 00:19A0
+    call GivePointsFF97             ; 00:199D
+    call SpawnScoreSprite           ; 00:19A0
     pop  bc                         ; 00:19A3
 Code0019A4:
     pop  de                         ; 00:19A4
@@ -3686,10 +3709,10 @@ Code0019A5:
     push hl                         ; 00:19AD
     ld   hl,W_SpriteXLow            ; 00:19AE
     add  hl,bc                      ; 00:19B1
-    ldh  a,[<$FFA7]                 ; 00:19B2
+    ldh  a,[<H_PlayerXLow]          ; 00:19B2
     sub  [hl]                       ; 00:19B4
     pop  hl                         ; 00:19B5
-    ldh  a,[<$FFA8]                 ; 00:19B6
+    ldh  a,[<H_PlayerXHigh]         ; 00:19B6
     sbc  [hl]                       ; 00:19B8
     bit  7,a                        ; 00:19B9
     jr   nz,Sub0019C1               ; 00:19BB
@@ -3766,7 +3789,7 @@ Code001A0F:
     ld   d,a                        ; 00:1A31
     ld   l,e                        ; 00:1A32
     ld   h,d                        ; 00:1A33
-    call Sub0027BD                  ; 00:1A34
+    call Disp16x16Sprite            ; 00:1A34
     ld   a,$00                      ; 00:1A37
     call SetROMBank                 ; 00:1A39
     ret                             ; 00:1A3C
@@ -4082,7 +4105,7 @@ Code001CD8:
     ld   a,$00                      ; 00:1CF5
     ldh  [<SVBK],a                  ; 00:1CF7
     pop  af                         ; 00:1CF9
-    rst  $00                        ; 00:1CFA
+    rst  $00                        ; 00:1CFA  Execute from 16-bit pointer table
 .dw Return001D0A                    ; 00:1CFB
 .dw Code001D03                      ; 00:1CFD
 .dw Code001D0B                      ; 00:1CFF
@@ -4199,12 +4222,12 @@ Code001DAB:
     ld   e,a                        ; 00:1DAE
     ld   d,$00                      ; 00:1DAF
 Code001DB1:
-    ldh  a,[<$FFA9]                 ; 00:1DB1
+    ldh  a,[<H_PlayerYLow]          ; 00:1DB1
     ld   hl,Data001D19              ; 00:1DB3
     add  hl,de                      ; 00:1DB6
     add  [hl]                       ; 00:1DB7
     ld   [$C23B],a                  ; 00:1DB8
-    ldh  a,[<$FFAA]                 ; 00:1DBB
+    ldh  a,[<H_PlayerYHigh]         ; 00:1DBB
     adc  $00                        ; 00:1DBD
     ld   [$C23C],a                  ; 00:1DBF
     ld   hl,Data001D1B              ; 00:1DC2
@@ -4256,10 +4279,10 @@ Code001DB1:
 Code001E18:
     and  a                          ; 00:1E18
     jp   nz,Code001F72              ; 00:1E19
-    ldh  a,[<$FFA7]                 ; 00:1E1C
+    ldh  a,[<H_PlayerXLow]          ; 00:1E1C
     add  $08                        ; 00:1E1E
     ldh  [<$FF9B],a                 ; 00:1E20
-    ldh  a,[<$FFA8]                 ; 00:1E22
+    ldh  a,[<H_PlayerXHigh]         ; 00:1E22
     adc  $00                        ; 00:1E24
     ldh  [<$FF9C],a                 ; 00:1E26
     ld   hl,$D2D4                   ; 00:1E28
@@ -4326,10 +4349,10 @@ Code001E9A:
     and  a                          ; 00:1E9D
     jr   nz,Code001F0B              ; 00:1E9E
 Code001EA0:
-    ldh  a,[<$FFA9]                 ; 00:1EA0
+    ldh  a,[<H_PlayerYLow]          ; 00:1EA0
     add  $20                        ; 00:1EA2
     ld   [$D2EE],a                  ; 00:1EA4
-    ldh  a,[<$FFAA]                 ; 00:1EA7
+    ldh  a,[<H_PlayerYHigh]         ; 00:1EA7
     adc  $00                        ; 00:1EA9
     ld   [$D2EF],a                  ; 00:1EAB
     ld   a,[$D2D6]                  ; 00:1EAE
@@ -4394,12 +4417,12 @@ Code001F28:
     ld   e,a                        ; 00:1F2B
     ld   d,$00                      ; 00:1F2C
 Code001F2E:
-    ldh  a,[<$FFA9]                 ; 00:1F2E
+    ldh  a,[<H_PlayerYLow]          ; 00:1F2E
     ld   hl,Data001D1D              ; 00:1F30
     add  hl,de                      ; 00:1F33
     add  [hl]                       ; 00:1F34
     ld   [$D2EE],a                  ; 00:1F35
-    ldh  a,[<$FFAA]                 ; 00:1F38
+    ldh  a,[<H_PlayerYHigh]         ; 00:1F38
     adc  $00                        ; 00:1F3A
     ld   [$D2EF],a                  ; 00:1F3C
     ld   hl,$D2EC                   ; 00:1F3F
@@ -4442,19 +4465,19 @@ Sub001F75:
     ld   hl,$C501                   ; 00:1F75
     add  hl,de                      ; 00:1F78
     ld   a,[hl]                     ; 00:1F79
-    ldh  [<$FFA7],a                 ; 00:1F7A
+    ldh  [<H_PlayerXLow],a          ; 00:1F7A
     ld   hl,$C502                   ; 00:1F7C
     add  hl,de                      ; 00:1F7F
     ld   a,[hl]                     ; 00:1F80
-    ldh  [<$FFA8],a                 ; 00:1F81
+    ldh  [<H_PlayerXHigh],a         ; 00:1F81
     ld   hl,$C503                   ; 00:1F83
     add  hl,de                      ; 00:1F86
     ld   a,[hl]                     ; 00:1F87
-    ldh  [<$FFA9],a                 ; 00:1F88
+    ldh  [<H_PlayerYLow],a          ; 00:1F88
     ld   hl,$C504                   ; 00:1F8A
     add  hl,de                      ; 00:1F8D
     ld   a,[hl]                     ; 00:1F8E
-    ldh  [<$FFAA],a                 ; 00:1F8F
+    ldh  [<H_PlayerYHigh],a         ; 00:1F8F
     ld   hl,$C509                   ; 00:1F91
     add  hl,de                      ; 00:1F94
     ld   a,[hl]                     ; 00:1F95
@@ -4524,12 +4547,12 @@ Code002004:
     ld   e,a                        ; 00:2007
     ld   d,$00                      ; 00:2008
 Code00200A:
-    ldh  a,[<$FFA9]                 ; 00:200A
+    ldh  a,[<H_PlayerYLow]          ; 00:200A
     ld   hl,Data001D19              ; 00:200C
     add  hl,de                      ; 00:200F
     add  [hl]                       ; 00:2010
     ld   [$C23B],a                  ; 00:2011
-    ldh  a,[<$FFAA]                 ; 00:2014
+    ldh  a,[<H_PlayerYHigh]         ; 00:2014
     adc  $00                        ; 00:2016
     ld   [$C23C],a                  ; 00:2018
     ld   hl,Data001D1B              ; 00:201B
@@ -4581,10 +4604,10 @@ Code00200A:
 Code002073:
     and  a                          ; 00:2073
     jp   nz,Code002186              ; 00:2074
-    ldh  a,[<$FFA7]                 ; 00:2077
+    ldh  a,[<H_PlayerXLow]          ; 00:2077
     add  $08                        ; 00:2079
     ldh  [<$FF9B],a                 ; 00:207B
-    ldh  a,[<$FFA8]                 ; 00:207D
+    ldh  a,[<H_PlayerXHigh]         ; 00:207D
     adc  $00                        ; 00:207F
     ldh  [<$FF9C],a                 ; 00:2081
     ld   hl,$D2D4                   ; 00:2083
@@ -4625,10 +4648,10 @@ Code0020A3:
     ld   a,[$D2D7]                  ; 00:20C9
     sbc  $00                        ; 00:20CC
     ld   [$D2ED],a                  ; 00:20CE
-    ldh  a,[<$FFA9]                 ; 00:20D1
+    ldh  a,[<H_PlayerYLow]          ; 00:20D1
     add  $20                        ; 00:20D3
     ld   [$D2EE],a                  ; 00:20D5
-    ldh  a,[<$FFAA]                 ; 00:20D8
+    ldh  a,[<H_PlayerYHigh]         ; 00:20D8
     adc  $00                        ; 00:20DA
     ld   [$D2EF],a                  ; 00:20DC
     ld   hl,$D2EC                   ; 00:20DF
@@ -4666,12 +4689,12 @@ Code002121:
     ld   e,a                        ; 00:2124
     ld   d,$00                      ; 00:2125
 Code002127:
-    ldh  a,[<$FFA9]                 ; 00:2127
+    ldh  a,[<H_PlayerYLow]          ; 00:2127
     ld   hl,Data001D1D              ; 00:2129
     add  hl,de                      ; 00:212C
     add  [hl]                       ; 00:212D
     ld   [$D2EE],a                  ; 00:212E
-    ldh  a,[<$FFAA]                 ; 00:2131
+    ldh  a,[<H_PlayerYHigh]         ; 00:2131
     adc  $00                        ; 00:2133
     ld   [$D2EF],a                  ; 00:2135
     ld   hl,$D2EC                   ; 00:2138
@@ -5495,16 +5518,20 @@ Code0026B3:
 Return0026B9:
     ret                             ; 00:26B9
 
-Sub0026BA:
+LoadSpriteFixedSlot:
+; Load spriteID A into slot DE
     push bc                         ; 00:26BA
     push af                         ; 00:26BB
     jr   Code0026D5                 ; 00:26BC
 
-Sub0026BE:
+LoadSpriteAnySlot:
+; subroutine: Find free sprite slot, then load spriteID A into it
+; If the sprite was loaded, return slot index in DE, with carry flag clear
+; If no slot found, set carry flag
     push bc                         ; 00:26BE
     push af                         ; 00:26BF
     ld   de,$0000                   ; 00:26C0
-Code0026C3:
+@Loop_CheckSlots:
     ld   hl,W_SpriteStatus          ; 00:26C3
     add  hl,de                      ; 00:26C6
     ld   a,[hl]                     ; 00:26C7
@@ -5513,13 +5540,14 @@ Code0026C3:
     inc  e                          ; 00:26CB
     ld   a,e                        ; 00:26CC
     cp   $0F                        ; 00:26CD
-    jr   nz,Code0026C3              ; 00:26CF
+    jr   nz,@Loop_CheckSlots        ; 00:26CF
     pop  af                         ; 00:26D1
     pop  bc                         ; 00:26D2
-    scf                             ; 00:26D3
+    scf                             ; 00:26D3  if no slot found, set carry flag
     ret                             ; 00:26D4
 
 Code0026D5:
+; Load a sprite into slot DE, using sprite ID from stack
     ld   hl,W_SpriteStatus          ; 00:26D5
     add  hl,de                      ; 00:26D8
     ld   a,$02                      ; 00:26D9
@@ -5528,17 +5556,17 @@ Code0026D5:
     add  hl,de                      ; 00:26DF
     pop  af                         ; 00:26E0
     ld   [hl],a                     ; 00:26E1
-    ld   hl,W_SpriteXSpeed          ; 00:26E2
+    ld   hl,W_SpriteXSpeed          ; 00:26E2  first table to clear
     add  hl,de                      ; 00:26E5
     push de                         ; 00:26E6
     ld   de,$000F                   ; 00:26E7
     ld   c,$2A                      ; 00:26EA
     ld   a,$00                      ; 00:26EC
-Code0026EE:
+Loop_ClearSprTables:                ;         \ clear RAM from $D05A+de to $D2D0+de
     ld   [hl],a                     ; 00:26EE
     add  hl,de                      ; 00:26EF
     dec  c                          ; 00:26F0
-    jr   nz,Code0026EE              ; 00:26F1
+    jr   nz,Loop_ClearSprTables     ; 00:26F1 /
     pop  de                         ; 00:26F3
     ld   a,$00                      ; 00:26F4
     ld   hl,W_SpriteYHigh           ; 00:26F6
@@ -5550,7 +5578,7 @@ Code0026EE:
     call Sub002723                  ; 00:2700
     pop  bc                         ; 00:2703
     scf                             ; 00:2704
-    ccf                             ; 00:2705
+    ccf                             ; 00:2705  if slot found, clear carry flag
     ret                             ; 00:2706
 
 Sub002707:
@@ -5631,7 +5659,7 @@ Sub002769:
     and  $0F                        ; 00:277C
     ld   e,a                        ; 00:277E
     ldh  a,[<$FF97]                 ; 00:277F
-    ld   hl,$FFBA                   ; 00:2781
+    ld   hl,H_CameraY               ; 00:2781
     add  e                          ; 00:2784
     sub  [hl]                       ; 00:2785
     ldh  [<$FF97],a                 ; 00:2786
@@ -5654,17 +5682,19 @@ Sub002769:
     ldh  a,[<$FF99]                 ; 00:27A7
     adc  $00                        ; 00:27A9
     ld   e,a                        ; 00:27AB
-    ld   hl,$FFB8                   ; 00:27AC
+    ld   hl,H_CameraXLow            ; 00:27AC
     ldh  a,[<$FF98]                 ; 00:27AF
     sub  [hl]                       ; 00:27B1
     ldh  [<$FF98],a                 ; 00:27B2
-    ld   hl,$FFB9                   ; 00:27B4
+    ld   hl,H_CameraXHigh           ; 00:27B4
     ld   a,e                        ; 00:27B7
     sbc  [hl]                       ; 00:27B8
     ldh  [<$FF99],a                 ; 00:27B9
     jr   Code002824                 ; 00:27BB
 
-Sub0027BD:
+Disp16x16Sprite:
+; subroutine: Display 16x16 sprite
+; HL: pointer to 4 bytes of OAM attributes
     ldi  a,[hl]                     ; 00:27BD
     ldh  [<$FF9F],a                 ; 00:27BE
     ldi  a,[hl]                     ; 00:27C0
@@ -5692,7 +5722,7 @@ Sub0027BD:
     ld   a,e                        ; 00:27E3
     adc  $00                        ; 00:27E4
     ldh  [<$FFA6],a                 ; 00:27E6
-    ld   hl,$FFBA                   ; 00:27E8
+    ld   hl,H_CameraY               ; 00:27E8
     ldh  a,[<$FF97]                 ; 00:27EB
     sub  [hl]                       ; 00:27ED
     ldh  [<$FF97],a                 ; 00:27EE
@@ -5715,17 +5745,17 @@ Sub0027BD:
     ld   hl,W_SpriteID              ; 00:280B
     add  hl,bc                      ; 00:280E
     ld   a,[hl]                     ; 00:280F
-    cp   $1E                        ; 00:2810
+    cp   $1E                        ; 00:2810  1E: score sprite
     ld   a,e                        ; 00:2812
-    jr   z,Code002822               ; 00:2813
-    ld   hl,$FFB8                   ; 00:2815
+    jr   z,@Code002822              ; 00:2813
+    ld   hl,H_CameraXLow            ; 00:2815
     ldh  a,[<$FF98]                 ; 00:2818
     sub  [hl]                       ; 00:281A
     ldh  [<$FF98],a                 ; 00:281B
-    ld   hl,$FFB9                   ; 00:281D
+    ld   hl,H_CameraXHigh           ; 00:281D
     ld   a,e                        ; 00:2820
     sbc  [hl]                       ; 00:2821
-Code002822:
+@Code002822:
     ldh  [<$FF99],a                 ; 00:2822
 Code002824:
     ld   hl,$FF99                   ; 00:2824
@@ -5772,7 +5802,7 @@ Sub002861:
     ld   a,[hl]                     ; 00:2864
     ldh  [<$FFA0],a                 ; 00:2865
     ldh  a,[<$FF97]                 ; 00:2867
-    ld   hl,$FFBA                   ; 00:2869
+    ld   hl,H_CameraY               ; 00:2869
     add  $10                        ; 00:286C
     sub  [hl]                       ; 00:286E
     ldh  [<$FF97],a                 ; 00:286F
@@ -5790,11 +5820,11 @@ Sub002879:
     adc  $00                        ; 00:2880
     ld   d,a                        ; 00:2882
     ld   a,e                        ; 00:2883
-    ld   hl,$FFB8                   ; 00:2884
+    ld   hl,H_CameraXLow            ; 00:2884
     sub  [hl]                       ; 00:2887
     ldh  [<$FF98],a                 ; 00:2888
     ld   a,d                        ; 00:288A
-    ld   hl,$FFB9                   ; 00:288B
+    ld   hl,H_CameraXHigh           ; 00:288B
     sbc  [hl]                       ; 00:288E
     ldh  [<$FF99],a                 ; 00:288F
     jr   Code0028D1                 ; 00:2891
@@ -5807,7 +5837,7 @@ Sub002893:
     ld   hl,W_SpriteYLow            ; 00:2899
     add  hl,bc                      ; 00:289C
     ld   a,[hl]                     ; 00:289D
-    ld   hl,$FFBA                   ; 00:289E
+    ld   hl,H_CameraY               ; 00:289E
     sub  [hl]                       ; 00:28A1
     add  $10                        ; 00:28A2
     ldh  [<$FF97],a                 ; 00:28A4
@@ -5829,11 +5859,11 @@ Sub002893:
     cp   $1E                        ; 00:28BE
     ld   a,d                        ; 00:28C0
     jr   z,Code0028CF               ; 00:28C1
-    ld   hl,$FFB8                   ; 00:28C3
+    ld   hl,H_CameraXLow            ; 00:28C3
     ld   a,e                        ; 00:28C6
     sub  [hl]                       ; 00:28C7
     ldh  [<$FF98],a                 ; 00:28C8
-    ld   hl,$FFB9                   ; 00:28CA
+    ld   hl,H_CameraXHigh           ; 00:28CA
     ld   a,d                        ; 00:28CD
     sbc  [hl]                       ; 00:28CE
 Code0028CF:
@@ -6054,7 +6084,7 @@ Sub002A18:
     ld   a,$00                      ; 00:2A1B
     ld   [$D2D2],a                  ; 00:2A1D
     ld   [$D2D3],a                  ; 00:2A20
-Code002A23:
+@Loop002A23:
     ld   a,$00                      ; 00:2A23
     ld   hl,W_SpriteStatus          ; 00:2A25
     add  hl,de                      ; 00:2A28
@@ -6065,64 +6095,74 @@ Code002A23:
     inc  e                          ; 00:2A2F
     ld   a,e                        ; 00:2A30
     cp   $0F                        ; 00:2A31
-    jr   nz,Code002A23              ; 00:2A33
+    jr   nz,@Loop002A23             ; 00:2A33
     ld   a,$02                      ; 00:2A35
     call ClearWRAMBank              ; 00:2A37
     ld   a,$03                      ; 00:2A3A
     call ClearWRAMBank              ; 00:2A3C
     ld   a,[W_GameMode]             ; 00:2A3F
-    cp   $07                        ; 00:2A42
-    jr   nz,Code002A51              ; 00:2A44
-    xor  a                          ; 00:2A46
+    cp   $07                        ; 00:2A42  07: You vs. Boo
+    jr   nz,@Code002A51             ; 00:2A44
+    xor  a                          ; 00:2A46 \ runs if You vs. Boo
     ldh  [<SVBK],a                  ; 00:2A47
     ld   a,:Sub0750B0               ; 00:2A49
     call SetROMBank                 ; 00:2A4B
-    call Sub0750B0                  ; 00:2A4E
-Code002A51:
+    call Sub0750B0                  ; 00:2A4E /
+@Code002A51:
     ld   a,:SublevelSprPtrsSP       ; 00:2A51
     call SetROMBank                 ; 00:2A53
     ld   hl,SublevelSprPtrsSP       ; 00:2A56
     ld   a,[W_SPFlag]               ; 00:2A59
     and  a                          ; 00:2A5C
-    jr   nz,Code002A70              ; 00:2A5D
+    jr   nz,@LoadSprDataPtr         ; 00:2A5D
     ld   a,:SublevelSprPtrsNormal   ; 00:2A5F
     call SetROMBank                 ; 00:2A61
     ld   hl,SublevelSprPtrsHard     ; 00:2A64
     ld   a,[W_HardFlag]             ; 00:2A67
     and  a                          ; 00:2A6A
-    jr   nz,Code002A70              ; 00:2A6B
+    jr   nz,@LoadSprDataPtr         ; 00:2A6B
     ld   hl,SublevelSprPtrsNormal   ; 00:2A6D
-Code002A70:
-    ld   a,[W_SublevelID]           ; 00:2A70
-    sla  a                          ; 00:2A73
-    ld   e,a                        ; 00:2A75
-    ld   d,$00                      ; 00:2A76
-    add  hl,de                      ; 00:2A78
-    ldi  a,[hl]                     ; 00:2A79
-    ld   e,a                        ; 00:2A7A
-    ld   h,[hl]                     ; 00:2A7B
-    ld   l,e                        ; 00:2A7C
-Code002A7D:
-    ldi  a,[hl]                     ; 00:2A7D
-    cp   $FF                        ; 00:2A7E
-    jr   z,Code002ACB               ; 00:2A80
-    ldi  a,[hl]                     ; 00:2A82
-    ldh  [<$FF97],a                 ; 00:2A83
-    ldi  a,[hl]                     ; 00:2A85
-    ldh  [<$FF9A],a                 ; 00:2A86
-    ldi  a,[hl]                     ; 00:2A88
-    ldh  [<$FF98],a                 ; 00:2A89
-    inc  hl                         ; 00:2A8B
-    ldi  a,[hl]                     ; 00:2A8C
-    ldh  [<$FF99],a                 ; 00:2A8D
+@LoadSprDataPtr:
+; at this point, HL points to a pointer table
+; if Super Players, 12:6B14, if normal mode, 05:5217, if hard mode, 05:6687
+    ld   a,[W_SublevelID]           ; 00:2A70 \
+    sla  a                          ; 00:2A73 |
+    ld   e,a                        ; 00:2A75 | de = 2*sublevelID
+    ld   d,$00                      ; 00:2A76 /
+    add  hl,de                      ; 00:2A78  hl = address to load pointer to sprite data
+    ldi  a,[hl]                     ; 00:2A79 \
+    ld   e,a                        ; 00:2A7A |
+    ld   h,[hl]                     ; 00:2A7B | hl = pointer to sprite data
+    ld   l,e                        ; 00:2A7C /
+
+@Loop_LoadSpriteData:
+; Format: Each sprite command is 6 bytes long
+;  byte 0: ignored, unless it's FF (which marks end of data)
+;  byte 1: Y-position
+;  byte 2: X-position high bit
+;  byte 3: X-position
+;  byte 4: ignored
+;  byte 5: sprite ID
+    ldi  a,[hl]                     ; 00:2A7D  load byte from sprite data
+    cp   $FF                        ; 00:2A7E \ if byte is FF, end
+    jr   z,@Loop_LoadSpriteData_End ; 00:2A80 /
+    ldi  a,[hl]                     ; 00:2A82 \
+    ldh  [<$FF97],a                 ; 00:2A83 | load byte 1 into $FF97, 2 into $FF9A,
+    ldi  a,[hl]                     ; 00:2A85 |   3 into $FF98, and 5 into $FF99
+    ldh  [<$FF9A],a                 ; 00:2A86 |
+    ldi  a,[hl]                     ; 00:2A88 | so now $FF97-A contain bytes 1 3 5 2
+    ldh  [<$FF98],a                 ; 00:2A89 |
+    inc  hl                         ; 00:2A8B |
+    ldi  a,[hl]                     ; 00:2A8C |
+    ldh  [<$FF99],a                 ; 00:2A8D /
     push hl                         ; 00:2A8F
     ld   c,$02                      ; 00:2A90
     ldh  a,[<$FF9A]                 ; 00:2A92
     and  $0F                        ; 00:2A94
     and  a                          ; 00:2A96
-    jr   z,Code002A9B               ; 00:2A97
+    jr   z,@Code002A9B              ; 00:2A97
     ld   c,$03                      ; 00:2A99
-Code002A9B:
+@Code002A9B:
     ld   a,c                        ; 00:2A9B
     ldh  [<SVBK],a                  ; 00:2A9C
     ldh  a,[<$FF97]                 ; 00:2A9E
@@ -6147,19 +6187,18 @@ Code002A9B:
     ldh  a,[<$FF99]                 ; 00:2ABE
     ld   [hl],a                     ; 00:2AC0
     pop  hl                         ; 00:2AC1
-    ld   a,[$C283]                  ; 00:2AC2
+    ld   a,[W_ChallengeFlag]        ; 00:2AC2
     and  a                          ; 00:2AC5
-    jr   z,Code002AC8               ; 00:2AC6
-Code002AC8:
-    pop  hl                         ; 00:2AC8
-    jr   Code002A7D                 ; 00:2AC9
-Code002ACB:
+    jr   z,+                        ; 00:2AC6
++   pop  hl                         ; 00:2AC8
+    jr   @Loop_LoadSpriteData       ; 00:2AC9
+@Loop_LoadSpriteData_End:
     xor  a                          ; 00:2ACB
     ldh  [<SVBK],a                  ; 00:2ACC
-    ldh  a,[<$FFB8]                 ; 00:2ACE
+    ldh  a,[<H_CameraXLow]          ; 00:2ACE
     add  $B0                        ; 00:2AD0
     ld   e,a                        ; 00:2AD2
-    ldh  a,[<$FFB9]                 ; 00:2AD3
+    ldh  a,[<H_CameraXHigh]         ; 00:2AD3
     adc  $00                        ; 00:2AD5
     ld   d,a                        ; 00:2AD7
     srl  d                          ; 00:2AD8
@@ -6174,20 +6213,20 @@ Code002ACB:
     ld   [$D2D2],a                  ; 00:2AE9
     ld   a,d                        ; 00:2AEC
     ld   [$D2D3],a                  ; 00:2AED
-    ldh  a,[<$FFB9]                 ; 00:2AF0
+    ldh  a,[<H_CameraXHigh]         ; 00:2AF0
     and  a                          ; 00:2AF2
-    jr   z,Code002B00               ; 00:2AF3
-    ldh  a,[<$FFB8]                 ; 00:2AF5
+    jr   z,@Code002B00              ; 00:2AF3
+    ldh  a,[<H_CameraXLow]          ; 00:2AF5
     add  $A0                        ; 00:2AF7
     ld   e,a                        ; 00:2AF9
-    ldh  a,[<$FFB9]                 ; 00:2AFA
+    ldh  a,[<H_CameraXHigh]         ; 00:2AFA
     adc  $00                        ; 00:2AFC
-    jr   Code002B05                 ; 00:2AFE
-Code002B00:
-    ldh  a,[<$FFB8]                 ; 00:2B00
+    jr   @Code002B05                ; 00:2AFE
+@Code002B00:
+    ldh  a,[<H_CameraXLow]          ; 00:2B00
     ld   e,a                        ; 00:2B02
-    ldh  a,[<$FFB9]                 ; 00:2B03
-Code002B05:
+    ldh  a,[<H_CameraXHigh]         ; 00:2B03
+@Code002B05:
     ld   d,a                        ; 00:2B05
     srl  d                          ; 00:2B06
     rr   e                          ; 00:2B08
@@ -6197,7 +6236,7 @@ Code002B05:
     rr   e                          ; 00:2B10
     srl  d                          ; 00:2B12
     rr   e                          ; 00:2B14
-Code002B16:
+@Loop002B16:
     push de                         ; 00:2B16
     sla  e                          ; 00:2B17
     rl   d                          ; 00:2B19
@@ -6228,65 +6267,66 @@ Code002B16:
     ld   a,[$D2D3]                  ; 00:2B43
     sbc  d                          ; 00:2B46
     bit  7,a                        ; 00:2B47
-    jr   z,Code002B16               ; 00:2B49
-    ldh  a,[<$FFB9]                 ; 00:2B4B
+    jr   z,@Loop002B16              ; 00:2B49
+    ldh  a,[<H_CameraXHigh]         ; 00:2B4B
     and  a                          ; 00:2B4D
     ret  z                          ; 00:2B4E
     call Sub002BAE                  ; 00:2B4F
     ld   bc,$0000                   ; 00:2B52
     ld   a,[$C182]                  ; 00:2B55
     ldh  [<$FF97],a                 ; 00:2B58
-Code002B5A:
+@Loop002B5A:
     ldh  a,[<$FF97]                 ; 00:2B5A
     srl  a                          ; 00:2B5C
     ldh  [<$FF97],a                 ; 00:2B5E
-    jr   nc,Code002B96              ; 00:2B60
+    jr   nc,@Code002B96             ; 00:2B60
     ld   hl,$C183                   ; 00:2B62
     add  hl,bc                      ; 00:2B65
     ld   a,[W_SublevelID]           ; 00:2B66
     cp   [hl]                       ; 00:2B69
-    jr   nz,Code002B96              ; 00:2B6A
+    jr   nz,@Code002B96             ; 00:2B6A
     ld   hl,Data002A14              ; 00:2B6C
     add  hl,bc                      ; 00:2B6F
     ld   a,[hl]                     ; 00:2B70
-    call Sub0026BE                  ; 00:2B71
-    jr   c,Code002B96               ; 00:2B74
+    call LoadSpriteAnySlot          ; 00:2B71
+    jr   c,@Code002B96              ; 00:2B74
     ld   hl,W_SpriteStatus          ; 00:2B76
     add  hl,de                      ; 00:2B79
     ld   [hl],$01                   ; 00:2B7A
     push bc                         ; 00:2B7C
     call Sub002BE1                  ; 00:2B7D
     pop  bc                         ; 00:2B80
-    jr   Code002B96                 ; 00:2B81
+    jr   @Code002B96                ; 00:2B81
 @Unused002B83:
     ld   hl,W_SpriteXLow            ; 00:2B83
     add  hl,de                      ; 00:2B86
     ld   [hl],$00                   ; 00:2B87
     ld   hl,W_SpriteXHigh           ; 00:2B89
     add  hl,de                      ; 00:2B8C
-    ldh  a,[<$FFB9]                 ; 00:2B8D
+    ldh  a,[<H_CameraXHigh]         ; 00:2B8D
     ld   [hl],a                     ; 00:2B8F
     ld   hl,W_SpriteYLow            ; 00:2B90
     add  hl,de                      ; 00:2B93
     ld   [hl],$40                   ; 00:2B94
-Code002B96:
+@Code002B96:
     inc  c                          ; 00:2B96
     ld   a,c                        ; 00:2B97
     cp   $04                        ; 00:2B98
-    jr   nz,Code002B5A              ; 00:2B9A
+    jr   nz,@Loop002B5A             ; 00:2B9A
     ret                             ; 00:2B9C
 
 ClearWRAMBank:
+; subroutine: Clear WRAM bank (specified in A)
     ldh  [<SVBK],a                  ; 00:2B9D
     ld   hl,$D000                   ; 00:2B9F
     ld   de,$1000                   ; 00:2BA2
-Code002BA5:
+@Loop:
     ld   a,$00                      ; 00:2BA5
     ldi  [hl],a                     ; 00:2BA7
     dec  de                         ; 00:2BA8
     ld   a,e                        ; 00:2BA9
     or   d                          ; 00:2BAA
-    jr   nz,Code002BA5              ; 00:2BAB
+    jr   nz,@Loop                   ; 00:2BAB
     ret                             ; 00:2BAD
 
 Sub002BAE:
@@ -6304,7 +6344,7 @@ Code002BBA:
     ld   a,[W_SublevelID]           ; 00:2BBF
     cp   $0C                        ; 00:2BC2
     jr   nz,Code002BCB              ; 00:2BC4
-    ldh  a,[<$FFB9]                 ; 00:2BC6
+    ldh  a,[<H_CameraXHigh]         ; 00:2BC6
     cp   $0A                        ; 00:2BC8
     ret  nz                         ; 00:2BCA
 Code002BCB:
@@ -6340,7 +6380,7 @@ Code002BF3:
     ld   a,[W_SublevelID]           ; 00:2BF9
     cp   $14                        ; 00:2BFC
     jr   z,Code002C06               ; 00:2BFE
-    ldh  a,[<$FFB9]                 ; 00:2C00
+    ldh  a,[<H_CameraXHigh]         ; 00:2C00
     cp   $0A                        ; 00:2C02
     jr   z,Code002C0A               ; 00:2C04
 Code002C06:
@@ -6434,9 +6474,9 @@ Code002C73:
     ret                             ; 00:2C87
 
 Sub002C88:
-    ldh  a,[<$FFB9]                 ; 00:2C88
+    ldh  a,[<H_CameraXHigh]         ; 00:2C88
     ld   d,a                        ; 00:2C8A
-    ldh  a,[<$FFB8]                 ; 00:2C8B
+    ldh  a,[<H_CameraXLow]          ; 00:2C8B
     add  $B0                        ; 00:2C8D
     ld   e,a                        ; 00:2C8F
     ld   a,$00                      ; 00:2C90
@@ -6488,9 +6528,9 @@ Sub002CE2:
     ld   b,$02                      ; 00:2CE2
     ld   a,d                        ; 00:2CE4
     and  a                          ; 00:2CE5
-    jr   z,Code002CEA               ; 00:2CE6
+    jr   z,@Code002CEA              ; 00:2CE6
     ld   b,$03                      ; 00:2CE8
-Code002CEA:
+@Code002CEA:
     ld   a,b                        ; 00:2CEA
     ldh  [<SVBK],a                  ; 00:2CEB
     ld   a,e                        ; 00:2CED
@@ -6503,26 +6543,26 @@ Code002CEA:
     ld   hl,W_SubLvSprTilemap       ; 00:2CF7
     add  hl,de                      ; 00:2CFA
     ld   c,$10                      ; 00:2CFB
-Code002CFD:
-    ld   a,[hl]                     ; 00:2CFD
+@Loop002CFD:
+    ld   a,[hl]                     ; 00:2CFD  sprite ID
     and  a                          ; 00:2CFE
-    jr   z,Code002D3C               ; 00:2CFF
+    jr   z,@Code002D3C              ; 00:2CFF
     push hl                         ; 00:2D01
     push bc                         ; 00:2D02
-    ld   e,[hl]                     ; 00:2D03
+    ld   e,[hl]                     ; 00:2D03  sprite ID
     ld   a,$00                      ; 00:2D04
     ldh  [<SVBK],a                  ; 00:2D06
     ld   a,[W_HardFlag]             ; 00:2D08
     and  a                          ; 00:2D0B
-    jr   z,Code002D15               ; 00:2D0C
-    ld   a,e                        ; 00:2D0E
-    cp   $04                        ; 00:2D0F
-    jr   nz,Code002D15              ; 00:2D11
-    ld   e,$31                      ; 00:2D13
-Code002D15:
-    ld   a,e                        ; 00:2D15
-    call Sub0026BE                  ; 00:2D16
-    jr   c,Code002D37               ; 00:2D19
+    jr   z,@Code002D15              ; 00:2D0C
+    ld   a,e                        ; 00:2D0E \
+    cp   $04                        ; 00:2D0F | if sprite to load would be Goomba
+    jr   nz,@Code002D15             ; 00:2D11 |
+    ld   e,$31                      ; 00:2D13 | replace it by Buzzy Beetle
+@Code002D15:
+    ld   a,e                        ; 00:2D15 /
+    call LoadSpriteAnySlot          ; 00:2D16
+    jr   c,@Code002D37              ; 00:2D19
     ld   a,$01                      ; 00:2D1B
     ld   hl,W_SpriteStatus          ; 00:2D1D
     add  hl,de                      ; 00:2D20
@@ -6539,65 +6579,64 @@ Code002D15:
     ld   hl,W_SpriteYLow            ; 00:2D32
     add  hl,de                      ; 00:2D35
     ld   [hl],a                     ; 00:2D36
-Code002D37:
+@Code002D37:
     pop  bc                         ; 00:2D37
     pop  hl                         ; 00:2D38
     ld   a,b                        ; 00:2D39
     ldh  [<SVBK],a                  ; 00:2D3A
-Code002D3C:
+@Code002D3C:
     ldh  a,[<$FFA6]                 ; 00:2D3C
     add  $10                        ; 00:2D3E
     ldh  [<$FFA6],a                 ; 00:2D40
     ld   de,$0010                   ; 00:2D42
     add  hl,de                      ; 00:2D45
     dec  c                          ; 00:2D46
-    jr   nz,Code002CFD              ; 00:2D47
+    jr   nz,@Loop002CFD             ; 00:2D47
     ld   a,$00                      ; 00:2D49
     ldh  [<SVBK],a                  ; 00:2D4B
     ret                             ; 00:2D4D
 
-Sub002D4E:
-    ld   a,[$C283]                  ; 00:2D4E
+Give1up:
+    ld   a,[W_ChallengeFlag]        ; 00:2D4E
     and  a                          ; 00:2D51
-    jr   nz,Code002D61              ; 00:2D52
+    jr   nz,@Code002D61             ; 00:2D52  don't give 1up in challenge mode
     ld   a,[W_PlayerLives]          ; 00:2D54
     inc  a                          ; 00:2D57
     cp   $80                        ; 00:2D58
-    jr   nz,Code002D5E              ; 00:2D5A
-    ld   a,$7F                      ; 00:2D5C
-Code002D5E:
+    jr   nz,@Code002D5E             ; 00:2D5A
+    ld   a,$7F                      ; 00:2D5C  if lives would be 128, cap to 127
+@Code002D5E:
     ld   [W_PlayerLives],a          ; 00:2D5E
-Code002D61:
+@Code002D61:
     ld   a,$29                      ; 00:2D61
     ldh  [<$FFF3],a                 ; 00:2D63
     ret                             ; 00:2D65
 
-Sub002D66:
+GiveCoin:
     ld   a,$24                      ; 00:2D66
     ldh  [<$FFF3],a                 ; 00:2D68
     ld   a,[W_GameMode]             ; 00:2D6A
     cp   $02                        ; 00:2D6D
-    jr   z,Code002D86               ; 00:2D6F
+    jr   z,@Race                    ; 00:2D6F
     cp   $07                        ; 00:2D71
-    jr   z,Code002D86               ; 00:2D73
-    ld   a,[$C1F2]                  ; 00:2D75
+    jr   z,@Race                    ; 00:2D73
+    ld   a,[W_PlayerCoins]          ; 00:2D75
     inc  a                          ; 00:2D78
     cp   $64                        ; 00:2D79
-    jr   nz,Code002D82              ; 00:2D7B
-    call Sub002D4E                  ; 00:2D7D
+    jr   nz,@Code002D82             ; 00:2D7B
+    call Give1up                    ; 00:2D7D
     ld   a,$00                      ; 00:2D80
-Code002D82:
-    ld   [$C1F2],a                  ; 00:2D82
+@Code002D82:
+    ld   [W_PlayerCoins],a          ; 00:2D82
     ret                             ; 00:2D85
-
-Code002D86:
-    ld   hl,$C1F2                   ; 00:2D86
+@Race:
+    ld   hl,W_PlayerCoins           ; 00:2D86
     inc  [hl]                       ; 00:2D89
     ld   a,[hl]                     ; 00:2D8A
     cp   $63                        ; 00:2D8B
-    jr   c,Return002D91             ; 00:2D8D
-    ld   [hl],$63                   ; 00:2D8F
-Return002D91:
+    jr   c,@Return                  ; 00:2D8D
+    ld   [hl],$63                   ; 00:2D8F  if race, cap coins to 99
+@Return:
     ret                             ; 00:2D91
 
 Data002D92:                         ; 00:2D92
@@ -6655,85 +6694,87 @@ Sub002DE0:
     push de                         ; 00:2DE1
     ld   de,$0004                   ; 00:2DE2
 Code002DE5:
-    ld   a,[$D30A]                  ; 00:2DE5
-    ld   [$D30B],a                  ; 00:2DE8
-    ld   hl,$C221                   ; 00:2DEB
-    add  hl,de                      ; 00:2DEE
-    ld   a,[hl]                     ; 00:2DEF
-    and  $F0                        ; 00:2DF0
-    swap a                          ; 00:2DF2
-    ldh  [<$FF97],a                 ; 00:2DF4
-    ld   hl,$C229                   ; 00:2DF6
-    add  hl,de                      ; 00:2DF9
-    ld   a,[hl]                     ; 00:2DFA
-    ldh  [<$FF98],a                 ; 00:2DFB
-    ld   e,$00                      ; 00:2DFD
-Code002DFF:
-    ld   hl,$D30C                   ; 00:2DFF
+; DE has Mario's collision point that touched the red coin
+    ld   a,[$D30A]                  ; 00:2DE5 \ copy old red coin flags
+    ld   [$D30B],a                  ; 00:2DE8 /  into $D30B for status bar flashing
+    ld   hl,$C221                   ; 00:2DEB \
+    add  hl,de                      ; 00:2DEE |
+    ld   a,[hl]                     ; 00:2DEF | $FF97=Mario X collision point, low byte high digit
+    and  $F0                        ; 00:2DF0 |  current block's position within screen
+    swap a                          ; 00:2DF2 |
+    ldh  [<$FF97],a                 ; 00:2DF4 /
+    ld   hl,$C229                   ; 00:2DF6 \
+    add  hl,de                      ; 00:2DF9 | $FF98=Mario X collision point, high byte
+    ld   a,[hl]                     ; 00:2DFA |  current block's screen number
+    ldh  [<$FF98],a                 ; 00:2DFB /
+    ld   e,$00                      ; 00:2DFD  E is loop index
+@Loop:
+    ld   hl,$D30C                   ; 00:2DFF  red coin screen numbers
     add  hl,de                      ; 00:2E02
     ldh  a,[<$FF98]                 ; 00:2E03
     cp   [hl]                       ; 00:2E05
-    jr   nz,Code002E27              ; 00:2E06
-    ld   hl,$D31C                   ; 00:2E08
-    add  hl,de                      ; 00:2E0B
-    ld   a,[hl]                     ; 00:2E0C
-    and  $0F                        ; 00:2E0D
-    ld   hl,$FF97                   ; 00:2E0F
-    cp   [hl]                       ; 00:2E12
-    jr   nz,Code002E27              ; 00:2E13
+    jr   nz,@Continue               ; 00:2E06
+    ld   hl,$D31C                   ; 00:2E08  red coin X
+    add  hl,de                      ; 00:2E0B \
+    ld   a,[hl]                     ; 00:2E0C |
+    and  $0F                        ; 00:2E0D | compare only red coin X to Mario position
+    ld   hl,$FF97                   ; 00:2E0F |
+    cp   [hl]                       ; 00:2E12 |
+    jr   nz,@Continue               ; 00:2E13 /
     ld   hl,BitTable8Asc_002DD4     ; 00:2E15
     add  hl,de                      ; 00:2E18
-    ld   a,[$D30A]                  ; 00:2E19
-    or   [hl]                       ; 00:2E1C
-    ld   [$D30A],a                  ; 00:2E1D
-    ld   a,$70                      ; 00:2E20
-    ld   [$D32C],a                  ; 00:2E22
-    jr   Code002E2D                 ; 00:2E25
-Code002E27:
+    ld   a,[$D30A]                  ; 00:2E19 \
+    or   [hl]                       ; 00:2E1C | set red coin flag
+    ld   [$D30A],a                  ; 00:2E1D /
+    ld   a,$70                      ; 00:2E20 \ set timer to flash status bar red coins
+    ld   [$D32C],a                  ; 00:2E22 /
+    jr   @EndLoop                   ; 00:2E25
+@Continue:
     inc  e                          ; 00:2E27
     ld   a,e                        ; 00:2E28
-    cp   $05                        ; 00:2E29
-    jr   nz,Code002DFF              ; 00:2E2B
-Code002E2D:
+    cp   $05                        ; 00:2E29  loop 5 times
+    jr   nz,@Loop                   ; 00:2E2B
+@EndLoop:
     pop  de                         ; 00:2E2D
     pop  bc                         ; 00:2E2E
     ret                             ; 00:2E2F
 
-Sub002E30:
+GivePointsFF97:
+; subroutine: Add 16-bit value at $FF97 to current score. Cap to 0F423F (9,999,990 displayed) if applicable
     ld   hl,$C17A                   ; 00:2E30
-    ldh  a,[<$FF97]                 ; 00:2E33
-    add  [hl]                       ; 00:2E35
-    ldi  [hl],a                     ; 00:2E36
-    ldh  a,[<$FF98]                 ; 00:2E37
-    adc  [hl]                       ; 00:2E39
-    ldi  [hl],a                     ; 00:2E3A
-    ld   a,$00                      ; 00:2E3B
-    adc  [hl]                       ; 00:2E3D
-    ld   [hl],a                     ; 00:2E3E
+    ldh  a,[<$FF97]                 ; 00:2E33 \
+    add  [hl]                       ; 00:2E35 | add byte at $FF97 to low byte
+    ldi  [hl],a                     ; 00:2E36 /
+    ldh  a,[<$FF98]                 ; 00:2E37 \
+    adc  [hl]                       ; 00:2E39 | add byte at $FF98 to mid byte, with carry
+    ldi  [hl],a                     ; 00:2E3A /
+    ld   a,$00                      ; 00:2E3B \
+    adc  [hl]                       ; 00:2E3D | update high byte, with carry
+    ld   [hl],a                     ; 00:2E3E /
     cp   $0F                        ; 00:2E3F
-    jr   z,Code002E47               ; 00:2E41
-    jr   nc,Code002E57              ; 00:2E43
-    jr   Return002E63               ; 00:2E45
-Code002E47:
+    jr   z,@CheckMidByte            ; 00:2E41
+    jr   nc,@CapScore               ; 00:2E43  if high byte > 0F, cap score
+    jr   @Return                    ; 00:2E45  if high byte < 0F, return
+@CheckMidByte:
     dec  hl                         ; 00:2E47
     ldd  a,[hl]                     ; 00:2E48
     cp   $42                        ; 00:2E49
-    jr   z,Code002E52               ; 00:2E4B
-    jr   nc,Code002E57              ; 00:2E4D
-    jp   Return002E63               ; 00:2E4F
-Code002E52:
+    jr   z,@CheckLowByte            ; 00:2E4B
+    jr   nc,@CapScore               ; 00:2E4D
+    jp   @Return                    ; 00:2E4F
+@CheckLowByte:
     ld   a,[hl]                     ; 00:2E52
     cp   $3F                        ; 00:2E53
-    jr   c,Return002E63             ; 00:2E55
-Code002E57:
-    ld   hl,$C17A                   ; 00:2E57
-    ld   a,$3F                      ; 00:2E5A
-    ldi  [hl],a                     ; 00:2E5C
-    ld   a,$42                      ; 00:2E5D
-    ldi  [hl],a                     ; 00:2E5F
-    ld   a,$0F                      ; 00:2E60
-    ld   [hl],a                     ; 00:2E62
-Return002E63:
+    jr   c,@Return                  ; 00:2E55
+@CapScore:
+    ld   hl,$C17A                   ; 00:2E57 \
+    ld   a,$3F                      ; 00:2E5A |
+    ldi  [hl],a                     ; 00:2E5C |
+    ld   a,$42                      ; 00:2E5D | set score to 0F423F (9,999,990 displayed)
+    ldi  [hl],a                     ; 00:2E5F |
+    ld   a,$0F                      ; 00:2E60 |
+    ld   [hl],a                     ; 00:2E62 /
+@Return:
     ret                             ; 00:2E63
 
 Sub002E64:
@@ -6767,8 +6808,8 @@ Sub002E73:
 
 Sub002E90:
     ldh  [<$FF9B],a                 ; 00:2E90
-    cp   $0A                        ; 00:2E92
-    jr   z,Code002EB9               ; 00:2E94
+    cp   $0A                        ; 00:2E92  0A: 1up
+    jr   z,@1up                     ; 00:2E94
     sla  a                          ; 00:2E96
     ld   e,a                        ; 00:2E98
     ld   d,$00                      ; 00:2E99
@@ -6778,8 +6819,8 @@ Sub002E90:
     ldh  [<$FF97],a                 ; 00:2EA0
     ld   a,[hl]                     ; 00:2EA2
     ldh  [<$FF98],a                 ; 00:2EA3
-    call Sub002E30                  ; 00:2EA5
-    call Sub002ED7                  ; 00:2EA8
+    call GivePointsFF97             ; 00:2EA5
+    call SpawnScoreSprite           ; 00:2EA8
     ld   a,[$D2F4]                  ; 00:2EAB
     cp   $02                        ; 00:2EAE
     ret  nz                         ; 00:2EB0
@@ -6789,10 +6830,9 @@ Sub002E90:
     ret  z                          ; 00:2EB6
     dec  [hl]                       ; 00:2EB7
     ret                             ; 00:2EB8
-
-Code002EB9:
-    call Sub002ED7                  ; 00:2EB9
-    call Sub002D4E                  ; 00:2EBC
+@1up:
+    call SpawnScoreSprite           ; 00:2EB9
+    call Give1up                    ; 00:2EBC
     ret                             ; 00:2EBF
 
 Sub002EC0:
@@ -6814,19 +6854,21 @@ Code002ED5:
     scf                             ; 00:2ED5
     ret                             ; 00:2ED6
 
-Sub002ED7:
-    ld   hl,W_SpriteXLow            ; 00:2ED7
+SpawnScoreSprite:
+; subroutine: Spawn score sprite at existing sprite's position
+; BC: sprite slot with position to use
+    ld   hl,W_SpriteXLow            ; 00:2ED7 \ $FF97 = sprite X position, 16-bit
     add  hl,bc                      ; 00:2EDA
     ld   a,[hl]                     ; 00:2EDB
     ldh  [<$FF97],a                 ; 00:2EDC
     ld   hl,W_SpriteXHigh           ; 00:2EDE
     add  hl,bc                      ; 00:2EE1
     ld   a,[hl]                     ; 00:2EE2
-    ldh  [<$FF98],a                 ; 00:2EE3
+    ldh  [<$FF98],a                 ; 00:2EE3 /
     ld   hl,W_SpriteYLow            ; 00:2EE5
     add  hl,bc                      ; 00:2EE8
     ld   a,[hl]                     ; 00:2EE9
-    ldh  [<$FF99],a                 ; 00:2EEA
+    ldh  [<$FF99],a                 ; 00:2EEA  $FF99 = sprite Y position, 8-bit
     ldh  a,[<$FFBE]                 ; 00:2EEC
     push af                         ; 00:2EEE
     ld   a,:Sub0276B3               ; 00:2EEF
@@ -6874,7 +6916,7 @@ Data002F1E:                         ; 00:2F1E
 Data002F42:                         ; 00:2F42
 .db $02,$02,$01,$06,$02,$02,$02,$02,\
     $02
-ScoreSpriteValues:                  ; 00:2F4B
+ScoreSpriteValues:                  ; 00:2F4B  fixed-point (*10 for displayed value)
 .dw 10, 20, 40, 50, 80, 100, 200, 400,\
     500, 800, 0, 1000
 Data002F63:                         ; 00:2F63
@@ -6903,10 +6945,10 @@ Sub002FEF:
     push hl                         ; 00:2FF3
     ld   hl,W_SpriteXLow            ; 00:2FF4
     add  hl,bc                      ; 00:2FF7
-    ldh  a,[<$FFA7]                 ; 00:2FF8
+    ldh  a,[<H_PlayerXLow]          ; 00:2FF8
     sub  [hl]                       ; 00:2FFA
     pop  hl                         ; 00:2FFB
-    ldh  a,[<$FFA8]                 ; 00:2FFC
+    ldh  a,[<H_PlayerXHigh]         ; 00:2FFC
     sbc  [hl]                       ; 00:2FFE
     ret                             ; 00:2FFF
 
@@ -7109,31 +7151,32 @@ Code003163:
     pop  af                         ; 00:3169
     reti                            ; 00:316A
 
-Sub00316B:
+InitSubLv16x16Tilemap:
+; Fill WRAM banks 6-7 with 03 (empty tile), and init screen exit table
     ld   a,$06                      ; 00:316B
     ldh  [<SVBK],a                  ; 00:316D
-    ld   b,$02                      ; 00:316F
-Code003171:
+    ld   b,$02                      ; 00:316F  loop 2 times
+@BankLoop:
     push bc                         ; 00:3171
     ld   hl,W_SubLv16x16Tilemap     ; 00:3172
-    ld   bc,$1000                   ; 00:3175
-Code003178:
+    ld   bc,$1000                   ; 00:3175  loop 1000 times ($D000-E000)
+@TileLoop:
     ld   a,$03                      ; 00:3178
-    ldi  [hl],a                     ; 00:317A
+    ldi  [hl],a                     ; 00:317A  overwrite byte with 03 (empty tile)
     dec  bc                         ; 00:317B
-    ld   a,b                        ; 00:317C
-    or   c                          ; 00:317D
-    jr   nz,Code003178              ; 00:317E
+    ld   a,b                        ; 00:317C \
+    or   c                          ; 00:317D | loop if BC is not 0
+    jr   nz,@TileLoop               ; 00:317E /
     ld   hl,SVBK                    ; 00:3180
     inc  [hl]                       ; 00:3183
     pop  bc                         ; 00:3184
     dec  b                          ; 00:3185
-    jr   nz,Code003171              ; 00:3186
+    jr   nz,@BankLoop               ; 00:3186
     ld   a,$00                      ; 00:3188
     ldh  [<SVBK],a                  ; 00:318A
     ld   de,$000C                   ; 00:318C
-Code00318F:
-    ld   hl,$D2FA                   ; 00:318F
+@ScreenExitFFLoop:
+    ld   hl,$D2FA                   ; 00:318F \ add FF-termination markers every 4 bytes in screen exit table
     add  hl,de                      ; 00:3192
     ld   [hl],$FF                   ; 00:3193
     dec  e                          ; 00:3195
@@ -7142,528 +7185,573 @@ Code00318F:
     dec  e                          ; 00:3198
     ld   a,e                        ; 00:3199
     and  a                          ; 00:319A
-    jr   nz,Code00318F              ; 00:319B
+    jr   nz,@ScreenExitFFLoop       ; 00:319B /
     ret                             ; 00:319D
 
-LoadSublevelHeader:
+LoadSublevelMainData:
+; DE starts with pointer to start of header
+; scratch RAM:
+; $FFA1 = number of screens remaining to load
+; $FFA2 = current screen number
+; $FFA3 = current object's length (used by 00 and 40 only)
+; $FFA4 = current object's YX byte
+; $FFA5-6 = misc scratch RAM (used by 80+ only)
+
+; Header byte 00: screen count
     ld   a,$00                      ; 00:319E
     ldh  [<$FFA2],a                 ; 00:31A0
-    ld   a,[de]                     ; 00:31A2
-    ld   [$C161],a                  ; 00:31A3
-    ldh  [<$FFA1],a                 ; 00:31A6
+    ld   a,[de]                     ; 00:31A2 \
+    ld   [W_SubLvScreenCount],a     ; 00:31A3 | W_SubLvScreenCount = header byte 00 (screen count)
+    ldh  [<$FFA1],a                 ; 00:31A6 / initialize remaining screen count for level load
     ld   a,$06                      ; 00:31A8
+; Header byte 01: floor tile
     ldh  [<SVBK],a                  ; 00:31AA
-    inc  de                         ; 00:31AC
+    inc  de                         ; 00:31AC  increment byte to load from
     ld   hl,$D0F0                   ; 00:31AD
-    ld   b,$00                      ; 00:31B0
-@Loop0031B2:
-    ld   c,$10                      ; 00:31B2
-@Loop0031B4:
-    ld   a,[de]                     ; 00:31B4
-    ldi  [hl],a                     ; 00:31B5
-    dec  c                          ; 00:31B6
-    jr   nz,@Loop0031B4             ; 00:31B7
+; fill Y=F with header byte 01 (floor tile) for level's entire screen count
+    ld   b,$00                      ; 00:31B0  B: loop until screen number
+@ScreenLoop:
+    ld   c,$10                      ; 00:31B2  C: loop 10 times
+@TileLoop:
+    ld   a,[de]                     ; 00:31B4 \
+    ldi  [hl],a                     ; 00:31B5 | fill $D_F0-D_FF with header byte 01 (floor tile)
+    dec  c                          ; 00:31B6 |
+    jr   nz,@TileLoop               ; 00:31B7 /
     push bc                         ; 00:31B9
-    ld   bc,$00F0                   ; 00:31BA
-    add  hl,bc                      ; 00:31BD
+    ld   bc,$00F0                   ; 00:31BA \ add another 00F0 to HL, to add 0100 total
+    add  hl,bc                      ; 00:31BD /  (move to next screen's tilemap)
     pop  bc                         ; 00:31BE
     inc  b                          ; 00:31BF
-    ld   a,b                        ; 00:31C0
-    cp   $10                        ; 00:31C1
-    jr   nz,@Code0031CC             ; 00:31C3
-    ldh  a,[<SVBK]                  ; 00:31C5
-    inc  a                          ; 00:31C7
-    ldh  [<SVBK],a                  ; 00:31C8
-    ld   h,$D0                      ; 00:31CA
+    ld   a,b                        ; 00:31C0 \
+    cp   $10                        ; 00:31C1 | check if B reached 10
+    jr   nz,@Code0031CC             ; 00:31C3 /
+    ldh  a,[<SVBK]                  ; 00:31C5 \
+    inc  a                          ; 00:31C7 | if so, increment WRAM bank to 7
+    ldh  [<SVBK],a                  ; 00:31C8 |
+    ld   h,$D0                      ; 00:31CA / and reset HL to $D0F0
 @Code0031CC:
-    ld   a,[$C161]                  ; 00:31CC
+    ld   a,[W_SubLvScreenCount]     ; 00:31CC
     cp   b                          ; 00:31CF
-    jp   nc,@Loop0031B2             ; 00:31D0
-    inc  de                         ; 00:31D3
-    ld   a,[de]                     ; 00:31D4
-    ldh  [<H_PlInitY_SubLvType],a   ; 00:31D5
+    jp   nc,@ScreenLoop             ; 00:31D0
+; Header byte 02:
+;  high digit: Mario initial Y; low digit: level type
+    inc  de                         ; 00:31D3  increment byte to load from
+    ld   a,[de]                     ; 00:31D4 \ $FFC2 = header byte 02
+    ldh  [<H_PlInitY_SubLvType],a   ; 00:31D5 /  (Mario initial Y, level type)
     ld   a,[W_GameMode]             ; 00:31D7
     cp   $07                        ; 00:31DA
     jr   z,@RaceHeader              ; 00:31DC
     cp   $02                        ; 00:31DE
     jr   nz,@Code0031EA             ; 00:31E0
 @RaceHeader:
-    xor  a                          ; 00:31E2
+; Header byte 03 in race levels:
+; bit 0: (0)face or (1)3-2-1 blocks; bit 1: (0)solid/spike or (1)red/white blocks
+    xor  a                          ; 00:31E2 \ runs if game mode is You vs. Boo or VS
     ldh  [<SVBK],a                  ; 00:31E3
-    inc  de                         ; 00:31E5
+    inc  de                         ; 00:31E5  increment byte to load from
     ld   a,[de]                     ; 00:31E6
-    ld   [W_RaceHeaderFlags],a      ; 00:31E7
+    ld   [W_RaceHeaderFlags],a      ; 00:31E7 / $C3A2 = header byte 03 (animated tiles to load)
 @Code0031EA:
     ld   a,$00                      ; 00:31EA
     ldh  [<SVBK],a                  ; 00:31EC
     ld   hl,$D2FA                   ; 00:31EE
-    inc  de                         ; 00:31F1
-Code0031F2:
-    ld   a,[de]                     ; 00:31F2
-    cp   $FF                        ; 00:31F3
-    jr   z,Code003201               ; 00:31F5
-    ld   b,$04                      ; 00:31F7
-Code0031F9:
-    ld   a,[de]                     ; 00:31F9
-    ldi  [hl],a                     ; 00:31FA
-    inc  de                         ; 00:31FB
-    dec  b                          ; 00:31FC
-    jr   nz,Code0031F9              ; 00:31FD
-    jr   Code0031F2                 ; 00:31FF
-Code003201:
+    inc  de                         ; 00:31F1  increment byte to load from
+@ScreenExitLoop:
+    ld   a,[de]                     ; 00:31F2 \
+    cp   $FF                        ; 00:31F3 | end loop if next byte is FF
+    jr   z,@ScreenExitLoop_End      ; 00:31F5 /
+    ld   b,$04                      ; 00:31F7  loop 4 times
+@LoadScreenExit:
+    ld   a,[de]                     ; 00:31F9 \
+    ldi  [hl],a                     ; 00:31FA |
+    inc  de                         ; 00:31FB | loop: load 4 header bytes into $1:D2FA
+    dec  b                          ; 00:31FC |
+    jr   nz,@LoadScreenExit         ; 00:31FD /
+    jr   @ScreenExitLoop            ; 00:31FF
+@ScreenExitLoop_End:
     ld   a,$06                      ; 00:3201
     ldh  [<SVBK],a                  ; 00:3203
-Code003205:
-    inc  de                         ; 00:3205
+
+; Object loading
+; DE starts with location of FF byte that marks end of header
+MainDataObjectLoop:
+    inc  de                         ; 00:3205  increment byte to load from
     ld   a,[de]                     ; 00:3206
     cp   $FF                        ; 00:3207
-    jr   nz,Code00326D              ; 00:3209
-    ldh  a,[<$FFA1]                 ; 00:320B
-    dec  a                          ; 00:320D
-    ldh  [<$FFA1],a                 ; 00:320E
-    jr   nz,Code00325B              ; 00:3210
+    jr   nz,@Code00326D             ; 00:3209
+; runs if object byte is FF
+    ldh  a,[<$FFA1]                 ; 00:320B \
+    dec  a                          ; 00:320D | decrement screens remaining to load
+    ldh  [<$FFA1],a                 ; 00:320E /
+    jr   nz,@Code00325B             ; 00:3210
     ld   a,$06                      ; 00:3212
     ldh  [<SVBK],a                  ; 00:3214
     ld   b,$00                      ; 00:3216
-    ld   hl,$D004                   ; 00:3218
+    ld   hl,$D004                   ; 00:3218  HL = $D004 by deafult
     ld   a,[W_GameMode]             ; 00:321B
     cp   $02                        ; 00:321E
-    jr   z,Code003229               ; 00:3220
+    jr   z,@Code003229              ; 00:3220
     ld   a,[W_GameMode]             ; 00:3222
     cp   $07                        ; 00:3225
-    jr   nz,Code00322B              ; 00:3227
-Code003229:
-    dec  hl                         ; 00:3229
-    dec  hl                         ; 00:322A
-Code00322B:
-    ld   a,[$C283]                  ; 00:322B
+    jr   nz,@Code00322B             ; 00:3227
+@Code003229:
+    dec  hl                         ; 00:3229 \ if race level, HL = $D002
+    dec  hl                         ; 00:322A /
+@Code00322B:
+    ld   a,[W_ChallengeFlag]        ; 00:322B
     cp   $01                        ; 00:322E
-    jr   z,Code003237               ; 00:3230
-    ld   a,$70                      ; 00:3232
-    ld   [hl],a                     ; 00:3234
-    jr   Code003242                 ; 00:3235
-Code003237:
-    ld   a,$71                      ; 00:3237
-    ldi  [hl],a                     ; 00:3239
-    ldi  [hl],a                     ; 00:323A
-    ldi  [hl],a                     ; 00:323B
-    ld   a,$93                      ; 00:323C
-    ld   [hl],a                     ; 00:323E
-    dec  hl                         ; 00:323F
-    dec  hl                         ; 00:3240
-    dec  hl                         ; 00:3241
-Code003242:
-    inc  h                          ; 00:3242
+    jr   z,@Code003237              ; 00:3230
+    ld   a,$70                      ; 00:3232 \ if not challenge mode, store 70
+    ld   [hl],a                     ; 00:3234 |
+    jr   @Code003242                ; 00:3235 /
+@Code003237:
+    ld   a,$71                      ; 00:3237 \ if challenge mode, store 71 71 71 93
+    ldi  [hl],a                     ; 00:3239 |
+    ldi  [hl],a                     ; 00:323A |
+    ldi  [hl],a                     ; 00:323B |
+    ld   a,$93                      ; 00:323C |
+    ld   [hl],a                     ; 00:323E |
+    dec  hl                         ; 00:323F |
+    dec  hl                         ; 00:3240 | then revert HL
+    dec  hl                         ; 00:3241 /
+@Code003242:
+    inc  h                          ; 00:3242  shift 1 screen right
     inc  b                          ; 00:3243
     ld   a,b                        ; 00:3244
-    cp   $10                        ; 00:3245
-    jr   nz,Code003250              ; 00:3247
-    ldh  a,[<SVBK]                  ; 00:3249
-    inc  a                          ; 00:324B
-    ldh  [<SVBK],a                  ; 00:324C
+    cp   $10                        ; 00:3245 \ check if screen reached 10
+    jr   nz,@Code003250             ; 00:3247 /
+    ldh  a,[<SVBK]                  ; 00:3249 \
+    inc  a                          ; 00:324B | if so, increment bank byte
+    ldh  [<SVBK],a                  ; 00:324C /
     ld   h,$D0                      ; 00:324E
-Code003250:
-    ld   a,[$C161]                  ; 00:3250
+@Code003250:
+    ld   a,[W_SubLvScreenCount]     ; 00:3250
     cp   b                          ; 00:3253
-    jr   nc,Code00322B              ; 00:3254
+    jr   nc,@Code00322B             ; 00:3254
     ld   a,$00                      ; 00:3256
     ldh  [<SVBK],a                  ; 00:3258
     ret                             ; 00:325A
 
-Code00325B:
+@Code00325B:
     ldh  a,[<$FFA2]                 ; 00:325B
     inc  a                          ; 00:325D
     ldh  [<$FFA2],a                 ; 00:325E
     cp   $10                        ; 00:3260
-    jr   nz,Code003205              ; 00:3262
+    jr   nz,MainDataObjectLoop      ; 00:3262
     ldh  a,[<SVBK]                  ; 00:3264
     inc  a                          ; 00:3266
     ldh  [<SVBK],a                  ; 00:3267
     ld   h,$D0                      ; 00:3269
-    jr   Code003205                 ; 00:326B
-Code00326D:
-    ldh  [<$FFA3],a                 ; 00:326D
+    jr   MainDataObjectLoop         ; 00:326B
+
+@Code00326D:
+; still level data loading, process object bytes that are not FF
+; starts with A as an object byte already loaded, DE as address it was loaded from
+    ldh  [<$FFA3],a                 ; 00:326D  $FFA3 = object byte 0
     push de                         ; 00:326F
     bit  7,a                        ; 00:3270
-    jr   nz,Code00327A              ; 00:3272
+    jr   nz,Obj2_Extended_Main      ; 00:3272
     bit  6,a                        ; 00:3274
-    jr   nz,Code0032B2              ; 00:3276
-    jr   Code00329B                 ; 00:3278
-Code00327A:
+    jr   nz,Obj1_TileColumn_Main    ; 00:3276
+    jr   Obj0_TileRow_Main          ; 00:3278
+
+Obj2_Extended_Main:
     ldh  a,[<$FFA3]                 ; 00:327A
     and  $7F                        ; 00:327C
-    rst  $00                        ; 00:327E
-.dw Code0032C8                      ; 00:327F
-.dw Code003373                      ; 00:3281
-.dw Code0033B9                      ; 00:3283
-.dw Code0033E1                      ; 00:3285
-.dw Code00331D                      ; 00:3287
-.dw Code003353                      ; 00:3289
-.dw Code003454                      ; 00:328B
-.dw Code003309                      ; 00:328D
-.dw Code0034A9                      ; 00:328F
-.dw Code0034C3                      ; 00:3291
-.dw Code0034DA                      ; 00:3293
-.dw Code0034F1                      ; 00:3295
-.dw Code003515                      ; 00:3297
-.dw Code00353E                      ; 00:3299
+    rst  $00                        ; 00:327E  Execute from 16-bit pointer table
+.dw Obj200_SubLvMainWrapper         ; 00:327F
+.dw Obj201_SubLvMainWrapper         ; 00:3281
+.dw Obj202_SubLvMainWrapper         ; 00:3283
+.dw Obj203_SubLvMainWrapper         ; 00:3285
+.dw Obj204_SubLvMainWrapper         ; 00:3287
+.dw Obj205_SubLvMainWrapper         ; 00:3289
+.dw Obj206_SubLvMainWrapper         ; 00:328B
+.dw Obj207_SubLvMainWrapper         ; 00:328D
+.dw Obj208_SubLvMainWrapper         ; 00:328F
+.dw Obj209_SubLvMainWrapper         ; 00:3291
+.dw Obj20A_SubLvMainWrapper         ; 00:3293
+.dw Obj20B_SubLvMainWrapper         ; 00:3295
+.dw Obj20C_SubLvMainWrapper         ; 00:3297
+.dw Obj20D_SubLvMainWrapper         ; 00:3299
+; objects 2.0E-0F are only usable in challenge mode object data
 
-Code00329B:
+Obj0_TileRow_Main:
+; object 0: horizontal line of tiles (runs if bits 6-7 are both clear)
     pop  de                         ; 00:329B
-    call Sub003568                  ; 00:329C
+    call ObjShared_GetTilemapAddr   ; 00:329C  HL = tilemap address from level data
     inc  de                         ; 00:329F
-    ldh  a,[<$FFA3]                 ; 00:32A0
-    and  $3F                        ; 00:32A2
-    ld   b,a                        ; 00:32A4
-Code0032A5:
-    ld   a,b                        ; 00:32A5
+    ldh  a,[<$FFA3]                 ; 00:32A0  object byte 0
+    and  $3F                        ; 00:32A2  bits 0-5: length (width)
+    ld   b,a                        ; 00:32A4  B = remaining tiles to process
+@Loop:
+    ld   a,b                        ; 00:32A5 \
     and  a                          ; 00:32A6
-    jp   z,Code003205               ; 00:32A7
+    jp   z,MainDataObjectLoop       ; 00:32A7
     ld   a,[de]                     ; 00:32AA
-    ldi  [hl],a                     ; 00:32AB
-    call Sub003587                  ; 00:32AC
+    ldi  [hl],a                     ; 00:32AB  write tile to tilemap, then x += 1
+    call ObjShared_TilemapXCarry    ; 00:32AC
     dec  b                          ; 00:32AF
-    jr   Code0032A5                 ; 00:32B0
-Code0032B2:
-    pop  de                         ; 00:32B2
-    call Sub003568                  ; 00:32B3
-    inc  de                         ; 00:32B6
-    ldh  a,[<$FFA3]                 ; 00:32B7
-    and  $3F                        ; 00:32B9
-    ld   b,a                        ; 00:32BB
-Code0032BC:
-    ld   a,b                        ; 00:32BC
-    and  a                          ; 00:32BD
-    jp   z,Code003205               ; 00:32BE
-    call Sub00357C                  ; 00:32C1
-    dec  b                          ; 00:32C4
-    jp   Code0032BC                 ; 00:32C5
-Code0032C8:
-    pop  de                         ; 00:32C8
-    call Sub0032CF                  ; 00:32C9
-    jp   Code003205                 ; 00:32CC
+    jr   @Loop                      ; 00:32B0 /
 
-Sub0032CF:
-    call Sub003568                  ; 00:32CF
+Obj1_TileColumn_Main:
+; object 1: vertical line of tiles (runs if bit 6 set, bit 7 clear)
+    pop  de                         ; 00:32B2
+    call ObjShared_GetTilemapAddr   ; 00:32B3
+    inc  de                         ; 00:32B6
+    ldh  a,[<$FFA3]                 ; 00:32B7  object byte 0
+    and  $3F                        ; 00:32B9  bits 0-5: length (height)
+    ld   b,a                        ; 00:32BB  B = remaining tiles to process
+@Loop:
+    ld   a,b                        ; 00:32BC \
+    and  a                          ; 00:32BD
+    jp   z,MainDataObjectLoop       ; 00:32BE
+    call ObjShared_SetTileShiftDown ; 00:32C1
+    dec  b                          ; 00:32C4
+    jp   @Loop                      ; 00:32C5 /
+
+Obj200_SubLvMainWrapper:
+    pop  de                         ; 00:32C8
+    call Obj200_Main                ; 00:32C9
+    jp   MainDataObjectLoop         ; 00:32CC
+
+Obj200_Main:
+; object 2.00: vertical pipe (not enterable)
+    call ObjShared_GetTilemapAddr   ; 00:32CF
     inc  de                         ; 00:32D2
     ld   a,[de]                     ; 00:32D3
-    ldh  [<$FFA6],a                 ; 00:32D4
+    ldh  [<$FFA6],a                 ; 00:32D4  $FFA6 = length
     push de                         ; 00:32D6
-    ld   de,Data003E9F              ; 00:32D7
-Code0032DA:
-    ld   b,$02                      ; 00:32DA
-Code0032DC:
-    call Sub00357C                  ; 00:32DC
+    ld   de,Obj200_Tilemap          ; 00:32D7  05 07 06 08
+ObjPipeShared:
+; 2.00/2.07 shared code
+    ld   b,$02                      ; 00:32DA  loop 2 times
+@Loop0032DC:
+    call ObjShared_SetTileShiftDown ; 00:32DC \
     inc  de                         ; 00:32DF
     ldh  a,[<$FFA6]                 ; 00:32E0
     ld   c,a                        ; 00:32E2
-Code0032E3:
-    ld   a,c                        ; 00:32E3
+@Loop0032E3:
+    ld   a,c                        ; 00:32E3  \ loop length times
     cp   $00                        ; 00:32E4
-    jr   z,Code0032EE               ; 00:32E6
-    call Sub00357C                  ; 00:32E8
+    jr   z,@Code0032EE              ; 00:32E6
+    call ObjShared_SetTileShiftDown ; 00:32E8
     dec  c                          ; 00:32EB
-    jr   Code0032E3                 ; 00:32EC
-Code0032EE:
+    jr   @Loop0032E3                ; 00:32EC  /
+@Code0032EE:
     dec  b                          ; 00:32EE
-    jr   z,Code003307               ; 00:32EF
+    jr   z,@Code003307              ; 00:32EF
     push bc                         ; 00:32F1
     inc  hl                         ; 00:32F2
-    call Sub003587                  ; 00:32F3
-    ldh  a,[<$FFA6]                 ; 00:32F6
-    inc  a                          ; 00:32F8
-    ld   c,a                        ; 00:32F9
-    ld   a,$10                      ; 00:32FA
-    sub  c                          ; 00:32FC
+    call ObjShared_TilemapXCarry    ; 00:32F3
+    ldh  a,[<$FFA6]                 ; 00:32F6  \ revert y position in HL to start of object
+    inc  a                          ; 00:32F8  c = length+1
+    ld   c,a                        ; 00:32F9  c = 10 - (length+1)
+    ld   a,$10                      ; 00:32FA  bc = -(length+1) * 10
+    sub  c                          ; 00:32FC  /
     ld   c,a                        ; 00:32FD
     swap c                          ; 00:32FE
     ld   b,$FF                      ; 00:3300
     add  hl,bc                      ; 00:3302
     pop  bc                         ; 00:3303
     inc  de                         ; 00:3304
-    jr   Code0032DC                 ; 00:3305
-Code003307:
+    jr   @Loop0032DC                ; 00:3305 /
+@Code003307:
     pop  de                         ; 00:3307
     ret                             ; 00:3308
 
-Code003309:
+Obj207_SubLvMainWrapper:
     pop  de                         ; 00:3309
-    call Sub003310                  ; 00:330A
-    jp   Code003205                 ; 00:330D
+    call Obj207_Main                ; 00:330A
+    jp   MainDataObjectLoop         ; 00:330D
 
-Sub003310:
-    call Sub003568                  ; 00:3310
+Obj207_Main:
+; object 2.07: vertical pipe (enterable)
+    call ObjShared_GetTilemapAddr   ; 00:3310
     inc  de                         ; 00:3313
     ld   a,[de]                     ; 00:3314
-    ldh  [<$FFA6],a                 ; 00:3315
+    ldh  [<$FFA6],a                 ; 00:3315  $FFA6 = length
     push de                         ; 00:3317
-    ld   de,Data003EA3              ; 00:3318
-    jr   Code0032DA                 ; 00:331B
-Code00331D:
-    pop  de                         ; 00:331D
-    call Sub003324                  ; 00:331E
-    jp   Code003205                 ; 00:3321
+    ld   de,Obj207_Tilemap          ; 00:3318  22 07 23 08
+    jr   ObjPipeShared              ; 00:331B
 
-Sub003324:
-    call Sub003568                  ; 00:3324
+Obj204_SubLvMainWrapper:
+    pop  de                         ; 00:331D
+    call Obj204_Main                ; 00:331E
+    jp   MainDataObjectLoop         ; 00:3321
+
+Obj204_Main:
+; object 2.04: horizontal pipe
+    call ObjShared_GetTilemapAddr   ; 00:3324
     inc  de                         ; 00:3327
     ld   a,[de]                     ; 00:3328
-    ldh  [<$FFA5],a                 ; 00:3329
+    ldh  [<$FFA5],a                 ; 00:3329  $FFA5 = length
     push de                         ; 00:332B
-    ld   de,Data003EA7              ; 00:332C
+    ld   de,Obj204_Tilemap          ; 00:332C  28 29 2A 2B
     ld   b,$00                      ; 00:332F
-Code003331:
-    call Sub00357C                  ; 00:3331
+@Loop:
+    call ObjShared_SetTileShiftDown ; 00:3331 \ loop length+1 times
     inc  de                         ; 00:3334
     ld   a,[de]                     ; 00:3335
-    ld   [hl],a                     ; 00:3336
+    ld   [hl],a                     ; 00:3336  write tile to tilemap
     inc  de                         ; 00:3337
     ldh  a,[<$FFA5]                 ; 00:3338
     cp   b                          ; 00:333A
-    jr   z,Code003351               ; 00:333B
-    inc  b                          ; 00:333D
+    jr   z,@Code003351              ; 00:333B
+    inc  b                          ; 00:333D  increment relative X
     ld   a,b                        ; 00:333E
-    cp   $01                        ; 00:333F
-    jr   z,Code003345               ; 00:3341
-    dec  de                         ; 00:3343
-    dec  de                         ; 00:3344
-Code003345:
+    cp   $01                        ; 00:333F  if position after incrementing is not 1...
+    jr   z,@Code003345              ; 00:3341
+    dec  de                         ; 00:3343  \ subtract 2 from DE
+    dec  de                         ; 00:3344  /  to repeat tiles 2A/2B
+@Code003345:
     push bc                         ; 00:3345
-    ld   bc,$FFF0                   ; 00:3346
-    add  hl,bc                      ; 00:3349
-    inc  hl                         ; 00:334A
-    call Sub003587                  ; 00:334B
+    ld   bc,$FFF0                   ; 00:3346  \
+    add  hl,bc                      ; 00:3349  / y -= 1
+    inc  hl                         ; 00:334A  x += 1
+    call ObjShared_TilemapXCarry    ; 00:334B
     pop  bc                         ; 00:334E
-    jr   Code003331                 ; 00:334F
-Code003351:
+    jr   @Loop                      ; 00:334F /
+@Code003351:
     pop  de                         ; 00:3351
     ret                             ; 00:3352
 
-Code003353:
+Obj205_SubLvMainWrapper:
     pop  de                         ; 00:3353
-    call Sub00335A                  ; 00:3354
-    jp   Code003205                 ; 00:3357
+    call Obj205_Main                ; 00:3354
+    jp   MainDataObjectLoop         ; 00:3357
 
-Sub00335A:
-    call Sub003568                  ; 00:335A
+Obj205_Main:
+; object 2.05: pipe intersection (includes left column of vertical pipe)
+    call ObjShared_GetTilemapAddr   ; 00:335A
     inc  de                         ; 00:335D
     ld   a,[de]                     ; 00:335E
-    ld   b,a                        ; 00:335F
+    ld   b,a                        ; 00:335F  b = length
     push de                         ; 00:3360
-    ld   de,Data003EAB              ; 00:3361
-Code003364:
-    call Sub00357C                  ; 00:3364
+    ld   de,Obj205_Tilemap          ; 00:3361  07 2C 2D
+@Loop:
+    call ObjShared_SetTileShiftDown ; 00:3364 \ loop length times: write tile 07
     dec  b                          ; 00:3367
-    jr   nz,Code003364              ; 00:3368
+    jr   nz,@Loop                   ; 00:3368 /
     inc  de                         ; 00:336A
-    call Sub00357C                  ; 00:336B
+    call ObjShared_SetTileShiftDown ; 00:336B
     inc  de                         ; 00:336E
     ld   a,[de]                     ; 00:336F
-    ld   [hl],a                     ; 00:3370
+    ld   [hl],a                     ; 00:3370  set tile
     pop  de                         ; 00:3371
     ret                             ; 00:3372
 
-Code003373:
+Obj201_SubLvMainWrapper:
     pop  de                         ; 00:3373
-    call Sub00337A                  ; 00:3374
-    jp   Code003205                 ; 00:3377
+    call Obj201_Main                ; 00:3374
+    jp   MainDataObjectLoop         ; 00:3377
 
-Sub00337A:
-    call Sub003568                  ; 00:337A
-    inc  de                         ; 00:337D
+Obj201_Main:
+; object 2.01: BG cloud
+    call ObjShared_GetTilemapAddr   ; 00:337A
+    inc  de                         ; 00:337D  increment byte to load from
     ld   a,[de]                     ; 00:337E
-    ldh  [<$FFA5],a                 ; 00:337F
+    ldh  [<$FFA5],a                 ; 00:337F  $FFA5 = length
     push de                         ; 00:3381
-    ld   de,Data003EAE              ; 00:3382
-    call Sub00357C                  ; 00:3385
+    ld   de,Obj201_Tilemap          ; 00:3382  09 0C 0A 0D 0B 0E
+    call ObjShared_SetTileShiftDown ; 00:3385  write tile from [de] (09) to tilemap, then y += 1
     inc  de                         ; 00:3388
     ld   a,[de]                     ; 00:3389
-    ld   [hl],a                     ; 00:338A
+    ld   [hl],a                     ; 00:338A  write tile 0C
     inc  de                         ; 00:338B
-    ld   bc,$FFF0                   ; 00:338C
-    add  hl,bc                      ; 00:338F
-    inc  hl                         ; 00:3390
-    call Sub003587                  ; 00:3391
+    ld   bc,$FFF0                   ; 00:338C \
+    add  hl,bc                      ; 00:338F / y -= 1
+    inc  hl                         ; 00:3390  x += 1
+    call ObjShared_TilemapXCarry    ; 00:3391
     ldh  a,[<$FFA5]                 ; 00:3394
     ld   b,a                        ; 00:3396
-Code003397:
-    ld   c,$02                      ; 00:3397
-Code003399:
-    call Sub00357C                  ; 00:3399
+@Loop003397:                        ;         \ loop length times
+    ld   c,$02                      ; 00:3397  loop 2 times
+@Loop003399:
+    call ObjShared_SetTileShiftDown ; 00:3399  \
     inc  de                         ; 00:339C
     dec  c                          ; 00:339D
-    jr   nz,Code003399              ; 00:339E
+    jr   nz,@Loop003399             ; 00:339E  /
     push bc                         ; 00:33A0
-    ld   bc,$FFE0                   ; 00:33A1
-    add  hl,bc                      ; 00:33A4
-    inc  hl                         ; 00:33A5
-    call Sub003587                  ; 00:33A6
+    ld   bc,$FFE0                   ; 00:33A1  \
+    add  hl,bc                      ; 00:33A4  / y -= 2
+    inc  hl                         ; 00:33A5   x += 1
+    call ObjShared_TilemapXCarry    ; 00:33A6
     pop  bc                         ; 00:33A9
     dec  b                          ; 00:33AA
-    jr   z,Code0033B1               ; 00:33AB
-    dec  de                         ; 00:33AD
-    dec  de                         ; 00:33AE
-    jr   Code003397                 ; 00:33AF
-Code0033B1:
-    call Sub00357C                  ; 00:33B1
+    jr   z,@Code0033B1              ; 00:33AB
+    dec  de                         ; 00:33AD  \ revert tile to load
+    dec  de                         ; 00:33AE  /
+    jr   @Loop003397                ; 00:33AF /
+@Code0033B1:
+    call ObjShared_SetTileShiftDown ; 00:33B1  write tile from [de] (0B) to tilemap, then y += 1
     inc  de                         ; 00:33B4
     ld   a,[de]                     ; 00:33B5
-    ld   [hl],a                     ; 00:33B6
+    ld   [hl],a                     ; 00:33B6  write tile 0E
     pop  de                         ; 00:33B7
     ret                             ; 00:33B8
 
-Code0033B9:
+Obj202_SubLvMainWrapper:
     pop  de                         ; 00:33B9
-    call Sub0033C0                  ; 00:33BA
-    jp   Code003205                 ; 00:33BD
+    call Obj202_Main                ; 00:33BA
+    jp   MainDataObjectLoop         ; 00:33BD
 
-Sub0033C0:
-    call Sub003568                  ; 00:33C0
+Obj202_Main:
+; object 2.02: BG bush
+    call ObjShared_GetTilemapAddr   ; 00:33C0
     inc  de                         ; 00:33C3
     ld   a,[de]                     ; 00:33C4
-    ldh  [<$FFA5],a                 ; 00:33C5
+    ldh  [<$FFA5],a                 ; 00:33C5  $FFA5 = length
     push de                         ; 00:33C7
-    ld   de,Data003EB4              ; 00:33C8
+    ld   de,Obj202_Tilemap          ; 00:33C8  0F 10 11
     ld   a,[de]                     ; 00:33CB
-    ldi  [hl],a                     ; 00:33CC
-    call Sub003587                  ; 00:33CD
+    ldi  [hl],a                     ; 00:33CC  write tile to tilemap, then x += 1
+    call ObjShared_TilemapXCarry    ; 00:33CD
     inc  de                         ; 00:33D0
     ldh  a,[<$FFA5]                 ; 00:33D1
     ld   b,a                        ; 00:33D3
-Code0033D4:
+Obj202_20C_Shared:
+@Loop:                              ;         \ loop length times
     ld   a,[de]                     ; 00:33D4
     ldi  [hl],a                     ; 00:33D5
-    call Sub003587                  ; 00:33D6
+    call ObjShared_TilemapXCarry    ; 00:33D6
     dec  b                          ; 00:33D9
-    jr   nz,Code0033D4              ; 00:33DA
+    jr   nz,@Loop                   ; 00:33DA /
     inc  de                         ; 00:33DC
     ld   a,[de]                     ; 00:33DD
     ld   [hl],a                     ; 00:33DE
     pop  de                         ; 00:33DF
     ret                             ; 00:33E0
 
-Code0033E1:
+Obj203_SubLvMainWrapper:
     pop  de                         ; 00:33E1
-    call Sub0033E8                  ; 00:33E2
-    jp   Code003205                 ; 00:33E5
+    call Obj203_Main                ; 00:33E2
+    jp   MainDataObjectLoop         ; 00:33E5
 
-Sub0033E8:
-    call Sub003568                  ; 00:33E8
+Obj203_Main:
+; object 2.03: BG sloped hill
+; length is inverted! Subtracted from 5 for the 3-high hill, or from 3 for the 2-high hill
+; Obj203_Tilemap: 5 columns of 3 tiles each
+; 03 03 13 / 03 13 14 / 12 14 15 / 03 17 16 / 03 03 17
+    call ObjShared_GetTilemapAddr   ; 00:33E8
     inc  de                         ; 00:33EB
     ld   a,[de]                     ; 00:33EC
-    ldh  [<$FFA5],a                 ; 00:33ED
+    ldh  [<$FFA5],a                 ; 00:33ED  $FFA5 = length
     push de                         ; 00:33EF
-    ld   de,Data003EB7              ; 00:33F0
-    ldh  a,[<$FFA4]                 ; 00:33F3
+    ld   de,Obj203_Tilemap          ; 00:33F0
+    ldh  a,[<$FFA4]                 ; 00:33F3  current object's YX byte
     and  $F0                        ; 00:33F5
-    swap a                          ; 00:33F7
+    swap a                          ; 00:33F7  current object's Y
     cp   $0D                        ; 00:33F9
-    jr   c,Code00342A               ; 00:33FB
+    jr   c,@3HighHill               ; 00:33FB
+; runs if object Y >= 0D: 2 high hill
     ldh  a,[<$FFA5]                 ; 00:33FD
-    inc  a                          ; 00:33FF
-    ld   c,a                        ; 00:3400
-    sla  a                          ; 00:3401
-    add  c                          ; 00:3403
+    inc  a                          ; 00:33FF  length + 1
+    ld   c,a                        ; 00:3400  c = length + 1
+    sla  a                          ; 00:3401  a = (length + 1) * 2
+    add  c                          ; 00:3403  a = (length + 1) * 3
     add  e                          ; 00:3404
-    ld   e,a                        ; 00:3405
-    ld   a,d                        ; 00:3406
+    ld   e,a                        ; 00:3405 \ index DE with (length + 1) * 3
+    ld   a,d                        ; 00:3406 /
     adc  $00                        ; 00:3407
     ld   d,a                        ; 00:3409
-    ldh  a,[<$FFA5]                 ; 00:340A
+    ldh  a,[<$FFA5]                 ; 00:340A  length
     ld   b,a                        ; 00:340C
     ld   a,$03                      ; 00:340D
     sub  b                          ; 00:340F
-    ld   b,a                        ; 00:3410
-Code003411:
-    ld   c,$02                      ; 00:3411
-Code003413:
-    call Sub00357C                  ; 00:3413
+    ld   b,a                        ; 00:3410  b = 3 - length
+@LoopX_2High:                       ;         \ loop (3 - length) times
+    ld   c,$02                      ; 00:3411  loop 2 times
+@LoopY_2High:
+    call ObjShared_SetTileShiftDown ; 00:3413
     inc  de                         ; 00:3416
     dec  c                          ; 00:3417
-    jr   nz,Code003413              ; 00:3418
+    jr   nz,@LoopY_2High            ; 00:3418
     dec  b                          ; 00:341A
-    jr   z,Code003452               ; 00:341B
+    jr   z,@Return                  ; 00:341B
     inc  de                         ; 00:341D
     push bc                         ; 00:341E
     ld   bc,$FFE0                   ; 00:341F
     add  hl,bc                      ; 00:3422
     inc  hl                         ; 00:3423
-    call Sub003587                  ; 00:3424
+    call ObjShared_TilemapXCarry    ; 00:3424
     pop  bc                         ; 00:3427
-    jr   Code003411                 ; 00:3428
-Code00342A:
-    ldh  a,[<$FFA5]                 ; 00:342A
+    jr   @LoopX_2High               ; 00:3428 /
+
+@3HighHill:
+; runs if object Y < 0D: 3 high hill
+    ldh  a,[<$FFA5]                 ; 00:342A  length
     ld   c,a                        ; 00:342C
-    sla  a                          ; 00:342D
-    add  c                          ; 00:342F
+    sla  a                          ; 00:342D  length * 2
+    add  c                          ; 00:342F  length * 3
     add  e                          ; 00:3430
-    ld   e,a                        ; 00:3431
+    ld   e,a                        ; 00:3431 \ index DE with length * 3
     ld   a,d                        ; 00:3432
     adc  $00                        ; 00:3433
-    ld   d,a                        ; 00:3435
+    ld   d,a                        ; 00:3435 /
     ld   a,$05                      ; 00:3436
     sub  c                          ; 00:3438
-    ld   b,a                        ; 00:3439
-Code00343A:
+    ld   b,a                        ; 00:3439  b = 5 - length
+@LoopX_3High:                       ;         \ loop (5 - length) times
     ld   c,$03                      ; 00:343A
-Code00343C:
-    call Sub00357C                  ; 00:343C
+@LoopY_3High:
+    call ObjShared_SetTileShiftDown ; 00:343C
     inc  de                         ; 00:343F
     dec  c                          ; 00:3440
-    jr   nz,Code00343C              ; 00:3441
+    jr   nz,@LoopY_3High            ; 00:3441
     dec  b                          ; 00:3443
-    jr   z,Code003452               ; 00:3444
+    jr   z,@Return                  ; 00:3444
     push bc                         ; 00:3446
     ld   bc,$FFD0                   ; 00:3447
     add  hl,bc                      ; 00:344A
     inc  hl                         ; 00:344B
-    call Sub003587                  ; 00:344C
+    call ObjShared_TilemapXCarry    ; 00:344C
     pop  bc                         ; 00:344F
-    jr   Code00343A                 ; 00:3450
-Code003452:
+    jr   @LoopX_3High               ; 00:3450 /
+@Return:
     pop  de                         ; 00:3452
     ret                             ; 00:3453
 
-Code003454:
+Obj206_SubLvMainWrapper:
     pop  de                         ; 00:3454
-    call Sub00345B                  ; 00:3455
-    jp   Code003205                 ; 00:3458
+    call Obj206_Main                ; 00:3455
+    jp   MainDataObjectLoop         ; 00:3458
 
-Sub00345B:
-    call Sub003568                  ; 00:345B
+Obj206_Main:
+; object 2.06: tree platform
+    call ObjShared_GetTilemapAddr   ; 00:345B
     inc  de                         ; 00:345E
     ld   a,[de]                     ; 00:345F
-    ldh  [<$FFA5],a                 ; 00:3460
+    ldh  [<$FFA5],a                 ; 00:3460  $FFA5 = length
     push de                         ; 00:3462
-    ldh  a,[<$FFA4]                 ; 00:3463
+    ldh  a,[<$FFA4]                 ; 00:3463  current object's YX byte
     and  $F0                        ; 00:3465
-    swap a                          ; 00:3467
+    swap a                          ; 00:3467  current object's Y
     ld   b,a                        ; 00:3469
     ld   a,$0F                      ; 00:346A
     sub  b                          ; 00:346C
-    ldh  [<$FFA4],a                 ; 00:346D
-    ld   de,Data003EC6              ; 00:346F
+    ldh  [<$FFA4],a                 ; 00:346D  $FFA4 = 0F - current object's Y
+    ld   de,Obj206_Tilemap          ; 00:346F  32 33 35 34
     ld   a,[de]                     ; 00:3472
-    ldi  [hl],a                     ; 00:3473
-    call Sub003587                  ; 00:3474
+    ldi  [hl],a                     ; 00:3473  write tile 32 (platform left edge) to tilemap, then x += 1
+    call ObjShared_TilemapXCarry    ; 00:3474
     inc  de                         ; 00:3477
     ldh  a,[<$FFA5]                 ; 00:3478
     ld   b,a                        ; 00:347A
-Code00347B:
-    call Sub00357C                  ; 00:347B
+@LoopX:                             ;         \
+    call ObjShared_SetTileShiftDown ; 00:347B  write tile from [de] [33: platform center] to tilemap, then y += 1
     inc  de                         ; 00:347E
     ldh  a,[<$FFA4]                 ; 00:347F
     ld   c,a                        ; 00:3481
     and  c                          ; 00:3482
-Code003483:
-    jr   z,Code00348B               ; 00:3483
-    call Sub00357C                  ; 00:3485
+@LoopY:
+    jr   z,@Code00348B              ; 00:3483  \ write tile 35 (stem tile) until bottom of level
+    call ObjShared_SetTileShiftDown ; 00:3485
     dec  c                          ; 00:3488
-    jr   Code003483                 ; 00:3489
-Code00348B:
+    jr   @LoopY                     ; 00:3489  /
+@Code00348B:
     push bc                         ; 00:348B
-    inc  hl                         ; 00:348C
-    call Sub003587                  ; 00:348D
+    inc  hl                         ; 00:348C  x += 1
+    call ObjShared_TilemapXCarry    ; 00:348D
     ldh  a,[<$FFA4]                 ; 00:3490
     inc  a                          ; 00:3492
     ld   c,a                        ; 00:3493
@@ -7675,191 +7763,200 @@ Code00348B:
     add  hl,bc                      ; 00:349C
     pop  bc                         ; 00:349D
     dec  b                          ; 00:349E
-    jr   z,Code0034A4               ; 00:349F
+    jr   z,@Code0034A4              ; 00:349F
     dec  de                         ; 00:34A1
-    jr   Code00347B                 ; 00:34A2
-Code0034A4:
+    jr   @LoopX                     ; 00:34A2 /
+@Code0034A4:
     inc  de                         ; 00:34A4
     ld   a,[de]                     ; 00:34A5
-    ld   [hl],a                     ; 00:34A6
+    ld   [hl],a                     ; 00:34A6  write tile 34 (platform right edge)
     pop  de                         ; 00:34A7
     ret                             ; 00:34A8
 
-Code0034A9:
+Obj208_SubLvMainWrapper:
     pop  de                         ; 00:34A9
-    call Sub0034B0                  ; 00:34AA
-    jp   Code003205                 ; 00:34AD
+    call Obj208_Main                ; 00:34AA
+    jp   MainDataObjectLoop         ; 00:34AD
 
-Sub0034B0:
-    call Sub003568                  ; 00:34B0
+Obj208_Main:
+; object 2.08: BG round tree (1x3)
+    call ObjShared_GetTilemapAddr   ; 00:34B0
     inc  de                         ; 00:34B3
     push de                         ; 00:34B4
-    ld   de,Data003ECA              ; 00:34B5
-    ld   b,$03                      ; 00:34B8
-Code0034BA:
-    call Sub00357C                  ; 00:34BA
+    ld   de,Obj208_Tilemap          ; 00:34B5  48 49 4B
+    ld   b,$03                      ; 00:34B8  loop 3 times
+@Loop:
+    call ObjShared_SetTileShiftDown ; 00:34BA
     inc  de                         ; 00:34BD
     dec  b                          ; 00:34BE
-    jr   nz,Code0034BA              ; 00:34BF
+    jr   nz,@Loop                   ; 00:34BF
     pop  de                         ; 00:34C1
     ret                             ; 00:34C2
 
-Code0034C3:
+Obj209_SubLvMainWrapper:
     pop  de                         ; 00:34C3
-    call Sub0034CA                  ; 00:34C4
-    jp   Code003205                 ; 00:34C7
+    call Obj209_Main                ; 00:34C4
+    jp   MainDataObjectLoop         ; 00:34C7
 
-Sub0034CA:
-    call Sub003568                  ; 00:34CA
+Obj209_Main:
+; object 2.09: BG round tree (1x2)
+    call ObjShared_GetTilemapAddr   ; 00:34CA
     inc  de                         ; 00:34CD
     push de                         ; 00:34CE
-    ld   de,Data003ECD              ; 00:34CF
-    call Sub00357C                  ; 00:34D2
+    ld   de,Obj209_Tilemap          ; 00:34CF  4A 4B
+    call ObjShared_SetTileShiftDown ; 00:34D2
     inc  de                         ; 00:34D5
     ld   a,[de]                     ; 00:34D6
     ld   [hl],a                     ; 00:34D7
     pop  de                         ; 00:34D8
     ret                             ; 00:34D9
 
-Code0034DA:
+Obj20A_SubLvMainWrapper:
     pop  de                         ; 00:34DA
-    call Sub0034E1                  ; 00:34DB
-    jp   Code003205                 ; 00:34DE
+    call Obj20A_Main                ; 00:34DB
+    jp   MainDataObjectLoop         ; 00:34DE
 
-Sub0034E1:
-    call Sub003568                  ; 00:34E1
+Obj20A_Main:
+; object 2.0A: bullet cannon (1x2)
+    call ObjShared_GetTilemapAddr   ; 00:34E1
     inc  de                         ; 00:34E4
     push de                         ; 00:34E5
-    ld   de,Data003ECF              ; 00:34E6
-    call Sub00357C                  ; 00:34E9
+    ld   de,Obj20A_Tilemap          ; 00:34E6  46 47
+    call ObjShared_SetTileShiftDown ; 00:34E9
     inc  de                         ; 00:34EC
     ld   a,[de]                     ; 00:34ED
     ld   [hl],a                     ; 00:34EE
     pop  de                         ; 00:34EF
     ret                             ; 00:34F0
 
-Code0034F1:
+Obj20B_SubLvMainWrapper:
     pop  de                         ; 00:34F1
-    call Sub0034F8                  ; 00:34F2
-    jp   Code003205                 ; 00:34F5
+    call Obj20B_Main                ; 00:34F2
+    jp   MainDataObjectLoop         ; 00:34F5
 
-Sub0034F8:
-    call Sub003568                  ; 00:34F8
+Obj20B_Main:
+; object 2.0B: scale platform cable top
+    call ObjShared_GetTilemapAddr   ; 00:34F8
     inc  de                         ; 00:34FB
     ld   a,[de]                     ; 00:34FC
     ld   b,a                        ; 00:34FD
     push de                         ; 00:34FE
-    ld   de,Data003ED1              ; 00:34FF
+    ld   de,Obj20B_Tilemap          ; 00:34FF  44 4D 45
     ld   a,[de]                     ; 00:3502
     ldi  [hl],a                     ; 00:3503
     inc  de                         ; 00:3504
-    call Sub003587                  ; 00:3505
-Code003508:
+    call ObjShared_TilemapXCarry    ; 00:3505
+@Loop:                              ;         \ loop length times
     ld   a,[de]                     ; 00:3508
     ldi  [hl],a                     ; 00:3509
-    call Sub003587                  ; 00:350A
+    call ObjShared_TilemapXCarry    ; 00:350A
     dec  b                          ; 00:350D
-    jr   nz,Code003508              ; 00:350E
+    jr   nz,@Loop                   ; 00:350E /
     inc  de                         ; 00:3510
     ld   a,[de]                     ; 00:3511
     ld   [hl],a                     ; 00:3512
     pop  de                         ; 00:3513
     ret                             ; 00:3514
 
-Code003515:
+Obj20C_SubLvMainWrapper:
     pop  de                         ; 00:3515
-    call Sub00351C                  ; 00:3516
-    jp   Code003205                 ; 00:3519
+    call Obj20C_Main                ; 00:3516
+    jp   MainDataObjectLoop         ; 00:3519
 
-Sub00351C:
-    call Sub003568                  ; 00:351C
+Obj20C_Main:
+; object 2.0C: mushroom platform
+    call ObjShared_GetTilemapAddr   ; 00:351C
     inc  de                         ; 00:351F
     ld   a,[de]                     ; 00:3520
-    ldh  [<$FFA5],a                 ; 00:3521
+    ldh  [<$FFA5],a                 ; 00:3521  $FFA5 = length
     push de                         ; 00:3523
-    ld   de,Data003ED4              ; 00:3524
+    ld   de,Obj20C_Tilemap          ; 00:3524  4F 50 51
     ld   a,[de]                     ; 00:3527
     ldi  [hl],a                     ; 00:3528
-    call Sub003587                  ; 00:3529
+    call ObjShared_TilemapXCarry    ; 00:3529
     inc  de                         ; 00:352C
     ldh  a,[<$FFA5]                 ; 00:352D
     ld   b,a                        ; 00:352F
     ld   a,[de]                     ; 00:3530
     ldi  [hl],a                     ; 00:3531
-    call Sub003587                  ; 00:3532
+    call ObjShared_TilemapXCarry    ; 00:3532
     dec  b                          ; 00:3535
-    jp   nz,Code0033D4              ; 00:3536
+    jp   nz,Obj202_20C_Shared       ; 00:3536
     inc  de                         ; 00:3539
     ld   a,[de]                     ; 00:353A
     ld   [hl],a                     ; 00:353B
     pop  de                         ; 00:353C
     ret                             ; 00:353D
 
-Code00353E:
+Obj20D_SubLvMainWrapper:
     pop  de                         ; 00:353E
-    call Sub003545                  ; 00:353F
-    jp   Code003205                 ; 00:3542
+    call Obj20D_Main                ; 00:353F
+    jp   MainDataObjectLoop         ; 00:3542
 
-Sub003545:
-    call Sub003568                  ; 00:3545
+Obj20D_Main:
+; object 2.0D: mushroom platform stem
+    call ObjShared_GetTilemapAddr   ; 00:3545
     inc  de                         ; 00:3548
     push de                         ; 00:3549
-    ldh  a,[<$FFA4]                 ; 00:354A
+    ldh  a,[<$FFA4]                 ; 00:354A  current object's YX byte
     and  $F0                        ; 00:354C
-    swap a                          ; 00:354E
+    swap a                          ; 00:354E  current object Y
     ld   b,a                        ; 00:3550
     ld   a,$0F                      ; 00:3551
     sub  b                          ; 00:3553
-    ld   b,a                        ; 00:3554
-    ld   de,Data003ED7              ; 00:3555
-    call Sub00357C                  ; 00:3558
+    ld   b,a                        ; 00:3554  0F - object Y
+    ld   de,Obj20D_Tilemap          ; 00:3555  52 53
+    call ObjShared_SetTileShiftDown ; 00:3558
     inc  de                         ; 00:355B
     ld   a,b                        ; 00:355C
     and  a                          ; 00:355D
-Code00355E:
-    jr   z,Code003566               ; 00:355E
-    call Sub00357C                  ; 00:3560
+@Loop:
+    jr   z,@Return                  ; 00:355E \ loop 0F - object Y times
+    call ObjShared_SetTileShiftDown ; 00:3560
     dec  b                          ; 00:3563
-    jr   Code00355E                 ; 00:3564
-Code003566:
+    jr   @Loop                      ; 00:3564
+@Return:
     pop  de                         ; 00:3566
     ret                             ; 00:3567
 
-Sub003568:
-    ld   hl,$D000                   ; 00:3568
-    ldh  a,[<$FFA2]                 ; 00:356B
-    and  $0F                        ; 00:356D
-    ld   b,a                        ; 00:356F
-    ld   c,$00                      ; 00:3570
+ObjShared_GetTilemapAddr:
+; subroutine: Retrieve a YX byte from level data, to calculate tilemap address in HL
+    ld   hl,W_SubLv16x16Tilemap     ; 00:3568
+    ldh  a,[<$FFA2]                 ; 00:356B \
+    and  $0F                        ; 00:356D |
+    ld   b,a                        ; 00:356F | bc = current screen number (low digit)*100
+    ld   c,$00                      ; 00:3570 /
     add  hl,bc                      ; 00:3572
-    inc  de                         ; 00:3573
+    inc  de                         ; 00:3573  increment byte to load from
     ld   a,[de]                     ; 00:3574
-    ldh  [<$FFA4],a                 ; 00:3575
+    ldh  [<$FFA4],a                 ; 00:3575  $FFA4 = new byte from level data
     ld   c,a                        ; 00:3577
     ld   b,$00                      ; 00:3578
-    add  hl,bc                      ; 00:357A
+    add  hl,bc                      ; 00:357A  hl = $D000 + screen low * 100 + YX byte
     ret                             ; 00:357B
 
-Sub00357C:
+ObjShared_SetTileShiftDown:
+; subroutine: Write tile from [de] to tilemap, then increment tilemap Y position
     ld   a,[de]                     ; 00:357C
     ld   [hl],a                     ; 00:357D
-    ld   a,l                        ; 00:357E
-    add  $10                        ; 00:357F
-    ld   l,a                        ; 00:3581
-    ld   a,h                        ; 00:3582
-    adc  $00                        ; 00:3583
-    ld   h,a                        ; 00:3585
+    ld   a,l                        ; 00:357E \
+    add  $10                        ; 00:357F |
+    ld   l,a                        ; 00:3581 | add 10 to HL, with carry
+    ld   a,h                        ; 00:3582 |
+    adc  $00                        ; 00:3583 |
+    ld   h,a                        ; 00:3585 /
     ret                             ; 00:3586
 
-Sub003587:
-    ld   a,l                        ; 00:3587
-    and  $0F                        ; 00:3588
-    jr   nz,Return003592            ; 00:358A
-    push bc                         ; 00:358C
-    ld   bc,$00F0                   ; 00:358D
-    add  hl,bc                      ; 00:3590
-    pop  bc                         ; 00:3591
-Return003592:
+ObjShared_TilemapXCarry:
+; subroutine: Handle tilemap X carry (called after incrementing tilemap address in HL)
+    ld   a,l                        ; 00:3587 \
+    and  $0F                        ; 00:3588 | if L low digit is nonzero, return
+    jr   nz,@Return                 ; 00:358A /
+    push bc                         ; 00:358C \
+    ld   bc,$00F0                   ; 00:358D | add F0 to HL
+    add  hl,bc                      ; 00:3590 |
+    pop  bc                         ; 00:3591 /
+@Return:
     ret                             ; 00:3592
 
 Sub003593:
@@ -7867,7 +7964,7 @@ Sub003593:
     ldh  [<SVBK],a                  ; 00:3595
     ld   hl,$9800                   ; 00:3597
     ld   de,W_SubLv16x16Tilemap     ; 00:359A
-    ldh  a,[<$FFB9]                 ; 00:359D
+    ldh  a,[<H_CameraXHigh]         ; 00:359D
     and  a                          ; 00:359F
     jr   z,Code0035B6               ; 00:35A0
     cp   $11                        ; 00:35A2
@@ -7875,7 +7972,7 @@ Sub003593:
     ldh  a,[<SVBK]                  ; 00:35A6
     inc  a                          ; 00:35A8
     ldh  [<SVBK],a                  ; 00:35A9
-    ldh  a,[<$FFB9]                 ; 00:35AB
+    ldh  a,[<H_CameraXHigh]         ; 00:35AB
     and  $0F                        ; 00:35AD
 Code0035AF:
     add  d                          ; 00:35AF
@@ -7892,9 +7989,9 @@ Code0035BA:
 Code0035BE:
     push de                         ; 00:35BE
     push hl                         ; 00:35BF
-    ld   a,:Ti_16x16Tiles              ; 00:35C0
+    ld   a,:Ti_16x16Tiles           ; 00:35C0
     call SetROMBank                 ; 00:35C2
-    ld   hl,Ti_16x16Tiles              ; 00:35C5
+    ld   hl,Ti_16x16Tiles           ; 00:35C5
     ld   a,[de]                     ; 00:35C8
     ld   c,a                        ; 00:35C9
     cp   $3F                        ; 00:35CA
@@ -7980,7 +8077,7 @@ Code003636:
     ret                             ; 00:3642
 
 Sub003643:
-    ldh  a,[<$FFB9]                 ; 00:3643
+    ldh  a,[<H_CameraXHigh]         ; 00:3643
     ld   b,a                        ; 00:3645
     ldh  a,[<$FFC4]                 ; 00:3646
     cp   b                          ; 00:3648
@@ -7990,7 +8087,7 @@ Sub003643:
 Code00364F:
     ldh  a,[<$FFC5]                 ; 00:364F
     ld   b,a                        ; 00:3651
-    ldh  a,[<$FFB8]                 ; 00:3652
+    ldh  a,[<H_CameraXLow]          ; 00:3652
     and  $F8                        ; 00:3654
     cp   b                          ; 00:3656
     jr   c,Code00367B               ; 00:3657
@@ -8000,10 +8097,10 @@ Return00365D:
     ret                             ; 00:365D
 
 Code00365E:
-    ldh  a,[<$FFB9]                 ; 00:365E
+    ldh  a,[<H_CameraXHigh]         ; 00:365E
     ldh  [<$FFC4],a                 ; 00:3660
     ld   b,a                        ; 00:3662
-    ldh  a,[<$FFB8]                 ; 00:3663
+    ldh  a,[<H_CameraXLow]          ; 00:3663
     and  $F8                        ; 00:3665
     ldh  [<$FFC5],a                 ; 00:3667
     bit  3,a                        ; 00:3669
@@ -8017,11 +8114,11 @@ Code003671:
     add  $0C                        ; 00:3677
     jr   Code003697                 ; 00:3679
 Code00367B:
-    ldh  a,[<$FFB9]                 ; 00:367B
+    ldh  a,[<H_CameraXHigh]         ; 00:367B
     ldh  [<$FFC4],a                 ; 00:367D
     dec  a                          ; 00:367F
     ld   b,a                        ; 00:3680
-    ldh  a,[<$FFB8]                 ; 00:3681
+    ldh  a,[<H_CameraXLow]          ; 00:3681
     and  $F8                        ; 00:3683
     ldh  [<$FFC5],a                 ; 00:3685
     bit  3,a                        ; 00:3687
@@ -8059,51 +8156,51 @@ Sub0036B9:
     ldh  [<SVBK],a                  ; 00:36BB
     ld   a,h                        ; 00:36BD
     cp   $E0                        ; 00:36BE
-    jr   c,Code0036CA               ; 00:36C0
+    jr   c,@Code0036CA              ; 00:36C0
     sub  $10                        ; 00:36C2
     ld   h,a                        ; 00:36C4
     ldh  a,[<SVBK]                  ; 00:36C5
     inc  a                          ; 00:36C7
     ldh  [<SVBK],a                  ; 00:36C8
-Code0036CA:
+@Code0036CA:
     ldh  a,[<$FFC7]                 ; 00:36CA
     add  l                          ; 00:36CC
     ld   l,a                        ; 00:36CD
     ld   de,$C120                   ; 00:36CE
-    ld   a,:Ti_16x16Tiles              ; 00:36D1
+    ld   a,:Ti_16x16Tiles           ; 00:36D1
     ld   [ROMBANK],a                ; 00:36D3
     ld   a,$10                      ; 00:36D6
     ldh  [<$FFA2],a                 ; 00:36D8
-Code0036DA:
+@Loop0036DA:
     push hl                         ; 00:36DA
-    ld   a,[hl]                     ; 00:36DB
-    ld   c,a                        ; 00:36DC
-    cp   $3F                        ; 00:36DD
-    jr   nz,Code0036EB              ; 00:36DF
-    ld   a,[$C1B3]                  ; 00:36E1
+    ld   a,[hl]                     ; 00:36DB \
+    ld   c,a                        ; 00:36DC / c = 16x16 tile ID from 6:D000-7:DFFF
+    cp   $3F                        ; 00:36DD  3F: hidden block with 1up
+    jr   nz,@Code0036EB             ; 00:36DF
+    ld   a,[$C1B3]                  ; 00:36E1  if 3F, check flag
     and  a                          ; 00:36E4
-    jr   z,Code0036EB               ; 00:36E5
-    ld   a,$03                      ; 00:36E7
+    jr   z,@Code0036EB              ; 00:36E5
+    ld   a,$03                      ; 00:36E7  if $C13B is set, replace 3F with blank tile
     ld   [hl],a                     ; 00:36E9
     ld   c,a                        ; 00:36EA
-Code0036EB:
-    ld   b,$00                      ; 00:36EB
-    sla  c                          ; 00:36ED
-    rl   b                          ; 00:36EF
-    sla  c                          ; 00:36F1
-    rl   b                          ; 00:36F3
-    sla  c                          ; 00:36F5
-    rl   b                          ; 00:36F7
-    ld   hl,Ti_16x16Tiles              ; 00:36F9
-    add  hl,bc                      ; 00:36FC
-    ldh  a,[<$FFC8]                 ; 00:36FD
-    sla  a                          ; 00:36FF
-    ld   c,a                        ; 00:3701
-    ld   b,$00                      ; 00:3702
-    add  hl,bc                      ; 00:3704
+@Code0036EB:
+    ld   b,$00                      ; 00:36EB \
+    sla  c                          ; 00:36ED |
+    rl   b                          ; 00:36EF |
+    sla  c                          ; 00:36F1 | bc = c*8
+    rl   b                          ; 00:36F3 |
+    sla  c                          ; 00:36F5 |
+    rl   b                          ; 00:36F7 /
+    ld   hl,Ti_16x16Tiles           ; 00:36F9
+    add  hl,bc                      ; 00:36FC  hl = Ti_16x16Tiles + tile ID
+    ldh  a,[<$FFC8]                 ; 00:36FD \
+    sla  a                          ; 00:36FF |
+    ld   c,a                        ; 00:3701 | add 2*$FFC8
+    ld   b,$00                      ; 00:3702 /
+    add  hl,bc                      ; 00:3704  hl = Ti_16x16Tiles + tile ID + 2*$FFC8
     ld   a,$02                      ; 00:3705
     ldh  [<$FFA3],a                 ; 00:3707
-Code003709:
+@Loop003709:
     ldi  a,[hl]                     ; 00:3709
     ld   [de],a                     ; 00:370A
     inc  de                         ; 00:370B
@@ -8115,7 +8212,7 @@ Code003709:
     ldh  a,[<$FFA3]                 ; 00:3711
     dec  a                          ; 00:3713
     ldh  [<$FFA3],a                 ; 00:3714
-    jr   nz,Code003709              ; 00:3716
+    jr   nz,@Loop003709             ; 00:3716
     pop  hl                         ; 00:3718
     ld   a,l                        ; 00:3719
     add  $10                        ; 00:371A
@@ -8123,7 +8220,7 @@ Code003709:
     ldh  a,[<$FFA2]                 ; 00:371D
     dec  a                          ; 00:371F
     ldh  [<$FFA2],a                 ; 00:3720
-    jr   nz,Code0036DA              ; 00:3722
+    jr   nz,@Loop0036DA             ; 00:3722
     ld   a,$00                      ; 00:3724
     ldh  [<SVBK],a                  ; 00:3726
     ret                             ; 00:3728
@@ -8165,7 +8262,7 @@ Code00373D:
     ret                             ; 00:3759
 
 Sub00375A:
-    call Sub00316B                  ; 00:375A
+    call InitSubLv16x16Tilemap      ; 00:375A
     ld   a,[W_SublevelID]           ; 00:375D
     ld   c,a                        ; 00:3760
     ld   b,$00                      ; 00:3761
@@ -8178,16 +8275,16 @@ Sub00375A:
     ld   b,h                        ; 00:376B
     ld   a,[W_SPFlag]               ; 00:376C
     and  a                          ; 00:376F
-    jr   nz,Code00377C              ; 00:3770
+    jr   nz,@Code00377C             ; 00:3770
     ld   a,:SublevelMainPtrs0       ; 00:3772
     call SetROMBank                 ; 00:3774
     ld   hl,SublevelMainPtrs0       ; 00:3777
-    jr   Code003784                 ; 00:377A
-Code00377C:
+    jr   @Code003784                ; 00:377A
+@Code00377C:
     ld   a,:SublevelMainPtrsSP      ; 00:377C
     call SetROMBank                 ; 00:377E
     ld   hl,SublevelMainPtrsSP      ; 00:3781
-Code003784:
+@Code003784:
     add  hl,bc                      ; 00:3784
     ld   e,[hl]                     ; 00:3785
     inc  hl                         ; 00:3786
@@ -8195,12 +8292,12 @@ Code003784:
     inc  hl                         ; 00:3788
     ld   a,[hl]                     ; 00:3789
     call SetROMBank                 ; 00:378A
-    call LoadSublevelHeader         ; 00:378D
+    call LoadSublevelMainData       ; 00:378D
     ld   a,$00                      ; 00:3790
     ldh  [<$FFC8],a                 ; 00:3792
-    ldh  a,[<$FFB8]                 ; 00:3794
+    ldh  a,[<H_CameraXLow]          ; 00:3794
     ldh  [<$FFC5],a                 ; 00:3796
-    ldh  a,[<$FFB9]                 ; 00:3798
+    ldh  a,[<H_CameraXHigh]         ; 00:3798
     ldh  [<$FFC4],a                 ; 00:379A
     ldh  [<$FFC9],a                 ; 00:379C
     ldh  [<$FFCA],a                 ; 00:379E
@@ -8212,11 +8309,11 @@ Code003784:
     ld   [$C181],a                  ; 00:37AA
     ret                             ; 00:37AD
 
-Sub0037AE:
+LoadChallengeObjData:
     ld   a,[W_SublevelID]           ; 00:37AE
     sla  a                          ; 00:37B1
     ld   c,a                        ; 00:37B3
-    ld   b,$00                      ; 00:37B4
+    ld   b,$00                      ; 00:37B4  bc = 2*sublevelID
     ld   a,:ChallengeObjDataPtrs    ; 00:37B6
     call SetROMBank                 ; 00:37B8
     ld   hl,ChallengeObjDataPtrs    ; 00:37BB
@@ -8224,150 +8321,161 @@ Sub0037AE:
     ld   e,[hl]                     ; 00:37BF
     inc  hl                         ; 00:37C0
     ld   d,[hl]                     ; 00:37C1
-    call Sub0037C6                  ; 00:37C2
+    call @Sub0037C6                 ; 00:37C2  redundant call
     ret                             ; 00:37C5
 
-Sub0037C6:
+@Sub0037C6:
     ld   a,$00                      ; 00:37C6
     ldh  [<$FFA2],a                 ; 00:37C8
     ld   a,$06                      ; 00:37CA
     ldh  [<SVBK],a                  ; 00:37CC
-Code0037CE:
+ChalDataObjLoop:
     ld   a,[de]                     ; 00:37CE
     cp   $FF                        ; 00:37CF
     jp   z,Code0038A2               ; 00:37D1
     ldh  [<$FFA3],a                 ; 00:37D4
     push de                         ; 00:37D6
     bit  7,a                        ; 00:37D7
-    jr   nz,Code003807              ; 00:37D9
+    jr   nz,Obj2_Extended_Ch        ; 00:37D9
     bit  6,a                        ; 00:37DB
-    jr   nz,Code0037F4              ; 00:37DD
+    jr   nz,Obj1_TileColumn_Ch      ; 00:37DD
+
+; object 0: horizontal line of tiles  (runs if bits 6-7 are both clear)
     pop  de                         ; 00:37DF
-    call Sub003568                  ; 00:37E0
+    call ObjShared_GetTilemapAddr   ; 00:37E0
     inc  de                         ; 00:37E3
     ldh  a,[<$FFA3]                 ; 00:37E4
     and  $3F                        ; 00:37E6
     ld   b,a                        ; 00:37E8
-Code0037E9:
+@Loop:
     ld   a,[de]                     ; 00:37E9
     ldi  [hl],a                     ; 00:37EA
-    call Sub003587                  ; 00:37EB
+    call ObjShared_TilemapXCarry    ; 00:37EB
     dec  b                          ; 00:37EE
-    jr   nz,Code0037E9              ; 00:37EF
-    jp   Code00389E                 ; 00:37F1
-Code0037F4:
+    jr   nz,@Loop                   ; 00:37EF
+    jp   ChalDataObjLoop_Continue   ; 00:37F1
+
+Obj1_TileColumn_Ch:
+; object 1: vertical line of tiles  (runs if bit 6 set, bit 7 clear)
     pop  de                         ; 00:37F4
-    call Sub003568                  ; 00:37F5
+    call ObjShared_GetTilemapAddr   ; 00:37F5
     inc  de                         ; 00:37F8
     ldh  a,[<$FFA3]                 ; 00:37F9
     and  $3F                        ; 00:37FB
     ld   b,a                        ; 00:37FD
 Code0037FE:
-    call Sub00357C                  ; 00:37FE
+    call ObjShared_SetTileShiftDown ; 00:37FE
     dec  b                          ; 00:3801
     jr   nz,Code0037FE              ; 00:3802
-    jp   Code00389E                 ; 00:3804
-Code003807:
+    jp   ChalDataObjLoop_Continue   ; 00:3804
+
+Obj2_Extended_Ch:
+; object 2: extended object  (runs if bit 7 is set)
     ldh  a,[<$FFA3]                 ; 00:3807
     and  $7F                        ; 00:3809
-    rst  $00                        ; 00:380B
-.dw Code00382C                      ; 00:380C
-.dw Code003832                      ; 00:380E
-.dw Code003838                      ; 00:3810
-.dw Code00383E                      ; 00:3812
-.dw Code003844                      ; 00:3814
-.dw Code00384A                      ; 00:3816
-.dw Code003850                      ; 00:3818
-.dw Code003856                      ; 00:381A
-.dw Code00385C                      ; 00:381C
-.dw Code003862                      ; 00:381E
-.dw Code003868                      ; 00:3820
-.dw Code00386E                      ; 00:3822
-.dw Code003874                      ; 00:3824
-.dw Code00387A                      ; 00:3826
-.dw Code003880                      ; 00:3828
-.dw Code00388B                      ; 00:382A
+    rst  $00                        ; 00:380B  Execute from 16-bit pointer table
+.dw Obj200_ChDataWrapper            ; 00:380C
+.dw Obj201_ChDataWrapper            ; 00:380E
+.dw Obj202_ChDataWrapper            ; 00:3810
+.dw Obj203_ChDataWrapper            ; 00:3812
+.dw Obj204_ChDataWrapper            ; 00:3814
+.dw Obj205_ChDataWrapper            ; 00:3816
+.dw Obj206_ChDataWrapper            ; 00:3818
+.dw Obj207_ChDataWrapper            ; 00:381A
+.dw Obj208_ChDataWrapper            ; 00:381C
+.dw Obj209_ChDataWrapper            ; 00:381E
+.dw Obj20A_ChDataWrapper            ; 00:3820
+.dw Obj20B_ChDataWrapper            ; 00:3822
+.dw Obj20C_ChDataWrapper            ; 00:3824
+.dw Obj20D_ChDataWrapper            ; 00:3826
+.dw Obj20E                          ; 00:3828
+.dw Obj20F                          ; 00:382A
 
-Code00382C:
+Obj200_ChDataWrapper:
     pop  de                         ; 00:382C
-    call Sub0032CF                  ; 00:382D
-    jr   Code00389E                 ; 00:3830
-Code003832:
+    call Obj200_Main                ; 00:382D
+    jr   ChalDataObjLoop_Continue   ; 00:3830
+Obj201_ChDataWrapper:
     pop  de                         ; 00:3832
-    call Sub00337A                  ; 00:3833
-    jr   Code00389E                 ; 00:3836
-Code003838:
+    call Obj201_Main                ; 00:3833
+    jr   ChalDataObjLoop_Continue   ; 00:3836
+Obj202_ChDataWrapper:
     pop  de                         ; 00:3838
-    call Sub0033C0                  ; 00:3839
-    jr   Code00389E                 ; 00:383C
-Code00383E:
+    call Obj202_Main                ; 00:3839
+    jr   ChalDataObjLoop_Continue   ; 00:383C
+Obj203_ChDataWrapper:
     pop  de                         ; 00:383E
-    call Sub0033E8                  ; 00:383F
-    jr   Code00389E                 ; 00:3842
-Code003844:
+    call Obj203_Main                ; 00:383F
+    jr   ChalDataObjLoop_Continue   ; 00:3842
+Obj204_ChDataWrapper:
     pop  de                         ; 00:3844
-    call Sub003324                  ; 00:3845
-    jr   Code00389E                 ; 00:3848
-Code00384A:
+    call Obj204_Main                ; 00:3845
+    jr   ChalDataObjLoop_Continue   ; 00:3848
+Obj205_ChDataWrapper:
     pop  de                         ; 00:384A
-    call Sub00335A                  ; 00:384B
-    jr   Code00389E                 ; 00:384E
-Code003850:
+    call Obj205_Main                ; 00:384B
+    jr   ChalDataObjLoop_Continue   ; 00:384E
+Obj206_ChDataWrapper:
     pop  de                         ; 00:3850
-    call Sub00345B                  ; 00:3851
-    jr   Code00389E                 ; 00:3854
-Code003856:
+    call Obj206_Main                ; 00:3851
+    jr   ChalDataObjLoop_Continue   ; 00:3854
+Obj207_ChDataWrapper:
     pop  de                         ; 00:3856
-    call Sub003310                  ; 00:3857
-    jr   Code00389E                 ; 00:385A
-Code00385C:
+    call Obj207_Main                ; 00:3857
+    jr   ChalDataObjLoop_Continue   ; 00:385A
+Obj208_ChDataWrapper:
     pop  de                         ; 00:385C
-    call Sub0034B0                  ; 00:385D
-    jr   Code00389E                 ; 00:3860
-Code003862:
+    call Obj208_Main                ; 00:385D
+    jr   ChalDataObjLoop_Continue   ; 00:3860
+Obj209_ChDataWrapper:
     pop  de                         ; 00:3862
-    call Sub0034CA                  ; 00:3863
-    jr   Code00389E                 ; 00:3866
-Code003868:
+    call Obj209_Main                ; 00:3863
+    jr   ChalDataObjLoop_Continue   ; 00:3866
+Obj20A_ChDataWrapper:
     pop  de                         ; 00:3868
-    call Sub0034E1                  ; 00:3869
-    jr   Code00389E                 ; 00:386C
-Code00386E:
+    call Obj20A_Main                ; 00:3869
+    jr   ChalDataObjLoop_Continue   ; 00:386C
+Obj20B_ChDataWrapper:
     pop  de                         ; 00:386E
-    call Sub0034F8                  ; 00:386F
-    jr   Code00389E                 ; 00:3872
-Code003874:
+    call Obj20B_Main                ; 00:386F
+    jr   ChalDataObjLoop_Continue   ; 00:3872
+Obj20C_ChDataWrapper:
     pop  de                         ; 00:3874
-    call Sub00351C                  ; 00:3875
-    jr   Code00389E                 ; 00:3878
-Code00387A:
+    call Obj20C_Main                ; 00:3875
+    jr   ChalDataObjLoop_Continue   ; 00:3878
+Obj20D_ChDataWrapper:
     pop  de                         ; 00:387A
-    call Sub003545                  ; 00:387B
-    jr   Code00389E                 ; 00:387E
-Code003880:
+    call Obj20D_Main                ; 00:387B
+    jr   ChalDataObjLoop_Continue   ; 00:387E
+
+Obj20E:
+; object 2.0E: challenge x-4 pillar
     pop  de                         ; 00:3880
-    call Sub003568                  ; 00:3881
+    call ObjShared_GetTilemapAddr   ; 00:3881
     inc  de                         ; 00:3884
     push de                         ; 00:3885
-    ld   de,Data003ED9              ; 00:3886
-    jr   Code003894                 ; 00:3889
-Code00388B:
+    ld   de,Obj20E_Tilemap          ; 00:3886  90 91 92
+    jr   Obj20E_20F_Shared          ; 00:3889
+
+Obj20F:
+; object 2.0F: challenge x-4 doorway
     pop  de                         ; 00:388B
-    call Sub003568                  ; 00:388C
+    call ObjShared_GetTilemapAddr   ; 00:388C
     inc  de                         ; 00:388F
     push de                         ; 00:3890
-    ld   de,Data003EDC              ; 00:3891
-Code003894:
-    ld   b,$03                      ; 00:3894
-Code003896:
-    call Sub00357C                  ; 00:3896
+    ld   de,Obj20F_Tilemap          ; 00:3891  8F 94 94
+Obj20E_20F_Shared:
+    ld   b,$03                      ; 00:3894  loop 3 times
+@Loop:
+    call ObjShared_SetTileShiftDown ; 00:3896
     inc  de                         ; 00:3899
     dec  b                          ; 00:389A
-    jr   nz,Code003896              ; 00:389B
+    jr   nz,@Loop                   ; 00:389B
     pop  de                         ; 00:389D
-Code00389E:
+ChalDataObjLoop_Continue:
     inc  de                         ; 00:389E
-    jp   Code0037CE                 ; 00:389F
+    jp   ChalDataObjLoop            ; 00:389F
+
 Code0038A2:
     inc  de                         ; 00:38A2
     ldh  a,[<$FFA2]                 ; 00:38A3
@@ -8379,9 +8487,9 @@ Code0038A2:
     ld   a,$07                      ; 00:38AD
     ldh  [<SVBK],a                  ; 00:38AF
 Code0038B1:
-    ld   a,[$C161]                  ; 00:38B1
+    ld   a,[W_SubLvScreenCount]     ; 00:38B1
     cp   b                          ; 00:38B4
-    jp   nz,Code0037CE              ; 00:38B5
+    jp   nz,ChalDataObjLoop         ; 00:38B5
     ld   a,$00                      ; 00:38B8
     ldh  [<SVBK],a                  ; 00:38BA
     ret                             ; 00:38BC
@@ -8391,16 +8499,16 @@ OverworldInit:
     call Sub00126D                  ; 00:38BD
     ld   a,$00                      ; 00:38C0
     ldh  [<IE],a                    ; 00:38C2
-    ldh  a,[<$FFB8]                 ; 00:38C4
+    ldh  a,[<H_CameraXLow]          ; 00:38C4
     ld   [$C175],a                  ; 00:38C6
-    ldh  a,[<$FFBA]                 ; 00:38C9
+    ldh  a,[<H_CameraY]             ; 00:38C9
     ld   [$C176],a                  ; 00:38CB
     ld   a,$00                      ; 00:38CE
     ldh  [<H_GameSubstate],a        ; 00:38D0
 Code0038D2:
-    ld   a,:Sub115D00               ; 00:38D2
+    ld   a,:OverworldInit_CallSubstate; 00:38D2
     call SetROMBank                 ; 00:38D4
-    call Sub115D00                  ; 00:38D7
+    call OverworldInit_CallSubstate ; 00:38D7
     call Sub0014AA                  ; 00:38DA
     ldh  a,[<H_GameSubstate]        ; 00:38DD
     cp   $05                        ; 00:38DF
@@ -8419,37 +8527,36 @@ Code0038D2:
 
 OverworldMain:
 ; Game state 05/08
-    ld   a,[$C283]                  ; 00:38F8
+    ld   a,[W_ChallengeFlag]        ; 00:38F8
     cp   $01                        ; 00:38FB
-    jr   z,Code00390E               ; 00:38FD
+    jr   z,@Code00390E              ; 00:38FD
     ld   a,[$C1B7]                  ; 00:38FF
     and  $01                        ; 00:3902
-    jr   nz,Code00390E              ; 00:3904
+    jr   nz,@Code00390E             ; 00:3904
     ld   a,:Sub045096               ; 00:3906
     call SetROMBank                 ; 00:3908
     call Sub045096                  ; 00:390B
-Code00390E:
+@Code00390E:
     ld   a,:Sub1161D7               ; 00:390E
     call SetROMBank                 ; 00:3910
     call Sub1161D7                  ; 00:3913
-    ld   a,[$C283]                  ; 00:3916
+    ld   a,[W_ChallengeFlag]        ; 00:3916
     cp   $01                        ; 00:3919
-    jr   z,Code00396C               ; 00:391B
+    jr   z,@Code00396C              ; 00:391B
     ldh  a,[<H_ButtonsPressed]      ; 00:391D
-    and  $08                        ; 00:391F
-    jr   nz,Code00392F              ; 00:3921
+    and  $08                        ; 00:391F  08: Start
+    jr   nz,@Code00392F             ; 00:3921
     ld   a,[$C1B8]                  ; 00:3923
     and  a                          ; 00:3926
     ret  z                          ; 00:3927
     ldh  a,[<H_ButtonsPressed]      ; 00:3928
-    and  $01                        ; 00:392A
-    jr   nz,Code003949              ; 00:392C
+    and  $01                        ; 00:392A  01: A
+    jr   nz,@Code003949             ; 00:392C
     ret                             ; 00:392E
-
-Code00392F:
+@Code00392F:
     ld   a,[$C1B7]                  ; 00:392F
     and  $01                        ; 00:3932
-    jr   z,Code003949               ; 00:3934
+    jr   z,@Code003949              ; 00:3934
     ld   a,[$C1AF]                  ; 00:3936
     ld   [W_PlayerFireFlag],a       ; 00:3939
     ld   hl,W_LevelID               ; 00:393C
@@ -8459,8 +8566,7 @@ Code00392F:
     ld   a,$04                      ; 00:3944
     ldh  [<H_GameState],a           ; 00:3946
     ret                             ; 00:3948
-
-Code003949:
+@Code003949:
     ld   a,$02                      ; 00:3949
     ld   [$C1B7],a                  ; 00:394B
     ld   a,$01                      ; 00:394E
@@ -8475,19 +8581,17 @@ Code003949:
     ld   hl,H_GameState             ; 00:3967
     inc  [hl]                       ; 00:396A
     ret                             ; 00:396B
-
-Code00396C:
+@Code00396C:
     ldh  a,[<H_ButtonsPressed]      ; 00:396C
     and  $0B                        ; 00:396E
     ret  z                          ; 00:3970
     ldh  a,[<H_ButtonsPressed]      ; 00:3971
     and  $09                        ; 00:3973
-    jr   nz,Code00397C              ; 00:3975
+    jr   nz,@Code00397C             ; 00:3975
     ld   a,$1D                      ; 00:3977
     ldh  [<H_GameState],a           ; 00:3979
     ret                             ; 00:397B
-
-Code00397C:
+@Code00397C:
     ld   a,$03                      ; 00:397C
     ld   de,$0008                   ; 00:397E
     call Return0010B2               ; 00:3981
@@ -8503,7 +8607,7 @@ Code00397C:
     inc  hl                         ; 00:3996
     ld   d,[hl]                     ; 00:3997
     ld   bc,$0000                   ; 00:3998
-Code00399B:
+@Loop00399B:
     ld   hl,$D30C                   ; 00:399B
     add  hl,bc                      ; 00:399E
     ld   a,[de]                     ; 00:399F
@@ -8517,7 +8621,7 @@ Code00399B:
     inc  c                          ; 00:39A9
     ld   a,c                        ; 00:39AA
     cp   $05                        ; 00:39AB
-    jr   c,Code00399B               ; 00:39AD
+    jr   c,@Loop00399B              ; 00:39AD
     ld   a,$00                      ; 00:39AF
     ld   [$C188],a                  ; 00:39B1
     ld   [$D30A],a                  ; 00:39B4
@@ -8558,6 +8662,8 @@ Code0039E2:
     ret                             ; 00:39F4
 
 LoadGraphicsBank:
+; Load an entire bank of graphics from ROM, starting at [A]:4000, then return to bank B
+;  Copies $4000-5800 to VRAM bank 0, $5800-7000 to VRAM bank 1
     call SetROMBank                 ; 00:39F5
     push bc                         ; 00:39F8
     ld   hl,$4000                   ; 00:39F9
@@ -8579,47 +8685,47 @@ LoadGraphicsBank:
 
     ret                             ; 00:3A1F
 
-Data003A20:                         ; 00:3A20
+StatusBarTiles_Default:             ; 00:3A20
 .db $F4,$F4,$F4,$F4,$F4,$F4,$F4,$D0,\
     $F4,$FE,$F9,$D0,$D0,$F4,$F4,$F4,\
     $7A,$F4,$F4,$F4,$F4,$F4,$F4,$F4,\
     $F4,$F4,$F4,$F4,$F4,$F4,$F4,$F4
-Data003A40:                         ; 00:3A40
+StatusBarTiles_Challenge:           ; 00:3A40
 .db $F4,$F4,$F4,$F4,$F4,$F4,$F4,$D0,\
     $F4,$77,$77,$77,$77,$77,$F4,$F4,\
     $7A,$F4,$F4,$F4,$F4,$F4,$F4,$F4,\
     $F4,$F4,$F4,$F4,$F4,$F4,$F4,$F4
-Data003A60:                         ; 00:3A60
+StatusBarTiles_Race:                ; 00:3A60
 .db $F4,$F4,$F4,$F4,$F4,$FE,$F9,$D0,\
     $D0,$F4,$7A,$F4,$F4,$F4,$F4,$F4,\
     $F4,$F4,$F4,$F4,$F4,$F4,$F4,$F4,\
     $F4,$F4,$F4,$F4,$F4,$F4,$F4,$F4
 
-Sub003A80:
+StatusBarInit:
     ld   a,[W_GameMode]             ; 00:3A80
     cp   $02                        ; 00:3A83
-    jr   z,Code003A9C               ; 00:3A85
+    jr   z,@Race                    ; 00:3A85
     cp   $07                        ; 00:3A87
-    jr   z,Code003A9C               ; 00:3A89
-    ld   a,[$C283]                  ; 00:3A8B
+    jr   z,@Race                    ; 00:3A89
+    ld   a,[W_ChallengeFlag]        ; 00:3A8B
     cp   $01                        ; 00:3A8E
-    jr   z,Code003A97               ; 00:3A90
-    ld   de,Data003A20              ; 00:3A92
-    jr   Code003A9F                 ; 00:3A95
-Code003A97:
-    ld   de,Data003A40              ; 00:3A97
-    jr   Code003A9F                 ; 00:3A9A
-Code003A9C:
-    ld   de,Data003A60              ; 00:3A9C
-Code003A9F:
+    jr   z,@Challenge               ; 00:3A90
+    ld   de,StatusBarTiles_Default  ; 00:3A92
+    jr   @LoadTiles                 ; 00:3A95
+@Challenge:
+    ld   de,StatusBarTiles_Challenge; 00:3A97
+    jr   @LoadTiles                 ; 00:3A9A
+@Race:
+    ld   de,StatusBarTiles_Race     ; 00:3A9C
+@LoadTiles:
     ld   hl,$C100                   ; 00:3A9F
     ld   b,$20                      ; 00:3AA2
-Code003AA4:
+@CopyLoop:
     ld   a,[de]                     ; 00:3AA4
     ldi  [hl],a                     ; 00:3AA5
     inc  de                         ; 00:3AA6
     dec  b                          ; 00:3AA7
-    jr   nz,Code003AA4              ; 00:3AA8
+    jr   nz,@CopyLoop               ; 00:3AA8
     ld   a,$00                      ; 00:3AAA
     ld   [$C180],a                  ; 00:3AAC
     ret                             ; 00:3AAF
@@ -8635,19 +8741,19 @@ Sub003AB0:
     ret  c                          ; 00:3ABE
     ld   a,$00                      ; 00:3ABF
     ld   [$C180],a                  ; 00:3AC1
-    ld   a,[$C17E]                  ; 00:3AC4
+    ld   a,[W_LevelTimerHigh]       ; 00:3AC4
     and  a                          ; 00:3AC7
     jr   nz,Code003AD8              ; 00:3AC8
-    ld   a,[$C17D]                  ; 00:3ACA
+    ld   a,[W_LevelTimerLow]        ; 00:3ACA
     cp   $64                        ; 00:3ACD
     jr   nz,Code003AD8              ; 00:3ACF
     ld   a,$71                      ; 00:3AD1
     ld   [$DE68],a                  ; 00:3AD3
     jr   Code003AF4                 ; 00:3AD6
 Code003AD8:
-    ld   a,[$C17D]                  ; 00:3AD8
+    ld   a,[W_LevelTimerLow]        ; 00:3AD8
     ld   e,a                        ; 00:3ADB
-    ld   a,[$C17E]                  ; 00:3ADC
+    ld   a,[W_LevelTimerHigh]       ; 00:3ADC
     or   e                          ; 00:3ADF
     jr   nz,Code003AF4              ; 00:3AE0
     ld   a,$00                      ; 00:3AE2
@@ -8660,7 +8766,7 @@ Code003AD8:
     ret                             ; 00:3AF3
 
 Code003AF4:
-    ld   hl,$C17D                   ; 00:3AF4
+    ld   hl,W_LevelTimerLow         ; 00:3AF4
     ld   e,[hl]                     ; 00:3AF7
     inc  hl                         ; 00:3AF8
     ld   d,[hl]                     ; 00:3AF9
@@ -8672,7 +8778,7 @@ Code003AF4:
 
 Sub003AFF:
     call Sub003CEF                  ; 00:3AFF
-    ld   a,[$C283]                  ; 00:3B02
+    ld   a,[W_ChallengeFlag]        ; 00:3B02
     cp   $01                        ; 00:3B05
     jr   z,Code003B3C               ; 00:3B07
     ld   hl,$C10B                   ; 00:3B09
@@ -8798,9 +8904,9 @@ Code003BCD:
 Code003BD9:
     ld   hl,$C3B0                   ; 00:3BD9
 Code003BDC:
-    ldh  a,[<$FFB9]                 ; 00:3BDC
+    ldh  a,[<H_CameraXHigh]         ; 00:3BDC
     ld   b,a                        ; 00:3BDE
-    ldh  a,[<$FFB8]                 ; 00:3BDF
+    ldh  a,[<H_CameraXLow]          ; 00:3BDF
     ld   c,a                        ; 00:3BE1
     ldi  a,[hl]                     ; 00:3BE2
     add  $10                        ; 00:3BE3
@@ -8828,7 +8934,7 @@ Code003BF9:
     ld   bc,$C501                   ; 00:3C01
     jr   Code003C09                 ; 00:3C04
 Code003C06:
-    ld   bc,$FFA7                   ; 00:3C06
+    ld   bc,H_PlayerXLow            ; 00:3C06
 Code003C09:
     ld   a,[bc]                     ; 00:3C09
     inc  bc                         ; 00:3C0A
@@ -9006,15 +9112,15 @@ Code003CFD:
     ret                             ; 00:3D03
 
 Sub003D04:
-    ld   a,[$C1F2]                  ; 00:3D04
+    ld   a,[W_PlayerCoins]          ; 00:3D04
     ldh  [<$FFA5],a                 ; 00:3D07
     call Sub003DE4                  ; 00:3D09
     ret                             ; 00:3D0C
 
 Sub003D0D:
-    ld   a,[$C17D]                  ; 00:3D0D
+    ld   a,[W_LevelTimerLow]        ; 00:3D0D
     ldh  [<$FFA5],a                 ; 00:3D10
-    ld   a,[$C17E]                  ; 00:3D12
+    ld   a,[W_LevelTimerHigh]       ; 00:3D12
     ldh  [<$FFA4],a                 ; 00:3D15
     call Sub003DC5                  ; 00:3D17
     ret                             ; 00:3D1A
@@ -9210,7 +9316,7 @@ Code003E14:
 Return003E1F:
     ret                             ; 00:3E1F
 
-DataPtrs003E20:                     ; 00:3E20
+AwardCutsceneTilemapPtrs:           ; 00:3E20
 .dl Ti_ToadAward, Ti_MarioAward, Ti_PeachAward, Ti_BowserAward,\
     Ti_YoshiAward
 
@@ -9234,7 +9340,7 @@ Code003E2F:
     add  c                          ; 00:3E4B
     ld   c,a                        ; 00:3E4C
     ld   b,$00                      ; 00:3E4D
-    ld   hl,DataPtrs003E20          ; 00:3E4F
+    ld   hl,AwardCutsceneTilemapPtrs; 00:3E4F
     add  hl,bc                      ; 00:3E52
     ld   c,[hl]                     ; 00:3E53
     inc  hl                         ; 00:3E54
@@ -9279,36 +9385,37 @@ Code003E98:
     ld   [$C172],a                  ; 00:3E9B
     ret                             ; 00:3E9E
 
-Data003E9F:                         ; 00:3E9F
+; 16x16 tile numbers for each extended object
+Obj200_Tilemap:                     ; 00:3E9F
 .db $05,$07,$06,$08
-Data003EA3:                         ; 00:3EA3
+Obj207_Tilemap:                     ; 00:3EA3
 .db $22,$07,$23,$08
-Data003EA7:                         ; 00:3EA7
+Obj204_Tilemap:                     ; 00:3EA7
 .db $28,$29,$2A,$2B
-Data003EAB:                         ; 00:3EAB
+Obj205_Tilemap:                     ; 00:3EAB
 .db $07,$2C,$2D
-Data003EAE:                         ; 00:3EAE
+Obj201_Tilemap:                     ; 00:3EAE
 .db $09,$0C,$0A,$0D,$0B,$0E
-Data003EB4:                         ; 00:3EB4
+Obj202_Tilemap:                     ; 00:3EB4
 .db $0F,$10,$11
-Data003EB7:                         ; 00:3EB7
+Obj203_Tilemap:                     ; 00:3EB7
 .db $03,$03,$13,$03,$13,$14,$12,$14,\
     $15,$03,$17,$16,$03,$03,$17
-Data003EC6:                         ; 00:3EC6
+Obj206_Tilemap:                     ; 00:3EC6
 .db $32,$33,$35,$34
-Data003ECA:                         ; 00:3ECA
+Obj208_Tilemap:                     ; 00:3ECA
 .db $48,$49,$4B
-Data003ECD:                         ; 00:3ECD
+Obj209_Tilemap:                     ; 00:3ECD
 .db $4A,$4B
-Data003ECF:                         ; 00:3ECF
+Obj20A_Tilemap:                     ; 00:3ECF
 .db $46,$47
-Data003ED1:                         ; 00:3ED1
+Obj20B_Tilemap:                     ; 00:3ED1
 .db $44,$4D,$45
-Data003ED4:                         ; 00:3ED4
+Obj20C_Tilemap:                     ; 00:3ED4
 .db $4F,$50,$51
-Data003ED7:                         ; 00:3ED7
+Obj20D_Tilemap:                     ; 00:3ED7
 .db $52,$53
-Data003ED9:                         ; 00:3ED9
+Obj20E_Tilemap:                     ; 00:3ED9
 .db $90,$91,$92
-Data003EDC:                         ; 00:3EDC
+Obj20F_Tilemap:                     ; 00:3EDC
 .db $8F,$94,$94

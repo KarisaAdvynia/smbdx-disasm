@@ -65,10 +65,10 @@ Code08404E:
     push hl                         ; 08:4063
     ld   hl,W_SpriteXLow            ; 08:4064
     add  hl,de                      ; 08:4067
-    ldh  a,[<$FFA7]                 ; 08:4068
+    ldh  a,[<H_PlayerXLow]          ; 08:4068
     sub  [hl]                       ; 08:406A
     pop  hl                         ; 08:406B
-    ldh  a,[<$FFA8]                 ; 08:406C
+    ldh  a,[<H_PlayerXHigh]         ; 08:406C
     sbc  [hl]                       ; 08:406E
     bit  7,a                        ; 08:406F
     jr   nz,Code084077              ; 08:4071
@@ -88,10 +88,10 @@ Code084077:
     push hl                         ; 08:408A
     ld   hl,W_SpriteXLow            ; 08:408B
     add  hl,bc                      ; 08:408E
-    ldh  a,[<$FFA7]                 ; 08:408F
+    ldh  a,[<H_PlayerXLow]          ; 08:408F
     sub  [hl]                       ; 08:4091
     pop  hl                         ; 08:4092
-    ldh  a,[<$FFA8]                 ; 08:4093
+    ldh  a,[<H_PlayerXHigh]         ; 08:4093
     sbc  [hl]                       ; 08:4095
     bit  7,a                        ; 08:4096
     jp   nz,Return0840BF            ; 08:4098
@@ -161,7 +161,7 @@ Code084113:
     cp   e                          ; 08:4115
     ret  nc                         ; 08:4116
     ld   a,$23                      ; 08:4117
-    call Sub0026BE                  ; 08:4119
+    call LoadSpriteAnySlot          ; 08:4119
     jp   c,Return0841C5             ; 08:411C
     push de                         ; 08:411F
     ldh  a,[<$FFBC]                 ; 08:4120
@@ -216,19 +216,19 @@ Code084169:
     jr   z,Code084183               ; 08:4172
     ld   hl,Data0840C0              ; 08:4174
     add  hl,de                      ; 08:4177
-    ldh  a,[<$FFA7]                 ; 08:4178
+    ldh  a,[<H_PlayerXLow]          ; 08:4178
     add  [hl]                       ; 08:417A
     ldh  [<$FFA3],a                 ; 08:417B
-    ldh  a,[<$FFA8]                 ; 08:417D
+    ldh  a,[<H_PlayerXHigh]         ; 08:417D
     adc  $00                        ; 08:417F
     jr   Code084190                 ; 08:4181
 Code084183:
     ld   hl,Data0840D0              ; 08:4183
     add  hl,de                      ; 08:4186
-    ldh  a,[<$FFA7]                 ; 08:4187
+    ldh  a,[<H_PlayerXLow]          ; 08:4187
     sub  [hl]                       ; 08:4189
     ldh  [<$FFA3],a                 ; 08:418A
-    ldh  a,[<$FFA8]                 ; 08:418C
+    ldh  a,[<H_PlayerXHigh]         ; 08:418C
     sbc  $00                        ; 08:418E
 Code084190:
     ldh  [<$FFA4],a                 ; 08:4190
@@ -347,7 +347,7 @@ Code08423B:
 
 Code084262:
     ld   a,$08                      ; 08:4262
-    rst  $10                        ; 08:4264
+    rst  $10                        ; 08:4264  24-bit call
 .dl SubL_0B4074                     ; 08:4265
     jr   Code084279                 ; 08:4268
 Code08426A:
@@ -391,7 +391,7 @@ Code08428D:
     add  hl,de                      ; 08:42A7
     ld   de,Data0841C6              ; 08:42A8
     add  hl,de                      ; 08:42AB
-    call Sub0027BD                  ; 08:42AC
+    call Disp16x16Sprite            ; 08:42AC
     ret                             ; 08:42AF
 
 Code0842B0:
@@ -511,10 +511,10 @@ Code08435D:
     ld   hl,$D096                   ; 08:4364
     add  hl,bc                      ; 08:4367
     ld   [hl],a                     ; 08:4368
-    ldh  a,[<$FFA7]                 ; 08:4369
+    ldh  a,[<H_PlayerXLow]          ; 08:4369
     add  $08                        ; 08:436B
     ldh  [<$FF97],a                 ; 08:436D
-    ldh  a,[<$FFA8]                 ; 08:436F
+    ldh  a,[<H_PlayerXHigh]         ; 08:436F
     adc  $00                        ; 08:4371
     ldh  [<$FF98],a                 ; 08:4373
     ld   hl,W_SpriteXHigh           ; 08:4375
@@ -568,9 +568,9 @@ Sub0843B7:
     add  hl,bc                      ; 08:43C4
     ld   a,[hl]                     ; 08:43C5
     ldh  [<$FF97],a                 ; 08:43C6
-    ld   hl,$FFA7                   ; 08:43C8
+    ld   hl,H_PlayerXLow            ; 08:43C8
     sub  [hl]                       ; 08:43CB
-    ld   hl,$FFA8                   ; 08:43CC
+    ld   hl,H_PlayerXHigh           ; 08:43CC
     ldh  a,[<$FF98]                 ; 08:43CF
     sbc  [hl]                       ; 08:43D1
     bit  7,a                        ; 08:43D2
@@ -626,7 +626,7 @@ Code084410:
     jr   nc,Return084468            ; 08:441B
 Code08441D:
     ld   a,$25                      ; 08:441D
-    call Sub0026BE                  ; 08:441F
+    call LoadSpriteAnySlot          ; 08:441F
     jr   c,Return084468             ; 08:4422
     ld   hl,W_SpriteXLow            ; 08:4424
     add  hl,de                      ; 08:4427
@@ -743,14 +743,14 @@ Code0844E6:
     add  hl,de                      ; 08:44F2
     ld   de,Data084469              ; 08:44F3
     add  hl,de                      ; 08:44F6
-    call Sub0027BD                  ; 08:44F7
+    call Disp16x16Sprite            ; 08:44F7
     ret                             ; 08:44FA
 
 Sub0844FB:
     ld   hl,W_SpriteSubstate        ; 08:44FB
     add  hl,bc                      ; 08:44FE
     ld   a,[hl]                     ; 08:44FF
-    rst  $00                        ; 08:4500
+    rst  $00                        ; 08:4500  Execute from 16-bit pointer table
 .dw Code084505                      ; 08:4501
 .dw Code084569                      ; 08:4503
 Code084505:
@@ -777,7 +777,7 @@ Code08452A:
     srl  a                          ; 08:452C
     jr   nc,Return084568            ; 08:452E
     ld   a,$08                      ; 08:4530
-    rst  $10                        ; 08:4532
+    rst  $10                        ; 08:4532  24-bit call
 .dl SubL_0B4074                     ; 08:4533
     jr   Return084568               ; 08:4536
 Code084538:
@@ -880,7 +880,7 @@ Sub0845C8:
     ld   hl,W_SpriteSubstate        ; 08:45C8
     add  hl,bc                      ; 08:45CB
     ld   a,[hl]                     ; 08:45CC
-    rst  $00                        ; 08:45CD
+    rst  $00                        ; 08:45CD  Execute from 16-bit pointer table
 .dw Code0845D4                      ; 08:45CE
 .dw Code0845E5                      ; 08:45D0
 .dw Return0845EC                    ; 08:45D2
@@ -963,7 +963,7 @@ Code084659:
     push hl                         ; 08:467E
     ld   de,Data0845ED              ; 08:467F
     add  hl,de                      ; 08:4682
-    call Sub0027BD                  ; 08:4683
+    call Disp16x16Sprite            ; 08:4683
     ld   hl,W_SpriteXLow            ; 08:4686
     add  hl,bc                      ; 08:4689
     ld   a,[hl]                     ; 08:468A
@@ -994,7 +994,7 @@ Sub0846B1:
     ld   hl,W_SpriteSubstate        ; 08:46B1
     add  hl,bc                      ; 08:46B4
     ld   a,[hl]                     ; 08:46B5
-    rst  $00                        ; 08:46B6
+    rst  $00                        ; 08:46B6  Execute from 16-bit pointer table
 .dw Code0846C3                      ; 08:46B7
 .dw Code0847C6                      ; 08:46B9
 .dw Code084890                      ; 08:46BB
@@ -1097,7 +1097,7 @@ Code084754:
     srl  a                          ; 08:4756
     jr   nc,Return08476C            ; 08:4758
     ld   a,$08                      ; 08:475A
-    rst  $10                        ; 08:475C
+    rst  $10                        ; 08:475C  24-bit call
 .dl SubL_0B4074                     ; 08:475D
     jr   Return08476C               ; 08:4760
 Code084762:
@@ -1196,7 +1196,7 @@ Code0847FA:
     jr   nc,Code08481A              ; 08:47FE
     push bc                         ; 08:4800
     ld   a,$08                      ; 08:4801
-    rst  $10                        ; 08:4803
+    rst  $10                        ; 08:4803  24-bit call
 .dl SubL_0B4074                     ; 08:4804
     pop  bc                         ; 08:4807
     call Sub0026A8                  ; 08:4808
@@ -1310,7 +1310,7 @@ Code0848B9:
     srl  a                          ; 08:48BB
     jr   nc,Code0848D1              ; 08:48BD
     ld   a,$08                      ; 08:48BF
-    rst  $10                        ; 08:48C1
+    rst  $10                        ; 08:48C1  24-bit call
 .dl SubL_0B4074                     ; 08:48C2
     jr   Code0848D1                 ; 08:48C5
 Code0848C7:
@@ -1440,10 +1440,10 @@ Code08498A:
     push hl                         ; 08:4990
     ld   hl,W_SpriteXLow            ; 08:4991
     add  hl,bc                      ; 08:4994
-    ldh  a,[<$FFA7]                 ; 08:4995
+    ldh  a,[<H_PlayerXLow]          ; 08:4995
     sub  [hl]                       ; 08:4997
     pop  hl                         ; 08:4998
-    ldh  a,[<$FFA8]                 ; 08:4999
+    ldh  a,[<H_PlayerXHigh]         ; 08:4999
     sbc  [hl]                       ; 08:499B
     bit  7,a                        ; 08:499C
     jr   z,Code0849A2               ; 08:499E
@@ -1510,7 +1510,7 @@ Code0849E9:
     ld   d,$00                      ; 08:49F4
     ld   hl,Data08494D              ; 08:49F6
     add  hl,de                      ; 08:49F9
-    call Sub0027BD                  ; 08:49FA
+    call Disp16x16Sprite            ; 08:49FA
     pop  af                         ; 08:49FD
     and  a                          ; 08:49FE
     jr   nz,Return084A29            ; 08:49FF
@@ -1586,7 +1586,7 @@ Code084A7C:
     srl  a                          ; 08:4A7E
     jr   nc,Code084A9A              ; 08:4A80
     ld   a,$08                      ; 08:4A82
-    rst  $10                        ; 08:4A84
+    rst  $10                        ; 08:4A84  24-bit call
 .dl SubL_0B4074                     ; 08:4A85
     jr   Code084A9A                 ; 08:4A88
 Code084A8A:
@@ -1679,7 +1679,7 @@ Code084B0A:
     add  hl,bc                      ; 08:4B0D
     ld   a,[hl]                     ; 08:4B0E
     add  $10                        ; 08:4B0F
-    ld   hl,$FFA9                   ; 08:4B11
+    ld   hl,H_PlayerYLow            ; 08:4B11
     cp   [hl]                       ; 08:4B14
     jr   c,Code084B1E               ; 08:4B15
     ld   hl,W_SpriteSubstate        ; 08:4B17
@@ -1779,10 +1779,10 @@ Code084BA5:
     push hl                         ; 08:4BB1
     ld   hl,W_SpriteXLow            ; 08:4BB2
     add  hl,bc                      ; 08:4BB5
-    ldh  a,[<$FFA7]                 ; 08:4BB6
+    ldh  a,[<H_PlayerXLow]          ; 08:4BB6
     sub  [hl]                       ; 08:4BB8
     pop  hl                         ; 08:4BB9
-    ldh  a,[<$FFA8]                 ; 08:4BBA
+    ldh  a,[<H_PlayerXHigh]         ; 08:4BBA
     sbc  [hl]                       ; 08:4BBC
     bit  7,a                        ; 08:4BBD
     jr   nz,Return084C02            ; 08:4BBF
@@ -1827,7 +1827,7 @@ Sub084C03:
     ld   hl,W_SpriteSubstate        ; 08:4C03
     add  hl,bc                      ; 08:4C06
     ld   a,[hl]                     ; 08:4C07
-    rst  $00                        ; 08:4C08
+    rst  $00                        ; 08:4C08  Execute from 16-bit pointer table
 .dw Code084C25                      ; 08:4C09
 .dw Code084D49                      ; 08:4C0B
 .dw Code084D7F                      ; 08:4C0D
@@ -1838,7 +1838,7 @@ Sub084C13:
     ld   hl,W_SpriteSubstate        ; 08:4C13
     add  hl,bc                      ; 08:4C16
     ld   a,[hl]                     ; 08:4C17
-    rst  $00                        ; 08:4C18
+    rst  $00                        ; 08:4C18  Execute from 16-bit pointer table
 .dw Code084EB0                      ; 08:4C19
 .dw Code084F02                      ; 08:4C1B
 .dw Return084F30                    ; 08:4C1D
@@ -1993,7 +1993,7 @@ Code084D07:
 
 Code084D10:
     ld   a,$08                      ; 08:4D10
-    rst  $10                        ; 08:4D12
+    rst  $10                        ; 08:4D12  24-bit call
 .dl SubL_0B4074                     ; 08:4D13
 Return084D16:
     ret                             ; 08:4D16
@@ -2098,11 +2098,11 @@ Code084D7F:
     push hl                         ; 08:4DAE
     ld   hl,W_SpriteXLow            ; 08:4DAF
     add  hl,bc                      ; 08:4DB2
-    ldh  a,[<$FFB8]                 ; 08:4DB3
+    ldh  a,[<H_CameraXLow]          ; 08:4DB3
     add  $B0                        ; 08:4DB5
     ld   [hl],a                     ; 08:4DB7
     pop  hl                         ; 08:4DB8
-    ldh  a,[<$FFB9]                 ; 08:4DB9
+    ldh  a,[<H_CameraXHigh]         ; 08:4DB9
     adc  $00                        ; 08:4DBB
     ld   [hl],a                     ; 08:4DBD
     ld   hl,$D1D1                   ; 08:4DBE
@@ -2132,7 +2132,7 @@ Sub084DD6:
     ld   a,$89                      ; 08:4DE3
     jr   Code084DFB                 ; 08:4DE5
 Code084DE7:
-    ld   hl,$FFBA                   ; 08:4DE7
+    ld   hl,H_CameraY               ; 08:4DE7
     ld   a,$70                      ; 08:4DEA
     sub  [hl]                       ; 08:4DEC
     cp   $21                        ; 08:4DED
@@ -2160,12 +2160,12 @@ Sub084E04:
     ld   hl,W_SpriteXLow            ; 08:4E0C
     add  hl,bc                      ; 08:4E0F
     ld   a,[hl]                     ; 08:4E10
-    ld   hl,$FFA7                   ; 08:4E11
+    ld   hl,H_PlayerXLow            ; 08:4E11
     sub  [hl]                       ; 08:4E14
     ldh  [<$FF97],a                 ; 08:4E15
     pop  hl                         ; 08:4E17
     ld   a,[hl]                     ; 08:4E18
-    ld   hl,$FFA8                   ; 08:4E19
+    ld   hl,H_PlayerXHigh           ; 08:4E19
     sbc  [hl]                       ; 08:4E1C
     bit  7,a                        ; 08:4E1D
     jr   z,Code084E29               ; 08:4E1F
@@ -2270,7 +2270,7 @@ Code084EB0:
     add  hl,de                      ; 08:4EC9
     ld   de,Data084E9C              ; 08:4ECA
     add  hl,de                      ; 08:4ECD
-    call Sub0027BD                  ; 08:4ECE
+    call Disp16x16Sprite            ; 08:4ECE
     ld   hl,W_SpriteXLow            ; 08:4ED1
     add  hl,bc                      ; 08:4ED4
     ld   a,[hl]                     ; 08:4ED5
@@ -2301,7 +2301,7 @@ Data084EFE:                         ; 08:4EFE
 .db $40,$4F,$42,$4F
 Code084F02:
     ld   hl,Data084EFA              ; 08:4F02
-    call Sub0027BD                  ; 08:4F05
+    call Disp16x16Sprite            ; 08:4F05
     ld   hl,W_SpriteXLow            ; 08:4F08
     add  hl,bc                      ; 08:4F0B
     ld   a,[hl]                     ; 08:4F0C
@@ -2364,7 +2364,7 @@ Code084F63:
     ldh  [<$FF9B],a                 ; 08:4F68
     push bc                         ; 08:4F6A
     ld   a,$2F                      ; 08:4F6B
-    call Sub0026BE                  ; 08:4F6D
+    call LoadSpriteAnySlot          ; 08:4F6D
     jr   c,Code084F9F               ; 08:4F70
     ld   hl,W_SpriteYSpeed          ; 08:4F72
     add  hl,de                      ; 08:4F75
@@ -2439,7 +2439,7 @@ Code084FE7:
     ld   d,$00                      ; 08:4FF0
     ld   hl,Data084FA1              ; 08:4FF2
     add  hl,de                      ; 08:4FF5
-    call Sub0027BD                  ; 08:4FF6
+    call Disp16x16Sprite            ; 08:4FF6
     ret                             ; 08:4FF9
 
 Sub084FFA:
@@ -2453,7 +2453,7 @@ Sub084FFA:
     srl  a                          ; 08:500A
     jr   nc,Code085020              ; 08:500C
     ld   a,$08                      ; 08:500E
-    rst  $10                        ; 08:5010
+    rst  $10                        ; 08:5010  24-bit call
 .dl SubL_0B4074                     ; 08:5011
     jr   Code085020                 ; 08:5014
 Code085016:
@@ -2602,14 +2602,14 @@ Code08510F:
     add  hl,de                      ; 08:511B
     ld   de,Data08507E              ; 08:511C
     add  hl,de                      ; 08:511F
-    call Sub0027BD                  ; 08:5120
+    call Disp16x16Sprite            ; 08:5120
     ret                             ; 08:5123
 
 Sub085124:
     ld   hl,W_SpriteSubstate        ; 08:5124
     add  hl,bc                      ; 08:5127
     ld   a,[hl]                     ; 08:5128
-    rst  $00                        ; 08:5129
+    rst  $00                        ; 08:5129  Execute from 16-bit pointer table
 .dw Code085132                      ; 08:512A
 .dw Return0851A9                    ; 08:512C
 .dw Return0851A9                    ; 08:512E
@@ -2625,7 +2625,7 @@ Code085132:
     srl  a                          ; 08:5142
     jr   nc,Code085160              ; 08:5144
     ld   a,$08                      ; 08:5146
-    rst  $10                        ; 08:5148
+    rst  $10                        ; 08:5148  24-bit call
 .dl SubL_0B4074                     ; 08:5149
     call Sub003000                  ; 08:514C
     jr   Code085160                 ; 08:514F
@@ -2716,7 +2716,7 @@ Code0851C1:
     ld   a,[$C366]                  ; 08:51D6
     cp   [hl]                       ; 08:51D9
     jr   nz,Code0851DD              ; 08:51DA
-    rst  $18                        ; 08:51DC
+    rst  $18                        ; 08:51DC  Return from 24-bit call
 
 Code0851DD:
     inc  e                          ; 08:51DD
@@ -2751,11 +2751,11 @@ Code085201:
     cp   $03                        ; 08:5209
     jr   nc,ReturnL_085278          ; 08:520B
 Code08520D:
-    ldh  a,[<$FFA9]                 ; 08:520D
+    ldh  a,[<H_PlayerYLow]          ; 08:520D
     cp   $38                        ; 08:520F
     jr   c,ReturnL_085278           ; 08:5211
     ld   a,$35                      ; 08:5213
-    call Sub0026BE                  ; 08:5215
+    call LoadSpriteAnySlot          ; 08:5215
     jr   c,ReturnL_085278           ; 08:5218
     ld   a,[$C1C3]                  ; 08:521A
     srl  a                          ; 08:521D
@@ -2763,10 +2763,10 @@ Code08520D:
     ld   b,$00                      ; 08:5220
     ld   hl,Data0851B1              ; 08:5222
     add  hl,bc                      ; 08:5225
-    ldh  a,[<$FFA7]                 ; 08:5226
+    ldh  a,[<H_PlayerXLow]          ; 08:5226
     add  [hl]                       ; 08:5228
     ldh  [<$FF97],a                 ; 08:5229
-    ldh  a,[<$FFA8]                 ; 08:522B
+    ldh  a,[<H_PlayerXHigh]         ; 08:522B
     adc  $00                        ; 08:522D
     ld   hl,W_SpriteXHigh           ; 08:522F
     add  hl,de                      ; 08:5232
@@ -2785,11 +2785,11 @@ Code085248:
     sla  c                          ; 08:5248
     ld   hl,Data0851B3              ; 08:524A
     add  hl,bc                      ; 08:524D
-    ldh  a,[<$FFA9]                 ; 08:524E
+    ldh  a,[<H_PlayerYLow]          ; 08:524E
     add  [hl]                       ; 08:5250
     ldh  [<$FF97],a                 ; 08:5251
     inc  hl                         ; 08:5253
-    ldh  a,[<$FFAA]                 ; 08:5254
+    ldh  a,[<H_PlayerYHigh]         ; 08:5254
     adc  [hl]                       ; 08:5256
     ld   hl,W_SpriteYHigh           ; 08:5257
     add  hl,de                      ; 08:525A
@@ -2809,7 +2809,7 @@ Code085248:
     ld   a,[$C366]                  ; 08:5274
     ld   [hl],a                     ; 08:5277
 ReturnL_085278:
-    rst  $18                        ; 08:5278
+    rst  $18                        ; 08:5278  Return from 24-bit call
 
 Data085279:                         ; 08:5279
 .db $26,$06
@@ -2938,10 +2938,10 @@ Code085335:
     and  $07                        ; 08:5349
     ld   e,a                        ; 08:534B
     ld   d,$00                      ; 08:534C
-    ldh  a,[<$FFB8]                 ; 08:534E
+    ldh  a,[<H_CameraXLow]          ; 08:534E
     add  $B0                        ; 08:5350
     ldh  [<$FF97],a                 ; 08:5352
-    ldh  a,[<$FFB9]                 ; 08:5354
+    ldh  a,[<H_CameraXHigh]         ; 08:5354
     adc  $00                        ; 08:5356
     ldh  [<$FF98],a                 ; 08:5358
     ld   hl,Data08532D              ; 08:535A
@@ -3208,17 +3208,17 @@ Code085794:
     ld   a,[$C25F]                  ; 08:57A3
     and  a                          ; 08:57A6
     jr   nz,Return0857FF            ; 08:57A7
-    ld   hl,$FFBA                   ; 08:57A9
+    ld   hl,H_CameraY               ; 08:57A9
     ld   a,[hl]                     ; 08:57AC
     cp   $38                        ; 08:57AD
     jr   c,Return0857FF             ; 08:57AF
     cp   $71                        ; 08:57B1
     jr   nc,Return0857FF            ; 08:57B3
-    ldh  a,[<$FFA9]                 ; 08:57B5
+    ldh  a,[<H_PlayerYLow]          ; 08:57B5
     sub  [hl]                       ; 08:57B7
     ld   e,a                        ; 08:57B8
     ld   hl,$FFBB                   ; 08:57B9
-    ldh  a,[<$FFAA]                 ; 08:57BC
+    ldh  a,[<H_PlayerYHigh]         ; 08:57BC
     sbc  [hl]                       ; 08:57BE
     ld   d,a                        ; 08:57BF
     ld   hl,W_SpriteSubstate        ; 08:57C0
@@ -3249,7 +3249,7 @@ Code0857E4:
     cp   $71                        ; 08:57E5
     jr   nc,Return0857FF            ; 08:57E7
 Code0857E9:
-    ldh  a,[<$FFBA]                 ; 08:57E9
+    ldh  a,[<H_CameraY]             ; 08:57E9
     cp   $70                        ; 08:57EB
     jr   z,Code0857F4               ; 08:57ED
     ld   a,$01                      ; 08:57EF
@@ -3268,12 +3268,12 @@ Code085800:
     ld   a,[$C1E7]                  ; 08:5800
     and  a                          ; 08:5803
     jr   nz,Return085828            ; 08:5804
-    ld   hl,$FFB8                   ; 08:5806
-    ldh  a,[<$FFB9]                 ; 08:5809
+    ld   hl,H_CameraXLow            ; 08:5806
+    ldh  a,[<H_CameraXHigh]         ; 08:5809
     or   [hl]                       ; 08:580B
     jr   z,Return085828             ; 08:580C
-    ld   hl,$FFB8                   ; 08:580E
-    ldh  a,[<$FFA7]                 ; 08:5811
+    ld   hl,H_CameraXLow            ; 08:580E
+    ldh  a,[<H_PlayerXLow]          ; 08:5811
     sub  [hl]                       ; 08:5813
     cp   $03                        ; 08:5814
     jr   c,Return085828             ; 08:5816
@@ -3321,10 +3321,10 @@ Sub08584B:
     ld   a,$00                      ; 08:5877
     adc  e                          ; 08:5879
     ld   [$D2D5],a                  ; 08:587A
-    ldh  a,[<$FFA7]                 ; 08:587D
+    ldh  a,[<H_PlayerXLow]          ; 08:587D
     add  $08                        ; 08:587F
     ldh  [<$FF9B],a                 ; 08:5881
-    ldh  a,[<$FFA8]                 ; 08:5883
+    ldh  a,[<H_PlayerXHigh]         ; 08:5883
     adc  $00                        ; 08:5885
     ldh  [<$FF9C],a                 ; 08:5887
     ld   hl,$D2D4                   ; 08:5889
@@ -3357,10 +3357,10 @@ Code0858A9:
     push hl                         ; 08:58BC
     ld   hl,W_SpriteYLow            ; 08:58BD
     add  hl,bc                      ; 08:58C0
-    ldh  a,[<$FFA9]                 ; 08:58C1
+    ldh  a,[<H_PlayerYLow]          ; 08:58C1
     sub  [hl]                       ; 08:58C3
     pop  hl                         ; 08:58C4
-    ldh  a,[<$FFAA]                 ; 08:58C5
+    ldh  a,[<H_PlayerYHigh]         ; 08:58C5
     sbc  [hl]                       ; 08:58C7
     bit  7,a                        ; 08:58C8
     jr   z,Code0858CE               ; 08:58CA
@@ -3393,13 +3393,13 @@ Code0858E4:
     call Sub001D21                  ; 08:58EA
     jr   nc,Return085903            ; 08:58ED
     ld   a,[$C1CA]                  ; 08:58EF
-    ldh  [<$FFA7],a                 ; 08:58F2
+    ldh  [<H_PlayerXLow],a          ; 08:58F2
     ld   a,[$C1CB]                  ; 08:58F4
-    ldh  [<$FFA8],a                 ; 08:58F7
+    ldh  [<H_PlayerXHigh],a         ; 08:58F7
     ld   a,[$C27B]                  ; 08:58F9
-    ldh  [<$FFB8],a                 ; 08:58FC
+    ldh  [<H_CameraXLow],a          ; 08:58FC
     ld   a,[$C27C]                  ; 08:58FE
-    ldh  [<$FFB9],a                 ; 08:5901
+    ldh  [<H_CameraXHigh],a         ; 08:5901
 Return085903:
     ret                             ; 08:5903
 
@@ -3414,7 +3414,7 @@ Code085904:
 Code085910:
     push de                         ; 08:5910
     ld   a,$26                      ; 08:5911
-    call Sub0026BE                  ; 08:5913
+    call LoadSpriteAnySlot          ; 08:5913
     jr   c,Code085956               ; 08:5916
     push bc                         ; 08:5918
     push de                         ; 08:5919
@@ -3522,9 +3522,9 @@ Code0859A2:
     ld   hl,W_SpriteXLow            ; 08:59B3
     add  hl,bc                      ; 08:59B6
     ld   e,[hl]                     ; 08:59B7
-    ldh  a,[<$FFB9]                 ; 08:59B8
+    ldh  a,[<H_CameraXHigh]         ; 08:59B8
     ld   h,a                        ; 08:59BA
-    ldh  a,[<$FFB8]                 ; 08:59BB
+    ldh  a,[<H_CameraXLow]          ; 08:59BB
     sub  e                          ; 08:59BD
     ld   e,a                        ; 08:59BE
     ld   a,h                        ; 08:59BF
@@ -3572,7 +3572,7 @@ Code0859ED:
     srl  a                          ; 08:5A04
     jr   nc,Code085A0E              ; 08:5A06
     ld   a,$08                      ; 08:5A08
-    rst  $10                        ; 08:5A0A
+    rst  $10                        ; 08:5A0A  24-bit call
 .dl SubL_0B4074                     ; 08:5A0B
 Code085A0E:
     ld   hl,$D11D                   ; 08:5A0E
@@ -3781,7 +3781,7 @@ Code085B5D:
     ld   a,[hl]                     ; 08:5B9C
     ldh  [<$FFA0],a                 ; 08:5B9D
     ldh  a,[<$FF97]                 ; 08:5B9F
-    ld   hl,$FFBA                   ; 08:5BA1
+    ld   hl,H_CameraY               ; 08:5BA1
     add  $10                        ; 08:5BA4
     sub  [hl]                       ; 08:5BA6
     ldh  [<$FF97],a                 ; 08:5BA7
@@ -3810,7 +3810,7 @@ Code085B5D:
     srl  a                          ; 08:5BD1
     jr   nc,Code085BDB              ; 08:5BD3
     ld   a,$08                      ; 08:5BD5
-    rst  $10                        ; 08:5BD7
+    rst  $10                        ; 08:5BD7  24-bit call
 .dl SubL_0B4074                     ; 08:5BD8
 Code085BDB:
     ld   hl,W_SpriteXLow            ; 08:5BDB
@@ -3850,7 +3850,7 @@ Code085BFE:
     cp   $2D                        ; 08:5C0F
     jr   nz,Code085C55              ; 08:5C11
 Code085C13:
-    ldh  a,[<$FFA7]                 ; 08:5C13
+    ldh  a,[<H_PlayerXLow]          ; 08:5C13
     and  $F0                        ; 08:5C15
     ldh  [<$FF97],a                 ; 08:5C17
     ld   hl,W_SpriteXHigh           ; 08:5C19
@@ -3862,7 +3862,7 @@ Code085C13:
     sub  [hl]                       ; 08:5C24
     ldh  [<$FF97],a                 ; 08:5C25
     pop  hl                         ; 08:5C27
-    ldh  a,[<$FFA8]                 ; 08:5C28
+    ldh  a,[<H_PlayerXHigh]         ; 08:5C28
     sbc  [hl]                       ; 08:5C2A
     ldh  [<$FF98],a                 ; 08:5C2B
     bit  7,a                        ; 08:5C2D
@@ -3887,14 +3887,14 @@ Code085C3D:
     ld   hl,$D13B                   ; 08:5C4E
     add  hl,de                      ; 08:5C51
     ld   [hl],$00                   ; 08:5C52
-    rst  $18                        ; 08:5C54
+    rst  $18                        ; 08:5C54  Return from 24-bit call
 
 Code085C55:
     inc  de                         ; 08:5C55
     ld   a,e                        ; 08:5C56
     cp   $0F                        ; 08:5C57
     jr   nz,Code085BFE              ; 08:5C59
-    rst  $18                        ; 08:5C5B
+    rst  $18                        ; 08:5C5B  Return from 24-bit call
 
 Data085C5C:                         ; 08:5C5C
 .db $1E,$0E,$1E,$2E,$00,$00,$00,$00,\
@@ -3943,7 +3943,7 @@ Code085CD8:
     add  hl,de                      ; 08:5CDB
 Code085CDC:
     push de                         ; 08:5CDC
-    call Sub0027BD                  ; 08:5CDD
+    call Disp16x16Sprite            ; 08:5CDD
     pop  de                         ; 08:5CE0
 Code085CE1:
     push de                         ; 08:5CE1
@@ -4007,19 +4007,19 @@ Sub085D37:
     and  a                          ; 08:5D3C
     jp   z,Code085E45               ; 08:5D3D
     ld   a,[$C1CA]                  ; 08:5D40
-    ldh  [<$FFA7],a                 ; 08:5D43
+    ldh  [<H_PlayerXLow],a          ; 08:5D43
     ld   a,[$C1CB]                  ; 08:5D45
-    ldh  [<$FFA8],a                 ; 08:5D48
+    ldh  [<H_PlayerXHigh],a         ; 08:5D48
     ld   a,[$C27B]                  ; 08:5D4A
-    ldh  [<$FFB8],a                 ; 08:5D4D
+    ldh  [<H_CameraXLow],a          ; 08:5D4D
     ld   a,[$C27C]                  ; 08:5D4F
-    ldh  [<$FFB9],a                 ; 08:5D52
+    ldh  [<H_CameraXHigh],a         ; 08:5D52
     xor  a                          ; 08:5D54
     ld   [$C1FA],a                  ; 08:5D55
     ld   a,[$C1CC]                  ; 08:5D58
-    ldh  [<$FFA9],a                 ; 08:5D5B
+    ldh  [<H_PlayerYLow],a          ; 08:5D5B
     ld   a,[$C1CD]                  ; 08:5D5D
-    ldh  [<$FFAA],a                 ; 08:5D60
+    ldh  [<H_PlayerYHigh],a         ; 08:5D60
     ld   hl,$D177                   ; 08:5D62
     add  hl,bc                      ; 08:5D65
     ld   a,[hl]                     ; 08:5D66
@@ -4027,16 +4027,16 @@ Sub085D37:
     jr   z,Code085D7D               ; 08:5D69
     and  $02                        ; 08:5D6B
     jr   nz,Code085D77              ; 08:5D6D
-    ldh  a,[<$FFA9]                 ; 08:5D6F
+    ldh  a,[<H_PlayerYLow]          ; 08:5D6F
     inc  a                          ; 08:5D71
     inc  a                          ; 08:5D72
-    ldh  [<$FFA9],a                 ; 08:5D73
+    ldh  [<H_PlayerYLow],a          ; 08:5D73
     jr   Code085D7D                 ; 08:5D75
 Code085D77:
-    ldh  a,[<$FFA9]                 ; 08:5D77
+    ldh  a,[<H_PlayerYLow]          ; 08:5D77
     dec  a                          ; 08:5D79
     dec  a                          ; 08:5D7A
-    ldh  [<$FFA9],a                 ; 08:5D7B
+    ldh  [<H_PlayerYLow],a          ; 08:5D7B
 Code085D7D:
     ld   hl,$D177                   ; 08:5D7D
     add  hl,bc                      ; 08:5D80
@@ -4331,7 +4331,7 @@ Sub085FB0:
     ld   hl,W_SpriteSubstate        ; 08:5FB0
     add  hl,bc                      ; 08:5FB3
     ld   a,[hl]                     ; 08:5FB4
-    rst  $00                        ; 08:5FB5
+    rst  $00                        ; 08:5FB5  Execute from 16-bit pointer table
 .dw Code085FBC                      ; 08:5FB6
 .dw Code086137                      ; 08:5FB8
 .dw Code0861F2                      ; 08:5FBA
@@ -4348,20 +4348,20 @@ Code085FBC:
     ld   a,e                        ; 08:5FCC
     cp   $14                        ; 08:5FCD
     jr   nz,Code085FE2              ; 08:5FCF
-    ldh  a,[<$FFB9]                 ; 08:5FD1
+    ldh  a,[<H_CameraXHigh]         ; 08:5FD1
     cp   [hl]                       ; 08:5FD3
     jp   nz,Return0860BB            ; 08:5FD4
     ld   hl,$FF97                   ; 08:5FD7
-    ldh  a,[<$FFB8]                 ; 08:5FDA
+    ldh  a,[<H_CameraXLow]          ; 08:5FDA
     cp   [hl]                       ; 08:5FDC
     jp   c,Return0860BB             ; 08:5FDD
     jr   Code085FF1                 ; 08:5FE0
 Code085FE2:
-    ldh  a,[<$FFB9]                 ; 08:5FE2
+    ldh  a,[<H_CameraXHigh]         ; 08:5FE2
     cp   [hl]                       ; 08:5FE4
     jp   nz,Return0860BB            ; 08:5FE5
     ld   hl,$FF97                   ; 08:5FE8
-    ldh  a,[<$FFB8]                 ; 08:5FEB
+    ldh  a,[<H_CameraXLow]          ; 08:5FEB
     cp   [hl]                       ; 08:5FED
     jp   c,Return0860BB             ; 08:5FEE
 Code085FF1:
@@ -4373,7 +4373,7 @@ Code085FF1:
     add  $24                        ; 08:5FFA
     ldh  [<$FF98],a                 ; 08:5FFC
     ld   hl,$FF97                   ; 08:5FFE
-    ldh  a,[<$FFA9]                 ; 08:6001
+    ldh  a,[<H_PlayerYLow]          ; 08:6001
     cp   [hl]                       ; 08:6003
     jr   c,Code08601D               ; 08:6004
     ld   hl,$FF98                   ; 08:6006
@@ -4412,7 +4412,7 @@ Code08603C:
     ldh  [<$FFF3],a                 ; 08:603E
 Code086040:
     call Sub0860BC                  ; 08:6040
-    ldh  a,[<$FFA8]                 ; 08:6043
+    ldh  a,[<H_PlayerXHigh]         ; 08:6043
     ldh  [<$FF97],a                 ; 08:6045
     ld   hl,$D11D                   ; 08:6047
     add  hl,bc                      ; 08:604A
@@ -4422,17 +4422,17 @@ Code086040:
     add  hl,de                      ; 08:6051
     ld   a,[hl]                     ; 08:6052
     ldh  [<$FFC4],a                 ; 08:6053
-    ldh  [<$FFB9],a                 ; 08:6055
-    ldh  [<$FFA8],a                 ; 08:6057
+    ldh  [<H_CameraXHigh],a         ; 08:6055
+    ldh  [<H_PlayerXHigh],a         ; 08:6057
     ld   [$C1EE],a                  ; 08:6059
-    ld   hl,$FFA8                   ; 08:605C
+    ld   hl,H_PlayerXHigh           ; 08:605C
     ldh  a,[<$FF97]                 ; 08:605F
     sub  [hl]                       ; 08:6061
     ldh  [<$FF97],a                 ; 08:6062
-    ldh  a,[<$FFB8]                 ; 08:6064
+    ldh  a,[<H_CameraXLow]          ; 08:6064
     add  $B0                        ; 08:6066
     ld   e,a                        ; 08:6068
-    ldh  a,[<$FFB9]                 ; 08:6069
+    ldh  a,[<H_CameraXHigh]         ; 08:6069
     adc  $00                        ; 08:606B
     ld   d,a                        ; 08:606D
     srl  d                          ; 08:606E
@@ -4575,10 +4575,10 @@ Code086137:
     ldh  [<$FF97],a                 ; 08:615B
     ld   de,Data086127              ; 08:615D
     add  hl,de                      ; 08:6160
-    ldh  a,[<$FFA7]                 ; 08:6161
+    ldh  a,[<H_PlayerXLow]          ; 08:6161
     sub  [hl]                       ; 08:6163
     inc  hl                         ; 08:6164
-    ldh  a,[<$FFA8]                 ; 08:6165
+    ldh  a,[<H_PlayerXHigh]         ; 08:6165
     sbc  [hl]                       ; 08:6167
     bit  7,a                        ; 08:6168
     jr   nz,Return0861D9            ; 08:616A
@@ -4593,7 +4593,7 @@ Code086137:
     add  $24                        ; 08:617A
     ldh  [<$FF98],a                 ; 08:617C
     ld   hl,$FF97                   ; 08:617E
-    ldh  a,[<$FFA9]                 ; 08:6181
+    ldh  a,[<H_PlayerYLow]          ; 08:6181
     cp   [hl]                       ; 08:6183
     jr   c,Code08619E               ; 08:6184
     ld   hl,$FF98                   ; 08:6186
@@ -4629,11 +4629,11 @@ Code0861A9:
     add  hl,de                      ; 08:61B5
     ldi  a,[hl]                     ; 08:61B6
     ldh  [<$FF97],a                 ; 08:61B7
-    ldh  a,[<$FFB9]                 ; 08:61B9
+    ldh  a,[<H_CameraXHigh]         ; 08:61B9
     cp   [hl]                       ; 08:61BB
     jp   nz,Return0861D9            ; 08:61BC
     ld   hl,$FF97                   ; 08:61BF
-    ldh  a,[<$FFB8]                 ; 08:61C2
+    ldh  a,[<H_CameraXLow]          ; 08:61C2
     cp   [hl]                       ; 08:61C4
     jp   c,Return0861D9             ; 08:61C5
     ld   a,e                        ; 08:61C8
@@ -4679,10 +4679,10 @@ Code0861F2:
     ldh  [<$FF97],a                 ; 08:6214
     ld   de,Data0861E2              ; 08:6216
     add  hl,de                      ; 08:6219
-    ldh  a,[<$FFA7]                 ; 08:621A
+    ldh  a,[<H_PlayerXLow]          ; 08:621A
     sub  [hl]                       ; 08:621C
     inc  hl                         ; 08:621D
-    ldh  a,[<$FFA8]                 ; 08:621E
+    ldh  a,[<H_PlayerXHigh]         ; 08:621E
     sbc  [hl]                       ; 08:6220
     bit  7,a                        ; 08:6221
     jr   nz,Return086262            ; 08:6223
@@ -4697,7 +4697,7 @@ Code0861F2:
     add  $24                        ; 08:6233
     ldh  [<$FF98],a                 ; 08:6235
     ld   hl,$FF97                   ; 08:6237
-    ldh  a,[<$FFA9]                 ; 08:623A
+    ldh  a,[<H_PlayerYLow]          ; 08:623A
     cp   [hl]                       ; 08:623C
     jr   c,Code086257               ; 08:623D
     ld   hl,$FF98                   ; 08:623F
@@ -4727,7 +4727,7 @@ Return086262:
     ret                             ; 08:6262
 
 Code086263:
-    ld   a,[$C283]                  ; 08:6263
+    ld   a,[W_ChallengeFlag]        ; 08:6263
     and  a                          ; 08:6266
     jr   z,Return086274             ; 08:6267
     xor  a                          ; 08:6269
@@ -4748,10 +4748,10 @@ Code086275:
     push hl                         ; 08:627D
     ld   hl,W_SpriteXLow            ; 08:627E
     add  hl,bc                      ; 08:6281
-    ldh  a,[<$FFA7]                 ; 08:6282
+    ldh  a,[<H_PlayerXLow]          ; 08:6282
     sub  [hl]                       ; 08:6284
     pop  hl                         ; 08:6285
-    ldh  a,[<$FFA8]                 ; 08:6286
+    ldh  a,[<H_PlayerXHigh]         ; 08:6286
     sbc  [hl]                       ; 08:6288
     bit  7,a                        ; 08:6289
     ret  nz                         ; 08:628B
@@ -4786,70 +4786,70 @@ Code0862B7:
     jr   nz,Code08629E              ; 08:62BB
     ret                             ; 08:62BD
 
-Data0862BE:                         ; 08:62BE
+VRAMUp_WarpTextDefault:             ; 08:62BE
 .db $9A,$09,$0A,$00,$F0,$00,$DE,$00,\
     $E5,$00,$DC,$00,$E8,$00,$E6,$00,\
     $DE,$00,$F4,$00,$ED,$00,$E8,$9A,\
     $49,$0A,$00,$F0,$00,$DA,$00,$EB,\
     $00,$E9,$00,$F4,$00,$F3,$00,$E8,\
     $00,$E7,$00,$DE,$00,$FB,$00
-Data0862ED:                         ; 08:62ED
+VRAMUp_WarpTextSPW2:                ; 08:62ED
 .db $9A,$0B,$0A,$00,$F0,$00,$DE,$00,\
     $E5,$00,$DC,$00,$E8,$00,$E6,$00,\
     $DE,$00,$F4,$00,$ED,$00,$E8,$9A,\
     $4B,$0A,$00,$F0,$00,$DA,$00,$EB,\
     $00,$E9,$00,$F4,$00,$F3,$00,$E8,\
     $00,$E7,$00,$DE,$00,$FB,$00
-Data08631C:                         ; 08:631C
+VRAMUp_WarpTo432:                   ; 08:631C
 .db $9A,$A4,$01,$00,$D4,$9A,$AD,$01,\
     $00,$D3,$9A,$B5,$01,$00,$D2,$00
-Data08632C:                         ; 08:632C
+VRAMUp_WarpTo876:                   ; 08:632C
 .db $9A,$A4,$01,$00,$D8,$9A,$AD,$01,\
     $00,$D7,$9A,$B5,$01,$00,$D6,$00
-Data08633C:                         ; 08:633C
+VRAMUp_WarpTo5Orig:                 ; 08:633C
 .db $9A,$AD,$01,$00,$D5,$00
-Data086342:                         ; 08:6342
+VRAMUp_WarpTo2:                     ; 08:6342
 .db $9A,$AF,$01,$00,$D2,$00
-Data086348:                         ; 08:6348
+VRAMUp_WarpTo3:                     ; 08:6348
 .db $9A,$AD,$01,$00,$D3,$00
-Data08634E:                         ; 08:634E
+VRAMUp_WarpTo4:                     ; 08:634E
 .db $9A,$AD,$01,$00,$D4,$00
-Data086354:                         ; 08:6354
+VRAMUp_WarpTo1:                     ; 08:6354
 .db $9A,$AD,$01,$00,$D1,$00
-Data08635A:                         ; 08:635A
+VRAMUp_WarpTo6:                     ; 08:635A
 .db $9A,$AD,$01,$00,$D6,$00
-Data086360:                         ; 08:6360
+VRAMUp_WarpTo7:                     ; 08:6360
 .db $9A,$AD,$01,$00,$D7,$00
-Data086366:                         ; 08:6366
+VRAMUp_WarpTo8:                     ; 08:6366
 .db $9A,$AD,$01,$00,$D8,$00
-Data08636C:                         ; 08:636C
+VRAMUp_WarpTo5SP:                   ; 08:636C
 .db $9A,$AD,$01,$00,$D5,$00
-DataPtrs086372:                     ; 08:6372
-.dw Data08631C, Data08632C, Data08633C
-DataPtrs086378:                     ; 08:6378
-.dw Data086342, Data086348, Data08634E, Data086354,\
-    Data08635A, Data086360, Data086366, Data08636C
-Data086388:                         ; 08:6388
+VRAMUpWorldNumOrigPtrs:             ; 08:6372
+.dw VRAMUp_WarpTo432, VRAMUp_WarpTo876, VRAMUp_WarpTo5Orig
+VRAMUpWorldNumSPPtrs:               ; 08:6378
+.dw VRAMUp_WarpTo2, VRAMUp_WarpTo3, VRAMUp_WarpTo4, VRAMUp_WarpTo1,\
+    VRAMUp_WarpTo6, VRAMUp_WarpTo7, VRAMUp_WarpTo8, VRAMUp_WarpTo5SP
+VRAMUpWorldNumOrigLengths:          ; 08:6388
 .db $10,$00,$10,$00,$06,$00
-Data08638E:                         ; 08:638E
+VRAMUpWorldNumSPLengths:            ; 08:638E
 .db $06,$00,$06,$00,$06,$00,$06,$00,\
     $06,$00,$06,$00,$06,$00,$06,$00
 DataPtrs08639E:                     ; 08:639E
-.dw Data0862BE, Data0862ED
-Data0863A2:                         ; 08:63A2
+.dw VRAMUp_WarpTextDefault, VRAMUp_WarpTextSPW2
+VRAMUpWarpTextIndexOrig:            ; 08:63A2
 .db $00,$00,$00
-Data0863A5:                         ; 08:63A5
+VRAMUpWarpTextIndexSP:              ; 08:63A5
 .db $01,$00,$00,$00,$00,$00,$00,$00
 
 Sub0863AD:
     ld   a,[W_SPFlag]               ; 08:63AD
     and  a                          ; 08:63B0
-    jr   nz,Code0863B8              ; 08:63B1
-    ld   hl,Data0863A2              ; 08:63B3
-    jr   Code0863BB                 ; 08:63B6
-Code0863B8:
-    ld   hl,Data0863A5              ; 08:63B8
-Code0863BB:
+    jr   nz,@Code0863B8             ; 08:63B1
+    ld   hl,VRAMUpWarpTextIndexOrig ; 08:63B3
+    jr   @Code0863BB                ; 08:63B6
+@Code0863B8:
+    ld   hl,VRAMUpWarpTextIndexSP   ; 08:63B8
+@Code0863BB:
     ld   a,[$D2E6]                  ; 08:63BB
     ld   e,a                        ; 08:63BE
     ld   d,$00                      ; 08:63BF
@@ -4864,7 +4864,7 @@ Code0863BB:
     ld   d,[hl]                     ; 08:63CC
     ld   l,e                        ; 08:63CD
     ld   h,d                        ; 08:63CE
-    ld   de,$DF01                   ; 08:63CF
+    ld   de,W_TilemapUploadBuffer   ; 08:63CF
     ld   bc,$002F                   ; 08:63D2
     call CopyBytes                  ; 08:63D5
     ld   a,[$D2E6]                  ; 08:63D8
@@ -4873,20 +4873,20 @@ Code0863BB:
     ld   d,$00                      ; 08:63DE
     ld   a,[W_SPFlag]               ; 08:63E0
     and  a                          ; 08:63E3
-    jr   nz,Code0863F2              ; 08:63E4
-    ld   hl,Data086388              ; 08:63E6
+    jr   nz,@Code0863F2             ; 08:63E4
+    ld   hl,VRAMUpWorldNumOrigLengths; 08:63E6
     add  hl,de                      ; 08:63E9
     ld   a,[hl]                     ; 08:63EA
     ldh  [<$FF97],a                 ; 08:63EB
-    ld   hl,DataPtrs086372          ; 08:63ED
-    jr   Code0863FC                 ; 08:63F0
-Code0863F2:
-    ld   hl,Data08638E              ; 08:63F2
+    ld   hl,VRAMUpWorldNumOrigPtrs  ; 08:63ED
+    jr   @Code0863FC                ; 08:63F0
+@Code0863F2:
+    ld   hl,VRAMUpWorldNumSPLengths ; 08:63F2
     add  hl,de                      ; 08:63F5
     ld   a,[hl]                     ; 08:63F6
     ldh  [<$FF97],a                 ; 08:63F7
-    ld   hl,DataPtrs086378          ; 08:63F9
-Code0863FC:
+    ld   hl,VRAMUpWorldNumSPPtrs    ; 08:63F9
+@Code0863FC:
     add  hl,de                      ; 08:63FC
     ldi  a,[hl]                     ; 08:63FD
     ld   e,a                        ; 08:63FE
@@ -4894,33 +4894,33 @@ Code0863FC:
     ld   l,e                        ; 08:6400
     ld   h,d                        ; 08:6401
     ld   de,$0000                   ; 08:6402
-Code086405:
+@Loop086405:
     ldi  a,[hl]                     ; 08:6405
     push hl                         ; 08:6406
-    ld   hl,$DF2F                   ; 08:6407
+    ld   hl,W_TilemapUploadBuffer+$2E; 08:6407
     add  hl,de                      ; 08:640A
     ld   [hl],a                     ; 08:640B
     pop  hl                         ; 08:640C
     inc  e                          ; 08:640D
     ldh  a,[<$FF97]                 ; 08:640E
     cp   e                          ; 08:6410
-    jr   nz,Code086405              ; 08:6411
+    jr   nz,@Loop086405             ; 08:6411
     ret                             ; 08:6413
 
-Data086414:                         ; 08:6414
+Ti16_WELCOMETOWARPZONE:             ; 08:6414
 .db $5D,$5E,$5F,$60,$61,$9D,$62,$63,\
     $64,$65,$66,$67
-Data086420:                         ; 08:6420
+Ti16_WorldNumOrig:                  ; 08:6420
 .db $6A,$69,$68,$00,$6E,$6D,$6C,$00,\
     $00,$6B,$00,$00
-Data08642C:                         ; 08:642C
+Ti16_WorldNumSP:                    ; 08:642C
 .db $00,$68,$00,$00,$00,$69,$00,$00,\
     $00,$6A,$00,$00,$00,$9C,$00,$00,\
     $00,$6C,$00,$00,$00,$6D,$00,$00,\
     $00,$6E,$00,$00,$00,$6B,$00,$00
-Data08644C:                         ; 08:644C
+WarpZoneText_SublevelsOrig:         ; 08:644C
 .db $01,$30,$0D
-Data08644F:                         ; 08:644F
+WarpZoneText_SublevelsSP:           ; 08:644F
 .db $01,$35,$36,$08,$43,$11,$44,$4D
 Data086457:                         ; 08:6457
 .db $C0,$FF,$C0,$FF,$C0,$FF
@@ -4929,44 +4929,45 @@ Data08645D:                         ; 08:645D
     $C0,$FF,$C0,$FF,$C0,$FF,$C0,$FF
 
 Sub08646D:
+; subroutine: Check for warp zone, and if so, update level block tilemap with text
     push bc                         ; 08:646D
     ld   a,[W_SPFlag]               ; 08:646E
     and  a                          ; 08:6471
-    jr   nz,Code08648A              ; 08:6472
-    ld   hl,Data08644C              ; 08:6474
+    jr   nz,@SP                     ; 08:6472
+    ld   hl,WarpZoneText_SublevelsOrig; 08:6474
     ld   de,$0000                   ; 08:6477
-Code08647A:
-    ld   a,[W_SublevelID]           ; 08:647A
-    cp   [hl]                       ; 08:647D
-    jr   z,Code0864A0               ; 08:647E
+@LoopOrigSublevels:
+    ld   a,[W_SublevelID]           ; 08:647A \ loop 3 times: check if current sublevel
+    cp   [hl]                       ; 08:647D    matches any byte in the table
+    jr   z,@WarpZoneFound           ; 08:647E
     inc  hl                         ; 08:6480
     inc  e                          ; 08:6481
     ld   a,e                        ; 08:6482
     cp   $03                        ; 08:6483
-    jr   nz,Code08647A              ; 08:6485
-    jp   Code086595                 ; 08:6487
-Code08648A:
-    ld   hl,Data08644F              ; 08:648A
+    jr   nz,@LoopOrigSublevels      ; 08:6485 /
+    jp   @Return                    ; 08:6487
+@SP:
+    ld   hl,WarpZoneText_SublevelsSP; 08:648A
     ld   de,$0000                   ; 08:648D
-Code086490:
-    ld   a,[W_SublevelID]           ; 08:6490
-    cp   [hl]                       ; 08:6493
-    jr   z,Code0864A0               ; 08:6494
+@LoopSPSublevels:
+    ld   a,[W_SublevelID]           ; 08:6490 \ loop 8 times: check if current sublevel
+    cp   [hl]                       ; 08:6493    matches any byte in the table
+    jr   z,@WarpZoneFound           ; 08:6494
     inc  hl                         ; 08:6496
     inc  e                          ; 08:6497
     ld   a,e                        ; 08:6498
     cp   $08                        ; 08:6499
-    jr   nz,Code086490              ; 08:649B
-    jp   Code086595                 ; 08:649D
-Code0864A0:
+    jr   nz,@LoopSPSublevels        ; 08:649B
+    jp   @Return                    ; 08:649D
+@WarpZoneFound:
     ld   a,e                        ; 08:64A0
     ld   [$D2E6],a                  ; 08:64A1
     ld   hl,Data086457              ; 08:64A4
     ld   a,[W_SPFlag]               ; 08:64A7
     and  a                          ; 08:64AA
-    jr   z,Code0864B0               ; 08:64AB
+    jr   z,@Code0864B0              ; 08:64AB
     ld   hl,Data08645D              ; 08:64AD
-Code0864B0:
+@Code0864B0:
     sla  e                          ; 08:64B0
     add  hl,de                      ; 08:64B2
     ldi  a,[hl]                     ; 08:64B3
@@ -4995,8 +4996,8 @@ Code0864B0:
     ld   a,$06                      ; 08:64DC
     ldh  [<SVBK],a                  ; 08:64DE
     ld   bc,$0000                   ; 08:64E0
-Code0864E3:
-    ld   hl,Data086414              ; 08:64E3
+@Loop0864E3:
+    ld   hl,Ti16_WELCOMETOWARPZONE  ; 08:64E3
     add  hl,bc                      ; 08:64E6
     ld   a,[hl]                     ; 08:64E7
     ldh  [<$FFA3],a                 ; 08:64E8
@@ -5023,18 +5024,18 @@ Code0864E3:
     ldh  [<$FFA6],a                 ; 08:650C
     ld   a,c                        ; 08:650E
     cp   $05                        ; 08:650F
-    jr   nz,Code08651F              ; 08:6511
+    jr   nz,@Code08651F             ; 08:6511
     ldh  a,[<$FFA5]                 ; 08:6513
     sub  $60                        ; 08:6515
     ldh  [<$FFA5],a                 ; 08:6517
     ldh  a,[<$FF98]                 ; 08:6519
     add  $10                        ; 08:651B
     ldh  [<$FF98],a                 ; 08:651D
-Code08651F:
+@Code08651F:
     inc  c                          ; 08:651F
     ld   a,c                        ; 08:6520
     cp   $0C                        ; 08:6521
-    jr   nz,Code0864E3              ; 08:6523
+    jr   nz,@Loop0864E3             ; 08:6523
     ld   a,$00                      ; 08:6525
     ldh  [<SVBK],a                  ; 08:6527
     ld   b,$00                      ; 08:6529
@@ -5052,20 +5053,20 @@ Code08651F:
     ldh  a,[<$FF98]                 ; 08:6543
     add  $10                        ; 08:6545
     ldh  [<$FF98],a                 ; 08:6547
-Code086549:
+@Loop086549:
     ld   a,[W_SPFlag]               ; 08:6549
     and  a                          ; 08:654C
-    jr   nz,Code086554              ; 08:654D
-    ld   hl,Data086420              ; 08:654F
-    jr   Code086557                 ; 08:6552
-Code086554:
-    ld   hl,Data08642C              ; 08:6554
-Code086557:
+    jr   nz,@Code086554             ; 08:654D
+    ld   hl,Ti16_WorldNumOrig       ; 08:654F
+    jr   @Code086557                ; 08:6552
+@Code086554:
+    ld   hl,Ti16_WorldNumSP         ; 08:6554
+@Code086557:
     add  hl,bc                      ; 08:6557
     ld   a,[hl]                     ; 08:6558
     ldh  [<$FFA3],a                 ; 08:6559
     and  a                          ; 08:655B
-    jr   z,Code08657E               ; 08:655C
+    jr   z,@Code08657E              ; 08:655C
     ld   a,$06                      ; 08:655E
     ldh  [<SVBK],a                  ; 08:6560
     ldh  a,[<$FFA6]                 ; 08:6562
@@ -5085,7 +5086,7 @@ Code086557:
     ld   [hl],a                     ; 08:6579
     ld   a,$00                      ; 08:657A
     ldh  [<SVBK],a                  ; 08:657C
-Code08657E:
+@Code08657E:
     ldh  a,[<$FFA5]                 ; 08:657E
     add  $40                        ; 08:6580
     ldh  [<$FFA5],a                 ; 08:6582
@@ -5098,7 +5099,7 @@ Code08657E:
     dec  a                          ; 08:658E
     ldh  [<$FFA1],a                 ; 08:658F
     bit  7,a                        ; 08:6591
-    jr   z,Code086549               ; 08:6593
-Code086595:
+    jr   z,@Loop086549              ; 08:6593
+@Return:
     pop  bc                         ; 08:6595
     ret                             ; 08:6596

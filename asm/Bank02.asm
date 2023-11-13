@@ -38,7 +38,7 @@ Code024023:
 
 SubL_024030:
     ld   a,$0D                      ; 02:4030
-    call Sub0026BE                  ; 02:4032
+    call LoadSpriteAnySlot          ; 02:4032
     jr   c,ReturnL_0240A5           ; 02:4035
     ld   a,e                        ; 02:4037
     and  $01                        ; 02:4038
@@ -48,11 +48,11 @@ SubL_024030:
     ld   b,$00                      ; 02:4040
     ld   hl,Data024001              ; 02:4042
     add  hl,bc                      ; 02:4045
-    ldh  a,[<$FFA7]                 ; 02:4046
+    ldh  a,[<H_PlayerXLow]          ; 02:4046
     add  [hl]                       ; 02:4048
     ldh  [<$FF97],a                 ; 02:4049
     inc  hl                         ; 02:404B
-    ldh  a,[<$FFA8]                 ; 02:404C
+    ldh  a,[<H_PlayerXHigh]         ; 02:404C
     adc  [hl]                       ; 02:404E
     ldh  [<$FF98],a                 ; 02:404F
     ld   hl,$FF97                   ; 02:4051
@@ -76,11 +76,11 @@ SubL_024030:
     push hl                         ; 02:4071
     ld   hl,W_SpriteYLow            ; 02:4072
     add  hl,de                      ; 02:4075
-    ldh  a,[<$FFA9]                 ; 02:4076
+    ldh  a,[<H_PlayerYLow]          ; 02:4076
     add  $05                        ; 02:4078
     ld   [hl],a                     ; 02:407A
     pop  hl                         ; 02:407B
-    ldh  a,[<$FFAA]                 ; 02:407C
+    ldh  a,[<H_PlayerYHigh]         ; 02:407C
     adc  $00                        ; 02:407E
     ld   [hl],a                     ; 02:4080
     ld   a,[$C1C3]                  ; 02:4081
@@ -103,7 +103,7 @@ SubL_024030:
     ld   a,$48                      ; 02:40A1
     ldh  [<$FFF2],a                 ; 02:40A3
 ReturnL_0240A5:
-    rst  $18                        ; 02:40A5
+    rst  $18                        ; 02:40A5  Return from 24-bit call
 
 Code0240A6:
     call Sub0025CB                  ; 02:40A6
@@ -246,7 +246,7 @@ Sub024183:
 Code02419B:
     ld   [hl],a                     ; 02:419B
     ld   a,$02                      ; 02:419C
-    rst  $10                        ; 02:419E
+    rst  $10                        ; 02:419E  24-bit call
 .dl SubL_074155                     ; 02:419F
     ld   hl,W_SpriteYHigh           ; 02:41A2
     add  hl,bc                      ; 02:41A5
@@ -409,10 +409,10 @@ Code02427F:
     ldh  [<$FF97],a                 ; 02:42AD
     ld   a,[hl]                     ; 02:42AF
     ldh  [<$FF98],a                 ; 02:42B0
-    call Sub002E30                  ; 02:42B2
+    call GivePointsFF97             ; 02:42B2
     ld   c,e                        ; 02:42B5
     ld   b,d                        ; 02:42B6
-    call Sub002ED7                  ; 02:42B7
+    call SpawnScoreSprite           ; 02:42B7
     ld   a,$45                      ; 02:42BA
     ldh  [<$FFF2],a                 ; 02:42BC
     call Sub027C62                  ; 02:42BE
@@ -585,7 +585,7 @@ Code0243C0:
     ldh  a,[<$FF9B]                 ; 02:43C6
     adc  $00                        ; 02:43C8
     ldh  [<$FFA6],a                 ; 02:43CA
-    ld   hl,$FFBA                   ; 02:43CC
+    ld   hl,H_CameraY               ; 02:43CC
     ldh  a,[<$FFA5]                 ; 02:43CF
     sub  [hl]                       ; 02:43D1
     ld   hl,$FFBB                   ; 02:43D2
@@ -614,7 +614,7 @@ Sub0243EF:
     ld   d,$00                      ; 02:43FD
     ld   hl,Data0243E3              ; 02:43FF
     add  hl,de                      ; 02:4402
-    call Sub0027BD                  ; 02:4403
+    call Disp16x16Sprite            ; 02:4403
 Return024406:
     ret                             ; 02:4406
 
@@ -629,7 +629,7 @@ Data024419:                         ; 02:4419
 
 SubL_02442B:
     ld   a,$01                      ; 02:442B
-    call Sub0026BE                  ; 02:442D
+    call LoadSpriteAnySlot          ; 02:442D
     jr   nc,Code02444E              ; 02:4430
     ld   de,$0000                   ; 02:4432
     ld   hl,W_SpriteID              ; 02:4435
@@ -735,10 +735,10 @@ Code0244DB:
     ldh  [<$FF9B],a                 ; 02:44DC
     push de                         ; 02:44DE
     call Sub024797                  ; 02:44DF
-    call Sub002D66                  ; 02:44E2
+    call GiveCoin                   ; 02:44E2
     pop  de                         ; 02:44E5
 ReturnL_0244E6:
-    rst  $18                        ; 02:44E6
+    rst  $18                        ; 02:44E6  Return from 24-bit call
 
 Data0244E7:                         ; 02:44E7
 .db $88,$01,$8A,$01,$80,$01,$82,$01,\
@@ -873,7 +873,7 @@ Code0245D4:
 Code0245D7:
     ld   hl,Data0244E7              ; 02:45D7
     add  hl,de                      ; 02:45DA
-    call Sub0027BD                  ; 02:45DB
+    call Disp16x16Sprite            ; 02:45DB
     ret                             ; 02:45DE
 
 Sub0245DF:
@@ -1046,11 +1046,11 @@ Sub0246D7:
     add  hl,bc                      ; 02:46E8
     ld   a,[hl]                     ; 02:46E9
     ldh  [<$FF99],a                 ; 02:46EA
-    ld   hl,$FFB8                   ; 02:46EC
+    ld   hl,H_CameraXLow            ; 02:46EC
     ldh  a,[<$FF97]                 ; 02:46EF
     sub  [hl]                       ; 02:46F1
     ldh  [<$FF9D],a                 ; 02:46F2
-    ld   hl,$FFB9                   ; 02:46F4
+    ld   hl,H_CameraXHigh           ; 02:46F4
     ldh  a,[<$FF99]                 ; 02:46F7
     sbc  [hl]                       ; 02:46F9
     ldh  [<$FF9E],a                 ; 02:46FA
@@ -1112,7 +1112,7 @@ Code02474B:
     ld   hl,W_SpriteSubstate        ; 02:474B
     add  hl,bc                      ; 02:474E
     ld   a,[hl]                     ; 02:474F
-    rst  $00                        ; 02:4750
+    rst  $00                        ; 02:4750  Execute from 16-bit pointer table
 .dw Return024000                    ; 02:4751
 .dw Sub0248B5                       ; 02:4753
 .dw Return024000                    ; 02:4755
@@ -1157,7 +1157,7 @@ Code024791:
 
 Sub024797:
     ld   a,$0B                      ; 02:4797
-    call Sub0026BE                  ; 02:4799
+    call LoadSpriteAnySlot          ; 02:4799
     jr   c,Return0247F2             ; 02:479C
     ldh  a,[<$FF97]                 ; 02:479E
     add  $04                        ; 02:47A0
@@ -1203,13 +1203,13 @@ Sub024797:
     ldh  [<$FF97],a                 ; 02:47EA
     xor  a                          ; 02:47EC
     ldh  [<$FF98],a                 ; 02:47ED
-    call Sub002E30                  ; 02:47EF
+    call GivePointsFF97             ; 02:47EF
 Return0247F2:
     ret                             ; 02:47F2
 
 SubL_0247F3:
     call Sub024797                  ; 02:47F3
-    rst  $18                        ; 02:47F6
+    rst  $18                        ; 02:47F6  Return from 24-bit call
 
 Data0247F7:                         ; 02:47F7
 .db $54,$06,$5A,$06,$58,$06,$56,$06,\
@@ -1265,7 +1265,7 @@ Code024820:
     ld   a,$01                      ; 02:4860
     ldh  [<$FF9B],a                 ; 02:4862
     ld   a,$02                      ; 02:4864
-    rst  $10                        ; 02:4866
+    rst  $10                        ; 02:4866  24-bit call
 .dl SubL_0276AF                     ; 02:4867
 Return02486A:
     ret                             ; 02:486A
@@ -1306,7 +1306,7 @@ Code02487F:
 
 UnusedL_02489F:
     call Sub02486B                  ; 02:489F
-    rst  $18                        ; 02:48A2
+    rst  $18                        ; 02:48A2  Return from 24-bit call
 
 Data0248A3:                         ; 02:48A3
 .db $00,$00,$00,$02,$00,$03,$03,$00,\
@@ -1339,7 +1339,7 @@ Sub0248B5:
     ld   a,[hl]                     ; 02:48DE
     ld   [$D2E6],a                  ; 02:48DF
     ld   a,$0C                      ; 02:48E2
-    call Sub0026BE                  ; 02:48E4
+    call LoadSpriteAnySlot          ; 02:48E4
     jp   c,Return024982             ; 02:48E7
     ld   a,$26                      ; 02:48EA
     ldh  [<$FFF3],a                 ; 02:48EC
@@ -1542,7 +1542,7 @@ Code024A3D:
 Code024A61:
     ld   hl,Data0249E5              ; 02:4A61
     add  hl,de                      ; 02:4A64
-    call Sub0027BD                  ; 02:4A65
+    call Disp16x16Sprite            ; 02:4A65
 Return024A68:
     ret                             ; 02:4A68
 
@@ -1550,7 +1550,7 @@ Sub024A69:
     ld   hl,W_SpriteSubstate        ; 02:4A69
     add  hl,bc                      ; 02:4A6C
     ld   a,[hl]                     ; 02:4A6D
-    rst  $00                        ; 02:4A6E
+    rst  $00                        ; 02:4A6E  Execute from 16-bit pointer table
 .dw Code024AE9                      ; 02:4A6F
 .dw Code024B49                      ; 02:4A71
 .dw Code024C2B                      ; 02:4A73
@@ -1589,7 +1589,7 @@ Code024ACD:
     sla  a                          ; 02:4AD3
     ld   e,a                        ; 02:4AD5
     add  hl,de                      ; 02:4AD6
-    call Sub0027BD                  ; 02:4AD7
+    call Disp16x16Sprite            ; 02:4AD7
     ret                             ; 02:4ADA
 
 Data024ADB:                         ; 02:4ADB
@@ -1923,7 +1923,7 @@ Sub024CE2:
     ld   hl,$D11D                   ; 02:4CE2
     add  hl,bc                      ; 02:4CE5
     ld   a,[hl]                     ; 02:4CE6
-    rst  $00                        ; 02:4CE7
+    rst  $00                        ; 02:4CE7  Execute from 16-bit pointer table
 .dw Code024CF6                      ; 02:4CE8
 .dw Code024CF6                      ; 02:4CEA
 .dw Code024DA4                      ; 02:4CEC
@@ -1934,7 +1934,7 @@ Sub024CE2:
 
 Code024CF6:
     ld   a,$02                      ; 02:4CF6
-    rst  $10                        ; 02:4CF8
+    rst  $10                        ; 02:4CF8  24-bit call
 .dl SubL_0370E4                     ; 02:4CF9
     ld   a,[W_GameMode]             ; 02:4CFC
     cp   $07                        ; 02:4CFF
@@ -1954,10 +1954,10 @@ Code024D0F:
     ldh  [<$FF97],a                 ; 02:4D1C
     xor  a                          ; 02:4D1E
     ldh  [<$FF98],a                 ; 02:4D1F
-    call Sub002E30                  ; 02:4D21
+    call GivePointsFF97             ; 02:4D21
     ld   a,$05                      ; 02:4D24
     ldh  [<$FF9B],a                 ; 02:4D26
-    call Sub002ED7                  ; 02:4D28
+    call SpawnScoreSprite           ; 02:4D28
 Return024D2B:
     ret                             ; 02:4D2B
 
@@ -2048,8 +2048,8 @@ Code024DA4:
     ld   a,$05                      ; 02:4DC8
     ldh  [<$FF9B],a                 ; 02:4DCA
     push bc                         ; 02:4DCC
-    call Sub002E30                  ; 02:4DCD
-    call Sub002ED7                  ; 02:4DD0
+    call GivePointsFF97             ; 02:4DCD
+    call SpawnScoreSprite           ; 02:4DD0
     pop  bc                         ; 02:4DD3
     ret                             ; 02:4DD4
 
@@ -2079,13 +2079,13 @@ Return024E00:
     ret                             ; 02:4E00
 
 Code024E01:
-    ld   a,[$C283]                  ; 02:4E01
+    ld   a,[W_ChallengeFlag]        ; 02:4E01
     and  a                          ; 02:4E04
     jr   nz,Code024E13              ; 02:4E05
-    call Sub002D4E                  ; 02:4E07
+    call Give1up                    ; 02:4E07
     ld   a,$0A                      ; 02:4E0A
     ldh  [<$FF9B],a                 ; 02:4E0C
-    call Sub002ED7                  ; 02:4E0E
+    call SpawnScoreSprite           ; 02:4E0E
     jr   Code024E2A                 ; 02:4E11
 Code024E13:
     ld   a,$C8                      ; 02:4E13
@@ -2095,8 +2095,8 @@ Code024E13:
     ld   a,$06                      ; 02:4E1A
     ldh  [<$FF9B],a                 ; 02:4E1C
     push bc                         ; 02:4E1E
-    call Sub002E30                  ; 02:4E1F
-    call Sub002ED7                  ; 02:4E22
+    call GivePointsFF97             ; 02:4E1F
+    call SpawnScoreSprite           ; 02:4E22
     pop  bc                         ; 02:4E25
     ld   a,$28                      ; 02:4E26
     ldh  [<$FFF3],a                 ; 02:4E28
@@ -2121,8 +2121,8 @@ Code024E33:
     ld   a,$06                      ; 02:4E4B
     ldh  [<$FF9B],a                 ; 02:4E4D
     push bc                         ; 02:4E4F
-    call Sub002E30                  ; 02:4E50
-    call Sub002ED7                  ; 02:4E53
+    call GivePointsFF97             ; 02:4E50
+    call SpawnScoreSprite           ; 02:4E53
     pop  bc                         ; 02:4E56
     ret                             ; 02:4E57
 
@@ -2133,7 +2133,7 @@ Code024E58:
     and  a                          ; 02:4E5F
     ret  nz                         ; 02:4E60
     ld   a,$02                      ; 02:4E61
-    rst  $10                        ; 02:4E63
+    rst  $10                        ; 02:4E63  24-bit call
 .dl SubL_0B4074                     ; 02:4E64
     ret                             ; 02:4E67
 
@@ -2152,12 +2152,12 @@ Code024E68:
     ldh  [<$FF97],a                 ; 02:4E80
     xor  a                          ; 02:4E82
     ldh  [<$FF98],a                 ; 02:4E83
-    call Sub002E30                  ; 02:4E85
+    call GivePointsFF97             ; 02:4E85
     ret                             ; 02:4E88
 
 SubL_024E89:
     call Sub024E8D                  ; 02:4E89
-    rst  $18                        ; 02:4E8C
+    rst  $18                        ; 02:4E8C  Return from 24-bit call
 
 Sub024E8D:
     ld   e,$01                      ; 02:4E8D
@@ -2261,7 +2261,7 @@ Sub024F2A:
     ld   hl,W_SpriteSubstate        ; 02:4F2A
     add  hl,bc                      ; 02:4F2D
     ld   a,[hl]                     ; 02:4F2E
-    rst  $00                        ; 02:4F2F
+    rst  $00                        ; 02:4F2F  Execute from 16-bit pointer table
 .dw Code024F46                      ; 02:4F30
 .dw Code0250F1                      ; 02:4F32
 .dw Code02524E                      ; 02:4F34
@@ -2271,7 +2271,7 @@ Sub024F38:
     ld   hl,W_SpriteSubstate        ; 02:4F38
     add  hl,bc                      ; 02:4F3B
     ld   a,[hl]                     ; 02:4F3C
-    rst  $00                        ; 02:4F3D
+    rst  $00                        ; 02:4F3D  Execute from 16-bit pointer table
 .dw Code0255B3                      ; 02:4F3E
 .dw Code0256B6                      ; 02:4F40
 .dw Code0256CD                      ; 02:4F42
@@ -2346,7 +2346,7 @@ Code024FC3:
     jr   Code024FF4                 ; 02:4FC8
 Code024FCA:
     ld   a,$02                      ; 02:4FCA
-    rst  $10                        ; 02:4FCC
+    rst  $10                        ; 02:4FCC  24-bit call
 .dl SubL_0B4074                     ; 02:4FCD
     call Sub003000                  ; 02:4FD0
     jr   Code024FF4                 ; 02:4FD3
@@ -2575,10 +2575,10 @@ Code0250FD:
     push hl                         ; 02:5135
     ld   hl,W_SpriteXLow            ; 02:5136
     add  hl,bc                      ; 02:5139
-    ldh  a,[<$FFA7]                 ; 02:513A
+    ldh  a,[<H_PlayerXLow]          ; 02:513A
     sub  [hl]                       ; 02:513C
     pop  hl                         ; 02:513D
-    ldh  a,[<$FFA8]                 ; 02:513E
+    ldh  a,[<H_PlayerXHigh]         ; 02:513E
     sbc  [hl]                       ; 02:5140
     bit  7,a                        ; 02:5141
     jr   nz,Code025146              ; 02:5143
@@ -2878,7 +2878,7 @@ Code02532E:
     srl  a                          ; 02:5338
     jr   nc,Code025353              ; 02:533A
     ld   a,$02                      ; 02:533C
-    rst  $10                        ; 02:533E
+    rst  $10                        ; 02:533E  24-bit call
 .dl SubL_0B4074                     ; 02:533F
     jr   Code025353                 ; 02:5342
 Code025344:
@@ -2982,7 +2982,7 @@ Code0253E2:
     inc  a                          ; 02:53E7
     cp   $0A                        ; 02:53E8
     jr   c,Code0253F8               ; 02:53EA
-    ld   a,[$C283]                  ; 02:53EC
+    ld   a,[W_ChallengeFlag]        ; 02:53EC
     and  a                          ; 02:53EF
     jr   nz,Code0253F6              ; 02:53F0
     ld   a,$0A                      ; 02:53F2
@@ -3093,8 +3093,8 @@ Code025492:
     ld   a,$03                      ; 02:549A
     ldh  [<$FF98],a                 ; 02:549C
     push bc                         ; 02:549E
-    call Sub002E30                  ; 02:549F
-    call Sub002ED7                  ; 02:54A2
+    call GivePointsFF97             ; 02:549F
+    call SpawnScoreSprite           ; 02:54A2
     pop  bc                         ; 02:54A5
     jr   Code0254C0                 ; 02:54A6
 Code0254A8:
@@ -3261,7 +3261,7 @@ Code0255D1:
     add  hl,de                      ; 02:55DF
     ld   de,Data025573              ; 02:55E0
     add  hl,de                      ; 02:55E3
-    call Sub0027BD                  ; 02:55E4
+    call Disp16x16Sprite            ; 02:55E4
     ld   hl,$D0E1                   ; 02:55E7
     add  hl,bc                      ; 02:55EA
     ld   a,[hl]                     ; 02:55EB
@@ -3298,7 +3298,7 @@ Code0255F4:
     ld   hl,W_SpriteYLow            ; 02:561D
     add  hl,bc                      ; 02:5620
     ld   a,[hl]                     ; 02:5621
-    ld   hl,$FFBA                   ; 02:5622
+    ld   hl,H_CameraY               ; 02:5622
     sub  [hl]                       ; 02:5625
     add  $01                        ; 02:5626
     ldh  [<$FF97],a                 ; 02:5628
@@ -3315,10 +3315,10 @@ Code0255F4:
     adc  d                          ; 02:563A
     ld   d,a                        ; 02:563B
     ld   a,e                        ; 02:563C
-    ld   hl,$FFB8                   ; 02:563D
+    ld   hl,H_CameraXLow            ; 02:563D
     sub  [hl]                       ; 02:5640
     ldh  [<$FF98],a                 ; 02:5641
-    ld   hl,$FFB9                   ; 02:5643
+    ld   hl,H_CameraXHigh           ; 02:5643
     ld   a,d                        ; 02:5646
     sbc  [hl]                       ; 02:5647
     ldh  [<$FF99],a                 ; 02:5648
@@ -3468,12 +3468,12 @@ Code02574D:
 Code02574E:
     pop  de                         ; 02:574E
     add  hl,de                      ; 02:574F
-    call Sub0027BD                  ; 02:5750
+    call Disp16x16Sprite            ; 02:5750
     ret                             ; 02:5753
 
 SubL_025754:
     call Sub025758                  ; 02:5754
-    rst  $18                        ; 02:5757
+    rst  $18                        ; 02:5757  Return from 24-bit call
 
 Sub025758:
     ld   hl,W_SpriteXSpeed          ; 02:5758
@@ -3520,7 +3520,7 @@ Sub02579C:
     ld   hl,W_SpriteSubstate        ; 02:579C
     add  hl,bc                      ; 02:579F
     ld   a,[hl]                     ; 02:57A0
-    rst  $00                        ; 02:57A1
+    rst  $00                        ; 02:57A1  Execute from 16-bit pointer table
 .dw Code0257B0                      ; 02:57A2
 .dw Code02585C                      ; 02:57A4
 
@@ -3528,7 +3528,7 @@ Sub0257A6:
     ld   hl,W_SpriteSubstate        ; 02:57A6
     add  hl,bc                      ; 02:57A9
     ld   a,[hl]                     ; 02:57AA
-    rst  $00                        ; 02:57AB
+    rst  $00                        ; 02:57AB  Execute from 16-bit pointer table
 .dw Code025875                      ; 02:57AC
 .dw Code02588D                      ; 02:57AE
 
@@ -3569,7 +3569,7 @@ Code0257F1:
     srl  a                          ; 02:57F3
     jr   nc,Code025812              ; 02:57F5
     ld   a,$02                      ; 02:57F7
-    rst  $10                        ; 02:57F9
+    rst  $10                        ; 02:57F9  24-bit call
 .dl SubL_0B4074                     ; 02:57FA
     call Sub003000                  ; 02:57FD
     jr   Code025812                 ; 02:5800
@@ -3659,19 +3659,19 @@ Code025875:
     sla  e                          ; 02:587F
     ld   hl,Data02586D              ; 02:5881
     add  hl,de                      ; 02:5884
-    call Sub0027BD                  ; 02:5885
+    call Disp16x16Sprite            ; 02:5885
     ret                             ; 02:5888
 
 Data025889:                         ; 02:5889
 .db $48,$41,$48,$61
 Code02588D:
     ld   hl,Data025889              ; 02:588D
-    call Sub0027BD                  ; 02:5890
+    call Disp16x16Sprite            ; 02:5890
     ret                             ; 02:5893
 
 SubL_025894:
     ld   a,$0E                      ; 02:5894
-    call Sub0026BE                  ; 02:5896
+    call LoadSpriteAnySlot          ; 02:5896
     jr   nc,Code0258B6              ; 02:5899
     ld   de,$0000                   ; 02:589B
     ld   hl,W_SpriteID              ; 02:589E
@@ -3729,7 +3729,7 @@ Code0258B6:
     add  hl,de                      ; 02:58F9
     ld   [hl],$01                   ; 02:58FA
 ReturnL_0258FC:
-    rst  $18                        ; 02:58FC
+    rst  $18                        ; 02:58FC  Return from 24-bit call
 
 Data0258FD:                         ; 02:58FD
 .db $60,$01,$62,$01,$62,$21,$60,$21
@@ -4082,7 +4082,7 @@ Sub025B2F:
     ld   hl,W_SpriteSubstate        ; 02:5B2F
     add  hl,bc                      ; 02:5B32
     ld   a,[hl]                     ; 02:5B33
-    rst  $00                        ; 02:5B34
+    rst  $00                        ; 02:5B34  Execute from 16-bit pointer table
 .dw Code025B3F                      ; 02:5B35
 .dw Code025D44                      ; 02:5B37
 .dw Code025B3F                      ; 02:5B39
@@ -4183,7 +4183,7 @@ Code025B93:
 
 Code025BE0:
     ld   a,$02                      ; 02:5BE0
-    rst  $10                        ; 02:5BE2
+    rst  $10                        ; 02:5BE2  24-bit call
 .dl SubL_0B4074                     ; 02:5BE3
     jr   Code025C01                 ; 02:5BE6
 Code025BE8:
@@ -4439,7 +4439,7 @@ Sub025D9F:
     ld   hl,W_SpriteSubstate        ; 02:5D9F
     add  hl,bc                      ; 02:5DA2
     ld   a,[hl]                     ; 02:5DA3
-    rst  $00                        ; 02:5DA4
+    rst  $00                        ; 02:5DA4  Execute from 16-bit pointer table
 .dw Code025DAB                      ; 02:5DA5
 .dw Sub025EA0                       ; 02:5DA7
 .dw Code025DAB                      ; 02:5DA9
@@ -4504,7 +4504,7 @@ Code025DF3:
     ld   d,$00                      ; 02:5E0B
     ld   hl,Data025D5B              ; 02:5E0D
     add  hl,de                      ; 02:5E10
-    call Sub0027BD                  ; 02:5E11
+    call Disp16x16Sprite            ; 02:5E11
     ld   hl,W_SpriteYLow            ; 02:5E14
     add  hl,bc                      ; 02:5E17
     ld   a,[hl]                     ; 02:5E18
@@ -4553,7 +4553,7 @@ Code025E43:
     ld   e,a                        ; 02:5E5D
     ld   hl,Data025D57              ; 02:5E5E
     add  hl,de                      ; 02:5E61
-    call Sub0027BD                  ; 02:5E62
+    call Disp16x16Sprite            ; 02:5E62
     ld   hl,W_SpriteYLow            ; 02:5E65
     add  hl,bc                      ; 02:5E68
     ld   a,[hl]                     ; 02:5E69
@@ -4631,7 +4631,7 @@ Sub025EA0:
     ld   e,a                        ; 02:5EE1
     ld   hl,Data025D8F              ; 02:5EE2
     add  hl,de                      ; 02:5EE5
-    call Sub0027BD                  ; 02:5EE6
+    call Disp16x16Sprite            ; 02:5EE6
     pop  af                         ; 02:5EE9
     ld   hl,W_SpriteYLow            ; 02:5EEA
     add  hl,bc                      ; 02:5EED
@@ -4646,7 +4646,7 @@ Data025EF2:                         ; 02:5EF2
 Sub025EF4:
     push bc                         ; 02:5EF4
     ld   a,$18                      ; 02:5EF5
-    call Sub0026BE                  ; 02:5EF7
+    call LoadSpriteAnySlot          ; 02:5EF7
     jr   c,Code025F64               ; 02:5EFA
     pop  bc                         ; 02:5EFC
     push de                         ; 02:5EFD
@@ -4772,7 +4772,7 @@ Code025FBB:
     srl  a                          ; 02:5FBD
     jr   nc,Code025FC8              ; 02:5FBF
     ld   a,$02                      ; 02:5FC1
-    rst  $10                        ; 02:5FC3
+    rst  $10                        ; 02:5FC3  24-bit call
 .dl SubL_0B4074                     ; 02:5FC4
     ret                             ; 02:5FC7
 
@@ -4890,7 +4890,7 @@ Code026045:
     sla  e                          ; 02:6088
     ld   hl,Data025FE5              ; 02:608A
     add  hl,de                      ; 02:608D
-    call Sub0027BD                  ; 02:608E
+    call Disp16x16Sprite            ; 02:608E
     pop  hl                         ; 02:6091
     ld   a,[$D2E4]                  ; 02:6092
     ld   [hl],a                     ; 02:6095
@@ -4899,45 +4899,45 @@ Code026045:
     ld   [hl],a                     ; 02:609A
     ret                             ; 02:609B
 
-Data02609C:                         ; 02:609C
+PiranhaUp_WarpZoneScreens:          ; 02:609C
 .db $0B,$0D,$03
+
 Code02609F:
     ld   a,[W_GameMode]             ; 02:609F
     cp   $07                        ; 02:60A2
-    jr   z,Code026115               ; 02:60A4
+    jr   z,@Code026115              ; 02:60A4
     cp   $02                        ; 02:60A6
-    jr   z,Code026115               ; 02:60A8
-    ld   a,[$C283]                  ; 02:60AA
+    jr   z,@Code026115              ; 02:60A8
+    ld   a,[W_ChallengeFlag]        ; 02:60AA
     and  a                          ; 02:60AD
-    jr   z,Code0260DC               ; 02:60AE
-    ld   de,$0000                   ; 02:60B0
+    jr   z,@Code0260DC              ; 02:60AE
+    ld   de,$0000                   ; 02:60B0 \ runs if challenge mode
     ld   a,[W_SublevelID]           ; 02:60B3
-    cp   $01                        ; 02:60B6
-    jr   z,Code0260C4               ; 02:60B8
+    cp   $01                        ; 02:60B6  01: 1-2 main
+    jr   z,@WarpZoneSublevel        ; 02:60B8
     inc  e                          ; 02:60BA
-    cp   $0D                        ; 02:60BB
-    jr   z,Code0260C4               ; 02:60BD
+    cp   $0D                        ; 02:60BB  0D: 4-2 main
+    jr   z,@WarpZoneSublevel        ; 02:60BD
     inc  e                          ; 02:60BF
-    cp   $30                        ; 02:60C0
-    jr   nz,Code0260DC              ; 02:60C2
-Code0260C4:
-    ld   hl,Data02609C              ; 02:60C4
-    add  hl,de                      ; 02:60C7
+    cp   $30                        ; 02:60C0  30: 4-2 vine bonus
+    jr   nz,@Code0260DC             ; 02:60C2
+@WarpZoneSublevel:
+    ld   hl,PiranhaUp_WarpZoneScreens; 02:60C4
+    add  hl,de                      ; 02:60C7  index with 0/1/2 for sublevel 01/0D/30
     ld   a,[hl]                     ; 02:60C8
     ld   hl,W_SpriteXHigh           ; 02:60C9
     add  hl,bc                      ; 02:60CC
-    cp   [hl]                       ; 02:60CD
-    jr   nz,Code0260DC              ; 02:60CE
-    xor  a                          ; 02:60D0
+    cp   [hl]                       ; 02:60CD  check if X position > threshold
+    jr   nz,@Code0260DC             ; 02:60CE
+    xor  a                          ; 02:60D0 \ despawn sprite
     ld   hl,W_SpriteStatus          ; 02:60D1
     add  hl,bc                      ; 02:60D4
     ld   [hl],a                     ; 02:60D5
     ld   hl,W_SpriteID              ; 02:60D6
     add  hl,bc                      ; 02:60D9
     ld   [hl],a                     ; 02:60DA
-    ret                             ; 02:60DB
-
-Code0260DC:
+    ret                             ; 02:60DB //
+@Code0260DC:
     ld   hl,W_SpriteXHigh           ; 02:60DC
     add  hl,bc                      ; 02:60DF
     push hl                         ; 02:60E0
@@ -4962,19 +4962,18 @@ Code0260DC:
     ld   [hl],a                     ; 02:60FE
     ld   a,[W_SPFlag]               ; 02:60FF
     and  a                          ; 02:6102
-    jr   z,Code026111               ; 02:6103
+    jr   z,@Code026111              ; 02:6103
     ld   a,[W_LevelID]              ; 02:6105
-    cp   $0C                        ; 02:6108
-    jr   c,Code026110               ; 02:610A
-    ld   a,$08                      ; 02:610C
-    jr   Code026111                 ; 02:610E
-Code026110:
-    xor  a                          ; 02:6110
-Code026111:
+    cp   $0C                        ; 02:6108  0C: 4-1
+    jr   c,@Code026110              ; 02:610A
+    ld   a,$08                      ; 02:610C  if SP and level >= 4-1, $D2F7 = 8 (red plants)
+    jr   @Code026111                ; 02:610E
+@Code026110:
+    xor  a                          ; 02:6110  else, $D2F7 = 0 (green plants)
+@Code026111:
     ld   [$D2F7],a                  ; 02:6111
     ret                             ; 02:6114
-
-Code026115:
+@Code026115:
     ld   a,[$C36B]                  ; 02:6115
     ld   d,a                        ; 02:6118
     and  $F0                        ; 02:6119
@@ -5010,7 +5009,7 @@ Code026115:
     ld   hl,W_SpriteXHigh           ; 02:6147
     add  hl,bc                      ; 02:614A
     ld   [hl],d                     ; 02:614B
-    jr   Code0260DC                 ; 02:614C
+    jr   @Code0260DC                ; 02:614C
 
 Data02614E:                         ; 02:614E
 .db $00,$0D,$00,$00,$00,$07,$00,$00,\
@@ -5049,7 +5048,7 @@ Code0261A4:
     srl  a                          ; 02:61A6
     jr   nc,Code0261C5              ; 02:61A8
     ld   a,$02                      ; 02:61AA
-    rst  $10                        ; 02:61AC
+    rst  $10                        ; 02:61AC  24-bit call
 .dl SubL_0B4074                     ; 02:61AD
     jr   Code0261C5                 ; 02:61B0
 Code0261B2:
@@ -5099,7 +5098,7 @@ Sub0261E0:
     and  a                          ; 02:61FE
     jr   nz,Code026209              ; 02:61FF
     ld   a,$02                      ; 02:6201
-    rst  $10                        ; 02:6203
+    rst  $10                        ; 02:6203  24-bit call
 .dl SubL_0B4074                     ; 02:6204
     jr   Code02620D                 ; 02:6207
 Code026209:
@@ -5121,7 +5120,7 @@ Code02620D:
     cp   $00                        ; 02:6228
     jr   nz,Code026234              ; 02:622A
     ld   a,$02                      ; 02:622C
-    rst  $10                        ; 02:622E
+    rst  $10                        ; 02:622E  24-bit call
 .dl SubL_0B4074                     ; 02:622F
     jr   Code026238                 ; 02:6232
 Code026234:
@@ -5158,7 +5157,7 @@ Sub026259:
     ld   hl,W_SpriteSubstate        ; 02:6259
     add  hl,bc                      ; 02:625C
     ld   a,[hl]                     ; 02:625D
-    rst  $00                        ; 02:625E
+    rst  $00                        ; 02:625E  Execute from 16-bit pointer table
 .dw Code026269                      ; 02:625F
 .dw Code026336                      ; 02:6261
 .dw Code02635B                      ; 02:6263
@@ -5183,10 +5182,10 @@ Code02627E:
     ld   a,[W_GameMode]             ; 02:627F
     cp   $02                        ; 02:6282
     jr   z,Code026299               ; 02:6284
-    ldh  a,[<$FFA7]                 ; 02:6286
+    ldh  a,[<H_PlayerXLow]          ; 02:6286
     add  $08                        ; 02:6288
     ldh  [<$FF97],a                 ; 02:628A
-    ldh  a,[<$FFA8]                 ; 02:628C
+    ldh  a,[<H_PlayerXHigh]         ; 02:628C
     adc  $00                        ; 02:628E
     ldh  [<$FF98],a                 ; 02:6290
     call Sub0262EF                  ; 02:6292
@@ -5390,7 +5389,7 @@ Sub0263B9:
     ld   d,$00                      ; 02:63CF
     ld   hl,Data0263A1              ; 02:63D1
     add  hl,de                      ; 02:63D4
-    call Sub0027BD                  ; 02:63D5
+    call Disp16x16Sprite            ; 02:63D5
     ld   hl,W_SpriteYLow            ; 02:63D8
     add  hl,bc                      ; 02:63DB
     ld   a,[hl]                     ; 02:63DC
@@ -5404,7 +5403,7 @@ Sub0263B9:
     ld   d,$00                      ; 02:63E8
     ld   hl,Data0263B1              ; 02:63EA
     add  hl,de                      ; 02:63ED
-    call Sub0027BD                  ; 02:63EE
+    call Disp16x16Sprite            ; 02:63EE
     pop  af                         ; 02:63F1
     pop  hl                         ; 02:63F2
     ld   [hl],a                     ; 02:63F3
@@ -5416,14 +5415,14 @@ Data0263F5:                         ; 02:63F5
     $00,$00,$00,$00,$00,$00,$90,$0E
 Code026405:
     ld   a,$02                      ; 02:6405
-    rst  $10                        ; 02:6407
+    rst  $10                        ; 02:6407  24-bit call
 .dl SubL_0B536D                     ; 02:6408
     ld   a,[W_GameMode]             ; 02:640B
     cp   $07                        ; 02:640E
-    jr   z,Code026416               ; 02:6410
+    jr   z,@Race                    ; 02:6410
     cp   $02                        ; 02:6412
-    jr   nz,Code026430              ; 02:6414
-Code026416:
+    jr   nz,@Code026430             ; 02:6414
+@Race:
     ld   a,[W_SublevelID]           ; 02:6416
     sub  $3A                        ; 02:6419
     sla  a                          ; 02:641B
@@ -5439,7 +5438,7 @@ Code026416:
     ld   hl,W_SpriteXHigh           ; 02:642B
     add  hl,bc                      ; 02:642E
     ld   [hl],e                     ; 02:642F
-Code026430:
+@Code026430:
     ld   hl,W_SpriteXSpeed          ; 02:6430
     add  hl,bc                      ; 02:6433
     ld   [hl],$FC                   ; 02:6434
@@ -5565,7 +5564,7 @@ Sub026500:
     ld   hl,W_SpriteSubstate        ; 02:6500
     add  hl,bc                      ; 02:6503
     ld   a,[hl]                     ; 02:6504
-    rst  $00                        ; 02:6505
+    rst  $00                        ; 02:6505  Execute from 16-bit pointer table
 .dw Code026528                      ; 02:6506
 .dw Return024000                    ; 02:6508
 .dw Code0269AE                      ; 02:650A
@@ -5575,11 +5574,11 @@ Sub02650E:
     ld   hl,W_SpriteSubstate        ; 02:650E
     add  hl,bc                      ; 02:6511
     ld   a,[hl]                     ; 02:6512
-    rst  $00                        ; 02:6513
+    rst  $00                        ; 02:6513  Execute from 16-bit pointer table
 .dw Code026A69                      ; 02:6514
 .dw Code026A69                      ; 02:6516
 .dw Code026A69                      ; 02:6518
-.dw Code026B8B                      ; 02:651A
+.dw Bowser_DeathState               ; 02:651A
 
 Data02651C:                         ; 02:651C
 .db $DF,$60,$DF,$DF,$DF,$60,$60,$DF
@@ -5860,7 +5859,7 @@ Code0266CB:
     srl  a                          ; 02:66E3
     jr   nc,Code0266ED              ; 02:66E5
     ld   a,$02                      ; 02:66E7
-    rst  $10                        ; 02:66E9
+    rst  $10                        ; 02:66E9  24-bit call
 .dl SubL_0B4074                     ; 02:66EA
 Code0266ED:
     ld   hl,W_SpriteYSpeed          ; 02:66ED
@@ -5890,10 +5889,10 @@ Code0266ED:
     ld   hl,W_SpriteXLow            ; 02:671A
     add  hl,bc                      ; 02:671D
     ld   a,[hl]                     ; 02:671E
-    ld   hl,$FFB8                   ; 02:671F
+    ld   hl,H_CameraXLow            ; 02:671F
     sub  [hl]                       ; 02:6722
     ldh  a,[<$FF98]                 ; 02:6723
-    ld   hl,$FFB9                   ; 02:6725
+    ld   hl,H_CameraXHigh           ; 02:6725
     sbc  [hl]                       ; 02:6728
     and  a                          ; 02:6729
     jr   nz,Code026734              ; 02:672A
@@ -6083,11 +6082,11 @@ Code026841:
     push hl                         ; 02:6847
     ld   hl,W_SpriteXLow            ; 02:6848
     add  hl,bc                      ; 02:684B
-    ldh  a,[<$FFA7]                 ; 02:684C
+    ldh  a,[<H_PlayerXLow]          ; 02:684C
     add  d                          ; 02:684E
     sub  [hl]                       ; 02:684F
     pop  hl                         ; 02:6850
-    ldh  a,[<$FFA8]                 ; 02:6851
+    ldh  a,[<H_PlayerXHigh]         ; 02:6851
     sbc  [hl]                       ; 02:6853
     bit  7,a                        ; 02:6854
     jr   nz,Code026867              ; 02:6856
@@ -6150,10 +6149,10 @@ Sub0268A2:
     add  hl,bc                      ; 02:68AC
     ld   a,[hl]                     ; 02:68AD
     ldh  [<$FF97],a                 ; 02:68AE
-    ld   hl,$FFA7                   ; 02:68B0
+    ld   hl,H_PlayerXLow            ; 02:68B0
     sub  [hl]                       ; 02:68B3
     ldh  a,[<$FF98]                 ; 02:68B4
-    ld   hl,$FFA8                   ; 02:68B6
+    ld   hl,H_PlayerXHigh           ; 02:68B6
     sbc  [hl]                       ; 02:68B9
     bit  7,a                        ; 02:68BA
     jr   nz,Code0268C1              ; 02:68BC
@@ -6226,7 +6225,7 @@ Code02690F:
     ret  nz                         ; 02:6918
     call Sub026981                  ; 02:6919
     ld   a,$18                      ; 02:691C
-    call Sub0026BA                  ; 02:691E
+    call LoadSpriteFixedSlot        ; 02:691E
     ld   hl,Data025EF0              ; 02:6921
     ld   a,[hl]                     ; 02:6924
     ld   hl,W_SpriteXSpeed          ; 02:6925
@@ -6337,7 +6336,7 @@ Code0269D4:
     ld   a,[W_SublevelID]           ; 02:69DA
     cp   $54                        ; 02:69DD
     jr   nz,Code0269E7              ; 02:69DF
-    ldh  a,[<$FFB9]                 ; 02:69E1
+    ldh  a,[<H_CameraXHigh]         ; 02:69E1
     cp   $04                        ; 02:69E3
     jr   c,Code026A08               ; 02:69E5
 Code0269E7:
@@ -6419,7 +6418,7 @@ Code026A69:
     push de                         ; 02:6A84
     ld   hl,Data026A31              ; 02:6A85
     add  hl,de                      ; 02:6A88
-    call Sub0027BD                  ; 02:6A89
+    call Disp16x16Sprite            ; 02:6A89
     ld   hl,W_SpriteYLow            ; 02:6A8C
     add  hl,bc                      ; 02:6A8F
     ld   a,[hl]                     ; 02:6A90
@@ -6526,14 +6525,21 @@ Code026A69:
     call Sub002769                  ; 02:6B3B
     ret                             ; 02:6B3E
 
-Data026B3F:                         ; 02:6B3F
-.db $36,$61,$34,$61,$44,$07,$44,$27,\
-    $3E,$09,$3E,$29,$4A,$6E,$48,$6E,\
-    $00,$00,$00,$00,$2A,$49,$2A,$69,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $4A,$47,$4C,$47,$58,$69,$56,$69
-Data026B67:                         ; 02:6B67
-.db $44,$4F,$44,$6F
+Bowser_DeathTilemaps16x16:          ; 02:6B3F
+; Bowser 16x16 death sprite tilemaps (tile number, PYX0VCCC)
+; All have been rotated and recolored as needed
+.db $36,$61,$34,$61,\               ;          1-4: Goomba
+    $44,$07,$44,$27,\               ;          2-4: Green Koopa shell
+    $3E,$09,$3E,$29,\               ;          3-4: Buzzy shell
+    $4A,$6E,$48,$6E,\               ;          4-4: Spiny
+    $00,$00,$00,$00,\
+    $2A,$49,$2A,$69,\               ;          6-4: Blooper
+    $00,$00,$00,$00,\
+    $00,$00,$00,$00,\
+    $4A,$47,$4C,$47,\               ;          Race 1-4: Cheep-Cheep
+    $58,$69,$56,$69                 ;          Race 2-4: Bullet Bill
+Bowser_DeathTilemapW5:              ; 02:6B67
+.db $44,$4F,$44,$6F                 ;          5-4: Lakitu
 Data026B6B:                         ; 02:6B6B
 .db $42,$6F,$40,$6F
 Data026B6F:                         ; 02:6B6F
@@ -6544,39 +6550,42 @@ Data026B7B:                         ; 02:6B7B
 .db $70,$4F,$72,$4F,$76,$6F,$74,$6F
 Data026B83:                         ; 02:6B83
 .db $74,$4F,$76,$4F,$72,$6F,$70,$6F
-Code026B8B:
+
+Bowser_DeathState:
+; determine which Bowser death sprite to use
     ld   a,[W_GameMode]             ; 02:6B8B
     cp   $07                        ; 02:6B8E
-    jr   z,Code026B96               ; 02:6B90
+    jr   z,@Race                    ; 02:6B90
     cp   $02                        ; 02:6B92
-    jr   nz,Code026BA3              ; 02:6B94
-Code026B96:
-    ld   e,$20                      ; 02:6B96
+    jr   nz,@NotRace                ; 02:6B94
+@Race:
+    ld   e,$20                      ; 02:6B96  if race 1-4, use index 20 (Cheep-Cheep)
     ld   a,[W_SublevelID]           ; 02:6B98
-    cp   $3D                        ; 02:6B9B
-    jr   z,Code026BB5               ; 02:6B9D
-    ld   e,$24                      ; 02:6B9F
-    jr   Code026BB5                 ; 02:6BA1
-Code026BA3:
+    cp   $3D                        ; 02:6B9B  3D: race 1-4
+    jr   z,@Load16x16Tilemap        ; 02:6B9D
+    ld   e,$24                      ; 02:6B9F  else, use index 24 (Bullet Bill)
+    jr   @Load16x16Tilemap          ; 02:6BA1
+@NotRace:
     ld   a,[W_LevelID]              ; 02:6BA3
-    and  $FC                        ; 02:6BA6
-    cp   $10                        ; 02:6BA8
-    jr   z,Code026BBF               ; 02:6BAA
-    cp   $18                        ; 02:6BAC
-    jr   z,Code026BEE               ; 02:6BAE
-    cp   $1C                        ; 02:6BB0
-    jr   z,Code026BF8               ; 02:6BB2
-    ld   e,a                        ; 02:6BB4
-Code026BB5:
+    and  $FC                        ; 02:6BA6  clear lowest 2 bits (filter out world number)
+    cp   $10                        ; 02:6BA8  10: W5
+    jr   z,@W5                      ; 02:6BAA
+    cp   $18                        ; 02:6BAC  18: W7
+    jr   z,@W7                      ; 02:6BAE
+    cp   $1C                        ; 02:6BB0  1C: W8
+    jr   z,@W8                      ; 02:6BB2
+    ld   e,a                        ; 02:6BB4  use world as offset
+@Load16x16Tilemap:
     ld   d,$00                      ; 02:6BB5
-    ld   hl,Data026B3F              ; 02:6BB7
+    ld   hl,Bowser_DeathTilemaps16x16; 02:6BB7
     add  hl,de                      ; 02:6BBA
-    call Sub0027BD                  ; 02:6BBB
+    call Disp16x16Sprite            ; 02:6BBB
     ret                             ; 02:6BBE
 
-Code026BBF:
-    ld   hl,Data026B67              ; 02:6BBF
-    call Sub0027BD                  ; 02:6BC2
+@W5:
+; special handling for world 5 Lakitu death sprite
+    ld   hl,Bowser_DeathTilemapW5   ; 02:6BBF
+    call Disp16x16Sprite            ; 02:6BC2
     ld   hl,W_SpriteXLow            ; 02:6BC5
     add  hl,bc                      ; 02:6BC8
     ld   a,[hl]                     ; 02:6BC9
@@ -6601,14 +6610,16 @@ Code026BBF:
     call Sub002769                  ; 02:6BEA
     ret                             ; 02:6BED
 
-Code026BEE:
+@W7:
+; special handling for world 7 Hammer Bro death sprite?
     ld   hl,$D195                   ; 02:6BEE
     add  hl,bc                      ; 02:6BF1
     ld   [hl],$01                   ; 02:6BF2
     call Sub025EA0                  ; 02:6BF4
     ret                             ; 02:6BF7
 
-Code026BF8:
+@W8:
+; special handling for world 8 Bowser death sprite?
     ld   hl,W_SpriteXLow            ; 02:6BF8
     add  hl,bc                      ; 02:6BFB
     ld   a,[hl]                     ; 02:6BFC
@@ -6705,7 +6716,7 @@ Sub026CBA:
     call Sub026D4B                  ; 02:6CBA
     ret  nc                         ; 02:6CBD
     ld   a,$1B                      ; 02:6CBE
-    call Sub0026BE                  ; 02:6CC0
+    call LoadSpriteAnySlot          ; 02:6CC0
     jr   c,Return026D37             ; 02:6CC3
     ld   hl,W_SpriteXHigh           ; 02:6CC5
     add  hl,bc                      ; 02:6CC8
@@ -6854,7 +6865,7 @@ Sub026D9B:
     srl  a                          ; 02:6DB2
     jr   nc,Code026DC1              ; 02:6DB4
     ld   a,$02                      ; 02:6DB6
-    rst  $10                        ; 02:6DB8
+    rst  $10                        ; 02:6DB8  24-bit call
 .dl SubL_0B4074                     ; 02:6DB9
     jr   Code026DC1                 ; 02:6DBC
 Code026DBE:
@@ -7180,7 +7191,7 @@ Return026FE7:
 
 Sub026FE8:
     push bc                         ; 02:6FE8
-    call Sub0026BE                  ; 02:6FE9
+    call LoadSpriteAnySlot          ; 02:6FE9
     pop  bc                         ; 02:6FEC
     jr   c,Return026FE7             ; 02:6FED
     ld   hl,W_SpriteYLow            ; 02:6FEF
@@ -7364,7 +7375,7 @@ Sub027141:
     ld   hl,W_SpriteSubstate        ; 02:7141
     add  hl,bc                      ; 02:7144
     ld   a,[hl]                     ; 02:7145
-    rst  $00                        ; 02:7146
+    rst  $00                        ; 02:7146  Execute from 16-bit pointer table
 .dw Code027256                      ; 02:7147
 .dw Code027256                      ; 02:7149
 .dw Code0272BA                      ; 02:714B
@@ -7406,7 +7417,7 @@ Sub027181:
     push de                         ; 02:718F
     ld   hl,Data02716E              ; 02:7190
     add  hl,de                      ; 02:7193
-    call Sub0027BD                  ; 02:7194
+    call Disp16x16Sprite            ; 02:7194
     ld   hl,W_SpriteYLow            ; 02:7197
     add  hl,bc                      ; 02:719A
     ld   a,[hl]                     ; 02:719B
@@ -7463,7 +7474,7 @@ Sub0271EF:
     push de                         ; 02:71FB
     ld   hl,Data02716E              ; 02:71FC
     add  hl,de                      ; 02:71FF
-    call Sub0027BD                  ; 02:7200
+    call Disp16x16Sprite            ; 02:7200
     ld   hl,W_SpriteYLow            ; 02:7203
     add  hl,bc                      ; 02:7206
     ld   a,[hl]                     ; 02:7207
@@ -7492,7 +7503,7 @@ Sub0271EF:
 
 Code02722E:
     ld   hl,Data02716E              ; 02:722E
-    call Sub0027BD                  ; 02:7231
+    call Disp16x16Sprite            ; 02:7231
     ld   hl,W_SpriteYLow            ; 02:7234
     add  hl,bc                      ; 02:7237
     ld   a,[hl]                     ; 02:7238
@@ -7569,7 +7580,7 @@ Sub027290:
     ld   [$C1D7],a                  ; 02:72AE
     push bc                         ; 02:72B1
     ld   a,$02                      ; 02:72B2
-    rst  $10                        ; 02:72B4
+    rst  $10                        ; 02:72B4  24-bit call
 .dl SubL_0374C7                     ; 02:72B5
     pop  bc                         ; 02:72B8
 Return0272B9:
@@ -7727,7 +7738,7 @@ Code0273A5:
 Code0273A8:
     call Sub027290                  ; 02:73A8
     ld   hl,W_SpriteXHigh           ; 02:73AB
-    ld   a,[$C161]                  ; 02:73AE
+    ld   a,[W_SubLvScreenCount]     ; 02:73AE
     cp   [hl]                       ; 02:73B1
     jr   nz,Code0273B7              ; 02:73B2
     call Sub0029EF                  ; 02:73B4
@@ -7853,7 +7864,7 @@ Sub02745C:
     jr   z,Code02748C               ; 02:7479
     ld   hl,W_SpriteXLow            ; 02:747B
     add  hl,bc                      ; 02:747E
-    ldh  a,[<$FFA7]                 ; 02:747F
+    ldh  a,[<H_PlayerXLow]          ; 02:747F
     sub  [hl]                       ; 02:7481
     cp   $2C                        ; 02:7482
     jp   c,Return02755F             ; 02:7484
@@ -7862,13 +7873,13 @@ Sub02745C:
 Code02748C:
     nop                             ; 02:748C
     ld   a,[$C1CA]                  ; 02:748D
-    ldh  [<$FFA7],a                 ; 02:7490
+    ldh  [<H_PlayerXLow],a          ; 02:7490
     ld   a,[$C1CB]                  ; 02:7492
-    ldh  [<$FFA8],a                 ; 02:7495
+    ldh  [<H_PlayerXHigh],a         ; 02:7495
     ld   a,[$C27B]                  ; 02:7497
-    ldh  [<$FFB8],a                 ; 02:749A
+    ldh  [<H_CameraXLow],a          ; 02:749A
     ld   a,[$C27C]                  ; 02:749C
-    ldh  [<$FFB9],a                 ; 02:749F
+    ldh  [<H_CameraXHigh],a         ; 02:749F
     jp   Return02755F               ; 02:74A1
 Code0274A4:
     ld   a,e                        ; 02:74A4
@@ -7880,13 +7891,13 @@ Code0274A4:
     ld   a,$20                      ; 02:74B0
     ldh  [<$FFAC],a                 ; 02:74B2
     ld   a,[$C27D]                  ; 02:74B4
-    ldh  [<$FFBA],a                 ; 02:74B7
+    ldh  [<H_CameraY],a             ; 02:74B7
     ld   a,[$C27E]                  ; 02:74B9
     ldh  [<$FFBB],a                 ; 02:74BC
     ld   a,[$C1CC]                  ; 02:74BE
-    ldh  [<$FFA9],a                 ; 02:74C1
+    ldh  [<H_PlayerYLow],a          ; 02:74C1
     ld   a,[$C1CD]                  ; 02:74C3
-    ldh  [<$FFAA],a                 ; 02:74C6
+    ldh  [<H_PlayerYHigh],a         ; 02:74C6
     ldh  a,[<H_PlInitY_SubLvType]   ; 02:74C8
     and  $0F                        ; 02:74CA
     cp   $02                        ; 02:74CC
@@ -7916,7 +7927,7 @@ Code0274FB:
     ld   [W_PlayerState],a          ; 02:74FD
 Code027500:
     ld   a,[$C27D]                  ; 02:7500
-    ldh  [<$FFBA],a                 ; 02:7503
+    ldh  [<H_CameraY],a             ; 02:7503
     ld   a,[$C27E]                  ; 02:7505
     ldh  [<$FFBB],a                 ; 02:7508
     ld   hl,W_SpriteSubstate        ; 02:750A
@@ -7944,11 +7955,11 @@ Code02751E:
     ld   a,[hl]                     ; 02:752E
     ld   hl,$FF97                   ; 02:752F
     sub  [hl]                       ; 02:7532
-    ldh  [<$FFA9],a                 ; 02:7533
+    ldh  [<H_PlayerYLow],a          ; 02:7533
     pop  hl                         ; 02:7535
     ld   a,[hl]                     ; 02:7536
     sbc  $00                        ; 02:7537
-    ldh  [<$FFAA],a                 ; 02:7539
+    ldh  [<H_PlayerYHigh],a         ; 02:7539
     xor  a                          ; 02:753B
     ldh  [<$FF98],a                 ; 02:753C
     ld   hl,W_SpriteXLow            ; 02:753E
@@ -7962,11 +7973,11 @@ Code02751E:
     ld   a,$FF                      ; 02:754D
     ldh  [<$FF98],a                 ; 02:754F
 Code027551:
-    ld   hl,$FFA7                   ; 02:7551
+    ld   hl,H_PlayerXLow            ; 02:7551
     ldh  a,[<$FF97]                 ; 02:7554
     add  [hl]                       ; 02:7556
     ld   [hl],a                     ; 02:7557
-    ld   hl,$FFA8                   ; 02:7558
+    ld   hl,H_PlayerXHigh           ; 02:7558
     ldh  a,[<$FF98]                 ; 02:755B
     adc  [hl]                       ; 02:755D
     ld   [hl],a                     ; 02:755E
@@ -7975,7 +7986,7 @@ Return02755F:
 
 SubL_027560:
     ld   a,$1D                      ; 02:7560
-    call Sub0026BE                  ; 02:7562
+    call LoadSpriteAnySlot          ; 02:7562
     jr   c,ReturnL_0275D1           ; 02:7565
     ld   bc,$0004                   ; 02:7567
     ld   hl,$C221                   ; 02:756A
@@ -8036,7 +8047,7 @@ SubL_027560:
     call Sub024797                  ; 02:75CD
     pop  de                         ; 02:75D0
 ReturnL_0275D1:
-    rst  $18                        ; 02:75D1
+    rst  $18                        ; 02:75D1  Return from 24-bit call
 
 Data0275D2:                         ; 02:75D2
 .db $80,$01,$82,$01,$88,$01,$8A,$01,\
@@ -8165,31 +8176,35 @@ Code027696:
 Code0276A7:
     ld   hl,Data0275D2              ; 02:76A7
     add  hl,de                      ; 02:76AA
-    call Sub0027BD                  ; 02:76AB
+    call Disp16x16Sprite            ; 02:76AB
     ret                             ; 02:76AE
 
 SubL_0276AF:
     call Sub0276B3                  ; 02:76AF
-    rst  $18                        ; 02:76B2
+    rst  $18                        ; 02:76B2  Return from 24-bit call
 
 Sub0276B3:
+; subroutine: Spawn score sprite into free sprite slot
+; $FF97: sprite X position (16-bit)
+; $FF99: sprite Y position (8-bit)
+; $FF9B: score sprite type
     ld   a,[W_GameMode]             ; 02:76B3
     cp   $07                        ; 02:76B6
-    jr   z,Return0276F9             ; 02:76B8
+    jr   z,@Return                  ; 02:76B8
     cp   $02                        ; 02:76BA
-    jr   z,Return0276F9             ; 02:76BC
-    ld   a,$1E                      ; 02:76BE
-    call Sub0026BE                  ; 02:76C0
-    jr   c,Return0276F9             ; 02:76C3
+    jr   z,@Return                  ; 02:76BC
+    ld   a,$1E                      ; 02:76BE  1E: score sprite
+    call LoadSpriteAnySlot          ; 02:76C0
+    jr   c,@Return                  ; 02:76C3  if no slot found, return
     ld   hl,W_SpriteXLow            ; 02:76C5
     add  hl,de                      ; 02:76C8
     push hl                         ; 02:76C9
-    ld   hl,$FFB8                   ; 02:76CA
+    ld   hl,H_CameraXLow            ; 02:76CA
     ldh  a,[<$FF97]                 ; 02:76CD
     sub  [hl]                       ; 02:76CF
     pop  hl                         ; 02:76D0
     ld   [hl],a                     ; 02:76D1
-    ld   hl,$FFB9                   ; 02:76D2
+    ld   hl,H_CameraXHigh           ; 02:76D2
     ldh  a,[<$FF98]                 ; 02:76D5
     sbc  [hl]                       ; 02:76D7
     ld   hl,W_SpriteXHigh           ; 02:76D8
@@ -8199,28 +8214,34 @@ Sub0276B3:
     add  hl,de                      ; 02:76E0
     ldh  a,[<$FF99]                 ; 02:76E1
     sub  $18                        ; 02:76E3
-    ld   [hl],a                     ; 02:76E5
+    ld   [hl],a                     ; 02:76E5  set sprite Y to $FF99, -18
     ld   hl,$D177                   ; 02:76E6
     add  hl,de                      ; 02:76E9
     ldh  a,[<$FF9B]                 ; 02:76EA
-    ld   [hl],a                     ; 02:76EC
+    ld   [hl],a                     ; 02:76EC  set score sprite type to $FF9B
     ld   hl,W_SpriteYSpeed          ; 02:76ED
     add  hl,de                      ; 02:76F0
-    ld   [hl],$F0                   ; 02:76F1
+    ld   [hl],$F0                   ; 02:76F1  set sprite Y velocity to F0
     ld   hl,$D096                   ; 02:76F3
     add  hl,de                      ; 02:76F6
-    ld   [hl],$30                   ; 02:76F7
-Return0276F9:
+    ld   [hl],$30                   ; 02:76F7  set sprite ??? to 30
+@Return:
     ret                             ; 02:76F9
 
-Data0276FA:                         ; 02:76FA
-.db $B0,$00,$BA,$00,$B2,$00,$BA,$00,\
-    $B4,$00,$BA,$00,$B6,$00,$BA,$00,\
-    $B8,$00,$BA,$00,$B0,$00,$BC,$00,\
-    $B2,$00,$BC,$00,$B4,$00,$BC,$00,\
-    $B6,$00,$BC,$00,$B8,$00,$BC,$00,\
-    $BE,$00,$C0,$00,$B0,$00,$BC,$00
-Data02772A:                         ; 02:772A
+ScoreSpr_Tilemap:                   ; 02:76FA
+.db $B0,$00,$BA,$00,\               ;          100
+    $B2,$00,$BA,$00,\               ;          200
+    $B4,$00,$BA,$00,\               ;          400
+    $B6,$00,$BA,$00,\               ;          500
+    $B8,$00,$BA,$00,\               ;          800
+    $B0,$00,$BC,$00,\               ;          1000
+    $B2,$00,$BC,$00,\               ;          2000
+    $B4,$00,$BC,$00,\               ;          4000
+    $B6,$00,$BC,$00,\               ;          5000
+    $B8,$00,$BC,$00,\               ;          8000
+    $BE,$00,$C0,$00,\               ;          1UP
+    $B0,$00,$BC,$00                 ;          10000
+ScoreSpr_10000ExtraTile:            ; 02:772A
 .db $BA,$00
 Code02772C:
     call Sub001A79                  ; 02:772C
@@ -8243,26 +8264,26 @@ Code027746:
     add  hl,bc                      ; 02:7749
     ld   a,[hl]                     ; 02:774A
     push af                         ; 02:774B
-    ld   hl,$FFBA                   ; 02:774C
+    ld   hl,H_CameraY               ; 02:774C
     cp   [hl]                       ; 02:774F
     jr   nc,Code027759              ; 02:7750
-    ldh  a,[<$FFBA]                 ; 02:7752
+    ldh  a,[<H_CameraY]             ; 02:7752
     ld   hl,W_SpriteYLow            ; 02:7754
     add  hl,bc                      ; 02:7757
     ld   [hl],a                     ; 02:7758
 Code027759:
     ld   hl,$D177                   ; 02:7759
     add  hl,bc                      ; 02:775C
-    ld   a,[hl]                     ; 02:775D
+    ld   a,[hl]                     ; 02:775D  score sprite type
     push af                         ; 02:775E
     sla  a                          ; 02:775F
     sla  a                          ; 02:7761
     ld   e,a                        ; 02:7763
-    ld   d,$00                      ; 02:7764
-    ld   hl,Data0276FA              ; 02:7766
-    add  hl,de                      ; 02:7769
-    call Sub0027BD                  ; 02:776A
-    pop  af                         ; 02:776D
+    ld   d,$00                      ; 02:7764  de = score sprite type *4
+    ld   hl,ScoreSpr_Tilemap        ; 02:7766
+    add  hl,de                      ; 02:7769  hl = pointer to OAM attributes
+    call Disp16x16Sprite            ; 02:776A
+    pop  af                         ; 02:776D  a = score sprite type
     cp   $0B                        ; 02:776E
     jr   nz,Code027798              ; 02:7770
     ld   hl,W_SpriteXHigh           ; 02:7772
@@ -8283,7 +8304,7 @@ Code027759:
     ld   hl,W_SpriteXHigh           ; 02:7787
     add  hl,bc                      ; 02:778A
     ld   [hl],a                     ; 02:778B
-    ld   hl,Data02772A              ; 02:778C
+    ld   hl,ScoreSpr_10000ExtraTile ; 02:778C
     call Sub002893                  ; 02:778F
     pop  af                         ; 02:7792
     pop  hl                         ; 02:7793
@@ -8301,7 +8322,7 @@ Code027798:
 Sub02779F:
     push bc                         ; 02:779F
     ld   a,$20                      ; 02:77A0
-    call Sub0026BE                  ; 02:77A2
+    call LoadSpriteAnySlot          ; 02:77A2
     jr   c,Code027804               ; 02:77A5
     ld   a,$27                      ; 02:77A7
     ldh  [<$FFF3],a                 ; 02:77A9
@@ -8335,17 +8356,17 @@ Code0277C4:
     ld   a,[$C25F]                  ; 02:77DB
     and  a                          ; 02:77DE
     jr   nz,Code027804              ; 02:77DF
-    ld   hl,$FFBA                   ; 02:77E1
+    ld   hl,H_CameraY               ; 02:77E1
     ld   a,[hl]                     ; 02:77E4
     cp   $38                        ; 02:77E5
     jr   c,Code027804               ; 02:77E7
     cp   $70                        ; 02:77E9
     jr   nc,Code027804              ; 02:77EB
-    ldh  a,[<$FFA9]                 ; 02:77ED
+    ldh  a,[<H_PlayerYLow]          ; 02:77ED
     sub  [hl]                       ; 02:77EF
     ld   e,a                        ; 02:77F0
     ld   hl,$FFBB                   ; 02:77F1
-    ldh  a,[<$FFAA]                 ; 02:77F4
+    ldh  a,[<H_PlayerYHigh]         ; 02:77F4
     sbc  [hl]                       ; 02:77F6
     and  a                          ; 02:77F7
     jr   z,Code0277FF               ; 02:77F8
@@ -8360,16 +8381,16 @@ Code027804:
     ret                             ; 02:7805
 
 SubL_027806:
-    ldh  a,[<$FFA7]                 ; 02:7806
+    ldh  a,[<H_PlayerXLow]          ; 02:7806
     add  $0A                        ; 02:7808
     ldh  [<$FF97],a                 ; 02:780A
-    ldh  a,[<$FFA8]                 ; 02:780C
+    ldh  a,[<H_PlayerXHigh]         ; 02:780C
     adc  $00                        ; 02:780E
     ldh  [<$FF99],a                 ; 02:7810
-    ldh  a,[<$FFA9]                 ; 02:7812
+    ldh  a,[<H_PlayerYLow]          ; 02:7812
     ldh  [<$FF98],a                 ; 02:7814
     call Sub02779F                  ; 02:7816
-    ldh  a,[<$FFAA]                 ; 02:7819
+    ldh  a,[<H_PlayerYHigh]         ; 02:7819
     ld   hl,W_SpriteYHigh           ; 02:781B
     add  hl,de                      ; 02:781E
     ld   [hl],a                     ; 02:781F
@@ -8380,7 +8401,7 @@ SubL_027806:
     add  hl,de                      ; 02:7828
     ld   a,$02                      ; 02:7829
     ld   [hl],a                     ; 02:782B
-    rst  $18                        ; 02:782C
+    rst  $18                        ; 02:782C  Return from 24-bit call
 
 Data02782D:                         ; 02:782D
 .db $2E,$8F,$30,$8F
@@ -8392,7 +8413,7 @@ Code027835:
     call Sub0278AC                  ; 02:783B
 Code02783E:
     ld   hl,Data02782D              ; 02:783E
-    call Sub0027BD                  ; 02:7841
+    call Disp16x16Sprite            ; 02:7841
     ld   hl,$D1E0                   ; 02:7844
     add  hl,bc                      ; 02:7847
     ld   a,[hl]                     ; 02:7848
@@ -8451,7 +8472,7 @@ Sub0278AC:
     ld   hl,W_SpriteSubstate        ; 02:78AC
     add  hl,bc                      ; 02:78AF
     ld   a,[hl]                     ; 02:78B0
-    rst  $00                        ; 02:78B1
+    rst  $00                        ; 02:78B1  Execute from 16-bit pointer table
 .dw Code0278BA                      ; 02:78B2
 .dw Code0278F5                      ; 02:78B4
 .dw Code0278BA                      ; 02:78B6
@@ -8580,8 +8601,8 @@ Code02797C:
     bit  7,a                        ; 02:797F
     jr   z,Code0279A1               ; 02:7981
 Code027983:
-    ld   hl,$FFB8                   ; 02:7983
-    ldh  a,[<$FFA7]                 ; 02:7986
+    ld   hl,H_CameraXLow            ; 02:7983
+    ldh  a,[<H_PlayerXLow]          ; 02:7986
     sub  [hl]                       ; 02:7988
     cp   $18                        ; 02:7989
     jr   nc,Code0279A1              ; 02:798B
@@ -8592,11 +8613,11 @@ Code027983:
     add  hl,bc                      ; 02:7995
     ld   a,[hl]                     ; 02:7996
     adc  $07                        ; 02:7997
-    ldh  [<$FFA7],a                 ; 02:7999
+    ldh  [<H_PlayerXLow],a          ; 02:7999
     pop  hl                         ; 02:799B
     ld   a,[hl]                     ; 02:799C
     adc  $00                        ; 02:799D
-    ldh  [<$FFA8],a                 ; 02:799F
+    ldh  [<H_PlayerXHigh],a         ; 02:799F
 Code0279A1:
     ld   hl,W_SpriteXHigh           ; 02:79A1
     add  hl,bc                      ; 02:79A4
@@ -8610,10 +8631,10 @@ Code0279A1:
     ld   a,[hl]                     ; 02:79B0
     adc  $00                        ; 02:79B1
     ldh  [<$FF98],a                 ; 02:79B3
-    ldh  a,[<$FFA7]                 ; 02:79B5
+    ldh  a,[<H_PlayerXLow]          ; 02:79B5
     add  $08                        ; 02:79B7
     ldh  [<$FF99],a                 ; 02:79B9
-    ldh  a,[<$FFA8]                 ; 02:79BB
+    ldh  a,[<H_PlayerXHigh]         ; 02:79BB
     adc  $00                        ; 02:79BD
     ldh  [<$FF9A],a                 ; 02:79BF
     ld   e,$00                      ; 02:79C1
@@ -8687,7 +8708,7 @@ Code027A19:
     jr   nz,Return027A73            ; 02:7A26
     ld   [hl],$F0                   ; 02:7A28
     ld   a,$1B                      ; 02:7A2A
-    call Sub0026BE                  ; 02:7A2C
+    call LoadSpriteAnySlot          ; 02:7A2C
     jr   c,Return027A73             ; 02:7A2F
     push de                         ; 02:7A31
     ld   de,$0008                   ; 02:7A32
@@ -8702,11 +8723,11 @@ Code027A19:
     push hl                         ; 02:7A45
     ld   hl,W_SpriteXLow            ; 02:7A46
     add  hl,de                      ; 02:7A49
-    ldh  a,[<$FFB8]                 ; 02:7A4A
+    ldh  a,[<H_CameraXLow]          ; 02:7A4A
     add  $A0                        ; 02:7A4C
     ld   [hl],a                     ; 02:7A4E
     pop  hl                         ; 02:7A4F
-    ldh  a,[<$FFB9]                 ; 02:7A50
+    ldh  a,[<H_CameraXHigh]         ; 02:7A50
     adc  $00                        ; 02:7A52
     ld   [hl],a                     ; 02:7A54
     push de                         ; 02:7A55
@@ -8729,14 +8750,14 @@ Code027A19:
 Return027A73:
     ret                             ; 02:7A73
 
-    rst  $18                        ; 02:7A74
+    rst  $18                        ; 02:7A74  Return from 24-bit call
 
 Return027A75:
     ret                             ; 02:7A75
 
 UnusedL_027A76:
     call Sub027A82                  ; 02:7A76
-    rst  $18                        ; 02:7A79
+    rst  $18                        ; 02:7A79  Return from 24-bit call
 
 Data027A7A:                         ; 02:7A7A
 .db $00,$40,$40,$40,$80,$40,$C0,$40
@@ -8769,7 +8790,7 @@ Sub027A82:
 
 SubL_027AAE:
     ld   a,$3E                      ; 02:7AAE
-    call Sub0026BE                  ; 02:7AB0
+    call LoadSpriteAnySlot          ; 02:7AB0
     jp   c,ReturnL_027AF8           ; 02:7AB3
     ld   bc,$0004                   ; 02:7AB6
     ld   hl,$C221                   ; 02:7AB9
@@ -8809,7 +8830,7 @@ SubL_027AAE:
     ldh  a,[<$FF9F]                 ; 02:7AF5
     ld   [hl],a                     ; 02:7AF7
 ReturnL_027AF8:
-    rst  $18                        ; 02:7AF8
+    rst  $18                        ; 02:7AF8  Return from 24-bit call
 
 Data027AF9:                         ; 02:7AF9
 .db $84,$01,$86,$01
@@ -8860,11 +8881,11 @@ Code027B30:
     ld   [hl],a                     ; 02:7B4A
     ld   a,$00                      ; 02:7B4B
     ldh  [<SVBK],a                  ; 02:7B4D
-    ld   hl,$FFB8                   ; 02:7B4F
+    ld   hl,H_CameraXLow            ; 02:7B4F
     ldh  a,[<$FF97]                 ; 02:7B52
     sub  [hl]                       ; 02:7B54
     ldh  [<$FF9D],a                 ; 02:7B55
-    ld   hl,$FFB9                   ; 02:7B57
+    ld   hl,H_CameraXHigh           ; 02:7B57
     ldh  a,[<$FF99]                 ; 02:7B5A
     sbc  [hl]                       ; 02:7B5C
     and  a                          ; 02:7B5D
@@ -8884,7 +8905,7 @@ Code027B69:
     ld   d,$00                      ; 02:7B72
     ld   hl,Data027AF9              ; 02:7B74
     add  hl,de                      ; 02:7B77
-    call Sub0027BD                  ; 02:7B78
+    call Disp16x16Sprite            ; 02:7B78
     ret                             ; 02:7B7B
 
 Sub027B7C:
@@ -8917,7 +8938,7 @@ Code027B9C:
 
 Unused027B9E:
     ld   a,$3F                      ; 02:7B9E
-    call Sub0026BE                  ; 02:7BA0
+    call LoadSpriteAnySlot          ; 02:7BA0
     jp   c,Return027BD3             ; 02:7BA3
     ld   a,$26                      ; 02:7BA6
     ldh  [<$FFF3],a                 ; 02:7BA8
@@ -8974,7 +8995,7 @@ Code027BE3:
 Code027BFF:
     ld   hl,Data0249E5              ; 02:7BFF
     add  hl,de                      ; 02:7C02
-    call Sub0027BD                  ; 02:7C03
+    call Disp16x16Sprite            ; 02:7C03
 Return027C06:
     ret                             ; 02:7C06
 
@@ -8982,7 +9003,7 @@ Sub027C07:
     ld   hl,W_SpriteSubstate        ; 02:7C07
     add  hl,bc                      ; 02:7C0A
     ld   a,[hl]                     ; 02:7C0B
-    rst  $00                        ; 02:7C0C
+    rst  $00                        ; 02:7C0C  Execute from 16-bit pointer table
 .dw Code027C11                      ; 02:7C0D
 .dw Code027C2A                      ; 02:7C0F
 
@@ -9278,7 +9299,7 @@ Sub027E03:
     ld   hl,$D195                   ; 02:7E03
     add  hl,bc                      ; 02:7E06
     ld   a,[hl]                     ; 02:7E07
-    rst  $00                        ; 02:7E08
+    rst  $00                        ; 02:7E08  Execute from 16-bit pointer table
 .dw Code027E0D                      ; 02:7E09
 .dw Code027EBC                      ; 02:7E0B
 
@@ -9461,11 +9482,11 @@ Code027F2B:
 
 Sub027F2E:
     push bc                         ; 02:7F2E
-    ld   hl,$FFB8                   ; 02:7F2F
+    ld   hl,H_CameraXLow            ; 02:7F2F
     ldh  a,[<$FF97]                 ; 02:7F32
     sub  [hl]                       ; 02:7F34
     ld   e,a                        ; 02:7F35
-    ld   hl,$FFB9                   ; 02:7F36
+    ld   hl,H_CameraXHigh           ; 02:7F36
     ldh  a,[<$FF9B]                 ; 02:7F39
     sbc  [hl]                       ; 02:7F3B
     ld   d,a                        ; 02:7F3C

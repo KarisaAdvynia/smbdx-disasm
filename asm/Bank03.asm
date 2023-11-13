@@ -7,7 +7,7 @@ Sub034000:
     ldh  a,[<H_ButtonsPressed]      ; 03:4003
     push af                         ; 03:4005
     ld   a,$03                      ; 03:4006
-    rst  $10                        ; 03:4008
+    rst  $10                        ; 03:4008  24-bit call
 .dl SubL_0B488F                     ; 03:4009
     call Sub0341C2                  ; 03:400C
     jr   Code034020                 ; 03:400F
@@ -18,7 +18,7 @@ Sub034011:
     ldh  a,[<H_ButtonsPressed]      ; 03:4014
     push af                         ; 03:4016
     ld   a,$03                      ; 03:4017
-    rst  $10                        ; 03:4019
+    rst  $10                        ; 03:4019  24-bit call
 .dl SubL_0B52C5                     ; 03:401A
     call Sub034033                  ; 03:401D
 Code034020:
@@ -58,7 +58,7 @@ Code03405A:
     call Sub0340C9                  ; 03:405D
 Code034060:
     ld   a,[$C53A]                  ; 03:4060
-    ld   [$C1F2],a                  ; 03:4063
+    ld   [W_PlayerCoins],a          ; 03:4063
     ld   hl,$C1ED                   ; 03:4066
     ld   a,[$C535]                  ; 03:4069
     ldi  [hl],a                     ; 03:406C
@@ -130,14 +130,14 @@ Sub0340F9:
     ld   a,[$DA6A]                  ; 03:40F9
     and  a                          ; 03:40FC
     jr   z,Code03410F               ; 03:40FD
-    ldh  a,[<$FFB8]                 ; 03:40FF
+    ldh  a,[<H_CameraXLow]          ; 03:40FF
     push af                         ; 03:4101
-    ldh  a,[<$FFB9]                 ; 03:4102
+    ldh  a,[<H_CameraXHigh]         ; 03:4102
     push af                         ; 03:4104
     ld   a,[$C27B]                  ; 03:4105
-    ldh  [<$FFB8],a                 ; 03:4108
+    ldh  [<H_CameraXLow],a          ; 03:4108
     ld   a,[$C27C]                  ; 03:410A
-    ldh  [<$FFB9],a                 ; 03:410D
+    ldh  [<H_CameraXHigh],a         ; 03:410D
 Code03410F:
     call Sub03781C                  ; 03:410F
     ld   a,[$DA75]                  ; 03:4112
@@ -153,9 +153,9 @@ Code03410F:
     and  a                          ; 03:412D
     jr   z,Code034136               ; 03:412E
     pop  af                         ; 03:4130
-    ldh  [<$FFB9],a                 ; 03:4131
+    ldh  [<H_CameraXHigh],a         ; 03:4131
     pop  af                         ; 03:4133
-    ldh  [<$FFB8],a                 ; 03:4134
+    ldh  [<H_CameraXLow],a          ; 03:4134
 Code034136:
     ld   a,$01                      ; 03:4136
     ld   [$C369],a                  ; 03:4138
@@ -170,28 +170,28 @@ SubL_034148:
     and  a                          ; 03:414B
     jr   nz,ReturnL_034156          ; 03:414C
     ld   a,$C0                      ; 03:414E
-    ldh  [<$FFA7],a                 ; 03:4150
+    ldh  [<H_PlayerXLow],a          ; 03:4150
     ld   a,$FF                      ; 03:4152
-    ldh  [<$FFA8],a                 ; 03:4154
+    ldh  [<H_PlayerXHigh],a         ; 03:4154
 ReturnL_034156:
-    rst  $18                        ; 03:4156
+    rst  $18                        ; 03:4156  Return from 24-bit call
 
 SubL_034157:
-    ldh  a,[<$FFB8]                 ; 03:4157
+    ldh  a,[<H_CameraXLow]          ; 03:4157
     ld   [$C27B],a                  ; 03:4159
-    ldh  a,[<$FFB9]                 ; 03:415C
+    ldh  a,[<H_CameraXHigh]         ; 03:415C
     ld   [$C27C],a                  ; 03:415E
-    ldh  a,[<$FFBA]                 ; 03:4161
+    ldh  a,[<H_CameraY]             ; 03:4161
     ld   [$C27D],a                  ; 03:4163
     ldh  a,[<$FFBB]                 ; 03:4166
     ld   [$C27E],a                  ; 03:4168
-    ldh  a,[<$FFA7]                 ; 03:416B
+    ldh  a,[<H_PlayerXLow]          ; 03:416B
     ld   [$C1CA],a                  ; 03:416D
-    ldh  a,[<$FFA8]                 ; 03:4170
+    ldh  a,[<H_PlayerXHigh]         ; 03:4170
     ld   [$C1CB],a                  ; 03:4172
-    ldh  a,[<$FFA9]                 ; 03:4175
+    ldh  a,[<H_PlayerYLow]          ; 03:4175
     ld   [$C1CC],a                  ; 03:4177
-    ldh  a,[<$FFAA]                 ; 03:417A
+    ldh  a,[<H_PlayerYHigh]         ; 03:417A
     ld   [$C1CD],a                  ; 03:417C
     xor  a                          ; 03:417F
     ld   [$C1D6],a                  ; 03:4180
@@ -199,17 +199,17 @@ SubL_034157:
     ld   [$C366],a                  ; 03:4186
     ld   hl,$C1E3                   ; 03:4189
     ld   [hl],$01                   ; 03:418C
-    ldh  a,[<$FFA8]                 ; 03:418E
+    ldh  a,[<H_PlayerXHigh]         ; 03:418E
     and  a                          ; 03:4190
     jr   nz,Code0341A9              ; 03:4191
-    ldh  a,[<$FFA7]                 ; 03:4193
+    ldh  a,[<H_PlayerXLow]          ; 03:4193
     cp   $08                        ; 03:4195
     jr   c,Code0341A9               ; 03:4197
     ld   [hl],$00                   ; 03:4199
     cp   $30                        ; 03:419B
     jr   c,Code0341A9               ; 03:419D
     ld   a,$30                      ; 03:419F
-    ldh  [<$FFA7],a                 ; 03:41A1
+    ldh  [<H_PlayerXLow],a          ; 03:41A1
     xor  a                          ; 03:41A3
     ld   [$C1C2],a                  ; 03:41A4
     jr   Code0341B7                 ; 03:41A7
@@ -221,15 +221,15 @@ Code0341A9:
     call Sub035A14                  ; 03:41B4
 Code0341B7:
     ld   a,$A8                      ; 03:41B7
-    ldh  [<$FFA9],a                 ; 03:41B9
+    ldh  [<H_PlayerYLow],a          ; 03:41B9
     xor  a                          ; 03:41BB
-    ldh  [<$FFAA],a                 ; 03:41BC
+    ldh  [<H_PlayerYHigh],a         ; 03:41BC
     call Sub037376                  ; 03:41BE
-    rst  $18                        ; 03:41C1
+    rst  $18                        ; 03:41C1  Return from 24-bit call
 
 Sub0341C2:
     ld   a,$03                      ; 03:41C2
-    rst  $10                        ; 03:41C4
+    rst  $10                        ; 03:41C4  24-bit call
 .dl SubL_0B5302                     ; 03:41C5
     xor  a                          ; 03:41C8
     ld   [$C366],a                  ; 03:41C9
@@ -261,7 +261,7 @@ Code0341EE:
     ld   [W_PlayerFireFlag],a       ; 03:41FD
 Code034200:
     ld   a,$03                      ; 03:4200
-    rst  $10                        ; 03:4202
+    rst  $10                        ; 03:4202  24-bit call
 .dl SubL_0B421E                     ; 03:4203
     jr   Code03421A                 ; 03:4206
 Code034208:
@@ -291,21 +291,21 @@ Sub03421E:
     jr   z,Code034230               ; 03:422D
     dec  [hl]                       ; 03:422F
 Code034230:
-    ldh  a,[<$FFB8]                 ; 03:4230
+    ldh  a,[<H_CameraXLow]          ; 03:4230
     ld   [$C27B],a                  ; 03:4232
-    ldh  a,[<$FFB9]                 ; 03:4235
+    ldh  a,[<H_CameraXHigh]         ; 03:4235
     ld   [$C27C],a                  ; 03:4237
-    ldh  a,[<$FFBA]                 ; 03:423A
+    ldh  a,[<H_CameraY]             ; 03:423A
     ld   [$C27D],a                  ; 03:423C
     ldh  a,[<$FFBB]                 ; 03:423F
     ld   [$C27E],a                  ; 03:4241
-    ldh  a,[<$FFA7]                 ; 03:4244
+    ldh  a,[<H_PlayerXLow]          ; 03:4244
     ld   [$C1CA],a                  ; 03:4246
-    ldh  a,[<$FFA8]                 ; 03:4249
+    ldh  a,[<H_PlayerXHigh]         ; 03:4249
     ld   [$C1CB],a                  ; 03:424B
-    ldh  a,[<$FFA9]                 ; 03:424E
+    ldh  a,[<H_PlayerYLow]          ; 03:424E
     ld   [$C1CC],a                  ; 03:4250
-    ldh  a,[<$FFAA]                 ; 03:4253
+    ldh  a,[<H_PlayerYHigh]         ; 03:4253
     ld   [$C1CD],a                  ; 03:4255
     xor  a                          ; 03:4258
     ld   [$C1D6],a                  ; 03:4259
@@ -326,30 +326,30 @@ Code034230:
 
 Sub03427D:
     ld   a,[W_PlayerState]          ; 03:427D
-    rst  $00                        ; 03:4280
-.dw Code034365                      ; 03:4281
-.dw Code034572                      ; 03:4283
-.dw Code0347FA                      ; 03:4285
-.dw Code03483D                      ; 03:4287
-.dw Code03489A                      ; 03:4289
-.dw Code034AD6                      ; 03:428B
-.dw Code034D75                      ; 03:428D
-.dw Code034DE8                      ; 03:428F
-.dw Code0374CB                      ; 03:4291
-.dw Code034E31                      ; 03:4293
-.dw Code034E71                      ; 03:4295
-.dw Code037524                      ; 03:4297
-.dw Code0343C0                      ; 03:4299
-.dw Code03447F                      ; 03:429B
-.dw Code03449C                      ; 03:429D
-.dw Code034737                      ; 03:429F
-.dw Code0347D4                      ; 03:42A1
-.dw Code034A24                      ; 03:42A3
-.dw Code0347E6                      ; 03:42A5
-.dw Code034572                      ; 03:42A7
-.dw Code034737                      ; 03:42A9
-.dw Return034E70                    ; 03:42AB
-.dw Code0346E5                      ; 03:42AD
+    rst  $00                        ; 03:4280  Execute from 16-bit pointer table
+.dw Code034365                      ; 00
+.dw Code034572                      ; 01
+.dw Code0347FA                      ; 02
+.dw Code03483D                      ; 03
+.dw Code03489A                      ; 04
+.dw PlayerFlagpole_Main             ; 05
+.dw Code034D75                      ; 06
+.dw Code034DE8                      ; 07
+.dw PlayerHorizPipe_Wrapper         ; 08
+.dw Code034E31                      ; 09
+.dw PlayerAxe_Main                  ; 0A
+.dw PlayerVertPipe_Wrapper          ; 0B
+.dw Code0343C0                      ; 0C
+.dw Code03447F                      ; 0D
+.dw PlayerVine_Wrapper              ; 0E
+.dw Code034737                      ; 0F
+.dw PlayerPipeIntroWalk             ; 10
+.dw Code034A24                      ; 11
+.dw Code0347E6                      ; 12
+.dw Code034572                      ; 13
+.dw Code034737                      ; 14
+.dw Return034E70                    ; 15
+.dw Code0346E5                      ; 16
 
 Sub0342AF:
     ld   a,[$C1DA]                  ; 03:42AF
@@ -449,11 +449,12 @@ Code034358:
     cp   $06                        ; 03:435B
     ret  z                          ; 03:435D
     ld   a,$03                      ; 03:435E
-    rst  $10                        ; 03:4360
+    rst  $10                        ; 03:4360  24-bit call
 .dl SubL_0B433F                     ; 03:4361
     ret                             ; 03:4364
 
 Code034365:
+; Player state 00
     ld   hl,$C1DD                   ; 03:4365
     ld   a,[W_PlayerSize]           ; 03:4368
     and  a                          ; 03:436B
@@ -492,7 +493,7 @@ Code034396:
     jr   c,Return0343B9             ; 03:43AF
     ld   [hl],$00                   ; 03:43B1
     ld   a,$03                      ; 03:43B3
-    rst  $10                        ; 03:43B5
+    rst  $10                        ; 03:43B5  24-bit call
 .dl SubL_0851B7                     ; 03:43B6
 Return0343B9:
     ret                             ; 03:43B9
@@ -501,7 +502,9 @@ Data0343BA:                         ; 03:43BA
 .db $F0,$20
 Data0343BC:                         ; 03:43BC
 .db $10,$00,$F0,$FF
+
 Code0343C0:
+; Player state 0C
     ld   a,[$C1DD]                  ; 03:43C0
     and  a                          ; 03:43C3
     jr   nz,Code0343CC              ; 03:43C4
@@ -514,15 +517,15 @@ Code0343CC:
     ret                             ; 03:43D0
 
 Code0343D1:
-    ldh  a,[<$FFA9]                 ; 03:43D1
+    ldh  a,[<H_PlayerYLow]          ; 03:43D1
     cp   $40                        ; 03:43D3
     jr   nc,Code0343E6              ; 03:43D5
     ld   a,$0E                      ; 03:43D7
     ld   [W_PlayerState],a          ; 03:43D9
     xor  a                          ; 03:43DC
-    ld   [$C1D3],a                  ; 03:43DD
+    ld   [W_PlayerWarpSubstate],a   ; 03:43DD
     ld   [$C181],a                  ; 03:43E0
-    jp   Code03449C                 ; 03:43E3
+    jp   PlayerVine_Wrapper         ; 03:43E3
 Code0343E6:
     ld   a,[$C1C8]                  ; 03:43E6
     and  $30                        ; 03:43E9
@@ -552,8 +555,8 @@ Code034415:
     ld   a,[$C1C3]                  ; 03:4415
     cp   $02                        ; 03:4418
     jr   z,Code034426               ; 03:441A
-    ld   hl,$FFB8                   ; 03:441C
-    ldh  a,[<$FFA7]                 ; 03:441F
+    ld   hl,H_CameraXLow            ; 03:441C
+    ldh  a,[<H_PlayerXLow]          ; 03:441F
     sub  [hl]                       ; 03:4421
     cp   $18                        ; 03:4422
     jr   c,Code034440               ; 03:4424
@@ -565,13 +568,13 @@ Code034426:
     ld   d,$00                      ; 03:442F
     ld   hl,Data0343BC              ; 03:4431
     add  hl,de                      ; 03:4434
-    ldh  a,[<$FFA7]                 ; 03:4435
+    ldh  a,[<H_PlayerXLow]          ; 03:4435
     add  [hl]                       ; 03:4437
-    ldh  [<$FFA7],a                 ; 03:4438
+    ldh  [<H_PlayerXLow],a          ; 03:4438
     inc  hl                         ; 03:443A
-    ldh  a,[<$FFA8]                 ; 03:443B
+    ldh  a,[<H_PlayerXHigh]         ; 03:443B
     adc  [hl]                       ; 03:443D
-    ldh  [<$FFA8],a                 ; 03:443E
+    ldh  [<H_PlayerXHigh],a         ; 03:443E
 Code034440:
     xor  a                          ; 03:4440
     ldh  [<$FFAC],a                 ; 03:4441
@@ -608,6 +611,7 @@ Code034471:
     ret                             ; 03:447E
 
 Code03447F:
+; Player state 0D
     ld   a,[$C1E4]                  ; 03:447F
     and  a                          ; 03:4482
     jr   nz,Code034489              ; 03:4483
@@ -623,13 +627,15 @@ Code034489:
     call Sub035A14                  ; 03:4498
     ret                             ; 03:449B
 
-Code03449C:
-    call Sub0344A0                  ; 03:449C
+PlayerVine_Wrapper:
+; Player state 0E wrapper
+    call PlayerVine_Main            ; 03:449C
     ret                             ; 03:449F
 
-Sub0344A0:
-    ld   a,[$C1D3]                  ; 03:44A0
-    rst  $00                        ; 03:44A3
+PlayerVine_Main:
+; Player state 0E
+    ld   a,[W_PlayerWarpSubstate]   ; 03:44A0
+    rst  $00                        ; 03:44A3  Execute from 16-bit pointer table
 .dw Code0344B0                      ; 03:44A4
 .dw Code0344EF                      ; 03:44A6
 .dw Return0344FC                    ; 03:44A8
@@ -637,7 +643,7 @@ Sub0344A0:
 .dw Code03451B                      ; 03:44AC
 .dw Code03453A                      ; 03:44AE
 Code0344B0:
-    ldh  a,[<$FFAA]                 ; 03:44B0
+    ldh  a,[<H_PlayerYHigh]         ; 03:44B0
     and  a                          ; 03:44B2
     jr   nz,Code0344BB              ; 03:44B3
     ld   a,[$C1E4]                  ; 03:44B5
@@ -648,10 +654,10 @@ Code0344BB:
     ld   a,[hl]                     ; 03:44BE
     ldh  [<$FFAC],a                 ; 03:44BF
     call Sub0359E4                  ; 03:44C1
-    ldh  a,[<$FFAA]                 ; 03:44C4
+    ldh  a,[<H_PlayerYHigh]         ; 03:44C4
     and  a                          ; 03:44C6
     jr   z,Code0344D3               ; 03:44C7
-    ldh  a,[<$FFA9]                 ; 03:44C9
+    ldh  a,[<H_PlayerYLow]          ; 03:44C9
     cp   $E0                        ; 03:44CB
     jr   nc,Code0344D3              ; 03:44CD
     ld   a,$0D                      ; 03:44CF
@@ -675,11 +681,11 @@ Code0344EB:
 
 Code0344EF:
     ld   a,$03                      ; 03:44EF
-    rst  $10                        ; 03:44F1
+    rst  $10                        ; 03:44F1  24-bit call
 .dl SubL_027806                     ; 03:44F2
-    ld   a,[$C1D3]                  ; 03:44F5
+    ld   a,[W_PlayerWarpSubstate]   ; 03:44F5
     inc  a                          ; 03:44F8
-    ld   [$C1D3],a                  ; 03:44F9
+    ld   [W_PlayerWarpSubstate],a   ; 03:44F9
 Return0344FC:
     ret                             ; 03:44FC
 
@@ -688,31 +694,31 @@ Code0344FD:
     ld   a,[hl]                     ; 03:4500
     ldh  [<$FFAC],a                 ; 03:4501
     call Sub0359E4                  ; 03:4503
-    ldh  a,[<$FFAA]                 ; 03:4506
+    ldh  a,[<H_PlayerYHigh]         ; 03:4506
     and  a                          ; 03:4508
     jr   nz,Code034519              ; 03:4509
-    ldh  a,[<$FFA9]                 ; 03:450B
+    ldh  a,[<H_PlayerYLow]          ; 03:450B
     cp   $C8                        ; 03:450D
     jp   nc,Code034519              ; 03:450F
-    ld   a,[$C1D3]                  ; 03:4512
+    ld   a,[W_PlayerWarpSubstate]   ; 03:4512
     inc  a                          ; 03:4515
-    ld   [$C1D3],a                  ; 03:4516
+    ld   [W_PlayerWarpSubstate],a   ; 03:4516
 Code034519:
     jr   Code0344D3                 ; 03:4519
 Code03451B:
     xor  a                          ; 03:451B
     ld   [$C1C3],a                  ; 03:451C
     ld   hl,Data0343BC              ; 03:451F
-    ldh  a,[<$FFA7]                 ; 03:4522
+    ldh  a,[<H_PlayerXLow]          ; 03:4522
     add  [hl]                       ; 03:4524
-    ldh  [<$FFA7],a                 ; 03:4525
+    ldh  [<H_PlayerXLow],a          ; 03:4525
     inc  hl                         ; 03:4527
-    ldh  a,[<$FFA8]                 ; 03:4528
+    ldh  a,[<H_PlayerXHigh]         ; 03:4528
     adc  [hl]                       ; 03:452A
-    ldh  [<$FFA8],a                 ; 03:452B
-    ld   a,[$C1D3]                  ; 03:452D
+    ldh  [<H_PlayerXHigh],a         ; 03:452B
+    ld   a,[W_PlayerWarpSubstate]   ; 03:452D
     inc  a                          ; 03:4530
-    ld   [$C1D3],a                  ; 03:4531
+    ld   [W_PlayerWarpSubstate],a   ; 03:4531
     ld   a,$10                      ; 03:4534
     ld   [$C1D1],a                  ; 03:4536
     ret                             ; 03:4539
@@ -749,6 +755,7 @@ Return034571:
     ret                             ; 03:4571
 
 Code034572:
+; Player state 01/13
     call Sub035615                  ; 03:4572
     ld   hl,$C1F7                   ; 03:4575
     ld   a,[hl]                     ; 03:4578
@@ -772,7 +779,7 @@ Code034596:
     ldh  a,[<$FFAC]                 ; 03:4596
     bit  7,a                        ; 03:4598
     jr   z,Code0345BE               ; 03:459A
-    ld   hl,$FFA9                   ; 03:459C
+    ld   hl,H_PlayerYLow            ; 03:459C
     ld   a,[$C201]                  ; 03:459F
     sub  [hl]                       ; 03:45A2
     cp   $10                        ; 03:45A3
@@ -946,7 +953,9 @@ Return0346D4:
 Data0346D5:                         ; 03:46D5
 .db $A8,$A7,$A6,$A5,$A4,$A3,$A2,$A1,\
     $A0,$BF,$BE,$BD,$BC,$BB,$BA,$B9
+
 Code0346E5:
+; Player state 16
     call Sub035615                  ; 03:46E5
     ld   a,[$C1FB]                  ; 03:46E8
     ld   e,a                        ; 03:46EB
@@ -994,7 +1003,9 @@ Code03471D:
     ld   [$C1FC],a                  ; 03:4732
 Code034735:
     jr   Code034794                 ; 03:4735
+
 Code034737:
+; Player state 0F/14
     call Sub035615                  ; 03:4737
     ld   a,[W_PlayerState]          ; 03:473A
     cp   $0F                        ; 03:473D
@@ -1076,7 +1087,8 @@ Code0347D0:
     call Sub035A14                  ; 03:47D0
     ret                             ; 03:47D3
 
-Code0347D4:
+PlayerPipeIntroWalk:
+; Player state 10
     ld   a,$10                      ; 03:47D4
     ld   [$C25E],a                  ; 03:47D6
     call Sub035680                  ; 03:47D9
@@ -1086,6 +1098,7 @@ Code0347D4:
     ret                             ; 03:47E5
 
 Code0347E6:
+; Player state 12
     ld   hl,$C1D1                   ; 03:47E6
     dec  [hl]                       ; 03:47E9
     ld   a,[hl]                     ; 03:47EA
@@ -1099,7 +1112,9 @@ Data0347F2:                         ; 03:47F2
 .db $00,$00,$C0,$40
 Data0347F6:                         ; 03:47F6
 .db $C0,$40,$00,$00
+
 Code0347FA:
+; Player state 02
     xor  a                          ; 03:47FA
     ldh  [<$FFAB],a                 ; 03:47FB
     ldh  [<$FFAC],a                 ; 03:47FD
@@ -1138,6 +1153,7 @@ Code034830:
     ret                             ; 03:483C
 
 Code03483D:
+; Player state 03
     ld   a,$05                      ; 03:483D
     ld   [$C1C2],a                  ; 03:483F
     ld   a,[W_PlayerFireFlag]       ; 03:4842
@@ -1145,7 +1161,7 @@ Code03483D:
     xor  a                          ; 03:4846
     ld   [W_PlayerFireFlag],a       ; 03:4847
     ld   a,$03                      ; 03:484A
-    rst  $10                        ; 03:484C
+    rst  $10                        ; 03:484C  24-bit call
 .dl SubL_0B421E                     ; 03:484D
     pop  af                         ; 03:4850
     ld   [W_PlayerFireFlag],a       ; 03:4851
@@ -1175,12 +1191,12 @@ Code03486B:
 Code03487B:
     ld   [hl],a                     ; 03:487B
     call Sub0359E4                  ; 03:487C
-    ldh  a,[<$FFAA]                 ; 03:487F
+    ldh  a,[<H_PlayerYHigh]         ; 03:487F
     bit  7,a                        ; 03:4881
     jr   nz,Return034899            ; 03:4883
     cp   $01                        ; 03:4885
     jr   z,Code03488F               ; 03:4887
-    ldh  a,[<$FFA9]                 ; 03:4889
+    ldh  a,[<H_PlayerYLow]          ; 03:4889
     cp   $F0                        ; 03:488B
     jr   c,Return034899             ; 03:488D
 Code03488F:
@@ -1192,6 +1208,7 @@ Return034899:
     ret                             ; 03:4899
 
 Code03489A:
+; Player state 04
     ld   a,[W_GameMode]             ; 03:489A
     cp   $02                        ; 03:489D
     jp   z,Code034931               ; 03:489F
@@ -1219,7 +1236,7 @@ Code0348C6:
     ld   a,[W_GameMode]             ; 03:48C6
     cp   $07                        ; 03:48C9
     jr   z,Code034924               ; 03:48CB
-    ld   hl,$C17D                   ; 03:48CD
+    ld   hl,W_LevelTimerLow         ; 03:48CD
     ld   e,[hl]                     ; 03:48D0
     inc  hl                         ; 03:48D1
     ld   a,[hl]                     ; 03:48D2
@@ -1243,7 +1260,7 @@ Code0348C6:
     ld   a,$01                      ; 03:48F6
     jr   Code034917                 ; 03:48F8
 Code0348FA:
-    ld   a,[$C283]                  ; 03:48FA
+    ld   a,[W_ChallengeFlag]        ; 03:48FA
     and  a                          ; 03:48FD
     jr   nz,Code034907              ; 03:48FE
     ld   a,$0E                      ; 03:4900
@@ -1425,6 +1442,7 @@ Code03498D:
     ret                             ; 03:4A23
 
 Code034A24:
+; Player state 11
     ld   hl,$C1CF                   ; 03:4A24
     ld   a,[hl]                     ; 03:4A27
     dec  [hl]                       ; 03:4A28
@@ -1450,26 +1468,26 @@ Code034A41:
     ldh  [<$FFF2],a                 ; 03:4A43
     ret                             ; 03:4A45
 
-Data034A46:                         ; 03:4A46
+MidpointScreens_Orig:               ; 03:4A46
 .db $05,$06,$04,$00,$06,$05,$07,$00,\
     $06,$06,$04,$00,$06,$06,$04,$00,\
     $06,$06,$04,$00,$06,$06,$06,$00,\
     $06,$05,$07,$00,$00,$00,$00,$00
-Data034A66:                         ; 03:4A66
+MidpointScreens_SP:                 ; 03:4A66
 .db $06,$06,$06,$00,$08,$08,$06,$00,\
     $06,$06,$07,$00,$07,$07,$06,$00,\
     $0D,$06,$00,$00,$07,$07,$08,$00,\
     $07,$00,$0B,$00,$00,$00,$00,$00
 
 Sub034A86:
-    ld   a,[$C1EF]                  ; 03:4A86
+    ld   a,[$C1EF]                  ; 03:4A86  highest screen number reached
     and  a                          ; 03:4A89
     ret  z                          ; 03:4A8A
-    ld   hl,Data034A46              ; 03:4A8B
+    ld   hl,MidpointScreens_Orig    ; 03:4A8B
     ld   a,[W_SPFlag]               ; 03:4A8E
     and  a                          ; 03:4A91
     jr   z,Code034A97               ; 03:4A92
-    ld   hl,Data034A66              ; 03:4A94
+    ld   hl,MidpointScreens_SP      ; 03:4A94  if Super Players, use different table
 Code034A97:
     ld   a,[W_LevelID]              ; 03:4A97
     ld   e,a                        ; 03:4A9A
@@ -1488,8 +1506,8 @@ Code034AAA:
     ld   [$C182],a                  ; 03:4AAF
 Code034AB2:
     ldh  [<$FFC4],a                 ; 03:4AB2
-    ldh  [<$FFB9],a                 ; 03:4AB4
-    ldh  [<$FFA8],a                 ; 03:4AB6
+    ldh  [<H_CameraXHigh],a         ; 03:4AB4
+    ldh  [<H_PlayerXHigh],a         ; 03:4AB6
     ld   [$C1EE],a                  ; 03:4AB8
     ld   [$C1EF],a                  ; 03:4ABB
     and  a                          ; 03:4ABE
@@ -1502,10 +1520,11 @@ Code034AB2:
     ld   [$C1EE],a                  ; 03:4ACE
 Code034AD1:
     ld   a,$20                      ; 03:4AD1
-    ldh  [<$FFA7],a                 ; 03:4AD3
+    ldh  [<H_PlayerXLow],a          ; 03:4AD3
     ret                             ; 03:4AD5
 
-Code034AD6:
+PlayerFlagpole_Main:
+; Player state 05
     ld   hl,$C20B                   ; 03:4AD6
     ld   e,[hl]                     ; 03:4AD9
     inc  hl                         ; 03:4ADA
@@ -1518,8 +1537,8 @@ Code034AD6:
     ret                             ; 03:4AE3
 
 Sub034AE4:
-    ld   a,[$C1D3]                  ; 03:4AE4
-    rst  $00                        ; 03:4AE7
+    ld   a,[W_PlayerWarpSubstate]   ; 03:4AE4
+    rst  $00                        ; 03:4AE7  Execute from 16-bit pointer table
 .dw Return034B2D                    ; 03:4AE8
 .dw Code034AF4                      ; 03:4AEA
 .dw Code034B6E                      ; 03:4AEC
@@ -1553,7 +1572,7 @@ Code034B13:
     and  $03                        ; 03:4B20
     cp   $03                        ; 03:4B22
     jr   nz,Code034B2A              ; 03:4B24
-    ld   hl,$C1D3                   ; 03:4B26
+    ld   hl,W_PlayerWarpSubstate    ; 03:4B26
     inc  [hl]                       ; 03:4B29
 Code034B2A:
     call Sub035A14                  ; 03:4B2A
@@ -1588,21 +1607,21 @@ Code034B6E:
 Code034B91:
     add  hl,de                      ; 03:4B91
     ld   d,[hl]                     ; 03:4B92
-    ldh  a,[<$FFA7]                 ; 03:4B93
+    ldh  a,[<H_PlayerXLow]          ; 03:4B93
     and  $F0                        ; 03:4B95
     cp   d                          ; 03:4B97
     ret  nz                         ; 03:4B98
     ld   a,d                        ; 03:4B99
-    ldh  [<$FFA7],a                 ; 03:4B9A
+    ldh  [<H_PlayerXLow],a          ; 03:4B9A
     xor  a                          ; 03:4B9C
     ld   [$C1C2],a                  ; 03:4B9D
     ld   [$C20B],a                  ; 03:4BA0
     ld   [$C20C],a                  ; 03:4BA3
-    ld   hl,$C1D3                   ; 03:4BA6
+    ld   hl,W_PlayerWarpSubstate    ; 03:4BA6
     inc  [hl]                       ; 03:4BA9
     ld   a,$04                      ; 03:4BAA
     ld   [$C1D1],a                  ; 03:4BAC
-    ld   hl,$C17D                   ; 03:4BAF
+    ld   hl,W_LevelTimerLow         ; 03:4BAF
     ld   e,[hl]                     ; 03:4BB2
     inc  hl                         ; 03:4BB3
     ld   d,[hl]                     ; 03:4BB4
@@ -1631,7 +1650,7 @@ Code034BC6:
     ld   [$C281],a                  ; 03:4BD6
     ld   a,$96                      ; 03:4BD9
     ld   [$C1D1],a                  ; 03:4BDB
-    ld   hl,$C1D3                   ; 03:4BDE
+    ld   hl,W_PlayerWarpSubstate    ; 03:4BDE
     inc  [hl]                       ; 03:4BE1
     ld   a,[$C280]                  ; 03:4BE2
     cp   $01                        ; 03:4BE5
@@ -1643,7 +1662,7 @@ Code034BC6:
     inc  [hl]                       ; 03:4BF1
 Code034BF2:
     ld   a,$03                      ; 03:4BF2
-    rst  $10                        ; 03:4BF4
+    rst  $10                        ; 03:4BF4  24-bit call
 .dl SubL_06499F                     ; 03:4BF5
     pop  hl                         ; 03:4BF8
     pop  de                         ; 03:4BF9
@@ -1655,7 +1674,7 @@ Code034BFA:
     ldh  [<$FF97],a                 ; 03:4BFE
     xor  a                          ; 03:4C00
     ldh  [<$FF98],a                 ; 03:4C01
-    call Sub002E30                  ; 03:4C03
+    call GivePointsFF97             ; 03:4C03
 Return034C06:
     ret                             ; 03:4C06
 
@@ -1666,7 +1685,7 @@ Sub034C07:
     and  a                          ; 03:4C0C
     jp   nz,Code034C39              ; 03:4C0D
     ld   [hl],$02                   ; 03:4C10
-    ld   hl,$C17D                   ; 03:4C12
+    ld   hl,W_LevelTimerLow         ; 03:4C12
     ld   e,[hl]                     ; 03:4C15
     inc  hl                         ; 03:4C16
     ld   d,[hl]                     ; 03:4C17
@@ -1718,25 +1737,25 @@ Code034C4B:
     ld   d,$00                      ; 03:4C5C
     ld   hl,Data034C3B              ; 03:4C5E
     add  hl,de                      ; 03:4C61
-    ldh  a,[<$FFA7]                 ; 03:4C62
+    ldh  a,[<H_PlayerXLow]          ; 03:4C62
     add  [hl]                       ; 03:4C64
     ldh  [<$FF97],a                 ; 03:4C65
     inc  hl                         ; 03:4C67
-    ldh  a,[<$FFA8]                 ; 03:4C68
+    ldh  a,[<H_PlayerXHigh]         ; 03:4C68
     adc  [hl]                       ; 03:4C6A
     ldh  [<$FF98],a                 ; 03:4C6B
     inc  hl                         ; 03:4C6D
-    ldh  a,[<$FFA9]                 ; 03:4C6E
+    ldh  a,[<H_PlayerYLow]          ; 03:4C6E
     add  [hl]                       ; 03:4C70
     ldh  [<$FF99],a                 ; 03:4C71
     ld   a,$03                      ; 03:4C73
-    rst  $10                        ; 03:4C75
+    rst  $10                        ; 03:4C75  24-bit call
 .dl SubL_064A0F                     ; 03:4C76
     ld   a,$32                      ; 03:4C79
     ldh  [<$FF97],a                 ; 03:4C7B
     xor  a                          ; 03:4C7D
     ldh  [<$FF98],a                 ; 03:4C7E
-    call Sub002E30                  ; 03:4C80
+    call GivePointsFF97             ; 03:4C80
     ld   de,$0008                   ; 03:4C83
     ld   a,$01                      ; 03:4C86
     call Return0010B2               ; 03:4C88
@@ -1752,7 +1771,7 @@ Code034C4B:
     ret  nz                         ; 03:4C99
     ld   hl,$C429                   ; 03:4C9A
     set  2,[hl]                     ; 03:4C9D
-    ld   hl,$C1D3                   ; 03:4C9F
+    ld   hl,W_PlayerWarpSubstate    ; 03:4C9F
     inc  [hl]                       ; 03:4CA2
     ret                             ; 03:4CA3
 
@@ -1784,7 +1803,7 @@ Code034CC5:
     ld   [$C182],a                  ; 03:4CCC
     ld   [$C20B],a                  ; 03:4CCF
     ld   [$C20C],a                  ; 03:4CD2
-    ld   a,[$C283]                  ; 03:4CD5
+    ld   a,[W_ChallengeFlag]        ; 03:4CD5
     and  a                          ; 03:4CD8
     jr   z,Code034CE0               ; 03:4CD9
     ld   a,$20                      ; 03:4CDB
@@ -1797,7 +1816,7 @@ Code034CE0:
     jr   nz,Code034CF1              ; 03:4CE4
     call Sub034D36                  ; 03:4CE6
     ld   a,$03                      ; 03:4CE9
-    rst  $10                        ; 03:4CEB
+    rst  $10                        ; 03:4CEB  24-bit call
 .dl SubL_0757EF                     ; 03:4CEC
     jr   Code034CF4                 ; 03:4CEF
 Code034CF1:
@@ -1845,7 +1864,7 @@ Sub034D26:
 
 Sub034D36:
     call Sub034D41                  ; 03:4D36
-    ld   hl,$C18E                   ; 03:4D39
+    ld   hl,W_ChalUnlockFlags       ; 03:4D39
     add  hl,de                      ; 03:4D3C
     ld   a,c                        ; 03:4D3D
     or   [hl]                       ; 03:4D3E
@@ -1878,7 +1897,9 @@ Data034D5D:                         ; 03:4D5D
 Data034D69:                         ; 03:4D69
 .db $01,$00,$01,$00,$01,$00,$01,$00,\
     $01,$00,$01,$00
+
 Code034D75:
+; Player state 06
     ld   a,[W_GameMode]             ; 03:4D75
     cp   $02                        ; 03:4D78
     jr   z,Code034D80               ; 03:4D7A
@@ -1908,7 +1929,7 @@ Code034D80:
     inc  a                          ; 03:4DAB
     ld   [$C181],a                  ; 03:4DAC
     ld   a,$03                      ; 03:4DAF
-    rst  $10                        ; 03:4DB1
+    rst  $10                        ; 03:4DB1  24-bit call
 .dl SubL_0B421E                     ; 03:4DB2
     ret                             ; 03:4DB5
 
@@ -1930,7 +1951,9 @@ Data034DC8:                         ; 03:4DC8
 Data034DD8:                         ; 03:4DD8
 .db $00,$01,$00,$01,$00,$01,$01,$00,\
     $01,$01,$00,$01,$01,$01,$01,$01
+
 Code034DE8:
+; Player state 07
     ld   a,[W_GameMode]             ; 03:4DE8
     cp   $02                        ; 03:4DEB
     jr   z,Code034DF3               ; 03:4DED
@@ -1973,6 +1996,7 @@ Code034E1F:
     ret                             ; 03:4E30
 
 Code034E31:
+; Player state 09
     ld   a,[W_GameMode]             ; 03:4E31
     cp   $02                        ; 03:4E34
     jr   z,Code034E3C               ; 03:4E36
@@ -2004,16 +2028,17 @@ Code034E68:
     dec  [hl]                       ; 03:4E68
 Code034E69:
     ld   a,$03                      ; 03:4E69
-    rst  $10                        ; 03:4E6B
+    rst  $10                        ; 03:4E6B  24-bit call
 .dl SubL_0B42F4                     ; 03:4E6C
     ret                             ; 03:4E6F
 
 Return034E70:
     ret                             ; 03:4E70
 
-Code034E71:
-    ld   a,[$C1D3]                  ; 03:4E71
-    rst  $00                        ; 03:4E74
+PlayerAxe_Main:
+; Player state 0A
+    ld   a,[W_PlayerWarpSubstate]   ; 03:4E71
+    rst  $00                        ; 03:4E74  Execute from 16-bit pointer table
 .dw Code034E8D                      ; 03:4E75
 .dw Code034EFC                      ; 03:4E77
 .dw Code034FA9                      ; 03:4E79
@@ -2063,7 +2088,7 @@ Code034ECA:
     ld   [$C268],a                  ; 03:4ECF
     xor  a                          ; 03:4ED2
     ld   [$C26A],a                  ; 03:4ED3
-    ld   hl,$C1D3                   ; 03:4ED6
+    ld   hl,W_PlayerWarpSubstate    ; 03:4ED6
     inc  [hl]                       ; 03:4ED9
     ret                             ; 03:4EDA
 
@@ -2073,7 +2098,7 @@ Code034EDB:
     cp   $0F                        ; 03:4EDD
     jr   nz,Code034E97              ; 03:4EDF
 Code034EE1:
-    ld   hl,$C1D3                   ; 03:4EE1
+    ld   hl,W_PlayerWarpSubstate    ; 03:4EE1
     ld   a,$04                      ; 03:4EE4
     ld   [hl],a                     ; 03:4EE6
     ld   a,$01                      ; 03:4EE7
@@ -2112,7 +2137,7 @@ Code034EFC:
     ret  nc                         ; 03:4F32
     ld   a,$20                      ; 03:4F33
     ld   [$C269],a                  ; 03:4F35
-    ld   hl,$C1D3                   ; 03:4F38
+    ld   hl,W_PlayerWarpSubstate    ; 03:4F38
     inc  [hl]                       ; 03:4F3B
     ret                             ; 03:4F3C
 
@@ -2169,7 +2194,7 @@ Code034F96:
     ld   [hl],a                     ; 03:4F9E
     ld   a,$20                      ; 03:4F9F
     ld   [$C269],a                  ; 03:4FA1
-    ld   hl,$C1D3                   ; 03:4FA4
+    ld   hl,W_PlayerWarpSubstate    ; 03:4FA4
     inc  [hl]                       ; 03:4FA7
     ret                             ; 03:4FA8
 
@@ -2210,7 +2235,7 @@ Code034FCB:
     ld   [$C268],a                  ; 03:4FDC
     ld   a,$4A                      ; 03:4FDF
     ldh  [<$FFF2],a                 ; 03:4FE1
-    ld   hl,$C1D3                   ; 03:4FE3
+    ld   hl,W_PlayerWarpSubstate    ; 03:4FE3
     inc  [hl]                       ; 03:4FE6
 Return034FE7:
     ret                             ; 03:4FE7
@@ -2238,7 +2263,7 @@ Code035014:
     ld   a,e                        ; 03:5015
     cp   $0F                        ; 03:5016
     jr   nz,Code035003              ; 03:5018
-    ld   hl,$C1D3                   ; 03:501A
+    ld   hl,W_PlayerWarpSubstate    ; 03:501A
     inc  [hl]                       ; 03:501D
     ld   a,[W_GameMode]             ; 03:501E
     cp   $02                        ; 03:5021
@@ -2271,7 +2296,7 @@ Code03504A:
     ld   e,a                        ; 03:5051
     ld   d,$00                      ; 03:5052
     add  hl,de                      ; 03:5054
-    ld   a,[$C283]                  ; 03:5055
+    ld   a,[W_ChallengeFlag]        ; 03:5055
     and  a                          ; 03:5058
     jr   z,Code03505F               ; 03:5059
     ld   de,$0008                   ; 03:505B
@@ -2299,45 +2324,45 @@ Code035071:
     call Sub03650F                  ; 03:5081
     call Sub035A14                  ; 03:5084
     ld   hl,$C267                   ; 03:5087
-    ldh  a,[<$FFA8]                 ; 03:508A
+    ldh  a,[<H_PlayerXHigh]         ; 03:508A
     cp   [hl]                       ; 03:508C
     jr   nz,Code0350A4              ; 03:508D
     ld   hl,$C265                   ; 03:508F
-    ldh  a,[<$FFA7]                 ; 03:5092
+    ldh  a,[<H_PlayerXLow]          ; 03:5092
     cp   [hl]                       ; 03:5094
     jr   c,Code0350A4               ; 03:5095
-    ld   hl,$C1D3                   ; 03:5097
+    ld   hl,W_PlayerWarpSubstate    ; 03:5097
     inc  [hl]                       ; 03:509A
     ld   a,$10                      ; 03:509B
     ld   [$C269],a                  ; 03:509D
     xor  a                          ; 03:50A0
     ld   [$C1C2],a                  ; 03:50A1
 Code0350A4:
-    ld   a,[$C161]                  ; 03:50A4
+    ld   a,[W_SubLvScreenCount]     ; 03:50A4
     dec  a                          ; 03:50A7
-    ld   hl,$FFB9                   ; 03:50A8
+    ld   hl,H_CameraXHigh           ; 03:50A8
     cp   [hl]                       ; 03:50AB
     jr   nz,Return0350C2            ; 03:50AC
-    ldh  a,[<$FFB8]                 ; 03:50AE
+    ldh  a,[<H_CameraXLow]          ; 03:50AE
     cp   $04                        ; 03:50B0
     jr   c,Return0350C2             ; 03:50B2
     xor  a                          ; 03:50B4
     ld   [$C1D6],a                  ; 03:50B5
     ld   a,$04                      ; 03:50B8
-    ldh  [<$FFB8],a                 ; 03:50BA
-    ld   a,[$C161]                  ; 03:50BC
+    ldh  [<H_CameraXLow],a          ; 03:50BA
+    ld   a,[W_SubLvScreenCount]     ; 03:50BC
     dec  a                          ; 03:50BF
-    ldh  [<$FFB9],a                 ; 03:50C0
+    ldh  [<H_CameraXHigh],a         ; 03:50C0
 Return0350C2:
     ret                             ; 03:50C2
 
 Code0350C3:
-    ld   a,[$C161]                  ; 03:50C3
+    ld   a,[W_SubLvScreenCount]     ; 03:50C3
     dec  a                          ; 03:50C6
-    ld   hl,$FFB9                   ; 03:50C7
+    ld   hl,H_CameraXHigh           ; 03:50C7
     cp   [hl]                       ; 03:50CA
     jr   nz,Code0350D3              ; 03:50CB
-    ldh  a,[<$FFB8]                 ; 03:50CD
+    ldh  a,[<H_CameraXLow]          ; 03:50CD
     cp   $04                        ; 03:50CF
     jr   nc,Code0350D9              ; 03:50D1
 Code0350D3:
@@ -2347,10 +2372,10 @@ Code0350D3:
 
 Code0350D9:
     ld   a,$04                      ; 03:50D9
-    ldh  [<$FFB8],a                 ; 03:50DB
-    ld   a,[$C161]                  ; 03:50DD
+    ldh  [<H_CameraXLow],a          ; 03:50DB
+    ld   a,[W_SubLvScreenCount]     ; 03:50DD
     dec  a                          ; 03:50E0
-    ldh  [<$FFB9],a                 ; 03:50E1
+    ldh  [<H_CameraXHigh],a         ; 03:50E1
     ld   hl,$C269                   ; 03:50E3
     dec  [hl]                       ; 03:50E6
     ld   a,[hl]                     ; 03:50E7
@@ -2359,9 +2384,9 @@ Code0350D9:
     ld   [hl],$20                   ; 03:50EA
     xor  a                          ; 03:50EC
     ld   [$C265],a                  ; 03:50ED
-    ld   hl,$C1D3                   ; 03:50F0
+    ld   hl,W_PlayerWarpSubstate    ; 03:50F0
     inc  [hl]                       ; 03:50F3
-    ld   a,[$C283]                  ; 03:50F4
+    ld   a,[W_ChallengeFlag]        ; 03:50F4
     and  a                          ; 03:50F7
     jr   z,Code035102               ; 03:50F8
     ld   [hl],$07                   ; 03:50FA
@@ -2381,7 +2406,7 @@ Code035102:
     jr   nz,Code035120              ; 03:5114
     call Sub034D36                  ; 03:5116
     ld   a,$03                      ; 03:5119
-    rst  $10                        ; 03:511B
+    rst  $10                        ; 03:511B  24-bit call
 .dl SubL_0757EF                     ; 03:511C
     ret                             ; 03:511F
 
@@ -2549,7 +2574,7 @@ Code035384:
 Code03539F:
     ldi  a,[hl]                     ; 03:539F
     push hl                         ; 03:53A0
-    ld   hl,$DF01                   ; 03:53A1
+    ld   hl,W_TilemapUploadBuffer   ; 03:53A1
     add  hl,de                      ; 03:53A4
     ld   [hl],a                     ; 03:53A5
     pop  hl                         ; 03:53A6
@@ -2562,7 +2587,7 @@ Code03539F:
     ld   [$C265],a                  ; 03:53B0
     cp   $03                        ; 03:53B3
     jr   nz,Return0353CE            ; 03:53B5
-    ld   hl,$C1D3                   ; 03:53B7
+    ld   hl,W_PlayerWarpSubstate    ; 03:53B7
     ld   [hl],$08                   ; 03:53BA
     ld   a,[W_LevelID]              ; 03:53BC
     srl  a                          ; 03:53BF
@@ -2584,7 +2609,7 @@ Code0353CF:
     push hl                         ; 03:53D7
     ld   a,$F0                      ; 03:53D8
     ld   [$C269],a                  ; 03:53DA
-    ld   hl,$C1D3                   ; 03:53DD
+    ld   hl,W_PlayerWarpSubstate    ; 03:53DD
     inc  [hl]                       ; 03:53E0
     pop  hl                         ; 03:53E1
 Code0353E2:
@@ -2604,7 +2629,7 @@ Code0353E6:
     ld   [$C182],a                  ; 03:53F4
     ld   [$C20B],a                  ; 03:53F7
     ld   [$C20C],a                  ; 03:53FA
-    ld   a,[$C283]                  ; 03:53FD
+    ld   a,[W_ChallengeFlag]        ; 03:53FD
     and  a                          ; 03:5400
     jr   z,Code035408               ; 03:5401
     ld   a,$20                      ; 03:5403
@@ -2631,7 +2656,7 @@ Code03541E:
     xor  a                          ; 03:541E
     ld   [$C265],a                  ; 03:541F
     ld   [$C269],a                  ; 03:5422
-    ld   hl,$C1D3                   ; 03:5425
+    ld   hl,W_PlayerWarpSubstate    ; 03:5425
     inc  [hl]                       ; 03:5428
 Return035429:
     ret                             ; 03:5429
@@ -2640,7 +2665,7 @@ Code03542A:
     ldh  a,[<H_ButtonsPressed]      ; 03:542A
     and  $03                        ; 03:542C
     ret  z                          ; 03:542E
-    ld   a,[$C283]                  ; 03:542F
+    ld   a,[W_ChallengeFlag]        ; 03:542F
     and  a                          ; 03:5432
     jr   nz,Code035438              ; 03:5433
     call Sub034D26                  ; 03:5435
@@ -2652,11 +2677,11 @@ Code035438:
     ld   [$C1AD],a                  ; 03:5440
     ld   a,$3A                      ; 03:5443
     ldh  [<H_GameState],a           ; 03:5445
-    ld   a,[$C283]                  ; 03:5447
+    ld   a,[W_ChallengeFlag]        ; 03:5447
     and  a                          ; 03:544A
     ret  nz                         ; 03:544B
     xor  a                          ; 03:544C
-    ld   [$C1F2],a                  ; 03:544D
+    ld   [W_PlayerCoins],a          ; 03:544D
     ld   [$C1EF],a                  ; 03:5450
     ld   [$C182],a                  ; 03:5453
     ret                             ; 03:5456
@@ -2686,7 +2711,7 @@ Code03547B:
     or   $08                        ; 03:5487
     ld   [$C429],a                  ; 03:5489
     ld   a,$03                      ; 03:548C
-    rst  $10                        ; 03:548E
+    rst  $10                        ; 03:548E  24-bit call
 .dl SubL_094736                     ; 03:548F
     jr   Code0354E0                 ; 03:5492
 Code035494:
@@ -2737,7 +2762,7 @@ Code0354E0:
     ldd  [hl],a                     ; 03:54EE
     ld   [hl],a                     ; 03:54EF
     ld   a,$03                      ; 03:54F0
-    rst  $10                        ; 03:54F2
+    rst  $10                        ; 03:54F2  24-bit call
 .dl SubL_0757EF                     ; 03:54F3
     ld   a,[W_SPFlag]               ; 03:54F6
     and  a                          ; 03:54F9
@@ -2746,7 +2771,7 @@ Code0354E0:
     ld   [W_HardFlag],a             ; 03:54FD
 Code035500:
     ld   a,$03                      ; 03:5500
-    rst  $10                        ; 03:5502
+    rst  $10                        ; 03:5502  24-bit call
 .dl SubL_075584                     ; 03:5503
     ld   hl,$C17A                   ; 03:5506
     ldh  a,[<$FFA1]                 ; 03:5509
@@ -2813,9 +2838,9 @@ Code03556F:
     xor  a                          ; 03:5574
     ldh  [<$FFAE],a                 ; 03:5575
     ld   [$C200],a                  ; 03:5577
-    ldh  a,[<$FFA9]                 ; 03:557A
+    ldh  a,[<H_PlayerYLow]          ; 03:557A
     ld   [$C201],a                  ; 03:557C
-    ldh  a,[<$FFAA]                 ; 03:557F
+    ldh  a,[<H_PlayerYHigh]         ; 03:557F
     ld   [$C202],a                  ; 03:5581
     ld   a,$20                      ; 03:5584
     ld   [$C1C7],a                  ; 03:5586
@@ -2877,10 +2902,10 @@ Return0355E6:
 
 Sub0355E7:
     ld   hl,$FFAC                   ; 03:55E7
-    ldh  a,[<$FFAA]                 ; 03:55EA
+    ldh  a,[<H_PlayerYHigh]         ; 03:55EA
     and  a                          ; 03:55EC
     jr   nz,Code0355FE              ; 03:55ED
-    ldh  a,[<$FFA9]                 ; 03:55EF
+    ldh  a,[<H_PlayerYLow]          ; 03:55EF
     cp   $2C                        ; 03:55F1
     jr   nc,Code0355FE              ; 03:55F3
     ld   a,[hl]                     ; 03:55F5
@@ -2916,7 +2941,7 @@ Sub035615:
     cp   $02                        ; 03:562C
     jr   z,Code035642               ; 03:562E
     ld   a,$03                      ; 03:5630
-    rst  $10                        ; 03:5632
+    rst  $10                        ; 03:5632  24-bit call
 .dl SubL_024007                     ; 03:5633
     ldh  a,[<$FFF2]                 ; 03:5636
     cp   $48                        ; 03:5638
@@ -2952,7 +2977,7 @@ Code035661:
     cp   $0F                        ; 03:5663
     jr   nz,Code035645              ; 03:5665
     ld   a,$03                      ; 03:5667
-    rst  $10                        ; 03:5669
+    rst  $10                        ; 03:5669  24-bit call
 .dl SubL_024030                     ; 03:566A
     ldh  a,[<$FFF2]                 ; 03:566D
     cp   $48                        ; 03:566F
@@ -3471,15 +3496,15 @@ Sub0359B4:
     or   $F0                        ; 03:59D1
     dec  e                          ; 03:59D3
 Code0359D4:
-    ld   hl,$FFA7                   ; 03:59D4
+    ld   hl,H_PlayerXLow            ; 03:59D4
     ldh  [<$FF97],a                 ; 03:59D7
     pop  af                         ; 03:59D9
     ldh  a,[<$FF97]                 ; 03:59DA
     adc  [hl]                       ; 03:59DC
     ld   [hl],a                     ; 03:59DD
-    ldh  a,[<$FFA8]                 ; 03:59DE
+    ldh  a,[<H_PlayerXHigh]         ; 03:59DE
     adc  e                          ; 03:59E0
-    ldh  [<$FFA8],a                 ; 03:59E1
+    ldh  [<H_PlayerXHigh],a         ; 03:59E1
     ret                             ; 03:59E3
 
 Sub0359E4:
@@ -3502,23 +3527,23 @@ Sub0359E4:
     or   $F0                        ; 03:5A01
     dec  e                          ; 03:5A03
 Code035A04:
-    ld   hl,$FFA9                   ; 03:5A04
+    ld   hl,H_PlayerYLow            ; 03:5A04
     ldh  [<$FF97],a                 ; 03:5A07
     pop  af                         ; 03:5A09
     ldh  a,[<$FF97]                 ; 03:5A0A
     adc  [hl]                       ; 03:5A0C
     ld   [hl],a                     ; 03:5A0D
-    ldh  a,[<$FFAA]                 ; 03:5A0E
+    ldh  a,[<H_PlayerYHigh]         ; 03:5A0E
     adc  e                          ; 03:5A10
-    ldh  [<$FFAA],a                 ; 03:5A11
+    ldh  [<H_PlayerYHigh],a         ; 03:5A11
     ret                             ; 03:5A13
 
 Sub035A14:
-    ldh  a,[<$FFA7]                 ; 03:5A14
+    ldh  a,[<H_PlayerXLow]          ; 03:5A14
     ld   hl,$C1CA                   ; 03:5A16
     sub  [hl]                       ; 03:5A19
     ld   [$C1D6],a                  ; 03:5A1A
-    ldh  a,[<$FFA9]                 ; 03:5A1D
+    ldh  a,[<H_PlayerYLow]          ; 03:5A1D
     ld   hl,$C1CC                   ; 03:5A1F
     sub  [hl]                       ; 03:5A22
     ld   [$C1D7],a                  ; 03:5A23
@@ -3572,12 +3597,12 @@ Code035A7F:
     and  a                          ; 03:5A8F
     jp   z,Code035B12               ; 03:5A90
 Code035A93:
-    ld   hl,$FFBA                   ; 03:5A93
-    ldh  a,[<$FFA9]                 ; 03:5A96
+    ld   hl,H_CameraY               ; 03:5A93
+    ldh  a,[<H_PlayerYLow]          ; 03:5A96
     sub  [hl]                       ; 03:5A98
     ldh  [<$FF97],a                 ; 03:5A99
     ld   hl,$FFBB                   ; 03:5A9B
-    ldh  a,[<$FFAA]                 ; 03:5A9E
+    ldh  a,[<H_PlayerYHigh]         ; 03:5A9E
     sbc  [hl]                       ; 03:5AA0
     ldh  [<$FF98],a                 ; 03:5AA1
     ldh  a,[<H_ButtonsPressed]      ; 03:5AA3
@@ -3601,7 +3626,7 @@ Code035AC7:
     ld   a,[W_PlayerState]          ; 03:5AC7
     cp   $0B                        ; 03:5ACA
     jr   z,Code035B12               ; 03:5ACC
-    ldh  a,[<$FFBA]                 ; 03:5ACE
+    ldh  a,[<H_CameraY]             ; 03:5ACE
     cp   $70                        ; 03:5AD0
     jr   z,Code035B12               ; 03:5AD2
     ld   a,$77                      ; 03:5AD4
@@ -3627,7 +3652,7 @@ Code035AF6:
     cp   $70                        ; 03:5AF8
     jr   nc,Code035B12              ; 03:5AFA
 Code035AFC:
-    ldh  a,[<$FFBA]                 ; 03:5AFC
+    ldh  a,[<H_CameraY]             ; 03:5AFC
     cp   $38                        ; 03:5AFE
     jr   z,Code035B12               ; 03:5B00
     ld   a,[W_PlayerState]          ; 03:5B02
@@ -3662,12 +3687,12 @@ Code035B12:
     ldh  [<$FFF2],a                 ; 03:5B3F
     jr   Code035B6F                 ; 03:5B41
 Code035B43:
-    ld   hl,$FFB8                   ; 03:5B43
-    ldh  a,[<$FFB9]                 ; 03:5B46
+    ld   hl,H_CameraXLow            ; 03:5B43
+    ldh  a,[<H_CameraXHigh]         ; 03:5B46
     or   [hl]                       ; 03:5B48
     jr   z,Code035B6B               ; 03:5B49
-    ld   hl,$FFB8                   ; 03:5B4B
-    ldh  a,[<$FFA7]                 ; 03:5B4E
+    ld   hl,H_CameraXLow            ; 03:5B4B
+    ldh  a,[<H_PlayerXLow]          ; 03:5B4E
     sub  [hl]                       ; 03:5B50
     bit  7,a                        ; 03:5B51
     jr   nz,Code035B6B              ; 03:5B53
@@ -3699,7 +3724,7 @@ Code035B89:
     ld   a,[$C1E8]                  ; 03:5B89
     and  a                          ; 03:5B8C
     jp   nz,Code035C70              ; 03:5B8D
-    ld   hl,$FFA8                   ; 03:5B90
+    ld   hl,H_PlayerXHigh           ; 03:5B90
     ld   a,b                        ; 03:5B93
     bit  7,a                        ; 03:5B94
     jp   nz,Code035C15              ; 03:5B96
@@ -3732,21 +3757,21 @@ Code035BBF:
     ld   a,[$C1CA]                  ; 03:5BC3
     cp   e                          ; 03:5BC6
     jr   nc,Code035BE2              ; 03:5BC7
-    ldh  a,[<$FFA7]                 ; 03:5BC9
+    ldh  a,[<H_PlayerXLow]          ; 03:5BC9
     cp   e                          ; 03:5BCB
     jp   c,Code035DA0               ; 03:5BCC
     jp   z,Code035DA0               ; 03:5BCF
     ld   a,[$C1CA]                  ; 03:5BD2
     cp   e                          ; 03:5BD5
     jp   nc,Code035C70              ; 03:5BD6
-    ld   hl,$FFA7                   ; 03:5BD9
+    ld   hl,H_PlayerXLow            ; 03:5BD9
     ld   a,e                        ; 03:5BDC
     sub  [hl]                       ; 03:5BDD
     ld   b,a                        ; 03:5BDE
     jp   Code035C70                 ; 03:5BDF
 Code035BE2:
-    ld   hl,$FFB8                   ; 03:5BE2
-    ldh  a,[<$FFA7]                 ; 03:5BE5
+    ld   hl,H_CameraXLow            ; 03:5BE2
+    ldh  a,[<H_PlayerXLow]          ; 03:5BE5
     sub  [hl]                       ; 03:5BE7
     ldh  [<$FF97],a                 ; 03:5BE8
     cp   e                          ; 03:5BEA
@@ -3775,7 +3800,7 @@ Code035C02:
 Code035C15:
     call Sub0360ED                  ; 03:5C15
     jr   nc,Code035C35              ; 03:5C18
-    ld   a,[$C161]                  ; 03:5C1A
+    ld   a,[W_SubLvScreenCount]     ; 03:5C1A
     dec  a                          ; 03:5C1D
     dec  a                          ; 03:5C1E
     cp   [hl]                       ; 03:5C1F
@@ -3783,29 +3808,29 @@ Code035C15:
     ld   a,[$C1CA]                  ; 03:5C22
     cp   $40                        ; 03:5C25
     jr   c,Code035C70               ; 03:5C27
-    ldh  a,[<$FFA7]                 ; 03:5C29
+    ldh  a,[<H_PlayerXLow]          ; 03:5C29
     cp   $40                        ; 03:5C2B
     jp   nc,Code035DA0              ; 03:5C2D
     sub  $40                        ; 03:5C30
     ld   b,a                        ; 03:5C32
     jr   Code035C70                 ; 03:5C33
 Code035C35:
-    ld   a,[$C161]                  ; 03:5C35
+    ld   a,[W_SubLvScreenCount]     ; 03:5C35
     dec  a                          ; 03:5C38
     cp   [hl]                       ; 03:5C39
     jr   nz,Code035C4F              ; 03:5C3A
     ld   a,[$C1CA]                  ; 03:5C3C
     cp   $B0                        ; 03:5C3F
     jr   c,Code035C70               ; 03:5C41
-    ldh  a,[<$FFA7]                 ; 03:5C43
+    ldh  a,[<H_PlayerXLow]          ; 03:5C43
     cp   $B0                        ; 03:5C45
     jp   nc,Code035DA0              ; 03:5C47
     sub  $B0                        ; 03:5C4A
     ld   b,a                        ; 03:5C4C
     jr   Code035C70                 ; 03:5C4D
 Code035C4F:
-    ld   hl,$FFB8                   ; 03:5C4F
-    ldh  a,[<$FFA7]                 ; 03:5C52
+    ld   hl,H_CameraXLow            ; 03:5C4F
+    ldh  a,[<H_PlayerXLow]          ; 03:5C52
     sub  [hl]                       ; 03:5C54
     ldh  [<$FF97],a                 ; 03:5C55
     cp   $58                        ; 03:5C57
@@ -3836,7 +3861,7 @@ Code035C7B:
     ld   b,e                        ; 03:5C7F
 Code035C80:
     ld   e,$00                      ; 03:5C80
-    ld   hl,$FFB8                   ; 03:5C82
+    ld   hl,H_CameraXLow            ; 03:5C82
     ld   a,b                        ; 03:5C85
     bit  7,a                        ; 03:5C86
     jp   z,Code035C8C               ; 03:5C88
@@ -3844,24 +3869,24 @@ Code035C80:
 Code035C8C:
     add  [hl]                       ; 03:5C8C
     ld   [hl],a                     ; 03:5C8D
-    ldh  a,[<$FFB9]                 ; 03:5C8E
+    ldh  a,[<H_CameraXHigh]         ; 03:5C8E
     adc  e                          ; 03:5C90
-    ldh  [<$FFB9],a                 ; 03:5C91
+    ldh  [<H_CameraXHigh],a         ; 03:5C91
     ld   c,a                        ; 03:5C93
     push hl                         ; 03:5C94
     push bc                         ; 03:5C95
-    ld   hl,$FFB8                   ; 03:5C96
-    ldh  a,[<$FFA7]                 ; 03:5C99
+    ld   hl,H_CameraXLow            ; 03:5C96
+    ldh  a,[<H_PlayerXLow]          ; 03:5C99
     sub  [hl]                       ; 03:5C9B
-    ld   hl,$FFB9                   ; 03:5C9C
-    ldh  a,[<$FFA8]                 ; 03:5C9F
+    ld   hl,H_CameraXHigh           ; 03:5C9C
+    ldh  a,[<H_PlayerXHigh]         ; 03:5C9F
     sbc  [hl]                       ; 03:5CA1
     bit  7,a                        ; 03:5CA2
     jr   z,Code035CAE               ; 03:5CA4
-    ldh  a,[<$FFA7]                 ; 03:5CA6
-    ldh  [<$FFB8],a                 ; 03:5CA8
-    ldh  a,[<$FFA8]                 ; 03:5CAA
-    ldh  [<$FFB9],a                 ; 03:5CAC
+    ldh  a,[<H_PlayerXLow]          ; 03:5CA6
+    ldh  [<H_CameraXLow],a          ; 03:5CA8
+    ldh  a,[<H_PlayerXHigh]         ; 03:5CAA
+    ldh  [<H_CameraXHigh],a         ; 03:5CAC
 Code035CAE:
     pop  bc                         ; 03:5CAE
     pop  hl                         ; 03:5CAF
@@ -3873,7 +3898,7 @@ Code035CAE:
     jr   z,Code035CDB               ; 03:5CBA
     ld   a,[hl]                     ; 03:5CBC
     ld   [$C1ED],a                  ; 03:5CBD
-    ldh  a,[<$FFB9]                 ; 03:5CC0
+    ldh  a,[<H_CameraXHigh]         ; 03:5CC0
     ld   [$C1EE],a                  ; 03:5CC2
     push hl                         ; 03:5CC5
     ld   hl,W_SublevelID            ; 03:5CC6
@@ -3881,7 +3906,7 @@ Code035CAE:
     cp   [hl]                       ; 03:5CCC
     jr   nz,Code035CDA              ; 03:5CCD
     ld   hl,$C1EF                   ; 03:5CCF
-    ldh  a,[<$FFB9]                 ; 03:5CD2
+    ldh  a,[<H_CameraXHigh]         ; 03:5CD2
     cp   [hl]                       ; 03:5CD4
     jr   c,Code035CDA               ; 03:5CD5
     ld   [$C1EF],a                  ; 03:5CD7
@@ -3904,7 +3929,7 @@ Code035CE7:
     ld   a,[$C1EE]                  ; 03:5CF2
     sbc  $00                        ; 03:5CF5
     ldh  [<$FF98],a                 ; 03:5CF7
-    ldh  a,[<$FFB9]                 ; 03:5CF9
+    ldh  a,[<H_CameraXHigh]         ; 03:5CF9
     ld   c,a                        ; 03:5CFB
     ldh  a,[<$FF97]                 ; 03:5CFC
     sub  [hl]                       ; 03:5CFE
@@ -3914,9 +3939,9 @@ Code035CE7:
     jr   nz,Code035D18              ; 03:5D04
 Code035D06:
     ldh  a,[<$FF97]                 ; 03:5D06
-    ldh  [<$FFB8],a                 ; 03:5D08
+    ldh  [<H_CameraXLow],a          ; 03:5D08
     ldh  a,[<$FF98]                 ; 03:5D0A
-    ldh  [<$FFB9],a                 ; 03:5D0C
+    ldh  [<H_CameraXHigh],a         ; 03:5D0C
     xor  a                          ; 03:5D0E
     ld   [$C1E9],a                  ; 03:5D0F
     ld   [$C1E7],a                  ; 03:5D12
@@ -3924,8 +3949,8 @@ Code035D06:
 Code035D18:
     call Sub0360ED                  ; 03:5D18
     jr   nc,Code035D5A              ; 03:5D1B
-    ld   hl,$FFB9                   ; 03:5D1D
-    ld   a,[$C161]                  ; 03:5D20
+    ld   hl,H_CameraXHigh           ; 03:5D1D
+    ld   a,[W_SubLvScreenCount]     ; 03:5D20
     dec  a                          ; 03:5D23
     dec  a                          ; 03:5D24
     cp   [hl]                       ; 03:5D25
@@ -3950,17 +3975,17 @@ Code035D41:
     ld   hl,Data035A27              ; 03:5D44
     add  hl,de                      ; 03:5D47
     ld   a,[hl]                     ; 03:5D48
-    ld   hl,$FFB8                   ; 03:5D49
+    ld   hl,H_CameraXLow            ; 03:5D49
     cp   [hl]                       ; 03:5D4C
     jr   nc,Code035DA0              ; 03:5D4D
-    ldh  [<$FFB8],a                 ; 03:5D4F
+    ldh  [<H_CameraXLow],a          ; 03:5D4F
     xor  a                          ; 03:5D51
     ld   [$C1E9],a                  ; 03:5D52
     ld   [$C1E7],a                  ; 03:5D55
     jr   Code035DA0                 ; 03:5D58
 Code035D5A:
-    ld   hl,$FFB9                   ; 03:5D5A
-    ld   a,[$C161]                  ; 03:5D5D
+    ld   hl,H_CameraXHigh           ; 03:5D5A
+    ld   a,[W_SubLvScreenCount]     ; 03:5D5D
     dec  a                          ; 03:5D60
     cp   [hl]                       ; 03:5D61
     jr   nz,Code035DA0              ; 03:5D62
@@ -3985,24 +4010,24 @@ Code035D85:
 Code035D87:
     ld   hl,Data035A31              ; 03:5D87
     add  hl,de                      ; 03:5D8A
-    ldh  a,[<$FFB8]                 ; 03:5D8B
+    ldh  a,[<H_CameraXLow]          ; 03:5D8B
     cp   [hl]                       ; 03:5D8D
     jr   c,Code035DA0               ; 03:5D8E
     xor  a                          ; 03:5D90
     ld   [$C1E9],a                  ; 03:5D91
     ld   [$C1E7],a                  ; 03:5D94
     ld   a,[hl]                     ; 03:5D97
-    ldh  [<$FFB8],a                 ; 03:5D98
-    ld   a,[$C161]                  ; 03:5D9A
+    ldh  [<H_CameraXLow],a          ; 03:5D98
+    ld   a,[W_SubLvScreenCount]     ; 03:5D9A
     dec  a                          ; 03:5D9D
-    ldh  [<$FFB9],a                 ; 03:5D9E
+    ldh  [<H_CameraXHigh],a         ; 03:5D9E
 Code035DA0:
     call Sub035EA9                  ; 03:5DA0
-    ldh  a,[<$FFAA]                 ; 03:5DA3
+    ldh  a,[<H_PlayerYHigh]         ; 03:5DA3
     cp   $FF                        ; 03:5DA5
     ret  z                          ; 03:5DA7
-    ld   hl,$FFBA                   ; 03:5DA8
-    ldh  a,[<$FFA9]                 ; 03:5DAB
+    ld   hl,H_CameraY               ; 03:5DA8
+    ldh  a,[<H_PlayerYLow]          ; 03:5DAB
     sub  [hl]                       ; 03:5DAD
     ld   c,a                        ; 03:5DAE
     ld   a,[$C1D7]                  ; 03:5DAF
@@ -4015,18 +4040,18 @@ Code035DA0:
     jr   z,Code035DD0               ; 03:5DC0
     bit  7,b                        ; 03:5DC2
     jr   z,Code035DFB               ; 03:5DC4
-    ldh  a,[<$FFA9]                 ; 03:5DC6
+    ldh  a,[<H_PlayerYLow]          ; 03:5DC6
     cp   $20                        ; 03:5DC8
     ret  c                          ; 03:5DCA
     cp   $90                        ; 03:5DCB
     ret  nc                         ; 03:5DCD
     jr   Code035DFB                 ; 03:5DCE
 Code035DD0:
-    ld   hl,$FFBA                   ; 03:5DD0
-    ldh  a,[<$FFA9]                 ; 03:5DD3
+    ld   hl,H_CameraY               ; 03:5DD0
+    ldh  a,[<H_PlayerYLow]          ; 03:5DD3
     sub  [hl]                       ; 03:5DD5
     ld   hl,$FFBB                   ; 03:5DD6
-    ldh  a,[<$FFAA]                 ; 03:5DD9
+    ldh  a,[<H_PlayerYHigh]         ; 03:5DD9
     sbc  [hl]                       ; 03:5DDB
     ldh  [<$FF98],a                 ; 03:5DDC
     bit  7,b                        ; 03:5DDE
@@ -4061,7 +4086,7 @@ Code035E04:
     jp   z,Code035E0D               ; 03:5E09
     dec  e                          ; 03:5E0C
 Code035E0D:
-    ld   hl,$FFBA                   ; 03:5E0D
+    ld   hl,H_CameraY               ; 03:5E0D
     add  [hl]                       ; 03:5E10
     ld   [hl],a                     ; 03:5E11
     ldh  a,[<$FFBB]                 ; 03:5E12
@@ -4128,11 +4153,11 @@ Code035EC4:
     ld   hl,$FF97                   ; 03:5ED3
     or   [hl]                       ; 03:5ED6
     ret  z                          ; 03:5ED7
-    ld   hl,$FFB8                   ; 03:5ED8
+    ld   hl,H_CameraXLow            ; 03:5ED8
     ldh  a,[<$FF97]                 ; 03:5EDB
     sub  [hl]                       ; 03:5EDD
     ldh  [<$FF99],a                 ; 03:5EDE
-    ld   hl,$FFB9                   ; 03:5EE0
+    ld   hl,H_CameraXHigh           ; 03:5EE0
     ldh  a,[<$FF98]                 ; 03:5EE3
     sbc  [hl]                       ; 03:5EE5
     ldh  [<$FF9A],a                 ; 03:5EE6
@@ -4143,9 +4168,9 @@ Code035EC4:
     ret  nz                         ; 03:5EF0
 Code035EF1:
     ldh  a,[<$FF97]                 ; 03:5EF1
-    ldh  [<$FFB8],a                 ; 03:5EF3
+    ldh  [<H_CameraXLow],a          ; 03:5EF3
     ldh  a,[<$FF98]                 ; 03:5EF5
-    ldh  [<$FFB9],a                 ; 03:5EF7
+    ldh  [<H_CameraXHigh],a         ; 03:5EF7
     ret                             ; 03:5EF9
 
 Sub035EFA:
@@ -4200,11 +4225,11 @@ Code035F3D:
 
 Code035F41:
     ld   hl,$C3B0                   ; 03:5F41
-    ldh  a,[<$FFA7]                 ; 03:5F44
+    ldh  a,[<H_PlayerXLow]          ; 03:5F44
     sub  [hl]                       ; 03:5F46
     ld   e,a                        ; 03:5F47
     ld   hl,$C3B1                   ; 03:5F48
-    ldh  a,[<$FFA8]                 ; 03:5F4B
+    ldh  a,[<H_PlayerXHigh]         ; 03:5F4B
     sbc  [hl]                       ; 03:5F4D
     ld   d,a                        ; 03:5F4E
     ld   a,d                        ; 03:5F4F
@@ -4256,13 +4281,13 @@ Sub035F8C:
     cp   $00                        ; 03:5F8F
     ret  z                          ; 03:5F91
     dec  a                          ; 03:5F92
-    rst  $00                        ; 03:5F93
+    rst  $00                        ; 03:5F93  Execute from 16-bit pointer table
 .dw Code035F9A                      ; 03:5F94
 .dw Code035FA6                      ; 03:5F96
 .dw Code035F9A                      ; 03:5F98
 Code035F9A:
-    ld   hl,$FFB8                   ; 03:5F9A
-    ldh  a,[<$FFA7]                 ; 03:5F9D
+    ld   hl,H_CameraXLow            ; 03:5F9A
+    ldh  a,[<H_PlayerXLow]          ; 03:5F9D
     sub  [hl]                       ; 03:5F9F
     cp   $03                        ; 03:5FA0
     jr   c,Code035FC4               ; 03:5FA2
@@ -4271,8 +4296,8 @@ Code035FA6:
     ld   a,[$C1EB]                  ; 03:5FA6
     sub  $08                        ; 03:5FA9
     ld   e,a                        ; 03:5FAB
-    ld   hl,$FFB8                   ; 03:5FAC
-    ldh  a,[<$FFA7]                 ; 03:5FAF
+    ld   hl,H_CameraXLow            ; 03:5FAC
+    ldh  a,[<H_PlayerXLow]          ; 03:5FAF
     sub  [hl]                       ; 03:5FB1
     cp   e                          ; 03:5FB2
     jr   nc,Code035FC4              ; 03:5FB3
@@ -4320,12 +4345,12 @@ Code035FE7:
     ret                             ; 03:5FEC
 
 Sub035FED:
-    ld   hl,$FFBA                   ; 03:5FED
-    ldh  a,[<$FFA9]                 ; 03:5FF0
+    ld   hl,H_CameraY               ; 03:5FED
+    ldh  a,[<H_PlayerYLow]          ; 03:5FF0
     sub  [hl]                       ; 03:5FF2
     ldh  [<$FF97],a                 ; 03:5FF3
     ld   hl,$FFBB                   ; 03:5FF5
-    ldh  a,[<$FFAA]                 ; 03:5FF8
+    ldh  a,[<H_PlayerYHigh]         ; 03:5FF8
     sbc  [hl]                       ; 03:5FFA
     ldh  [<$FF98],a                 ; 03:5FFB
     ret                             ; 03:5FFD
@@ -4339,7 +4364,7 @@ Sub035FFE:
     ret  z                          ; 03:6008
     ld   d,$FF                      ; 03:6009
     ld   e,$01                      ; 03:600B
-    ldh  a,[<$FFBA]                 ; 03:600D
+    ldh  a,[<H_CameraY]             ; 03:600D
     cp   $5C                        ; 03:600F
     jr   c,Code036017               ; 03:6011
     ld   d,$01                      ; 03:6013
@@ -4359,13 +4384,13 @@ Code036017:
 
 Code03602D:
     ld   [$C3A7],a                  ; 03:602D
-    ldh  a,[<$FFBA]                 ; 03:6030
+    ldh  a,[<H_CameraY]             ; 03:6030
     add  e                          ; 03:6032
     cp   $70                        ; 03:6033
     jr   c,Code036039               ; 03:6035
     ld   a,$70                      ; 03:6037
 Code036039:
-    ldh  [<$FFBA],a                 ; 03:6039
+    ldh  [<H_CameraY],a             ; 03:6039
     cp   $40                        ; 03:603B
     ret  nc                         ; 03:603D
     ld   a,b                        ; 03:603E
@@ -4381,9 +4406,9 @@ Sub036045:
     ld   a,[$C260]                  ; 03:604A
     sub  $02                        ; 03:604D
     ld   [$C260],a                  ; 03:604F
-    ldh  a,[<$FFBA]                 ; 03:6052
+    ldh  a,[<H_CameraY]             ; 03:6052
     sub  $02                        ; 03:6054
-    ldh  [<$FFBA],a                 ; 03:6056
+    ldh  [<H_CameraY],a             ; 03:6056
     ret                             ; 03:6058
 
 Sub036059:
@@ -4406,9 +4431,9 @@ Code03606E:
     cp   $EE                        ; 03:6079
     jr   c,Code03608D               ; 03:607B
 Code03607D:
-    ldh  a,[<$FFBA]                 ; 03:607D
+    ldh  a,[<H_CameraY]             ; 03:607D
     add  $02                        ; 03:607F
-    ldh  [<$FFBA],a                 ; 03:6081
+    ldh  [<H_CameraY],a             ; 03:6081
     ldh  a,[<$FFBB]                 ; 03:6083
     adc  $00                        ; 03:6085
     ldh  [<$FFBB],a                 ; 03:6087
@@ -4435,9 +4460,9 @@ Code0360A5:
     cp   $71                        ; 03:60A7
     jr   nc,Code0360BB              ; 03:60A9
 Code0360AB:
-    ldh  a,[<$FFBA]                 ; 03:60AB
+    ldh  a,[<H_CameraY]             ; 03:60AB
     sub  $02                        ; 03:60AD
-    ldh  [<$FFBA],a                 ; 03:60AF
+    ldh  [<H_CameraY],a             ; 03:60AF
     ldh  a,[<$FFBB]                 ; 03:60B1
     sbc  $00                        ; 03:60B3
     ldh  [<$FFBB],a                 ; 03:60B5
@@ -4452,7 +4477,7 @@ Code0360BB:
     ret                             ; 03:60C5
 
 Sub0360C6:
-    ldh  a,[<$FFBA]                 ; 03:60C6
+    ldh  a,[<H_CameraY]             ; 03:60C6
     cp   $38                        ; 03:60C8
     jr   nc,Code0360D3              ; 03:60CA
     xor  a                          ; 03:60CC
@@ -4460,12 +4485,12 @@ Sub0360C6:
     ld   a,$38                      ; 03:60CF
     jr   Code0360DA                 ; 03:60D1
 Code0360D3:
-    ldh  a,[<$FFBA]                 ; 03:60D3
+    ldh  a,[<H_CameraY]             ; 03:60D3
     cp   $70                        ; 03:60D5
     ret  c                          ; 03:60D7
     ld   a,$70                      ; 03:60D8
 Code0360DA:
-    ldh  [<$FFBA],a                 ; 03:60DA
+    ldh  [<H_CameraY],a             ; 03:60DA
     xor  a                          ; 03:60DC
     ld   [$C25F],a                  ; 03:60DD
     ld   [$C261],a                  ; 03:60E0
@@ -4524,7 +4549,7 @@ Sub036130:
     ld   a,[$C1E8]                  ; 03:6136
     and  a                          ; 03:6139
     ret  nz                         ; 03:613A
-    ld   hl,$C161                   ; 03:613B
+    ld   hl,W_SubLvScreenCount      ; 03:613B
     ld   a,[hl]                     ; 03:613E
     dec  a                          ; 03:613F
     ldh  [<$FF97],a                 ; 03:6140
@@ -4536,17 +4561,17 @@ Sub036130:
     cp   $20                        ; 03:614F
     jp   nz,Code0361CD              ; 03:6151
 Code036154:
-    ldh  a,[<$FFA8]                 ; 03:6154
+    ldh  a,[<H_PlayerXHigh]         ; 03:6154
     cp   $00                        ; 03:6156
     jr   z,Code036166               ; 03:6158
     cp   [hl]                       ; 03:615A
     jr   nz,Code03616F              ; 03:615B
-    ldh  a,[<$FFA7]                 ; 03:615D
+    ldh  a,[<H_PlayerXLow]          ; 03:615D
     cp   $B0                        ; 03:615F
     jr   c,Code036179               ; 03:6161
     jp   Code0361C8                 ; 03:6163
 Code036166:
-    ldh  a,[<$FFA7]                 ; 03:6166
+    ldh  a,[<H_PlayerXLow]          ; 03:6166
     cp   $20                        ; 03:6168
     jp   c,Code0361C8               ; 03:616A
     jr   Code036179                 ; 03:616D
@@ -4577,8 +4602,8 @@ Code036194:
     cp   $20                        ; 03:6196
     ret  c                          ; 03:6198
     ld   [hl],$21                   ; 03:6199
-    ld   hl,$FFB8                   ; 03:619B
-    ldh  a,[<$FFA7]                 ; 03:619E
+    ld   hl,H_CameraXLow            ; 03:619B
+    ldh  a,[<H_PlayerXLow]          ; 03:619E
     sub  [hl]                       ; 03:61A0
     cp   $48                        ; 03:61A1
     jr   nc,Code0361C8              ; 03:61A3
@@ -4876,8 +4901,8 @@ Sub036398:
     ret  nz                         ; 03:63A1
     ld   a,$01                      ; 03:63A2
     ld   b,a                        ; 03:63A4
-    ld   hl,$FFB8                   ; 03:63A5
-    ldh  a,[<$FFA7]                 ; 03:63A8
+    ld   hl,H_CameraXLow            ; 03:63A5
+    ldh  a,[<H_PlayerXLow]          ; 03:63A8
     sub  [hl]                       ; 03:63AA
     cp   $34                        ; 03:63AB
     jr   c,Code0363B3               ; 03:63AD
@@ -4975,20 +5000,20 @@ Sub03644C:
     and  $0F                        ; 03:644E
     cp   $02                        ; 03:6450
     jr   nz,Code036462              ; 03:6452
-    ldh  a,[<$FFA9]                 ; 03:6454
+    ldh  a,[<H_PlayerYLow]          ; 03:6454
     cp   $2C                        ; 03:6456
     jr   nc,Code036462              ; 03:6458
     ld   a,$2C                      ; 03:645A
-    ldh  [<$FFA9],a                 ; 03:645C
+    ldh  [<H_PlayerYLow],a          ; 03:645C
     ld   a,$10                      ; 03:645E
     ldh  [<$FFAC],a                 ; 03:6460
 Code036462:
-    ldh  a,[<$FFA8]                 ; 03:6462
+    ldh  a,[<H_PlayerXHigh]         ; 03:6462
     cp   $FF                        ; 03:6464
     jr   nz,Code03646F              ; 03:6466
     xor  a                          ; 03:6468
-    ldh  [<$FFA7],a                 ; 03:6469
-    ldh  [<$FFA8],a                 ; 03:646B
+    ldh  [<H_PlayerXLow],a          ; 03:6469
+    ldh  [<H_PlayerXHigh],a         ; 03:646B
     jr   Code0364AF                 ; 03:646D
 Code03646F:
     ld   a,[$C1ED]                  ; 03:646F
@@ -4998,36 +5023,36 @@ Code03646F:
     sbc  $00                        ; 03:6479
     ldh  [<$FF98],a                 ; 03:647B
     ld   hl,$FF97                   ; 03:647D
-    ldh  a,[<$FFA7]                 ; 03:6480
+    ldh  a,[<H_PlayerXLow]          ; 03:6480
     sub  [hl]                       ; 03:6482
     ld   hl,$FF98                   ; 03:6483
-    ldh  a,[<$FFA8]                 ; 03:6486
+    ldh  a,[<H_PlayerXHigh]         ; 03:6486
     sbc  [hl]                       ; 03:6488
     bit  7,a                        ; 03:6489
     jr   z,Code036497               ; 03:648B
     ldh  a,[<$FF97]                 ; 03:648D
-    ldh  [<$FFA7],a                 ; 03:648F
+    ldh  [<H_PlayerXLow],a          ; 03:648F
     ldh  a,[<$FF98]                 ; 03:6491
-    ldh  [<$FFA8],a                 ; 03:6493
+    ldh  [<H_PlayerXHigh],a         ; 03:6493
     jr   Code0364AF                 ; 03:6495
 Code036497:
-    ld   hl,$FFA8                   ; 03:6497
-    ld   a,[$C161]                  ; 03:649A
+    ld   hl,H_PlayerXHigh           ; 03:6497
+    ld   a,[W_SubLvScreenCount]     ; 03:649A
     dec  a                          ; 03:649D
     ld   c,a                        ; 03:649E
     cp   [hl]                       ; 03:649F
     jr   nz,Code0364AF              ; 03:64A0
-    ldh  a,[<$FFA7]                 ; 03:64A2
+    ldh  a,[<H_PlayerXLow]          ; 03:64A2
     cp   $F0                        ; 03:64A4
     jr   c,Code0364AF               ; 03:64A6
     ld   a,$F0                      ; 03:64A8
-    ldh  [<$FFA7],a                 ; 03:64AA
+    ldh  [<H_PlayerXLow],a          ; 03:64AA
     ld   a,c                        ; 03:64AC
-    ldh  [<$FFA8],a                 ; 03:64AD
+    ldh  [<H_PlayerXHigh],a         ; 03:64AD
 Code0364AF:
     call Sub0360ED                  ; 03:64AF
     ret  nc                         ; 03:64B2
-    ld   a,[$C161]                  ; 03:64B3
+    ld   a,[W_SubLvScreenCount]     ; 03:64B3
     dec  a                          ; 03:64B6
     dec  a                          ; 03:64B7
     ld   c,a                        ; 03:64B8
@@ -5054,10 +5079,10 @@ Code0364D4:
     add  hl,de                      ; 03:64DA
     ld   a,[hl]                     ; 03:64DB
     add  $90                        ; 03:64DC
-    ld   hl,$FFA7                   ; 03:64DE
+    ld   hl,H_PlayerXLow            ; 03:64DE
     cp   [hl]                       ; 03:64E1
     ret  nc                         ; 03:64E2
-    ldh  [<$FFA7],a                 ; 03:64E3
+    ldh  [<H_PlayerXLow],a          ; 03:64E3
     ret                             ; 03:64E5
 
 Data0364E6:                         ; 03:64E6
@@ -5140,10 +5165,10 @@ Code036585:
     ld   h,a                        ; 03:658C
     add  hl,de                      ; 03:658D
     ld   a,[hl]                     ; 03:658E
-    ld   hl,$FFA7                   ; 03:658F
+    ld   hl,H_PlayerXLow            ; 03:658F
     add  [hl]                       ; 03:6592
     ldh  [<$FF97],a                 ; 03:6593
-    ldh  a,[<$FFA8]                 ; 03:6595
+    ldh  a,[<H_PlayerXHigh]         ; 03:6595
     adc  $00                        ; 03:6597
     ldh  [<$FF98],a                 ; 03:6599
     ld   hl,$C229                   ; 03:659B
@@ -5160,10 +5185,10 @@ Code036585:
     ld   a,[$C23C]                  ; 03:65AF
     ld   h,a                        ; 03:65B2
     add  hl,de                      ; 03:65B3
-    ldh  a,[<$FFA9]                 ; 03:65B4
+    ldh  a,[<H_PlayerYLow]          ; 03:65B4
     add  [hl]                       ; 03:65B6
     ldh  [<$FF99],a                 ; 03:65B7
-    ldh  a,[<$FFAA]                 ; 03:65B9
+    ldh  a,[<H_PlayerYHigh]         ; 03:65B9
     adc  $00                        ; 03:65BB
     and  a                          ; 03:65BD
     jr   nz,Code0365D7              ; 03:65BE
@@ -5178,7 +5203,7 @@ Code036585:
     ld   a,[hl]                     ; 03:65CF
     ldh  [<$FF9B],a                 ; 03:65D0
     push de                         ; 03:65D2
-    call Sub036E16                  ; 03:65D3
+    call Tile16_Interaction         ; 03:65D3
     pop  de                         ; 03:65D6
 Code0365D7:
     ld   hl,$C23D                   ; 03:65D7
@@ -5199,7 +5224,7 @@ Code0365D7:
     and  a                          ; 03:65F4
     jr   nz,Code0365FF              ; 03:65F5
     ld   a,$03                      ; 03:65F7
-    rst  $10                        ; 03:65F9
+    rst  $10                        ; 03:65F9  24-bit call
 .dl SubL_0B407C                     ; 03:65FA
     jr   Code036632                 ; 03:65FD
 Code0365FF:
@@ -5246,12 +5271,12 @@ Code036632:
     ld   a,$08                      ; 03:6654
     ld   [W_PlayerState],a          ; 03:6656
     xor  a                          ; 03:6659
-    ld   [$C1D3],a                  ; 03:665A
+    ld   [W_PlayerWarpSubstate],a   ; 03:665A
     ld   [$C181],a                  ; 03:665D
-    ldh  a,[<$FFA7]                 ; 03:6660
+    ldh  a,[<H_PlayerXLow]          ; 03:6660
     add  $10                        ; 03:6662
     ld   [$C1E1],a                  ; 03:6664
-    ldh  a,[<$FFA8]                 ; 03:6667
+    ldh  a,[<H_PlayerXHigh]         ; 03:6667
     adc  $00                        ; 03:6669
     ld   [$C1E2],a                  ; 03:666B
     ld   a,$25                      ; 03:666E
@@ -5295,7 +5320,7 @@ Code03669F:
     cp   $06                        ; 03:66C2
     jp   nc,Code036833              ; 03:66C4
 Code0366C7:
-    ld   hl,$FFA9                   ; 03:66C7
+    ld   hl,H_PlayerYLow            ; 03:66C7
     ld   a,[$C231]                  ; 03:66CA
     and  $0F                        ; 03:66CD
     xor  $FF                        ; 03:66CF
@@ -5313,13 +5338,13 @@ Code0366C7:
     ld   a,[$C25E]                  ; 03:66E7
     and  $80                        ; 03:66EA
     jr   z,Code036713               ; 03:66EC
-    ldh  a,[<$FFA9]                 ; 03:66EE
+    ldh  a,[<H_PlayerYLow]          ; 03:66EE
     add  $20                        ; 03:66F0
     ld   [$C1E1],a                  ; 03:66F2
     ld   a,$0B                      ; 03:66F5
     ld   [W_PlayerState],a          ; 03:66F7
     xor  a                          ; 03:66FA
-    ld   [$C1D3],a                  ; 03:66FB
+    ld   [W_PlayerWarpSubstate],a   ; 03:66FB
     ld   [$C181],a                  ; 03:66FE
     ld   [$C25E],a                  ; 03:6701
     ldh  [<$FFAB],a                 ; 03:6704
@@ -5345,7 +5370,7 @@ Code036713:
     cp   $02                        ; 03:672E
     jr   nz,Code03674E              ; 03:6730
     ld   a,$03                      ; 03:6732
-    rst  $10                        ; 03:6734
+    rst  $10                        ; 03:6734  24-bit call
 .dl SubL_0B5328                     ; 03:6735
     ldh  a,[<$FFA6]                 ; 03:6738
     and  a                          ; 03:673A
@@ -5357,13 +5382,13 @@ Code03673F:
     inc  a                          ; 03:6744
     ld   [W_SpriteSubstate],a       ; 03:6745
     ld   a,$03                      ; 03:6748
-    rst  $10                        ; 03:674A
+    rst  $10                        ; 03:674A  24-bit call
 .dl SubL_075D06                     ; 03:674B
 Code03674E:
     ld   a,$0A                      ; 03:674E
     ld   [W_PlayerState],a          ; 03:6750
     xor  a                          ; 03:6753
-    ld   [$C1D3],a                  ; 03:6754
+    ld   [W_PlayerWarpSubstate],a   ; 03:6754
     ld   [$C181],a                  ; 03:6757
     ld   [$C1DD],a                  ; 03:675A
     ldh  [<$FFAB],a                 ; 03:675D
@@ -5453,7 +5478,7 @@ Code0367C4:
     ld   a,[hl]                     ; 03:67FD
     ldh  [<$FF9B],a                 ; 03:67FE
     ld   a,$03                      ; 03:6800
-    rst  $10                        ; 03:6802
+    rst  $10                        ; 03:6802  24-bit call
 .dl SubL_074412                     ; 03:6803
     xor  a                          ; 03:6806
     ld   [$C1D8],a                  ; 03:6807
@@ -5476,7 +5501,7 @@ Code036821:
     ldh  a,[<$FFAB]                 ; 03:6828
     ld   [$C1F0],a                  ; 03:682A
     ld   a,$03                      ; 03:682D
-    rst  $10                        ; 03:682F
+    rst  $10                        ; 03:682F  24-bit call
 .dl SubL_085BFB                     ; 03:6830
 Code036833:
     ld   a,[$C20F]                  ; 03:6833
@@ -5565,7 +5590,7 @@ Code0368BC:
     sub  $10                        ; 03:68DB
     xor  $FF                        ; 03:68DD
     inc  a                          ; 03:68DF
-    ld   hl,$FFA9                   ; 03:68E0
+    ld   hl,H_PlayerYLow            ; 03:68E0
     add  [hl]                       ; 03:68E3
     ld   [hl],a                     ; 03:68E4
     ld   a,[$C21E]                  ; 03:68E5
@@ -5636,7 +5661,7 @@ Code036912:
     ld   [$C1B3],a                  ; 03:696C
 Code03696F:
     ld   a,$03                      ; 03:696F
-    rst  $10                        ; 03:6971
+    rst  $10                        ; 03:6971  24-bit call
 .dl SubL_02442B                     ; 03:6972
     jr   Code0369B7                 ; 03:6975
 Code036977:
@@ -5662,16 +5687,16 @@ Code036977:
     ld   [$D2E4],a                  ; 03:699D
     ldh  [<$FFA3],a                 ; 03:69A0
     ld   a,$03                      ; 03:69A2
-    rst  $10                        ; 03:69A4
+    rst  $10                        ; 03:69A4  24-bit call
 .dl SubL_027560                     ; 03:69A5
     jr   Code0369B7                 ; 03:69A8
 Code0369AA:
     xor  a                          ; 03:69AA
     ld   [$D2E4],a                  ; 03:69AB
     ld   a,$03                      ; 03:69AE
-    rst  $10                        ; 03:69B0
+    rst  $10                        ; 03:69B0  24-bit call
 .dl SubL_027560                     ; 03:69B1
-    call Sub002D66                  ; 03:69B4
+    call GiveCoin                   ; 03:69B4
 Code0369B7:
     ld   a,[W_PlayerSize]           ; 03:69B7
     and  a                          ; 03:69BA
@@ -5688,12 +5713,12 @@ Code0369C5:
     ld   a,$01                      ; 03:69C9
     ldh  [<$FF9B],a                 ; 03:69CB
     ld   a,$03                      ; 03:69CD
-    rst  $10                        ; 03:69CF
+    rst  $10                        ; 03:69CF  24-bit call
 .dl SubL_074022                     ; 03:69D0
     jr   Code0369B7                 ; 03:69D3
 Code0369D5:
     ld   a,$03                      ; 03:69D5
-    rst  $10                        ; 03:69D7
+    rst  $10                        ; 03:69D7  24-bit call
 .dl SubL_027AAE                     ; 03:69D8
     jr   Code0369B7                 ; 03:69DB
 Code0369DD:
@@ -5741,7 +5766,7 @@ Code0369E6:
     and  $F0                        ; 03:6A32
     ldh  [<$FF99],a                 ; 03:6A34
     ld   a,$03                      ; 03:6A36
-    rst  $10                        ; 03:6A38
+    rst  $10                        ; 03:6A38  24-bit call
 .dl SubL_025894                     ; 03:6A39
     call Sub036C06                  ; 03:6A3C
     ld   a,$41                      ; 03:6A3F
@@ -5750,7 +5775,7 @@ Code0369E6:
     ldh  [<$FF97],a                 ; 03:6A45
     xor  a                          ; 03:6A47
     ldh  [<$FF98],a                 ; 03:6A48
-    call Sub002E30                  ; 03:6A4A
+    call GivePointsFF97             ; 03:6A4A
     ret                             ; 03:6A4D
 
 Return036A4E:
@@ -5787,7 +5812,7 @@ Code036A6C:
     ld   a,[$C219]                  ; 03:6A7F
     and  $7C                        ; 03:6A82
     jr   nz,Code036A92              ; 03:6A84
-    call Sub002D66                  ; 03:6A86
+    call GiveCoin                   ; 03:6A86
     ld   a,[$C3A5]                  ; 03:6A89
     inc  a                          ; 03:6A8C
     ld   [$C3A5],a                  ; 03:6A8D
@@ -5799,7 +5824,7 @@ Code036A95:
     ldh  [<$FF97],a                 ; 03:6A97
     xor  a                          ; 03:6A99
     ldh  [<$FF98],a                 ; 03:6A9A
-    call Sub002E30                  ; 03:6A9C
+    call GivePointsFF97             ; 03:6A9C
     ret                             ; 03:6A9F
 
 Sub036AA0:
@@ -5812,12 +5837,12 @@ Sub036AA0:
     cp   $60                        ; 03:6AAE
     jr   nz,Code036AC0              ; 03:6AB0
 Code036AB2:
-    ldh  a,[<$FFA7]                 ; 03:6AB2
+    ldh  a,[<H_PlayerXLow]          ; 03:6AB2
     add  $01                        ; 03:6AB4
-    ldh  [<$FFA7],a                 ; 03:6AB6
-    ldh  a,[<$FFA8]                 ; 03:6AB8
+    ldh  [<H_PlayerXLow],a          ; 03:6AB6
+    ldh  a,[<H_PlayerXHigh]         ; 03:6AB8
     adc  $00                        ; 03:6ABA
-    ldh  [<$FFA8],a                 ; 03:6ABC
+    ldh  [<H_PlayerXHigh],a         ; 03:6ABC
     scf                             ; 03:6ABE
     ret                             ; 03:6ABF
 
@@ -5876,9 +5901,9 @@ Code036B10:
     cp   $04                        ; 03:6B10
     jr   c,Code036B36               ; 03:6B12
     ld   a,[$C1CA]                  ; 03:6B14
-    ldh  [<$FFA7],a                 ; 03:6B17
+    ldh  [<H_PlayerXLow],a          ; 03:6B17
     ld   a,[$C1CB]                  ; 03:6B19
-    ldh  [<$FFA8],a                 ; 03:6B1C
+    ldh  [<H_PlayerXHigh],a         ; 03:6B1C
     ld   hl,$C231                   ; 03:6B1E
     add  hl,de                      ; 03:6B21
     ld   a,[hl]                     ; 03:6B22
@@ -5888,7 +5913,7 @@ Code036B10:
     cpl                             ; 03:6B29
     inc  a                          ; 03:6B2A
     ldh  [<$FF97],a                 ; 03:6B2B
-    ld   hl,$FFA9                   ; 03:6B2D
+    ld   hl,H_PlayerYLow            ; 03:6B2D
     add  [hl]                       ; 03:6B30
     ld   [hl],a                     ; 03:6B31
     ld   b,$01                      ; 03:6B32
@@ -5919,7 +5944,7 @@ Code036B4D:
     jr   z,Code036B5D               ; 03:6B5A
     dec  c                          ; 03:6B5C
 Code036B5D:
-    ld   hl,$FFA7                   ; 03:6B5D
+    ld   hl,H_PlayerXLow            ; 03:6B5D
     add  [hl]                       ; 03:6B60
     ld   [hl],a                     ; 03:6B61
     inc  l                          ; 03:6B62
@@ -6081,7 +6106,7 @@ Code036C32:
     add  $10                        ; 03:6C4A
     ldh  [<$FF99],a                 ; 03:6C4C
     ld   a,$03                      ; 03:6C4E
-    rst  $10                        ; 03:6C50
+    rst  $10                        ; 03:6C50  24-bit call
 .dl SubL_0247F3                     ; 03:6C51
     ld   de,$0004                   ; 03:6C54
     ld   hl,$C221                   ; 03:6C57
@@ -6092,11 +6117,11 @@ Code036C32:
     add  hl,de                      ; 03:6C61
     ld   a,[hl]                     ; 03:6C62
     ldh  [<$FF9E],a                 ; 03:6C63
-    ld   hl,$FFB8                   ; 03:6C65
+    ld   hl,H_CameraXLow            ; 03:6C65
     ldh  a,[<$FF97]                 ; 03:6C68
     sub  [hl]                       ; 03:6C6A
     ldh  [<$FF9D],a                 ; 03:6C6B
-    ld   hl,$FFB9                   ; 03:6C6D
+    ld   hl,H_CameraXHigh           ; 03:6C6D
     ldh  a,[<$FF9E]                 ; 03:6C70
     sbc  [hl]                       ; 03:6C72
     ldh  [<$FF9E],a                 ; 03:6C73
@@ -6119,7 +6144,7 @@ Code036C91:
     pop  af                         ; 03:6C91
     cp   $27                        ; 03:6C92
     jr   nz,Code036C9B              ; 03:6C94
-    call Sub002D66                  ; 03:6C96
+    call GiveCoin                   ; 03:6C96
     jr   Return036C9F               ; 03:6C99
 Code036C9B:
     call Sub002DA1                  ; 03:6C9B
@@ -6129,11 +6154,11 @@ Return036C9F:
     ret                             ; 03:6C9F
 
 Sub036CA0:
-    ld   hl,$FFB8                   ; 03:6CA0
+    ld   hl,H_CameraXLow            ; 03:6CA0
     ld   a,[$C265]                  ; 03:6CA3
     sub  [hl]                       ; 03:6CA6
     ldh  [<$FFA3],a                 ; 03:6CA7
-    ld   hl,$FFB9                   ; 03:6CA9
+    ld   hl,H_CameraXHigh           ; 03:6CA9
     ld   a,[$C266]                  ; 03:6CAC
     sbc  [hl]                       ; 03:6CAF
     ldh  [<$FFA4],a                 ; 03:6CB0
@@ -6160,11 +6185,11 @@ Sub036CC2:
     add  hl,de                      ; 03:6CCC
     ld   a,[hl]                     ; 03:6CCD
     ldh  [<$FF9E],a                 ; 03:6CCE
-    ld   hl,$FFB8                   ; 03:6CD0
+    ld   hl,H_CameraXLow            ; 03:6CD0
     ldh  a,[<$FF97]                 ; 03:6CD3
     sub  [hl]                       ; 03:6CD5
     ldh  [<$FF9D],a                 ; 03:6CD6
-    ld   hl,$FFB9                   ; 03:6CD8
+    ld   hl,H_CameraXHigh           ; 03:6CD8
     ldh  a,[<$FF9E]                 ; 03:6CDB
     sbc  [hl]                       ; 03:6CDD
     ldh  [<$FF9E],a                 ; 03:6CDE
@@ -6209,7 +6234,7 @@ Sub036CF9:
     ldh  [<SVBK],a                  ; 03:6D13
     ret                             ; 03:6D15
 
-Data036D16:                         ; 03:6D16
+Tile16_InteractTypes:               ; 03:6D16
 .db $01,$02,$01,$00,$03,$01,$01,$01,\
     $01,$00,$00,$00,$00,$00,$00,$00,\
     $00,$00,$00,$00,$00,$00,$00,$00,\
@@ -6243,15 +6268,15 @@ Data036D16:                         ; 03:6D16
     $00,$00,$00,$00,$00,$00,$00,$00,\
     $00,$00,$00,$00,$00,$00,$00,$00
 
-Sub036E16:
+Tile16_Interaction:
     ld   b,d                        ; 03:6E16
     ld   c,e                        ; 03:6E17
     ld   e,$06                      ; 03:6E18
     ldh  a,[<$FF98]                 ; 03:6E1A
     cp   $10                        ; 03:6E1C
-    jr   c,Code036E22               ; 03:6E1E
+    jr   c,@Code036E22              ; 03:6E1E
     ld   e,$07                      ; 03:6E20
-Code036E22:
+@Code036E22:
     ld   a,e                        ; 03:6E22
     ldh  [<SVBK],a                  ; 03:6E23
     ldh  [<$FFA6],a                 ; 03:6E25
@@ -6271,17 +6296,17 @@ Code036E22:
     ld   e,a                        ; 03:6E3E
     ld   d,$00                      ; 03:6E3F
     add  hl,de                      ; 03:6E41
-    ld   a,[hl]                     ; 03:6E42
-    ldh  [<$FF9F],a                 ; 03:6E43
-    ld   a,l                        ; 03:6E45
-    ldh  [<$FFA0],a                 ; 03:6E46
-    ld   a,h                        ; 03:6E48
-    ldh  [<$FFA1],a                 ; 03:6E49
+    ld   a,[hl]                     ; 03:6E42  load 16x16 tile ID from $6:D000-7:DFFF
+    ldh  [<$FF9F],a                 ; 03:6E43  $FF9F = tile ID to interact with
+    ld   a,l                        ; 03:6E45 \
+    ldh  [<$FFA0],a                 ; 03:6E46 | $FFA0 = address of current 16x16
+    ld   a,h                        ; 03:6E48 |
+    ldh  [<$FFA1],a                 ; 03:6E49 /
     ld   e,[hl]                     ; 03:6E4B
     ld   d,$00                      ; 03:6E4C
-    ld   hl,Data036D16              ; 03:6E4E
-    add  hl,de                      ; 03:6E51
-    ld   a,[hl]                     ; 03:6E52
+    ld   hl,Tile16_InteractTypes    ; 03:6E4E
+    add  hl,de                      ; 03:6E51  index table with tile ID
+    ld   a,[hl]                     ; 03:6E52  load 16x16 interaction type
     push af                         ; 03:6E53
     ld   a,$00                      ; 03:6E54
     ldh  [<SVBK],a                  ; 03:6E56
@@ -6302,32 +6327,33 @@ Code036E22:
     ld   [hl],a                     ; 03:6E71
     ld   a,c                        ; 03:6E72
     ldh  [<$FFA6],a                 ; 03:6E73
-    pop  af                         ; 03:6E75
-    rst  $00                        ; 03:6E76
-.dw Return036EAC                    ; 03:6E77
-.dw Code036EA5                      ; 03:6E79
-.dw Code036EAD                      ; 03:6E7B
-.dw Code036ECA                      ; 03:6E7D
-.dw Code036EBB                      ; 03:6E7F
-.dw Code036EC2                      ; 03:6E81
-.dw Code036EDA                      ; 03:6E83
-.dw Code036EE2                      ; 03:6E85
-.dw Code036EF5                      ; 03:6E87
-.dw Code036F03                      ; 03:6E89
-.dw Code036F0B                      ; 03:6E8B
-.dw Code036EB5                      ; 03:6E8D
-.dw Code036EEF                      ; 03:6E8F
-.dw Code036F13                      ; 03:6E91
-.dw Code036F1C                      ; 03:6E93
-.dw Code036F4B                      ; 03:6E95
-.dw Code036F85                      ; 03:6E97
-.dw Code036F8E                      ; 03:6E99
-.dw Code036FA1                      ; 03:6E9B
-.dw Code036FB1                      ; 03:6E9D
-.dw Code036FBA                      ; 03:6E9F
-.dw Code036FC3                      ; 03:6EA1
-.dw Code036FF8                      ; 03:6EA3
-Code036EA5:
+    pop  af                         ; 03:6E75  use interaction type as code pointer index
+    rst  $00                        ; 03:6E76  Execute from 16-bit pointer table
+.dw Return036EAC                    ; 00: no interaction
+.dw Tile16_Solid                    ; 01: solid
+.dw Tile16_SolidWithItem            ; 02: solid with coin/item
+.dw Tile16_Brick                    ; 03: brick
+.dw Tile16_Coin                     ; 04: coin
+.dw Tile16_HorizPipe                ; 05: enterable horizontal pipe
+.dw Tile16_Axe                      ; 06: Bowser's axe
+.dw Tile16_HiddenWithItem           ; 07: hidden block with coin/item
+.dw Tile16_BrickMultiCoin           ; 08: brick with multi-coins
+.dw Tile16_VertPipeLeft             ; 09: enterable vertical pipe (left)
+.dw Tile16_VertPipeRight            ; 0A: enterable vertical pipe (right)
+.dw Tile16_RedCoin                  ; 0B: red coin
+.dw Tile16_BrickMultiRedCoin        ; 0C: brick with multi-coins and red coin
+.dw Tile16_FaceBlock                ; 0D: face block
+.dw Tile16_SolidIfWhite             ; 0E: solid-if-white block
+.dw Tile16_SolidSpiked              ; 0F: solid/spiked block
+.dw Tile16_Type10                   ; 10: (unused block 81)
+.dw Tile16_Type11                   ; 11: (unused block 82: same as 81 but hidden)
+.dw Tile16_321Block                 ; 12: 3-2-1 block
+.dw Tile16_Spike                    ; 13: spiked block
+.dw Tile16_1x1Spring                ; 14: 1x1 trampoline
+.dw Tile16_SolidIfRed               ; 15: solid-if-red block
+.dw Tile16_1x2Spring                ; 16: 1x2 trampoline top
+
+Tile16_Solid:
     ld   hl,$C20F                   ; 03:6EA5
 
 Sub036EA8:
@@ -6335,68 +6361,76 @@ Sub036EA8:
     or   [hl]                       ; 03:6EAA
     ld   [hl],a                     ; 03:6EAB
 Return036EAC:
-    ret                             ; 03:6EAC
+    ret                             ; 03:6EAC  this ret is also used by interaction type 00: no interaction
 
-Code036EAD:
+Tile16_SolidWithItem:
     ld   hl,$C210                   ; 03:6EAD
     call Sub036EA8                  ; 03:6EB0
-    jr   Code036EA5                 ; 03:6EB3
-Code036EB5:
+    jr   Tile16_Solid               ; 03:6EB3
+
+Tile16_RedCoin:
     ld   hl,$C219                   ; 03:6EB5
     call Sub036EA8                  ; 03:6EB8
-Code036EBB:
+Tile16_Coin:
     ld   hl,$C212                   ; 03:6EBB
     call Sub036EA8                  ; 03:6EBE
     ret                             ; 03:6EC1
 
-Code036EC2:
+Tile16_HorizPipe:
     ld   hl,$C213                   ; 03:6EC2
     call Sub036EA8                  ; 03:6EC5
-    jr   Code036EA5                 ; 03:6EC8
-Code036ECA:
+    jr   Tile16_Solid               ; 03:6EC8
+
+Tile16_Brick:
     ld   a,[W_PlayerSize]           ; 03:6ECA
     and  a                          ; 03:6ECD
     jr   nz,Code036ED2              ; 03:6ECE
-    jr   Code036EAD                 ; 03:6ED0
+    jr   Tile16_SolidWithItem       ; 03:6ED0
+
 Code036ED2:
     ld   hl,$C211                   ; 03:6ED2
     call Sub036EA8                  ; 03:6ED5
-    jr   Code036EA5                 ; 03:6ED8
-Code036EDA:
+    jr   Tile16_Solid               ; 03:6ED8
+
+Tile16_Axe:
     ld   hl,$C214                   ; 03:6EDA
     call Sub036EA8                  ; 03:6EDD
-    jr   Code036EA5                 ; 03:6EE0
-Code036EE2:
+    jr   Tile16_Solid               ; 03:6EE0
+
+Tile16_HiddenWithItem:
     ldh  a,[<$FF9F]                 ; 03:6EE2
     cp   $3F                        ; 03:6EE4
-    jr   nz,Code036EE8              ; 03:6EE6
-Code036EE8:
-    ld   hl,$C215                   ; 03:6EE8
+    jr   nz,+                       ; 03:6EE6
++   ld   hl,$C215                   ; 03:6EE8
     call Sub036EA8                  ; 03:6EEB
     ret                             ; 03:6EEE
 
-Code036EEF:
+Tile16_BrickMultiRedCoin:
     ld   hl,$C21A                   ; 03:6EEF
     call Sub036EA8                  ; 03:6EF2
-Code036EF5:
+Tile16_BrickMultiCoin:
     ld   hl,$C216                   ; 03:6EF5
     call Sub036EA8                  ; 03:6EF8
     ld   hl,$C210                   ; 03:6EFB
     call Sub036EA8                  ; 03:6EFE
-    jr   Code036EA5                 ; 03:6F01
-Code036F03:
+    jr   Tile16_Solid               ; 03:6F01
+
+Tile16_VertPipeLeft:
     ld   hl,$C217                   ; 03:6F03
     call Sub036EA8                  ; 03:6F06
-    jr   Code036EA5                 ; 03:6F09
-Code036F0B:
+    jr   Tile16_Solid               ; 03:6F09
+
+Tile16_VertPipeRight:
     ld   hl,$C218                   ; 03:6F0B
     call Sub036EA8                  ; 03:6F0E
-    jr   Code036EA5                 ; 03:6F11
-Code036F13:
+    jr   Tile16_Solid               ; 03:6F11
+
+Tile16_FaceBlock:
     ld   hl,$C21B                   ; 03:6F13
     call Sub036EA8                  ; 03:6F16
-    jp   Code036EAD                 ; 03:6F19
-Code036F1C:
+    jp   Tile16_SolidWithItem       ; 03:6F19
+
+Tile16_SolidIfWhite:
     ld   a,[$C366]                  ; 03:6F1C
     and  a                          ; 03:6F1F
     jr   nz,Code036F40              ; 03:6F20
@@ -6411,7 +6445,6 @@ Code036F2A:
     and  a                          ; 03:6F31
     jr   nz,Code036F48              ; 03:6F32
     ret                             ; 03:6F34
-
 Code036F35:
     ld   a,[$C375]                  ; 03:6F35
     bit  1,a                        ; 03:6F38
@@ -6419,15 +6452,15 @@ Code036F35:
     and  a                          ; 03:6F3C
     jr   z,Code036F48               ; 03:6F3D
     ret                             ; 03:6F3F
-
 Code036F40:
     ld   a,[$DA6A]                  ; 03:6F40
     and  a                          ; 03:6F43
     jr   z,Code036F35               ; 03:6F44
     jr   Code036F2A                 ; 03:6F46
 Code036F48:
-    jp   Code036EA5                 ; 03:6F48
-Code036F4B:
+    jp   Tile16_Solid               ; 03:6F48
+
+Tile16_SolidSpiked:
     ld   a,[$C366]                  ; 03:6F4B
     and  a                          ; 03:6F4E
     jr   nz,Code036F7D              ; 03:6F4F
@@ -6451,46 +6484,50 @@ Code036F66:
 Code036F71:
     ld   hl,$C21C                   ; 03:6F71
     call Sub036EA8                  ; 03:6F74
-    jp   Code036EA5                 ; 03:6F77
+    jp   Tile16_Solid               ; 03:6F77
 Code036F7A:
-    jp   Code036EA5                 ; 03:6F7A
+    jp   Tile16_Solid               ; 03:6F7A
 Code036F7D:
     ld   a,[$DA6A]                  ; 03:6F7D
     and  a                          ; 03:6F80
     jr   z,Code036F66               ; 03:6F81
     jr   Code036F59                 ; 03:6F83
-Code036F85:
+
+Tile16_Type10:
     ld   hl,$C21D                   ; 03:6F85
     call Sub036EA8                  ; 03:6F88
-    jp   Code036EAD                 ; 03:6F8B
-Code036F8E:
+    jp   Tile16_SolidWithItem       ; 03:6F8B
+
+Tile16_Type11:
     ldh  a,[<$FF9F]                 ; 03:6F8E
-    cp   $3F                        ; 03:6F90
-    jr   nz,Code036F94              ; 03:6F92
-Code036F94:
-    ld   hl,$C215                   ; 03:6F94
+    cp   $3F                        ; 03:6F90  3F: invisible block with 1up
+    jr   nz,+                       ; 03:6F92
++   ld   hl,$C215                   ; 03:6F94
     call Sub036EA8                  ; 03:6F97
     ld   hl,$C21D                   ; 03:6F9A
     call Sub036EA8                  ; 03:6F9D
     ret                             ; 03:6FA0
 
-Code036FA1:
+Tile16_321Block:
     ld   a,[$C375]                  ; 03:6FA1
     bit  1,a                        ; 03:6FA4
     jr   nz,Code036FAE              ; 03:6FA6
     ld   hl,$C21E                   ; 03:6FA8
     call Sub036EA8                  ; 03:6FAB
 Code036FAE:
-    jp   Code036EA5                 ; 03:6FAE
-Code036FB1:
+    jp   Tile16_Solid               ; 03:6FAE
+
+Tile16_Spike:
     ld   hl,$C21C                   ; 03:6FB1
     call Sub036EA8                  ; 03:6FB4
-    jp   Code036EA5                 ; 03:6FB7
-Code036FBA:
+    jp   Tile16_Solid               ; 03:6FB7
+
+Tile16_1x1Spring:
     ld   hl,$C21F                   ; 03:6FBA
     call Sub036EA8                  ; 03:6FBD
-    jp   Code036EA5                 ; 03:6FC0
-Code036FC3:
+    jp   Tile16_Solid               ; 03:6FC0
+
+Tile16_SolidIfRed:
     ld   a,[$C366]                  ; 03:6FC3
     and  a                          ; 03:6FC6
     jr   nz,Code036FF0              ; 03:6FC7
@@ -6512,21 +6549,21 @@ Code036FDE:
     and  a                          ; 03:6FE5
     jp   z,Return036FEC             ; 03:6FE6
 Code036FE9:
-    jp   Code036EA5                 ; 03:6FE9
+    jp   Tile16_Solid               ; 03:6FE9
 Return036FEC:
     ret                             ; 03:6FEC
-
 Code036FED:
-    jp   Code036EA5                 ; 03:6FED
+    jp   Tile16_Solid               ; 03:6FED
 Code036FF0:
     ld   a,[$DA6A]                  ; 03:6FF0
     and  a                          ; 03:6FF3
     jr   z,Code036FDE               ; 03:6FF4
     jr   Code036FD1                 ; 03:6FF6
-Code036FF8:
+
+Tile16_1x2Spring:
     ld   hl,$C220                   ; 03:6FF8
     call Sub036EA8                  ; 03:6FFB
-    jp   Code036EA5                 ; 03:6FFE
+    jp   Tile16_Solid               ; 03:6FFE
 
 Sub037001:
     ld   b,d                        ; 03:7001
@@ -6567,73 +6604,76 @@ Code03700D:
     pop  af                         ; 03:7039
     ret                             ; 03:703A
 
-Data03703B:                         ; 03:703B
+Vine10000PointSublevels:            ; 03:703B
+; cloud bonus sublevels with 10000-point bonuses in challenge mode
 .db $26,$27,$2A,$2D
-Data03703F:                         ; 03:703F
-.db $29,$34,$29,$34
+Vine10000PointCoinCounts:           ; 03:703F
+; coin count required in each cloud bonus sublevel, for the +10000 points in challenge mode
+.db 41, 52, 41, 52
 
 Sub037043:
-    ld   a,[W_PlayerState]          ; 03:7043
-    cp   $11                        ; 03:7046
+; subroutine: Pit death/transition check
+    ld   a,[W_PlayerState]          ; 03:7043  check that Mario state is not...
+    cp   $11                        ; 03:7046  11: Pit death
     ret  z                          ; 03:7048
-    cp   $04                        ; 03:7049
+    cp   $04                        ; 03:7049  04: off-screen after dying from damage
     ret  z                          ; 03:704B
-    cp   $0E                        ; 03:704C
+    cp   $0E                        ; 03:704C  0E: climbing vine
     ret  z                          ; 03:704E
-    cp   $12                        ; 03:704F
+    cp   $12                        ; 03:704F  12: cloud bonus transition
     ret  z                          ; 03:7051
-    cp   $03                        ; 03:7052
+    cp   $03                        ; 03:7052  03: dying from damage
     ret  z                          ; 03:7054
-    call Sub0370C2                  ; 03:7055
-    jr   nc,Code037065              ; 03:7058
-    ldh  a,[<$FFAA]                 ; 03:705A
+    call Sub0370C2                  ; 03:7055  check if Mario is low enough to die
+    jr   nc,@PitDeath               ; 03:7058  if carry flag is clear (Mario is too low underwater), skip to death
+    ldh  a,[<H_PlayerYHigh]         ; 03:705A
     cp   $01                        ; 03:705C
     ret  nz                         ; 03:705E
-    ld   a,[$C1E6]                  ; 03:705F
-    and  a                          ; 03:7062
-    jr   nz,Code037078              ; 03:7063
-Code037065:
-    ld   a,$11                      ; 03:7065
+    ld   a,[W_PitScreenExitFlag]    ; 03:705F \
+    and  a                          ; 03:7062 | if pits give screen exits,
+    jr   nz,@CloudBonusTransition   ; 03:7063 /  run cloud bonus transition code
+@PitDeath:
+    ld   a,$11                      ; 03:7065  11: Pit death
     ld   [W_PlayerState],a          ; 03:7067
     ld   a,$D0                      ; 03:706A
     ld   [$C1CF],a                  ; 03:706C
-    xor  a                          ; 03:706F
-    ld   [$C181],a                  ; 03:7070
+    xor  a                          ; 03:706F \
+    ld   [$C181],a                  ; 03:7070 / lock sprites
     inc  a                          ; 03:7073
     ld   [$C1F3],a                  ; 03:7074
     ret                             ; 03:7077
 
-Code037078:
-    ld   a,$12                      ; 03:7078
+@CloudBonusTransition:
+    ld   a,$12                      ; 03:7078  12: Cloud bonus transition
     ld   [W_PlayerState],a          ; 03:707A
-    ld   a,$96                      ; 03:707D
-    ld   [$C1D1],a                  ; 03:707F
-    xor  a                          ; 03:7082
-    ld   [$C181],a                  ; 03:7083
-    ld   a,[$C283]                  ; 03:7086
+    ld   a,$96                      ; 03:707D \ set frames until screen transition
+    ld   [$C1D1],a                  ; 03:707F /
+    xor  a                          ; 03:7082 \
+    ld   [$C181],a                  ; 03:7083 / lock sprites
+    ld   a,[W_ChallengeFlag]        ; 03:7086
     and  a                          ; 03:7089
-    ret  z                          ; 03:708A
+    ret  z                          ; 03:708A  if not challenge mode, return
     ld   a,[W_SPFlag]               ; 03:708B
     and  a                          ; 03:708E
-    ret  nz                         ; 03:708F
+    ret  nz                         ; 03:708F  if Super Players, return
     ld   de,$0000                   ; 03:7090
-Code037093:
-    ld   hl,Data03703B              ; 03:7093
+@LoopCheckSublevels:
+    ld   hl,Vine10000PointSublevels ; 03:7093
     add  hl,de                      ; 03:7096
     ld   a,[W_SublevelID]           ; 03:7097
     cp   [hl]                       ; 03:709A
-    jr   z,Code0370A5               ; 03:709B
+    jr   z,@CheckCoinCount          ; 03:709B
     inc  e                          ; 03:709D
     ld   a,e                        ; 03:709E
     cp   $04                        ; 03:709F
-    jr   nz,Code037093              ; 03:70A1
-    jr   Return0370C1               ; 03:70A3
-Code0370A5:
-    ld   hl,Data03703F              ; 03:70A5
-    add  hl,de                      ; 03:70A8
-    ld   a,[$C3A5]                  ; 03:70A9
-    cp   [hl]                       ; 03:70AC
-    jr   c,Return0370C1             ; 03:70AD
+    jr   nz,@LoopCheckSublevels     ; 03:70A1
+    jr   @Return                    ; 03:70A3  if sublevel is not in table, return
+@CheckCoinCount:
+    ld   hl,Vine10000PointCoinCounts; 03:70A5 \ pointer to sublevel's required coins
+    add  hl,de                      ; 03:70A8 /
+    ld   a,[$C3A5]                  ; 03:70A9 \ compare with coins collected
+    cp   [hl]                       ; 03:70AC /  in current cloud bonus
+    jr   c,@Return                  ; 03:70AD  if too few coins, return
     ld   a,$67                      ; 03:70AF
     ldh  [<$FFF2],a                 ; 03:70B1
     nop                             ; 03:70B3
@@ -6645,35 +6685,33 @@ Code0370A5:
     nop                             ; 03:70B9
     nop                             ; 03:70BA
     ld   a,$03                      ; 03:70BB
-    rst  $10                        ; 03:70BD
+    rst  $10                        ; 03:70BD  24-bit call
 .dl SubL_0748E2                     ; 03:70BE
-Return0370C1:
+@Return:
     ret                             ; 03:70C1
 
 Sub0370C2:
-    ldh  a,[<H_PlInitY_SubLvType]   ; 03:70C2
-    and  $0F                        ; 03:70C4
-    cp   $02                        ; 03:70C6
-    jr   nz,Code0370E2              ; 03:70C8
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:70C2 \
+    and  $0F                        ; 03:70C4 | check if level type is water
+    cp   $02                        ; 03:70C6 /
+    jr   nz,@SetCarry               ; 03:70C8  if not underwater, always set carry flag
     ld   a,[W_PlayerSize]           ; 03:70CA
     and  a                          ; 03:70CD
-    jr   nz,Code0370D9              ; 03:70CE
-    ldh  a,[<$FFA9]                 ; 03:70D0
-    cp   $EE                        ; 03:70D2
-    jr   c,Code0370E2               ; 03:70D4
+    jr   nz,@Big                    ; 03:70CE
+    ldh  a,[<H_PlayerYLow]          ; 03:70D0 \ if Mario is small and underwater,
+    cp   $EE                        ; 03:70D2 /  check if Y position is EE
+    jr   c,@SetCarry                ; 03:70D4  set carry flag if it's less than EE
     scf                             ; 03:70D6
     ccf                             ; 03:70D7
     ret                             ; 03:70D8
-
-Code0370D9:
-    ldh  a,[<$FFA9]                 ; 03:70D9
-    cp   $FD                        ; 03:70DB
-    jr   c,Code0370E2               ; 03:70DD
+@Big:
+    ldh  a,[<H_PlayerYLow]          ; 03:70D9 \ if Mario is big and underwater,
+    cp   $FD                        ; 03:70DB /  check if Y position is FD
+    jr   c,@SetCarry                ; 03:70DD  set carry flag if it's less than FD
     scf                             ; 03:70DF
     ccf                             ; 03:70E0
     ret                             ; 03:70E1
-
-Code0370E2:
+@SetCarry:
     scf                             ; 03:70E2
     ret                             ; 03:70E3
 
@@ -6696,7 +6734,7 @@ SubL_0370E4:
     ld   [$C1D9],a                  ; 03:7107
     ld   a,$07                      ; 03:710A
     ld   [W_PlayerState],a          ; 03:710C
-    rst  $18                        ; 03:710F
+    rst  $18                        ; 03:710F  Return from 24-bit call
 
 Code037110:
     ld   a,[W_PlayerFireFlag]       ; 03:7110
@@ -6707,7 +6745,7 @@ Code037110:
     ld   a,$09                      ; 03:711C
     ld   [W_PlayerState],a          ; 03:711E
 ReturnL_037121:
-    rst  $18                        ; 03:7121
+    rst  $18                        ; 03:7121  Return from 24-bit call
 
 Code037122:
     ld   a,[$D2F5]                  ; 03:7122
@@ -6745,7 +6783,7 @@ Code037122:
     ld   [hl],a                     ; 03:715C
     pop  hl                         ; 03:715D
     ld   [hl],$07                   ; 03:715E
-    rst  $18                        ; 03:7160
+    rst  $18                        ; 03:7160  Return from 24-bit call
 
 Code037161:
     ld   hl,$C516                   ; 03:7161
@@ -6763,49 +6801,51 @@ Code037161:
     pop  hl                         ; 03:7174
     ld   [hl],$09                   ; 03:7175
 ReturnL_037177:
-    rst  $18                        ; 03:7177
+    rst  $18                        ; 03:7177  Return from 24-bit call
 
 Sub037178:
-    ld   hl,$FFA7                   ; 03:7178
+; Mario initial position handling?
+    ld   hl,H_PlayerXLow            ; 03:7178
     ld   a,[W_GameMode]             ; 03:717B
     cp   $02                        ; 03:717E
     jr   z,Code03719B               ; 03:7180
-    ld   a,[W_SublevelID]           ; 03:7182
-    cp   $20                        ; 03:7185
-    jr   nc,Code03719B              ; 03:7187
-    and  $03                        ; 03:7189
-    cp   $03                        ; 03:718B
-    jr   nz,Code03719B              ; 03:718D
-    ld   a,$20                      ; 03:718F
-    ldi  [hl],a                     ; 03:7191
-    xor  a                          ; 03:7192
-    ldi  [hl],a                     ; 03:7193
-    ld   a,$70                      ; 03:7194
-    ldi  [hl],a                     ; 03:7196
-    ld   [hl],$00                   ; 03:7197
+    ld   a,[W_SublevelID]           ; 03:7182 \
+    cp   $20                        ; 03:7185 | check if sublevel >= 20
+    jr   nc,Code03719B              ; 03:7187 /
+    and  $03                        ; 03:7189 \
+    cp   $03                        ; 03:718B | check if x-4 level
+    jr   nz,Code03719B              ; 03:718D /
+    ld   a,$20                      ; 03:718F \
+    ldi  [hl],a                     ; 03:7191 | set Mario X position to 0020
+    xor  a                          ; 03:7192 |
+    ldi  [hl],a                     ; 03:7193 /
+    ld   a,$70                      ; 03:7194 \
+    ldi  [hl],a                     ; 03:7196 | set Mario Y position to 0070
+    ld   [hl],$00                   ; 03:7197 /
     jr   Code0371BF                 ; 03:7199
+
 Code03719B:
-    ld   a,$20                      ; 03:719B
-    ldi  [hl],a                     ; 03:719D
-    xor  a                          ; 03:719E
-    ldi  [hl],a                     ; 03:719F
-    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71A0
+    ld   a,$20                      ; 03:719B \
+    ldi  [hl],a                     ; 03:719D | set Mario X position to 0020
+    xor  a                          ; 03:719E |
+    ldi  [hl],a                     ; 03:719F /
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71A0  high digit is Mario initial Y position
     and  $F0                        ; 03:71A2
     ldi  [hl],a                     ; 03:71A4
     ld   [hl],$00                   ; 03:71A5
     jr   Code0371BF                 ; 03:71A7
 
 Sub0371A9:
-    ld   hl,$FFA9                   ; 03:71A9
-    ldh  a,[<$FFA8]                 ; 03:71AC
-    and  a                          ; 03:71AE
-    jr   z,Code0371B8               ; 03:71AF
+    ld   hl,H_PlayerYLow            ; 03:71A9
+    ldh  a,[<H_PlayerXHigh]         ; 03:71AC \ check if Mario X high byte is zero
+    and  a                          ; 03:71AE |
+    jr   z,Code0371B8               ; 03:71AF /
     ld   a,$D0                      ; 03:71B1
     ldi  [hl],a                     ; 03:71B3
     ld   [hl],$00                   ; 03:71B4
     jr   Code0371BF                 ; 03:71B6
 Code0371B8:
-    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71B8
+    ldh  a,[<H_PlInitY_SubLvType]   ; 03:71B8  high digit is Mario initial Y position
     and  $F0                        ; 03:71BA
     ldi  [hl],a                     ; 03:71BC
     ld   [hl],$00                   ; 03:71BD
@@ -6834,7 +6874,7 @@ Sub0371C9:
     ldh  [<$FFAD],a                 ; 03:71E9
     ldh  [<$FFAE],a                 ; 03:71EB
     ld   [$C200],a                  ; 03:71ED
-    ld   [$C1D3],a                  ; 03:71F0
+    ld   [W_PlayerWarpSubstate],a   ; 03:71F0
     ld   [$C1FD],a                  ; 03:71F3
     ld   [$C1D8],a                  ; 03:71F6
     ld   [$C1DA],a                  ; 03:71F9
@@ -6868,7 +6908,7 @@ Sub0371C9:
     ld   [$C1DE],a                  ; 03:724D
     ld   [$C1E3],a                  ; 03:7250
     ld   [$C1E4],a                  ; 03:7253
-    ld   [$C1E6],a                  ; 03:7256
+    ld   [W_PitScreenExitFlag],a    ; 03:7256
     ld   [$C1F5],a                  ; 03:7259
     ld   [$C1F6],a                  ; 03:725C
     ld   [$C1ED],a                  ; 03:725F
@@ -6889,20 +6929,20 @@ Sub0371C9:
     ld   [$C3EA],a                  ; 03:728C
     ret                             ; 03:728F
 
-Data037290:                         ; 03:7290
+DataPtrs037290:                     ; 03:7290
 .dw $7C00,$7F00,$7DC0,$7C40,$7C80,$7E00,$7D80,$7E40,\
     $7CC0,$7D00,$7D40,$7C00,$7E80,$8200,$7EC0,$7700,\
     $7F40,$7D40
-Data0372B4:                         ; 03:72B4
+DataPtrs0372B4:                     ; 03:72B4
 .dw $7000,$7400,$7380,$7080,$7100,$7A00,$7300,$7500,\
     $7180,$7200,$7280,$7480,$7580,$7600,$7680,$7700,\
     $7A00,$7A80
-Data0372D8:                         ; 03:72D8
+DataPtrs0372D8:                     ; 03:72D8
 .dw $7600,$7600,$7900,$7780,$7800,$7A00,$7880,$7500,\
     $7600,$7980,$7980,$7480,$7580,$7600,$7980,$7700,\
     $7600,$7600
 DataPtrs0372FC:                     ; 03:72FC
-.dw Data037290, Data0372B4
+.dw DataPtrs037290, DataPtrs0372B4
 Data037300:                         ; 03:7300
 .db $10,$08,$00,$2C,$10,$00,$02,$2C,\
     $10,$00,$00,$0C,$10,$08,$02,$0C,\
@@ -6931,7 +6971,7 @@ Data03736C:                         ; 03:736C
 SubL_037370:
     ldh  a,[<$FF97]                 ; 03:7370
     call Sub037384                  ; 03:7372
-    rst  $18                        ; 03:7375
+    rst  $18                        ; 03:7375  Return from 24-bit call
 
 Sub037376:
     xor  a                          ; 03:7376
@@ -6949,13 +6989,13 @@ Sub037384:
     ld   a,[$C1D5]                  ; 03:7387
     and  $01                        ; 03:738A
     jp   nz,Code037460              ; 03:738C
-    ldh  a,[<$FFA9]                 ; 03:738F
+    ldh  a,[<H_PlayerYLow]          ; 03:738F
     add  $11                        ; 03:7391
     ld   e,a                        ; 03:7393
-    ldh  a,[<$FFAA]                 ; 03:7394
+    ldh  a,[<H_PlayerYHigh]         ; 03:7394
     adc  $00                        ; 03:7396
     ld   d,a                        ; 03:7398
-    ld   hl,$FFBA                   ; 03:7399
+    ld   hl,H_CameraY               ; 03:7399
     ld   a,e                        ; 03:739C
     sub  [hl]                       ; 03:739D
     ldh  [<$FF98],a                 ; 03:739E
@@ -6970,12 +7010,12 @@ Sub037384:
     cp   $C0                        ; 03:73B0
     jp   c,Code037460               ; 03:73B2
 Code0373B5:
-    ld   hl,$FFB8                   ; 03:73B5
-    ldh  a,[<$FFA7]                 ; 03:73B8
+    ld   hl,H_CameraXLow            ; 03:73B5
+    ldh  a,[<H_PlayerXLow]          ; 03:73B8
     sub  [hl]                       ; 03:73BA
     ldh  [<$FF99],a                 ; 03:73BB
-    ld   hl,$FFB9                   ; 03:73BD
-    ldh  a,[<$FFA8]                 ; 03:73C0
+    ld   hl,H_CameraXHigh           ; 03:73BD
+    ldh  a,[<H_PlayerXHigh]         ; 03:73C0
     sbc  [hl]                       ; 03:73C2
     ldh  [<$FF9A],a                 ; 03:73C3
     ldh  a,[<$FF99]                 ; 03:73C5
@@ -7102,7 +7142,7 @@ Code037487:
     and  $30                        ; 03:7489
     jr   nz,Code037492              ; 03:748B
 Code03748D:
-    ld   hl,Data0372D8              ; 03:748D
+    ld   hl,DataPtrs0372D8          ; 03:748D
     jr   Code0374A2                 ; 03:7490
 Code037492:
     ld   hl,DataPtrs0372FC          ; 03:7492
@@ -7143,17 +7183,19 @@ Code0374A2:
 
 SubL_0374C7:
     call Sub035A3C                  ; 03:74C7
-    rst  $18                        ; 03:74CA
+    rst  $18                        ; 03:74CA  Return from 24-bit call
 
-Code0374CB:
-    call Sub0374CF                  ; 03:74CB
+PlayerHorizPipe_Wrapper:
+; Player state 08 wrapper
+    call PlayerHorizPipe_Main       ; 03:74CB
     ret                             ; 03:74CE
 
-Sub0374CF:
-    ld   a,[$C1D3]                  ; 03:74CF
-    rst  $00                        ; 03:74D2
+PlayerHorizPipe_Main:
+; Player state 08
+    ld   a,[W_PlayerWarpSubstate]   ; 03:74CF
+    rst  $00                        ; 03:74D2  Execute from 16-bit pointer table
 .dw Code0374D7                      ; 03:74D3
-.dw Code0375E4                      ; 03:74D5
+.dw PipeTransition                  ; 03:74D5
 Code0374D7:
     ld   a,$01                      ; 03:74D7
     ld   [$C1E3],a                  ; 03:74D9
@@ -7168,11 +7210,11 @@ Code0374D7:
     call Sub0361DF                  ; 03:74EF
     call Sub035A14                  ; 03:74F2
     ld   hl,$C1E2                   ; 03:74F5
-    ldh  a,[<$FFA8]                 ; 03:74F8
+    ldh  a,[<H_PlayerXHigh]         ; 03:74F8
     cp   [hl]                       ; 03:74FA
     jr   nz,Return037553            ; 03:74FB
     ld   hl,$C1E1                   ; 03:74FD
-    ldh  a,[<$FFA7]                 ; 03:7500
+    ldh  a,[<H_PlayerXLow]          ; 03:7500
     cp   [hl]                       ; 03:7502
     jr   c,Return037553             ; 03:7503
     ld   hl,$C1D1                   ; 03:7505
@@ -7191,19 +7233,21 @@ Code037518:
     ld   [hl],$96                   ; 03:751C
 Code03751E:
     ld   a,$01                      ; 03:751E
-    ld   [$C1D3],a                  ; 03:7520
+    ld   [W_PlayerWarpSubstate],a   ; 03:7520
     ret                             ; 03:7523
 
-Code037524:
-    call Sub037528                  ; 03:7524
+PlayerVertPipe_Wrapper:
+; Player state 0B wrapper
+    call PlayerVertPipe_Main        ; 03:7524
     ret                             ; 03:7527
 
-Sub037528:
-    ld   a,[$C1D3]                  ; 03:7528
-    rst  $00                        ; 03:752B
+PlayerVertPipe_Main:
+; Player state 0B
+    ld   a,[W_PlayerWarpSubstate]   ; 03:7528
+    rst  $00                        ; 03:752B  Execute from 16-bit pointer table
 .dw Code037532                      ; 03:752C
 .dw Code037554                      ; 03:752E
-.dw Code0375E4                      ; 03:7530
+.dw PipeTransition                  ; 03:7530
 Code037532:
     ld   a,$01                      ; 03:7532
     ld   [$C1E3],a                  ; 03:7534
@@ -7212,13 +7256,13 @@ Code037532:
     call Sub0359E4                  ; 03:753B
     call Sub035A14                  ; 03:753E
     ld   hl,$C1E1                   ; 03:7541
-    ldh  a,[<$FFA9]                 ; 03:7544
+    ldh  a,[<H_PlayerYLow]          ; 03:7544
     cp   [hl]                       ; 03:7546
     jr   c,Return037553             ; 03:7547
     ld   a,$24                      ; 03:7549
     ld   [$C1D1],a                  ; 03:754B
     ld   a,$02                      ; 03:754E
-    ld   [$C1D3],a                  ; 03:7550
+    ld   [W_PlayerWarpSubstate],a   ; 03:7550
 Return037553:
     ret                             ; 03:7553
 
@@ -7244,12 +7288,12 @@ Code037576:
     call Sub0359E4                  ; 03:757A
     call Sub035A14                  ; 03:757D
     ld   hl,$C1E1                   ; 03:7580
-    ldh  a,[<$FFA9]                 ; 03:7583
+    ldh  a,[<H_PlayerYLow]          ; 03:7583
     cp   [hl]                       ; 03:7585
     jr   nc,Return0375AD            ; 03:7586
     xor  a                          ; 03:7588
     ld   [$C1F3],a                  ; 03:7589
-    ld   [$C1D3],a                  ; 03:758C
+    ld   [W_PlayerWarpSubstate],a   ; 03:758C
     ld   [W_PlayerState],a          ; 03:758F
     ld   [$C1E3],a                  ; 03:7592
     ld   [$C1D1],a                  ; 03:7595
@@ -7265,105 +7309,111 @@ Code037576:
 Return0375AD:
     ret                             ; 03:75AD
 
-Data0375AE:                         ; 03:75AE
-.db $01,$30,$0D
-Data0375B1:                         ; 03:75B1
-.dw $0B10,$0B48,$0B88,$0000,$0310,$0348,$0388,$0000,\
-    $0D00
-Data0375C3:                         ; 03:75C3
-.db $0C,$08,$04,$00,$1C,$18,$14,$00,\
-    $10
-Data0375CC:                         ; 03:75CC
-.db $01,$35,$36,$08,$43,$11,$44,$4D
-Data0375D4:                         ; 03:75D4
-.db $0D,$03,$05,$0F,$01,$0C,$03,$01
-Data0375DC:                         ; 03:75DC
-.db $04,$08,$0C,$00,$14,$18,$1C,$10
-Code0375E4:
+WarpZone_SublevelsOrig:             ; 03:75AE
+.db $01,$30,$0D                     ;          432, 876, 5
+WarpZone_PlayerXOrig:               ; 03:75B1
+.dw $0B10,$0B48,$0B88,$0000,\       ;          4 3 2
+    $0310,$0348,$0388,$0000,\       ;          8 7 6
+    $0D00                           ;          5
+WarpZone_DestLevelsOrig:            ; 03:75C3
+.db $0C,$08,$04,$00,\               ;          4 3 2
+    $1C,$18,$14,$00,\               ;          8 7 6
+    $10                             ;          5
+WarpZone_SublevelsSP:               ; 03:75CC
+.db $01,$35,$36,$08,$43,$11,$44,$4D ;          2 3 4 1 6 7 8 5
+WarpZone_PlayerXHighSP:             ; 03:75D4
+.db $0D,$03,$05,$0F,$01,$0C,$03,$01 ;          2 3 4 1 6 7 8 5
+WarpZone_DestLevelsSP:              ; 03:75DC
+.db $04,$08,$0C,$00,$14,$18,$1C,$10 ;          2 3 4 1 6 7 8 5
+
+PipeTransition:
+; horiz pipe substate 1, vert pipe substate 2
     ld   a,[$C1D1]                  ; 03:75E4
     dec  a                          ; 03:75E7
     ld   [$C1D1],a                  ; 03:75E8
-    jp   nz,Return037688            ; 03:75EB
-    ld   a,[$C283]                  ; 03:75EE
+    jp   nz,@Return                 ; 03:75EB
+    ld   a,[W_ChallengeFlag]        ; 03:75EE
     and  a                          ; 03:75F1
-    jr   nz,Code037613              ; 03:75F2
-    ld   c,$03                      ; 03:75F4
-    ld   hl,Data0375AE              ; 03:75F6
-    ld   a,[W_SPFlag]               ; 03:75F9
-    and  a                          ; 03:75FC
-    jr   z,Code037604               ; 03:75FD
-    ld   hl,Data0375CC              ; 03:75FF
-    ld   c,$08                      ; 03:7602
-Code037604:
+    jr   nz,@CheckIfPipeIntro       ; 03:75F2  if Challenge, skip ahead
+    ld   c,$03                      ; 03:75F4 \ if Original, loop 3 times
+    ld   hl,WarpZone_SublevelsOrig  ; 03:75F6 /  through level IDs
+    ld   a,[W_SPFlag]               ; 03:75F9 \ check level table to use
+    and  a                          ; 03:75FC |
+    jr   z,@Code037604              ; 03:75FD /
+    ld   hl,WarpZone_SublevelsSP    ; 03:75FF \ if Super Players, loop 8 times
+    ld   c,$08                      ; 03:7602 /  through level IDs
+@Code037604:
     ld   de,$0000                   ; 03:7604
-Code037607:
-    ld   a,[W_SublevelID]           ; 03:7607
-    cp   [hl]                       ; 03:760A
-    jr   z,Code037633               ; 03:760B
+@LoopCheckForWarpZone:
+    ld   a,[W_SublevelID]           ; 03:7607 \
+    cp   [hl]                       ; 03:760A | if current sublevel matches any of these IDs,
+    jr   z,@SublevelWithWarpZone    ; 03:760B /  skip ahead
     inc  hl                         ; 03:760D
     inc  e                          ; 03:760E
     ld   a,e                        ; 03:760F
     cp   c                          ; 03:7610
-    jr   nz,Code037607              ; 03:7611
-Code037613:
-    ld   l,$34                      ; 03:7613
+    jr   nz,@LoopCheckForWarpZone   ; 03:7611
+@CheckIfPipeIntro:
+; check if pipe intro sublevel (34 or 62)
+    ld   l,$34                      ; 03:7613  34: Original pipe intro
     ld   a,[W_SPFlag]               ; 03:7615
     and  a                          ; 03:7618
-    jr   z,Code03761D               ; 03:7619
-    ld   l,$62                      ; 03:761B
-Code03761D:
+    jr   z,@Code03761D              ; 03:7619
+    ld   l,$62                      ; 03:761B  62: Super Players pipe intro
+@Code03761D:
     ld   a,[W_SublevelID]           ; 03:761D
     cp   l                          ; 03:7620
-    jr   z,Code037628               ; 03:7621
+    jr   z,@PipeIntro               ; 03:7621
     ld   a,$0D                      ; 03:7623
     ldh  [<H_GameState],a           ; 03:7625
     ret                             ; 03:7627
 
-Code037628:
-    ld   a,[W_LevelID]              ; 03:7628
-    ld   [W_SublevelID],a           ; 03:762B
+@PipeIntro:
+    ld   a,[W_LevelID]              ; 03:7628 \ use level ID as sublevel destination
+    ld   [W_SublevelID],a           ; 03:762B /
     ld   a,$09                      ; 03:762E
     ldh  [<H_GameState],a           ; 03:7630
     ret                             ; 03:7632
 
-Code037633:
+@SublevelWithWarpZone:
+; E has the warp zone index
     ld   a,[W_SPFlag]               ; 03:7633
     and  a                          ; 03:7636
-    jr   nz,Code037689              ; 03:7637
-    sla  e                          ; 03:7639
-    sla  e                          ; 03:763B
-    sla  e                          ; 03:763D
-    ld   hl,Data0375B1              ; 03:763F
-    add  hl,de                      ; 03:7642
-    inc  hl                         ; 03:7643
+    jr   nz,@SublevelWithWarpZoneSP ; 03:7637
+    sla  e                          ; 03:7639 \
+    sla  e                          ; 03:763B |
+    sla  e                          ; 03:763D |
+    ld   hl,WarpZone_PlayerXOrig    ; 03:763F | hl = WarpZone_PlayerXOrig + 8*e
+    add  hl,de                      ; 03:7642 |
+    inc  hl                         ; 03:7643 /
     ldi  a,[hl]                     ; 03:7644
     ld   c,a                        ; 03:7645
-    ldh  a,[<$FFA8]                 ; 03:7646
+    ldh  a,[<H_PlayerXHigh]         ; 03:7646
     cp   c                          ; 03:7648
-    jr   nz,Code037613              ; 03:7649
+    jr   nz,@CheckIfPipeIntro       ; 03:7649
     cp   $0D                        ; 03:764B
-    jr   z,Code037663               ; 03:764D
-    ldh  a,[<$FFA7]                 ; 03:764F
+    jr   z,@ActivateWarpZoneOrig    ; 03:764D
+    ldh  a,[<H_PlayerXLow]          ; 03:764F
     sub  [hl]                       ; 03:7651
     bit  7,a                        ; 03:7652
-    jr   nz,Code037663              ; 03:7654
+    jr   nz,@ActivateWarpZoneOrig   ; 03:7654
     inc  hl                         ; 03:7656
     inc  hl                         ; 03:7657
     inc  e                          ; 03:7658
     inc  e                          ; 03:7659
-    ldh  a,[<$FFA7]                 ; 03:765A
+    ldh  a,[<H_PlayerXLow]          ; 03:765A
     sub  [hl]                       ; 03:765C
     bit  7,a                        ; 03:765D
-    jr   nz,Code037663              ; 03:765F
+    jr   nz,@ActivateWarpZoneOrig   ; 03:765F
     inc  e                          ; 03:7661
     inc  e                          ; 03:7662
-Code037663:
+@ActivateWarpZoneOrig:
     srl  e                          ; 03:7663
-    ld   hl,Data0375C3              ; 03:7665
+    ld   hl,WarpZone_DestLevelsOrig ; 03:7665
     add  hl,de                      ; 03:7668
     ld   a,[hl]                     ; 03:7669
     ld   [W_LevelID],a              ; 03:766A
-Code03766D:
+@ActivateWarpZone:
     ld   a,$07                      ; 03:766D
     ldh  [<H_GameState],a           ; 03:766F
     ld   hl,$C164                   ; 03:7671
@@ -7376,28 +7426,28 @@ Code03766D:
     ld   [$C1EF],a                  ; 03:7680
     ld   a,$FF                      ; 03:7683
     ld   [$DE68],a                  ; 03:7685
-Return037688:
+@Return:
     ret                             ; 03:7688
 
-Code037689:
-    ld   hl,Data0375D4              ; 03:7689
+@SublevelWithWarpZoneSP:
+    ld   hl,WarpZone_PlayerXHighSP  ; 03:7689
     add  hl,de                      ; 03:768C
     ld   a,[hl]                     ; 03:768D
     ld   c,a                        ; 03:768E
-    ldh  a,[<$FFA8]                 ; 03:768F
+    ldh  a,[<H_PlayerXHigh]         ; 03:768F
     cp   c                          ; 03:7691
-    jp   nz,Code037613              ; 03:7692
-    ld   hl,Data0375DC              ; 03:7695
+    jp   nz,@CheckIfPipeIntro       ; 03:7692
+    ld   hl,WarpZone_DestLevelsSP   ; 03:7695
     add  hl,de                      ; 03:7698
     ld   a,[hl]                     ; 03:7699
     ld   [W_LevelID],a              ; 03:769A
-    jr   Code03766D                 ; 03:769D
+    jr   @ActivateWarpZone          ; 03:769D
 
 Sub03769F:
     ld   a,[W_SPFlag]               ; 03:769F
     and  a                          ; 03:76A2
     jr   z,Code0376AB               ; 03:76A3
-    ldh  a,[<$FFA8]                 ; 03:76A5
+    ldh  a,[<H_PlayerXHigh]         ; 03:76A5
     and  $F0                        ; 03:76A7
     jr   nz,Code0376ED              ; 03:76A9
 Code0376AB:
@@ -7412,7 +7462,7 @@ Code0376AE:
     inc  hl                         ; 03:76B8
     inc  hl                         ; 03:76B9
     ld   a,[hl]                     ; 03:76BA
-    ld   hl,$FFA8                   ; 03:76BB
+    ld   hl,H_PlayerXHigh           ; 03:76BB
     and  $F0                        ; 03:76BE
     swap a                          ; 03:76C0
     cp   [hl]                       ; 03:76C2
@@ -7425,7 +7475,7 @@ Code0376C5:
     bit  7,e                        ; 03:76C9
     jr   z,Code0376AE               ; 03:76CB
     ld   de,$0000                   ; 03:76CD
-    ld   a,[$C283]                  ; 03:76D0
+    ld   a,[W_ChallengeFlag]        ; 03:76D0
     and  a                          ; 03:76D3
     jr   z,Code0376F0               ; 03:76D4
     ld   de,$0004                   ; 03:76D6
@@ -7435,7 +7485,7 @@ Code0376C5:
     ld   de,$0008                   ; 03:76E0
     cp   $0D                        ; 03:76E3
     jr   nz,Code0376ED              ; 03:76E5
-    ldh  a,[<$FFA8]                 ; 03:76E7
+    ldh  a,[<H_PlayerXHigh]         ; 03:76E7
     cp   $03                        ; 03:76E9
     jr   nz,Code0376F0              ; 03:76EB
 Code0376ED:
@@ -7446,19 +7496,19 @@ Code0376F0:
     ldi  a,[hl]                     ; 03:76F4
     ld   [W_SublevelID],a           ; 03:76F5
     ldi  a,[hl]                     ; 03:76F8
-    ldh  [<$FFB9],a                 ; 03:76F9
-    ldh  [<$FFA8],a                 ; 03:76FB
+    ldh  [<H_CameraXHigh],a         ; 03:76F9
+    ldh  [<H_PlayerXHigh],a         ; 03:76FB
     ld   [$C1EE],a                  ; 03:76FD
     xor  a                          ; 03:7700
-    ldh  [<$FFB8],a                 ; 03:7701
-    ldh  [<$FFAA],a                 ; 03:7703
+    ldh  [<H_CameraXLow],a          ; 03:7701
+    ldh  [<H_PlayerYHigh],a         ; 03:7703
     ld   a,[hl]                     ; 03:7705
     and  $0F                        ; 03:7706
     swap a                          ; 03:7708
-    ldh  [<$FFA7],a                 ; 03:770A
+    ldh  [<H_PlayerXLow],a          ; 03:770A
     ldi  a,[hl]                     ; 03:770C
     and  $F0                        ; 03:770D
-    ldh  [<$FFA9],a                 ; 03:770F
+    ldh  [<H_PlayerYLow],a          ; 03:770F
     call Sub037725                  ; 03:7711
     ld   a,[$C1ED]                  ; 03:7714
     add  $60                        ; 03:7717
@@ -7471,7 +7521,7 @@ Code0376F0:
 Sub037725:
     ld   a,[hl]                     ; 03:7725
     and  $0F                        ; 03:7726
-    rst  $00                        ; 03:7728
+    rst  $00                        ; 03:7728  Execute from 16-bit pointer table
 .dw Code03772F                      ; 03:7729
 .dw Code037740                      ; 03:772B
 .dw Code037773                      ; 03:772D
@@ -7480,7 +7530,7 @@ Code03772F:
     cp   $15                        ; 03:7732
     jr   nz,Code03773A              ; 03:7734
     ld   a,$38                      ; 03:7736
-    ldh  [<$FFBA],a                 ; 03:7738
+    ldh  [<H_CameraY],a             ; 03:7738
 Code03773A:
     ld   a,$01                      ; 03:773A
     ld   [$C181],a                  ; 03:773C
@@ -7492,62 +7542,63 @@ Code037740:
     inc  a                          ; 03:7744
     ld   [$C170],a                  ; 03:7745
     ld   [$C1E3],a                  ; 03:7748
-    ld   [$C1D3],a                  ; 03:774B
+    ld   [W_PlayerWarpSubstate],a   ; 03:774B
     ld   [$C1F3],a                  ; 03:774E
     ld   a,$0B                      ; 03:7751
     ld   [W_PlayerState],a          ; 03:7753
-    ldh  a,[<$FFA9]                 ; 03:7756
+    ldh  a,[<H_PlayerYLow]          ; 03:7756
     sub  $1D                        ; 03:7758
     ld   [$C1E1],a                  ; 03:775A
     ld   a,$40                      ; 03:775D
     ld   [$C1D1],a                  ; 03:775F
-    ldh  a,[<$FFA7]                 ; 03:7762
+    ldh  a,[<H_PlayerXLow]          ; 03:7762
     add  $08                        ; 03:7764
-    ldh  [<$FFA7],a                 ; 03:7766
-    ldh  a,[<$FFA8]                 ; 03:7768
+    ldh  [<H_PlayerXLow],a          ; 03:7766
+    ldh  a,[<H_PlayerXHigh]         ; 03:7768
     adc  $00                        ; 03:776A
-    ldh  [<$FFA8],a                 ; 03:776C
+    ldh  [<H_PlayerXHigh],a         ; 03:776C
     ld   a,$70                      ; 03:776E
-    ldh  [<$FFBA],a                 ; 03:7770
+    ldh  [<H_CameraY],a             ; 03:7770
     ret                             ; 03:7772
 
 Code037773:
+; vine transition initialization?
     ld   a,[W_LevelID]              ; 03:7773
     ld   e,a                        ; 03:7776
-    ld   d,$00                      ; 03:7777
+    ld   d,$00                      ; 03:7777  de = levelID
     ld   a,[W_SPFlag]               ; 03:7779
     and  a                          ; 03:777C
-    jr   z,Code037783               ; 03:777D
-    ld   a,e                        ; 03:777F
-    add  $20                        ; 03:7780
-    ld   e,a                        ; 03:7782
-Code037783:
-    ld   hl,Data034A46              ; 03:7783
-    add  hl,de                      ; 03:7786
-    ld   a,[hl]                     ; 03:7787
-    ld   [$C1EF],a                  ; 03:7788
+    jr   z,@Code037783              ; 03:777D
+    ld   a,e                        ; 03:777F \
+    add  MidpointScreens_SP-MidpointScreens_Orig; 03:7780 | if Super Players, adjust index
+    ld   e,a                        ; 03:7782 /
+@Code037783:
+    ld   hl,MidpointScreens_Orig    ; 03:7783 \ load current level's midpoint screen
+    add  hl,de                      ; 03:7786 |
+    ld   a,[hl]                     ; 03:7787 /
+    ld   [$C1EF],a                  ; 03:7788  $C1EF = current level's midpoint screen
     xor  a                          ; 03:778B
-    ldh  [<$FFB8],a                 ; 03:778C
-    ldh  [<$FFB9],a                 ; 03:778E
+    ldh  [<H_CameraXLow],a          ; 03:778C \ clear camera X
+    ldh  [<H_CameraXHigh],a         ; 03:778E /
     ldh  [<$FFBB],a                 ; 03:7790
-    ld   [$C3A5],a                  ; 03:7792
-    ld   [$C181],a                  ; 03:7795
-    ldh  [<$FFA9],a                 ; 03:7798
+    ld   [$C3A5],a                  ; 03:7792  clear cloud bonus coin count
+    ld   [$C181],a                  ; 03:7795  lock sprites
+    ldh  [<H_PlayerYLow],a          ; 03:7798
     inc  a                          ; 03:779A
     ld   [$C170],a                  ; 03:779B
-    ld   [$C1D3],a                  ; 03:779E
-    ld   [$C1E6],a                  ; 03:77A1
-    ldh  [<$FFAA],a                 ; 03:77A4
+    ld   [W_PlayerWarpSubstate],a   ; 03:779E
+    ld   [W_PitScreenExitFlag],a    ; 03:77A1  set flag: pits give screen exits
+    ldh  [<H_PlayerYHigh],a         ; 03:77A4  player Y high = 01 (Y position 0100)
     ld   a,$70                      ; 03:77A6
-    ldh  [<$FFBA],a                 ; 03:77A8
-    ld   a,$0E                      ; 03:77AA
+    ldh  [<H_CameraY],a             ; 03:77A8
+    ld   a,$0E                      ; 03:77AA  0E: Climbing vine
     ld   [W_PlayerState],a          ; 03:77AC
-    ldh  a,[<$FFA7]                 ; 03:77AF
+    ldh  a,[<H_PlayerXLow]          ; 03:77AF
     sub  $0A                        ; 03:77B1
-    ldh  [<$FFA7],a                 ; 03:77B3
-    ldh  a,[<$FFA8]                 ; 03:77B5
+    ldh  [<H_PlayerXLow],a          ; 03:77B3
+    ldh  a,[<H_PlayerXHigh]         ; 03:77B5
     sbc  $00                        ; 03:77B7
-    ldh  [<$FFA8],a                 ; 03:77B9
+    ldh  [<H_PlayerXHigh],a         ; 03:77B9
     ld   a,$07                      ; 03:77BB
     ld   [$C1C2],a                  ; 03:77BD
     ld   a,$02                      ; 03:77C0
@@ -7564,7 +7615,7 @@ Code037783:
     jr   nz,Return0377DE            ; 03:77D8
 Code0377DA:
     xor  a                          ; 03:77DA
-    ld   [$C1E6],a                  ; 03:77DB
+    ld   [W_PitScreenExitFlag],a    ; 03:77DB
 Return0377DE:
     ret                             ; 03:77DE
 
@@ -7575,13 +7626,13 @@ Sub0377DF:
 Sub0377E4:
     ld   hl,$C581                   ; 03:77E4
 Code0377E7:
-    ldh  a,[<$FFA7]                 ; 03:77E7
+    ldh  a,[<H_PlayerXLow]          ; 03:77E7
     ldi  [hl],a                     ; 03:77E9
-    ldh  a,[<$FFA8]                 ; 03:77EA
+    ldh  a,[<H_PlayerXHigh]         ; 03:77EA
     ldi  [hl],a                     ; 03:77EC
-    ldh  a,[<$FFA9]                 ; 03:77ED
+    ldh  a,[<H_PlayerYLow]          ; 03:77ED
     ldi  [hl],a                     ; 03:77EF
-    ldh  a,[<$FFAA]                 ; 03:77F0
+    ldh  a,[<H_PlayerYHigh]         ; 03:77F0
     ldi  [hl],a                     ; 03:77F2
     ldh  a,[<$FFAB]                 ; 03:77F3
     ldi  [hl],a                     ; 03:77F5
@@ -7609,7 +7660,7 @@ Code037802:
 
 SubL_037813:
     call Sub037817                  ; 03:7813
-    rst  $18                        ; 03:7816
+    rst  $18                        ; 03:7816  Return from 24-bit call
 
 Sub037817:
     ld   hl,$C501                   ; 03:7817
@@ -7619,13 +7670,13 @@ Sub03781C:
     ld   hl,$C581                   ; 03:781C
 Code03781F:
     ldi  a,[hl]                     ; 03:781F
-    ldh  [<$FFA7],a                 ; 03:7820
+    ldh  [<H_PlayerXLow],a          ; 03:7820
     ldi  a,[hl]                     ; 03:7822
-    ldh  [<$FFA8],a                 ; 03:7823
+    ldh  [<H_PlayerXHigh],a         ; 03:7823
     ldi  a,[hl]                     ; 03:7825
-    ldh  [<$FFA9],a                 ; 03:7826
+    ldh  [<H_PlayerYLow],a          ; 03:7826
     ldi  a,[hl]                     ; 03:7828
-    ldh  [<$FFAA],a                 ; 03:7829
+    ldh  [<H_PlayerYHigh],a         ; 03:7829
     ldi  a,[hl]                     ; 03:782B
     ldh  [<$FFAB],a                 ; 03:782C
     ldi  a,[hl]                     ; 03:782E
@@ -7658,7 +7709,7 @@ WaterLavaAnimPtrs:                  ; 03:785B
 .dw Gr_WaterLavaAnim, Gr_WaterLavaAnim+$10, Gr_WaterLavaAnim+$20, Gr_WaterLavaAnim+$30
 
 Sub037863:
-    ld   a,[$C283]                  ; 03:7863
+    ld   a,[W_ChallengeFlag]        ; 03:7863
     and  a                          ; 03:7866
     jr   z,@Code03788F              ; 03:7867
     ldh  a,[<H_GlobalTimer]         ; 03:7869
@@ -7814,7 +7865,7 @@ Code037972:
     ld   a,$01                      ; 03:7976
     ldh  [<$FF9B],a                 ; 03:7978
     ld   a,$03                      ; 03:797A
-    rst  $10                        ; 03:797C
+    rst  $10                        ; 03:797C  24-bit call
 .dl SubL_074022                     ; 03:797D
     ret                             ; 03:7980
 
@@ -7860,10 +7911,10 @@ Code0379C2:
     ld   a,$08                      ; 03:79C2
     ld   [$C1F9],a                  ; 03:79C4
     dec  [hl]                       ; 03:79C7
-    call Sub002D66                  ; 03:79C8
+    call GiveCoin                   ; 03:79C8
 Return0379CB:
     ret                             ; 03:79CB
 
 SubL_0379CC:
     call Sub0359E4                  ; 03:79CC
-    rst  $18                        ; 03:79CF
+    rst  $18                        ; 03:79CF  Return from 24-bit call

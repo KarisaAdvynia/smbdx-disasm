@@ -28,11 +28,11 @@ Sub114026:
     ldh  [<H_GameSubstate],a        ; 11:4045
     ld   [$C168],a                  ; 11:4047
     ld   [$C35B],a                  ; 11:404A
-    ldh  [<$FFB8],a                 ; 11:404D
-    ldh  [<$FFB9],a                 ; 11:404F
+    ldh  [<H_CameraXLow],a          ; 11:404D
+    ldh  [<H_CameraXHigh],a         ; 11:404F
     ldh  [<$FFBB],a                 ; 11:4051
     ld   a,$70                      ; 11:4053
-    ldh  [<$FFBA],a                 ; 11:4055
+    ldh  [<H_CameraY],a             ; 11:4055
     ld   a,$00                      ; 11:4057
     ld   hl,W_PaletteBuffer         ; 11:4059
     ldi  [hl],a                     ; 11:405C
@@ -57,11 +57,12 @@ Data114078:                         ; 11:4078
 Sub11407E:
 ; Game state 1B
     ldh  a,[<H_GameSubstate]        ; 11:407E
-    rst  $00                        ; 11:4080
+    rst  $00                        ; 11:4080  Execute from 16-bit pointer table
 .dw Code114089                      ; 11:4081
 .dw Code1140D4                      ; 11:4083
 .dw Code11414E                      ; 11:4085
 .dw Code1141B8                      ; 11:4087
+
 Code114089:
     ldh  a,[<H_ButtonsPressed]      ; 11:4089
     and  $C0                        ; 11:408B
@@ -83,7 +84,7 @@ Code11409C:
     add  hl,bc                      ; 11:40A9
     ld   e,l                        ; 11:40AA
     ld   d,h                        ; 11:40AB
-    ld   hl,$DF01                   ; 11:40AC
+    ld   hl,W_TilemapUploadBuffer   ; 11:40AC
     ld   [hl],$9A                   ; 11:40AF
     inc  hl                         ; 11:40B1
     ld   [hl],$E8                   ; 11:40B2
@@ -128,7 +129,7 @@ Code1140E6:
     ldi  [hl],a                     ; 11:40EE
     ldi  [hl],a                     ; 11:40EF
     ld   [hl],a                     ; 11:40F0
-    ld   [$C1F2],a                  ; 11:40F1
+    ld   [W_PlayerCoins],a          ; 11:40F1
     ld   [$C1EF],a                  ; 11:40F4
     ld   [$C182],a                  ; 11:40F7
     ld   [$C1B3],a                  ; 11:40FA
@@ -150,7 +151,7 @@ Data11410C:                         ; 11:410C
     $E8,$00
 Code114136:
     ld   de,Data11410C              ; 11:4136
-    ld   hl,$DF01                   ; 11:4139
+    ld   hl,W_TilemapUploadBuffer   ; 11:4139
     ld   b,$2A                      ; 11:413C
 Code11413E:
     ld   a,[de]                     ; 11:413E
@@ -185,7 +186,7 @@ Code114161:
     add  hl,bc                      ; 11:416E
     ld   e,l                        ; 11:416F
     ld   d,h                        ; 11:4170
-    ld   hl,$DF01                   ; 11:4171
+    ld   hl,W_TilemapUploadBuffer   ; 11:4171
     ld   [hl],$9A                   ; 11:4174
     inc  hl                         ; 11:4176
     ld   [hl],$E8                   ; 11:4177
@@ -211,7 +212,7 @@ Code11417F:
     ld   [$C35B],a                  ; 11:4196
     ld   a,$00                      ; 11:4199
     ldh  [<H_GameSubstate],a        ; 11:419B
-    ld   de,$DF01                   ; 11:419D
+    ld   de,W_TilemapUploadBuffer   ; 11:419D
     ld   hl,Data114000              ; 11:41A0
     ld   bc,$0026                   ; 11:41A3
     call CopyBytes                  ; 11:41A6
@@ -248,13 +249,13 @@ Code1141CD:
     ld   a,$05                      ; 11:41D5
     ld   [W_PlayerLives],a          ; 11:41D7
     ld   a,$00                      ; 11:41DA
-    ld   [$C1F2],a                  ; 11:41DC
+    ld   [W_PlayerCoins],a          ; 11:41DC
     ld   [$C1EF],a                  ; 11:41DF
     ld   [$C182],a                  ; 11:41E2
     ld   [$C1B3],a                  ; 11:41E5
     ldh  [<H_GameSubstate],a        ; 11:41E8
     ld   a,$11                      ; 11:41EA
-    rst  $10                        ; 11:41EC
+    rst  $10                        ; 11:41EC  24-bit call
 .dl SubL_075584                     ; 11:41ED
     ld   a,[W_SPFlag]               ; 11:41F0
     and  a                          ; 11:41F3
@@ -296,13 +297,13 @@ FileSelectInit:
     ld   [$C16B],a                  ; 11:423B
     ld   [$C358],a                  ; 11:423E
     ld   [$C359],a                  ; 11:4241
-    ld   [$C283],a                  ; 11:4244
+    ld   [W_ChallengeFlag],a        ; 11:4244
     ld   [W_SublevelID],a           ; 11:4247
-    ldh  [<$FFB8],a                 ; 11:424A
-    ldh  [<$FFB9],a                 ; 11:424C
+    ldh  [<H_CameraXLow],a          ; 11:424A
+    ldh  [<H_CameraXHigh],a         ; 11:424C
     ldh  [<$FFBB],a                 ; 11:424E
     ld   a,$70                      ; 11:4250
-    ldh  [<$FFBA],a                 ; 11:4252
+    ldh  [<H_CameraY],a             ; 11:4252
     ld   a,$20                      ; 11:4254
     ld   [$C35E],a                  ; 11:4256
     ld   a,$01                      ; 11:4259
@@ -312,18 +313,18 @@ FileSelectInit:
     ld   a,$FF                      ; 11:4263
     ld   [$DE68],a                  ; 11:4265
     ld   a,$00                      ; 11:4268
-    ldh  [<$FFAA],a                 ; 11:426A
-    ldh  [<$FFA8],a                 ; 11:426C
+    ldh  [<H_PlayerYHigh],a         ; 11:426A
+    ldh  [<H_PlayerXHigh],a         ; 11:426C
     ld   a,$B0                      ; 11:426E
-    ldh  [<$FFA9],a                 ; 11:4270
+    ldh  [<H_PlayerYLow],a          ; 11:4270
     ld   a,$18                      ; 11:4272
-    ldh  [<$FFA7],a                 ; 11:4274
+    ldh  [<H_PlayerXLow],a          ; 11:4274
     ld   a,$02                      ; 11:4276
     ld   [$C1C3],a                  ; 11:4278
     ld   a,$01                      ; 11:427B
     ld   [W_PlayerSize],a           ; 11:427D
     ld   a,$11                      ; 11:4280
-    rst  $10                        ; 11:4282
+    rst  $10                        ; 11:4282  24-bit call
 .dl SubL_0B421E                     ; 11:4283
     ld   a,$00                      ; 11:4286
     ld   [$C16B],a                  ; 11:4288
@@ -343,7 +344,7 @@ Code11428B:
     ld   a,$11                      ; 11:42A7
     call Sub001480                  ; 11:42A9
     ld   a,$11                      ; 11:42AC
-    rst  $10                        ; 11:42AE
+    rst  $10                        ; 11:42AE  24-bit call
 .dl SubL_0756D9                     ; 11:42AF
     ld   a,$01                      ; 11:42B2
     ldh  [<IE],a                    ; 11:42B4
@@ -372,12 +373,13 @@ Sub1142C2:
     ld   [$DE68],a                  ; 11:42DC
 Code1142DF:
     ld   a,[$C168]                  ; 11:42DF
-    rst  $00                        ; 11:42E2
+    rst  $00                        ; 11:42E2  Execute from 16-bit pointer table
 .dw Code1142ED                      ; 11:42E3
 .dw Code114399                      ; 11:42E5
 .dw Code114531                      ; 11:42E7
 .dw Code114559                      ; 11:42E9
 .dw Code114770                      ; 11:42EB
+
 Code1142ED:
     ldh  a,[<H_ButtonsPressed]      ; 11:42ED
     and  $08                        ; 11:42EF
@@ -385,7 +387,7 @@ Code1142ED:
     ld   a,$31                      ; 11:42F3
     ldh  [<$FFF3],a                 ; 11:42F5
     ld   a,$20                      ; 11:42F7
-    ldh  [<$FFA9],a                 ; 11:42F9
+    ldh  [<H_PlayerYLow],a          ; 11:42F9
     xor  a                          ; 11:42FB
     ldh  [<H_GameSubstate],a        ; 11:42FC
     ld   a,$04                      ; 11:42FE
@@ -408,7 +410,7 @@ Code114316:
     jr   z,Code114350               ; 11:431A
 Code11431C:
     ld   a,$11                      ; 11:431C
-    rst  $10                        ; 11:431E
+    rst  $10                        ; 11:431E  24-bit call
 .dl SubL_075485                     ; 11:431F
     ld   a,[$C358]                  ; 11:4322
     and  a                          ; 11:4325
@@ -424,7 +426,7 @@ Code114333:
     ld   a,$44                      ; 11:4339
     ldh  [<$FFF2],a                 ; 11:433B
     ld   a,$A0                      ; 11:433D
-    ldh  [<$FFA9],a                 ; 11:433F
+    ldh  [<H_PlayerYLow],a          ; 11:433F
     ld   a,$04                      ; 11:4341
     ld   [$C1C2],a                  ; 11:4343
     ld   hl,$C168                   ; 11:4346
@@ -476,7 +478,7 @@ Code114364:
     ld   hl,FileSelect_PlayerXPos   ; 11:4391
     add  hl,de                      ; 11:4394
     ld   a,[hl]                     ; 11:4395
-    ldh  [<$FFA7],a                 ; 11:4396
+    ldh  [<H_PlayerXLow],a          ; 11:4396
 @Return:
     ret                             ; 11:4398
 
@@ -486,7 +488,7 @@ Code114399:
     jr   z,Code1143B6               ; 11:439D
 Code11439F:
     ld   a,$B0                      ; 11:439F
-    ldh  [<$FFA9],a                 ; 11:43A1
+    ldh  [<H_PlayerYLow],a          ; 11:43A1
     ld   a,$00                      ; 11:43A3
     ldh  [<$FFAE],a                 ; 11:43A5
     ld   a,$FF                      ; 11:43A7
@@ -508,7 +510,7 @@ Code1143B6:
     ld   [$C1C2],a                  ; 11:43C6
     ld   [$C358],a                  ; 11:43C9
     ld   a,$B0                      ; 11:43CC
-    ldh  [<$FFA9],a                 ; 11:43CE
+    ldh  [<H_PlayerYLow],a          ; 11:43CE
     call Sub0010A9                  ; 11:43D0
     ret                             ; 11:43D3
 
@@ -714,13 +716,13 @@ Code114531:
     ld   a,$18                      ; 11:453B
     ldh  [<$FFAC],a                 ; 11:453D
     ld   a,$11                      ; 11:453F
-    rst  $10                        ; 11:4541
+    rst  $10                        ; 11:4541  24-bit call
 .dl SubL_0379CC                     ; 11:4542
-    ldh  a,[<$FFA9]                 ; 11:4545
+    ldh  a,[<H_PlayerYLow]          ; 11:4545
     cp   $D0                        ; 11:4547
     jr   c,Return114558             ; 11:4549
     ld   a,$D0                      ; 11:454B
-    ldh  [<$FFA9],a                 ; 11:454D
+    ldh  [<H_PlayerYLow],a          ; 11:454D
     ld   a,$40                      ; 11:454F
     ld   [$C284],a                  ; 11:4551
     ld   hl,$C168                   ; 11:4554
@@ -740,7 +742,7 @@ Code114559:
     ld   a,[W_HardFlag]             ; 11:4567
     push af                         ; 11:456A
     ld   a,$11                      ; 11:456B
-    rst  $10                        ; 11:456D
+    rst  $10                        ; 11:456D  24-bit call
 .dl SubL_075485                     ; 11:456E
     pop  af                         ; 11:4571
     ldh  [<$FF97],a                 ; 11:4572
@@ -778,7 +780,7 @@ Code1145B8:
     ld   hl,Data1145A3              ; 11:45B8
     add  hl,de                      ; 11:45BB
     ld   a,[hl]                     ; 11:45BC
-    ld   hl,$DF01                   ; 11:45BD
+    ld   hl,W_TilemapUploadBuffer   ; 11:45BD
     add  hl,de                      ; 11:45C0
     ld   [hl],a                     ; 11:45C1
     inc  e                          ; 11:45C2
@@ -794,7 +796,7 @@ Code1145B8:
     ld   b,[hl]                     ; 11:45D4
     inc  hl                         ; 11:45D5
     ld   c,[hl]                     ; 11:45D6
-    ld   hl,$DF01                   ; 11:45D7
+    ld   hl,W_TilemapUploadBuffer   ; 11:45D7
     ld   [hl],b                     ; 11:45DA
     inc  hl                         ; 11:45DB
     ld   [hl],c                     ; 11:45DC
@@ -834,7 +836,7 @@ Sub1145FD:
 Code114618:
     ldi  a,[hl]                     ; 11:4618
     push hl                         ; 11:4619
-    ld   hl,$DF01                   ; 11:461A
+    ld   hl,W_TilemapUploadBuffer   ; 11:461A
     add  hl,bc                      ; 11:461D
     ld   [hl],a                     ; 11:461E
     pop  hl                         ; 11:461F
@@ -998,9 +1000,10 @@ Data114753:                         ; 11:4753
     $E8,$08,$F4,$08,$F4,$98,$46,$06,\
     $08,$F4,$08,$F2,$08,$DE,$08,$EC,\
     $08,$F4,$08,$F4,$00
+
 Code114770:
     ldh  a,[<H_GameSubstate]        ; 11:4770
-    rst  $00                        ; 11:4772
+    rst  $00                        ; 11:4772  Execute from 16-bit pointer table
 .dw Code114B2C                      ; 11:4773
 .dw Code11478C                      ; 11:4775
 .dw Code11485E                      ; 11:4777
@@ -1071,7 +1074,7 @@ Code1147F2:
     ld   a,$44                      ; 11:47F2
     ldh  [<$FFF2],a                 ; 11:47F4
     ld   a,$B0                      ; 11:47F6
-    ldh  [<$FFA9],a                 ; 11:47F8
+    ldh  [<H_PlayerYLow],a          ; 11:47F8
     ld   a,[$C16B]                  ; 11:47FA
     ld   e,a                        ; 11:47FD
     ld   d,$00                      ; 11:47FE
@@ -1104,7 +1107,7 @@ Code114824:
     ld   hl,FileSelect_PlayerXPos   ; 11:482A
     add  hl,de                      ; 11:482D
     ld   a,[hl]                     ; 11:482E
-    ldh  [<$FFA7],a                 ; 11:482F
+    ldh  [<H_PlayerXLow],a          ; 11:482F
     ld   a,[$C1B5]                  ; 11:4831
     and  a                          ; 11:4834
     jr   nz,Code114841              ; 11:4835
@@ -1128,7 +1131,7 @@ Code11484B:
     ld   a,$31                      ; 11:4851
     ldh  [<$FFF3],a                 ; 11:4853
     ld   a,$B0                      ; 11:4855
-    ldh  [<$FFA9],a                 ; 11:4857
+    ldh  [<H_PlayerYLow],a          ; 11:4857
     ld   a,$09                      ; 11:4859
     ldh  [<H_GameSubstate],a        ; 11:485B
 Return11485D:
@@ -1143,7 +1146,7 @@ Code11485E:
     and  a                          ; 11:486A
     jr   nz,Code114887              ; 11:486B
     ld   a,$11                      ; 11:486D
-    rst  $10                        ; 11:486F
+    rst  $10                        ; 11:486F  24-bit call
 .dl SubL_075485                     ; 11:4870
     call Sub11462F                  ; 11:4873
     call Sub1145FD                  ; 11:4876
@@ -1163,7 +1166,7 @@ Code114890:
     ld   a,$44                      ; 11:4890
     ldh  [<$FFF2],a                 ; 11:4892
     ld   a,$A0                      ; 11:4894
-    ldh  [<$FFA9],a                 ; 11:4896
+    ldh  [<H_PlayerYLow],a          ; 11:4896
     ld   a,$04                      ; 11:4898
     ld   [$C1C2],a                  ; 11:489A
     ld   hl,H_GameSubstate          ; 11:489D
@@ -1176,7 +1179,7 @@ Code1148A2:
     ret  z                          ; 11:48A6
     ld   a,$63                      ; 11:48A7
     ldh  [<$FFF2],a                 ; 11:48A9
-    ld   de,$DF01                   ; 11:48AB
+    ld   de,W_TilemapUploadBuffer   ; 11:48AB
     ld   hl,Data1146EA              ; 11:48AE
     ld   bc,$0020                   ; 11:48B1
     call CopyBytes                  ; 11:48B4
@@ -1210,11 +1213,11 @@ Code1148E1:
     ld   hl,FileSelect_PlayerXPos   ; 11:48E7
     add  hl,de                      ; 11:48EA
     ld   a,[hl]                     ; 11:48EB
-    ldh  [<$FFA7],a                 ; 11:48EC
+    ldh  [<H_PlayerXLow],a          ; 11:48EC
     ld   a,$00                      ; 11:48EE
     ld   [$C1C2],a                  ; 11:48F0
     ld   a,$B0                      ; 11:48F3
-    ldh  [<$FFA9],a                 ; 11:48F5
+    ldh  [<H_PlayerYLow],a          ; 11:48F5
     ld   hl,H_GameSubstate          ; 11:48F7
     inc  [hl]                       ; 11:48FA
     ret                             ; 11:48FB
@@ -1247,7 +1250,7 @@ Code11491E:
     ld   hl,FileSelect_PlayerXPos   ; 11:4924
     add  hl,de                      ; 11:4927
     ld   a,[hl]                     ; 11:4928
-    ldh  [<$FFA7],a                 ; 11:4929
+    ldh  [<H_PlayerXLow],a          ; 11:4929
 Code11492B:
     ldh  a,[<H_ButtonsPressed]      ; 11:492B
     and  $03                        ; 11:492D
@@ -1260,7 +1263,7 @@ Code11492B:
     ld   a,$07                      ; 11:493A
     ld   [$C171],a                  ; 11:493C
     ld   a,$A0                      ; 11:493F
-    ldh  [<$FFA9],a                 ; 11:4941
+    ldh  [<H_PlayerYLow],a          ; 11:4941
     ld   a,$04                      ; 11:4943
     ld   [$C1C2],a                  ; 11:4945
     xor  a                          ; 11:4948
@@ -1284,7 +1287,7 @@ Code114951:
     ld   hl,FileSelect_PlayerXPos   ; 11:496A
     add  hl,de                      ; 11:496D
     ld   a,[hl]                     ; 11:496E
-    ldh  [<$FFA7],a                 ; 11:496F
+    ldh  [<H_PlayerXLow],a          ; 11:496F
     ld   a,$63                      ; 11:4971
     ldh  [<$FFF2],a                 ; 11:4973
     ld   a,$02                      ; 11:4975
@@ -1303,7 +1306,7 @@ Code11497A:
     and  a                          ; 11:498B
     jr   z,Code1149BC               ; 11:498C
     ld   a,$11                      ; 11:498E
-    rst  $10                        ; 11:4990
+    rst  $10                        ; 11:4990  24-bit call
 .dl SubL_075584                     ; 11:4991
     call Sub11462F                  ; 11:4994
     ld   a,[$C16B]                  ; 11:4997
@@ -1334,7 +1337,7 @@ Code1149C9:
     ld   a,$00                      ; 11:49C9
     ld   [$C1C2],a                  ; 11:49CB
     ld   a,$B0                      ; 11:49CE
-    ldh  [<$FFA9],a                 ; 11:49D0
+    ldh  [<H_PlayerYLow],a          ; 11:49D0
     ret                             ; 11:49D2
 
 Code1149D3:
@@ -1378,7 +1381,7 @@ Code114A1D:
     ld   a,$00                      ; 11:4A1D
     ld   [$C1C2],a                  ; 11:4A1F
     ld   a,$B0                      ; 11:4A22
-    ldh  [<$FFA9],a                 ; 11:4A24
+    ldh  [<H_PlayerYLow],a          ; 11:4A24
     ret                             ; 11:4A26
 
 Code114A27:
@@ -1393,10 +1396,10 @@ Code114A27:
     and  a                          ; 11:4A38
     jr   z,Code114A5A               ; 11:4A39
     ld   a,$11                      ; 11:4A3B
-    rst  $10                        ; 11:4A3D
+    rst  $10                        ; 11:4A3D  24-bit call
 .dl SubL_07539C                     ; 11:4A3E
     ld   a,$11                      ; 11:4A41
-    rst  $10                        ; 11:4A43
+    rst  $10                        ; 11:4A43  24-bit call
 .dl SubL_0B75A6                     ; 11:4A44
     ld   a,$FF                      ; 11:4A47
     ld   [$DE68],a                  ; 11:4A49
@@ -1411,7 +1414,7 @@ Code114A27:
 Code114A5A:
     ld   a,$63                      ; 11:4A5A
     ldh  [<$FFF2],a                 ; 11:4A5C
-    ld   de,$DF01                   ; 11:4A5E
+    ld   de,W_TilemapUploadBuffer   ; 11:4A5E
     ld   hl,Data1146E5              ; 11:4A61
     ld   bc,$0025                   ; 11:4A64
     call CopyBytes                  ; 11:4A67
@@ -1444,7 +1447,7 @@ Sub114A92:
     jr   z,Return114ABC             ; 11:4A96
     ld   a,$47                      ; 11:4A98
     ldh  [<$FFF2],a                 ; 11:4A9A
-    ld   de,$DF01                   ; 11:4A9C
+    ld   de,W_TilemapUploadBuffer   ; 11:4A9C
     ld   hl,Data114702              ; 11:4A9F
     ld   bc,$0008                   ; 11:4AA2
     call CopyBytes                  ; 11:4AA5
@@ -1465,7 +1468,7 @@ Sub114ABD:
     jr   z,Return114AE7             ; 11:4AC1
     ld   a,$47                      ; 11:4AC3
     ldh  [<$FFF2],a                 ; 11:4AC5
-    ld   de,$DF01                   ; 11:4AC7
+    ld   de,W_TilemapUploadBuffer   ; 11:4AC7
     ld   hl,Data114702              ; 11:4ACA
     ld   bc,$0008                   ; 11:4ACD
     call CopyBytes                  ; 11:4AD0
@@ -1518,13 +1521,13 @@ Code114B0D:
     ld   hl,FileSelect_PlayerXPos   ; 11:4B24
     add  hl,de                      ; 11:4B27
     ld   a,[hl]                     ; 11:4B28
-    ldh  [<$FFA7],a                 ; 11:4B29
+    ldh  [<H_PlayerXLow],a          ; 11:4B29
     ret                             ; 11:4B2B
 
 Code114B2C:
-    ldh  a,[<$FFBA]                 ; 11:4B2C
+    ldh  a,[<H_CameraY]             ; 11:4B2C
     add  $02                        ; 11:4B2E
-    ldh  [<$FFBA],a                 ; 11:4B30
+    ldh  [<H_CameraY],a             ; 11:4B30
     cp   $90                        ; 11:4B32
     jr   c,Return114B3E             ; 11:4B34
     xor  a                          ; 11:4B36
@@ -1535,12 +1538,12 @@ Return114B3E:
     ret                             ; 11:4B3E
 
 Code114B3F:
-    ldh  a,[<$FFBA]                 ; 11:4B3F
+    ldh  a,[<H_CameraY]             ; 11:4B3F
     sub  $02                        ; 11:4B41
-    ldh  [<$FFBA],a                 ; 11:4B43
+    ldh  [<H_CameraY],a             ; 11:4B43
     cp   $71                        ; 11:4B45
     jr   nc,Return114B5F            ; 11:4B47
-    ld   de,$DF01                   ; 11:4B49
+    ld   de,W_TilemapUploadBuffer   ; 11:4B49
     ld   hl,Data1146EA              ; 11:4B4C
     ld   bc,$0020                   ; 11:4B4F
     call CopyBytes                  ; 11:4B52
@@ -1599,7 +1602,7 @@ Code114BBB:
     ld   [$C0C4],a                  ; 11:4BBF
     ld   [$C28E],a                  ; 11:4BC2
     ld   [W_SPFlag],a               ; 11:4BC5
-    ld   [$C283],a                  ; 11:4BC8
+    ld   [W_ChallengeFlag],a        ; 11:4BC8
     ld   [$C1B4],a                  ; 11:4BCB
     ld   [W_SublevelID],a           ; 11:4BCE
     ld   [$C174],a                  ; 11:4BD1
@@ -1621,11 +1624,11 @@ Code114BBB:
     ld   [$C35C],a                  ; 11:4C00
     ld   [$C36B],a                  ; 11:4C03
     ld   [$C1B0],a                  ; 11:4C06
-    ldh  [<$FFB8],a                 ; 11:4C09
-    ldh  [<$FFB9],a                 ; 11:4C0B
+    ldh  [<H_CameraXLow],a          ; 11:4C09
+    ldh  [<H_CameraXHigh],a         ; 11:4C0B
     ldh  [<$FFBB],a                 ; 11:4C0D
     ld   a,$70                      ; 11:4C0F
-    ldh  [<$FFBA],a                 ; 11:4C11
+    ldh  [<H_CameraY],a             ; 11:4C11
     ld   a,$0A                      ; 11:4C13
     ld   [$C356],a                  ; 11:4C15
     ld   a,$10                      ; 11:4C18
@@ -1740,7 +1743,7 @@ Sub114CB9:
     ld   [$DE68],a                  ; 11:4CC8
 Code114CCB:
     ld   a,[$C168]                  ; 11:4CCB
-    rst  $00                        ; 11:4CCE
+    rst  $00                        ; 11:4CCE  Execute from 16-bit pointer table
 .dw Code114CD3                      ; 11:4CCF
 .dw Code114F32                      ; 11:4CD1
 Code114CD3:
@@ -1767,7 +1770,7 @@ Code114CF2:
     and  $01                        ; 11:4CFC
     jr   z,Code114D07               ; 11:4CFE
     ld   a,$11                      ; 11:4D00
-    rst  $10                        ; 11:4D02
+    rst  $10                        ; 11:4D02  24-bit call
 .dl SubL_064CD3                     ; 11:4D03
     ret                             ; 11:4D06
 
@@ -1805,25 +1808,25 @@ Code114D28:
     cp   $01                        ; 11:4D40
     jr   z,Code114D4E               ; 11:4D42
     ld   a,$11                      ; 11:4D44
-    rst  $10                        ; 11:4D46
+    rst  $10                        ; 11:4D46  24-bit call
 .dl SubL_064CEB                     ; 11:4D47
     ld   a,$16                      ; 11:4D4A
     jr   Code114D74                 ; 11:4D4C
 Code114D4E:
     ld   a,$11                      ; 11:4D4E
-    rst  $10                        ; 11:4D50
+    rst  $10                        ; 11:4D50  24-bit call
 .dl SubL_0756D9                     ; 11:4D51
-    ld   a,[$C1A1]                  ; 11:4D54
+    ld   a,[W_ChalTotalScoreLow]    ; 11:4D54
     ld   [$C1A4],a                  ; 11:4D57
-    ld   a,[$C1A2]                  ; 11:4D5A
+    ld   a,[W_ChalTotalScoreMid]    ; 11:4D5A
     ld   [$C1A5],a                  ; 11:4D5D
-    ld   a,[$C1A3]                  ; 11:4D60
+    ld   a,[W_ChalTotalScoreHigh]   ; 11:4D60
     ld   [$C1A6],a                  ; 11:4D63
     xor  a                          ; 11:4D66
     ld   [$C35C],a                  ; 11:4D67
     ld   [$C195],a                  ; 11:4D6A
     ld   a,$01                      ; 11:4D6D
-    ld   [$C283],a                  ; 11:4D6F
+    ld   [W_ChallengeFlag],a        ; 11:4D6F
     ld   a,$1D                      ; 11:4D72
 Code114D74:
     ldh  [<H_GameState],a           ; 11:4D74
@@ -1836,7 +1839,7 @@ Code114D7B:
     ldh  [<$FFF3],a                 ; 11:4D7D
     xor  a                          ; 11:4D7F
     ld   [W_HardFlag],a             ; 11:4D80
-    ld   [$C283],a                  ; 11:4D83
+    ld   [W_ChallengeFlag],a        ; 11:4D83
     ld   [$C168],a                  ; 11:4D86
     inc  a                          ; 11:4D89
     ld   [W_SPFlag],a               ; 11:4D8A
@@ -2121,7 +2124,7 @@ Code114F60:
     jr   Code114F87                 ; 11:4F63
 Code114F65:
     ld   hl,Data114CA1              ; 11:4F65
-    ld   de,$DF01                   ; 11:4F68
+    ld   de,W_TilemapUploadBuffer   ; 11:4F68
     ld   bc,$0010                   ; 11:4F6B
     call CopyBytes                  ; 11:4F6E
     ld   a,[W_GameMode]             ; 11:4F71
@@ -2339,12 +2342,12 @@ Sub1152D2:
     ld   [$C28E],a                  ; 11:52ED
     ldh  [<H_GameSubstate],a        ; 11:52F0
     ld   [$C168],a                  ; 11:52F2
-    ldh  [<$FFB9],a                 ; 11:52F5
+    ldh  [<H_CameraXHigh],a         ; 11:52F5
     ldh  [<$FFBB],a                 ; 11:52F7
     ld   a,$FC                      ; 11:52F9
-    ldh  [<$FFB8],a                 ; 11:52FB
+    ldh  [<H_CameraXLow],a          ; 11:52FB
     ld   a,$6E                      ; 11:52FD
-    ldh  [<$FFBA],a                 ; 11:52FF
+    ldh  [<H_CameraY],a             ; 11:52FF
     ld   a,$50                      ; 11:5301
     ld   [$C326],a                  ; 11:5303
     ld   a,$20                      ; 11:5306
@@ -2364,9 +2367,9 @@ Sub1152D2:
     ld   a,$01                      ; 11:5327
     ldh  [<H_GameSubstate],a        ; 11:5329
 Code11532B:
-    ld   a,:Data0E5AD0              ; 11:532B
+    ld   a,:Pal_ChalMenu            ; 11:532B
     ld   b,$11                      ; 11:532D
-    ld   de,Data0E5AD0              ; 11:532F
+    ld   de,Pal_ChalMenu            ; 11:532F
     call LoadFullPaletteLong        ; 11:5332
     call Sub1158F2                  ; 11:5335
     ld   hl,$D30C                   ; 11:5338
@@ -2379,7 +2382,7 @@ Code11533D:
     ld   a,[$C35C]                  ; 11:5343
     ld   [W_SublevelID],a           ; 11:5346
     ld   [W_LevelID],a              ; 11:5349
-    call Sub115464                  ; 11:534C
+    call CalcScoreBarPixels         ; 11:534C  b = score bar pixels to display
     ld   a,b                        ; 11:534F
     ld   [$C35D],a                  ; 11:5350
     cp   $00                        ; 11:5353
@@ -2392,26 +2395,24 @@ Code11535F:
     ld   a,$11                      ; 11:5362
     call Sub001480                  ; 11:5364
     ld   a,[$C35D]                  ; 11:5367
-    cp   $88                        ; 11:536A
-    jr   nc,Code115383              ; 11:536C
-    cp   $5B                        ; 11:536E
-    jr   nc,Code11537C              ; 11:5370
-    cp   $2E                        ; 11:5372
+    cp   $88                        ; 11:536A  88 pixels (1,160,000): full bar (blue threshold)
+    jr   nc,@Blue                   ; 11:536C
+    cp   $5B                        ; 11:536E  5B pixels (777,500): red threshold
+    jr   nc,@Red                    ; 11:5370
+    cp   $2E                        ; 11:5372  2E pixels (395,000): orange threshold
     ret  c                          ; 11:5374
-    ld   de,Data11582F              ; 11:5375
+    ld   de,Pal_ChalMenuOrangeBG    ; 11:5375
     call Sub1154E0                  ; 11:5378
     ret                             ; 11:537B
-
-Code11537C:
-    ld   de,Data115833              ; 11:537C
+@Red:
+    ld   de,Pal_ChalMenuRedBG       ; 11:537C
     call Sub1154E0                  ; 11:537F
     ret                             ; 11:5382
-
-Code115383:
-    ld   de,Data115837              ; 11:5383
+@Blue:
+    ld   de,Pal_ChalMenuBlueBG      ; 11:5383
     call Sub1154E0                  ; 11:5386
-    ld   hl,$DF01                   ; 11:5389
-    ld   [hl],$9B                   ; 11:538C
+    ld   hl,W_TilemapUploadBuffer   ; 11:5389
+    ld   [hl],$9B                   ; 11:538C \ set VRAM upload: 9B F2 01 06 AF 00
     inc  hl                         ; 11:538E
     ld   [hl],$F2                   ; 11:538F
     inc  hl                         ; 11:5391
@@ -2421,16 +2422,16 @@ Code115383:
     inc  hl                         ; 11:5397
     ld   [hl],$AF                   ; 11:5398
     inc  hl                         ; 11:539A
-    ld   [hl],$00                   ; 11:539B
+    ld   [hl],$00                   ; 11:539B /
     ret                             ; 11:539D
 
 Sub11539E:
     ld   a,[W_LevelID]              ; 11:539E
     ldh  [<$FFA5],a                 ; 11:53A1
     xor  a                          ; 11:53A3
-    ld   [$C1A1],a                  ; 11:53A4
-    ld   [$C1A2],a                  ; 11:53A7
-    ld   [$C1A3],a                  ; 11:53AA
+    ld   [W_ChalTotalScoreLow],a    ; 11:53A4
+    ld   [W_ChalTotalScoreMid],a    ; 11:53A7
+    ld   [W_ChalTotalScoreHigh],a   ; 11:53AA
     ld   [$C198],a                  ; 11:53AD
     ld   [$C19C],a                  ; 11:53B0
     ld   [$C19D],a                  ; 11:53B3
@@ -2439,23 +2440,23 @@ Code1153B8:
     ldh  a,[<$FFA6]                 ; 11:53B8
     ld   [W_LevelID],a              ; 11:53BA
     ld   a,$11                      ; 11:53BD
-    rst  $10                        ; 11:53BF
-.dl SubL_075B10                     ; 11:53C0
+    rst  $10                        ; 11:53BF  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 11:53C0
     ld   a,[$C18A]                  ; 11:53C3
     ld   b,a                        ; 11:53C6
-    ld   a,[$C1A1]                  ; 11:53C7
+    ld   a,[W_ChalTotalScoreLow]    ; 11:53C7
     add  b                          ; 11:53CA
-    ld   [$C1A1],a                  ; 11:53CB
+    ld   [W_ChalTotalScoreLow],a    ; 11:53CB
     ld   a,[$C18B]                  ; 11:53CE
     ld   b,a                        ; 11:53D1
-    ld   a,[$C1A2]                  ; 11:53D2
+    ld   a,[W_ChalTotalScoreMid]    ; 11:53D2
     adc  b                          ; 11:53D5
-    ld   [$C1A2],a                  ; 11:53D6
+    ld   [W_ChalTotalScoreMid],a    ; 11:53D6
     ld   a,[$C18C]                  ; 11:53D9
     ld   b,a                        ; 11:53DC
-    ld   a,[$C1A3]                  ; 11:53DD
+    ld   a,[W_ChalTotalScoreHigh]   ; 11:53DD
     adc  b                          ; 11:53E0
-    ld   [$C1A3],a                  ; 11:53E1
+    ld   [W_ChalTotalScoreHigh],a   ; 11:53E1
     ld   a,[$C18D]                  ; 11:53E4
     ld   b,a                        ; 11:53E7
     ld   a,[$C19C]                  ; 11:53E8
@@ -2479,31 +2480,31 @@ Code115405:
     jr   c,Code1153B8               ; 11:540C
     ldh  a,[<$FFA5]                 ; 11:540E
     ld   [W_LevelID],a              ; 11:5410
-    ld   a,[$C1A3]                  ; 11:5413
+    ld   a,[W_ChalTotalScoreHigh]   ; 11:5413
     cp   $0F                        ; 11:5416
     jr   c,Return11543B             ; 11:5418
     jr   nz,Code11542C              ; 11:541A
-    ld   a,[$C1A2]                  ; 11:541C
+    ld   a,[W_ChalTotalScoreMid]    ; 11:541C
     cp   $42                        ; 11:541F
     jr   c,Return11543B             ; 11:5421
     jr   nz,Code11542C              ; 11:5423
-    ld   a,[$C1A1]                  ; 11:5425
+    ld   a,[W_ChalTotalScoreLow]    ; 11:5425
     cp   $3F                        ; 11:5428
     jr   c,Return11543B             ; 11:542A
 Code11542C:
     ld   a,$3F                      ; 11:542C
-    ld   [$C1A1],a                  ; 11:542E
+    ld   [W_ChalTotalScoreLow],a    ; 11:542E
     ld   a,$42                      ; 11:5431
-    ld   [$C1A2],a                  ; 11:5433
+    ld   [W_ChalTotalScoreMid],a    ; 11:5433
     ld   a,$0F                      ; 11:5436
-    ld   [$C1A3],a                  ; 11:5438
+    ld   [W_ChalTotalScoreHigh],a   ; 11:5438
 Return11543B:
     ret                             ; 11:543B
 
 Sub11543C:
     ld   de,$C1A4                   ; 11:543C
     call Sub003DFB                  ; 11:543F
-    ld   hl,$DF01                   ; 11:5442
+    ld   hl,W_TilemapUploadBuffer   ; 11:5442
     ld   [hl],$9B                   ; 11:5445
     inc  hl                         ; 11:5447
     ld   [hl],$CC                   ; 11:5448
@@ -2527,15 +2528,18 @@ Code115453:
     ld   [hl],$00                   ; 11:5461
     ret                             ; 11:5463
 
-Sub115464:
-    ld   hl,$C1A4                   ; 11:5464
-    ld   e,[hl]                     ; 11:5467
-    inc  hl                         ; 11:5468
-    ld   d,[hl]                     ; 11:5469
-    inc  hl                         ; 11:546A
-    ld   c,[hl]                     ; 11:546B
+CalcScoreBarPixels:
+; subroutine: Calculate pixels of score bar to display (capped at 0x88 pixels -> 0x11 tiles, but can 8-bit overflow). Return value in register B.
+; The first 8 pixels are worth 9000 points each (0x384 internally)
+; Each remaining pixel is worth 8500 points (0x352 internally)
+    ld   hl,$C1A4                   ; 11:5464 \
+    ld   e,[hl]                     ; 11:5467 |
+    inc  hl                         ; 11:5468 |
+    ld   d,[hl]                     ; 11:5469 |
+    inc  hl                         ; 11:546A |
+    ld   c,[hl]                     ; 11:546B / cde = challenge mode total score, displayed
     ld   b,$00                      ; 11:546C
-Code11546E:
+@LoopSub9000:                       ;         \ subtract 0x384 (9000 displayed) from total score, up to 8 times
     ld   a,e                        ; 11:546E
     sub  $84                        ; 11:546F
     ld   e,a                        ; 11:5471
@@ -2545,12 +2549,12 @@ Code11546E:
     ld   a,c                        ; 11:5476
     sbc  $00                        ; 11:5477
     ld   c,a                        ; 11:5479
-    jr   c,Code115493               ; 11:547A
+    jr   c,@Break                   ; 11:547A
     inc  b                          ; 11:547C
     ld   a,b                        ; 11:547D
     cp   $08                        ; 11:547E
-    jr   c,Code11546E               ; 11:5480
-Code115482:
+    jr   c,@LoopSub9000             ; 11:5480 /
+@LoopSub8500:                       ;         \ subtract 0x352 (8500 displayed) from total score
     ld   a,e                        ; 11:5482
     sub  $52                        ; 11:5483
     ld   e,a                        ; 11:5485
@@ -2560,13 +2564,13 @@ Code115482:
     ld   a,c                        ; 11:548A
     sbc  $00                        ; 11:548B
     ld   c,a                        ; 11:548D
-    jr   c,Code115493               ; 11:548E
+    jr   c,@Break                   ; 11:548E
     inc  b                          ; 11:5490
-    jr   Code115482                 ; 11:5491
-Code115493:
+    jr   @LoopSub8500               ; 11:5491 /
+@Break:
     ld   a,b                        ; 11:5493
-    cp   $88                        ; 11:5494
-    ret  c                          ; 11:5496
+    cp   $88                        ; 11:5494  if pixels > 88, cap to 88
+    ret  c                          ; 11:5496  (no overflow checking, so if pixels > FF, loops back to an empty bar)
     ld   b,$88                      ; 11:5497
     ret                             ; 11:5499
 
@@ -2584,7 +2588,7 @@ Sub11549A:
     xor  a                          ; 11:54AC
     ldh  [<$FF97],a                 ; 11:54AD
 Code1154AF:
-    ld   hl,$DF01                   ; 11:54AF
+    ld   hl,W_TilemapUploadBuffer   ; 11:54AF
     ld   [hl],$9B                   ; 11:54B2
     inc  hl                         ; 11:54B4
     ld   [hl],$E1                   ; 11:54B5
@@ -2634,15 +2638,17 @@ Code1154E5:
     ldh  [<$FFC0],a                 ; 11:54ED
     ret                             ; 11:54EF
 
-ChallengeMenuMain:
+ChalMenu_Main:
 ; Game state 1E
     ldh  a,[<H_GameSubstate]        ; 11:54F0
-    rst  $00                        ; 11:54F2
+    rst  $00                        ; 11:54F2  Execute from 16-bit pointer table
 .dw Code1154F7                      ; 11:54F3
 .dw Code11583B                      ; 11:54F5
+
 Code1154F7:
+; Challenge menu substate 0
     ld   a,[$C168]                  ; 11:54F7
-    rst  $00                        ; 11:54FA
+    rst  $00                        ; 11:54FA  Execute from 16-bit pointer table
 .dw Code116D48                      ; 11:54FB
 .dw Code115523                      ; 11:54FD
 .dw Code116D48                      ; 11:54FF
@@ -2663,6 +2669,7 @@ Code1154F7:
 .dw Code116D48                      ; 11:551D
 .dw Code11576F                      ; 11:551F
 .dw Code115813                      ; 11:5521
+
 Code115523:
     ld   a,[$C197]                  ; 11:5523
     bit  7,a                        ; 11:5526
@@ -2833,7 +2840,7 @@ Sub115627:
     add  hl,de                      ; 11:5651
     ld   e,l                        ; 11:5652
     ld   d,h                        ; 11:5653
-    ld   hl,$DF01                   ; 11:5654
+    ld   hl,W_TilemapUploadBuffer   ; 11:5654
     ld   [hl],d                     ; 11:5657
     inc  hl                         ; 11:5658
     ld   [hl],e                     ; 11:5659
@@ -2858,13 +2865,13 @@ Code11566E:
     cp   $20                        ; 11:5675
     jr   c,Code115680               ; 11:5677
     ld   a,$11                      ; 11:5679
-    rst  $10                        ; 11:567B
+    rst  $10                        ; 11:567B  24-bit call
 .dl SubL_0451A8                     ; 11:567C
     ret                             ; 11:567F
 
 Code115680:
     ld   a,$11                      ; 11:5680
-    rst  $10                        ; 11:5682
+    rst  $10                        ; 11:5682  24-bit call
 .dl SubL_045225                     ; 11:5683
     ld   a,[$C1AD]                  ; 11:5686
     and  a                          ; 11:5689
@@ -2927,7 +2934,7 @@ Code1156DB:
     ld   a,[hl]                     ; 11:56EC
     adc  $00                        ; 11:56ED
     ld   [hl],a                     ; 11:56EF
-    ld   hl,$C1A3                   ; 11:56F0
+    ld   hl,W_ChalTotalScoreHigh    ; 11:56F0
     ld   de,$C1A6                   ; 11:56F3
     ld   c,$03                      ; 11:56F6
 Code1156F8:
@@ -2940,17 +2947,17 @@ Code1156F8:
     dec  c                          ; 11:5700
     jr   nz,Code1156F8              ; 11:5701
 Code115703:
-    ld   a,[$C1A1]                  ; 11:5703
+    ld   a,[W_ChalTotalScoreLow]    ; 11:5703
     ld   [$C1A4],a                  ; 11:5706
-    ld   a,[$C1A2]                  ; 11:5709
+    ld   a,[W_ChalTotalScoreMid]    ; 11:5709
     ld   [$C1A5],a                  ; 11:570C
-    ld   a,[$C1A3]                  ; 11:570F
+    ld   a,[W_ChalTotalScoreHigh]   ; 11:570F
     ld   [$C1A6],a                  ; 11:5712
 Code115715:
     ld   a,$47                      ; 11:5715
     ldh  [<$FFF2],a                 ; 11:5717
     call Sub11543C                  ; 11:5719
-    ld   hl,$C1A3                   ; 11:571C
+    ld   hl,W_ChalTotalScoreHigh    ; 11:571C
     ld   a,[$C1A6]                  ; 11:571F
     cp   [hl]                       ; 11:5722
     ret  nz                         ; 11:5723
@@ -2962,11 +2969,11 @@ Code115715:
     ld   a,[$C1A4]                  ; 11:572B
     cp   [hl]                       ; 11:572E
     ret  nz                         ; 11:572F
-    ld   a,[$C1A1]                  ; 11:5730
+    ld   a,[W_ChalTotalScoreLow]    ; 11:5730
     ld   [$C1A4],a                  ; 11:5733
-    ld   a,[$C1A2]                  ; 11:5736
+    ld   a,[W_ChalTotalScoreMid]    ; 11:5736
     ld   [$C1A5],a                  ; 11:5739
-    ld   a,[$C1A3]                  ; 11:573C
+    ld   a,[W_ChalTotalScoreHigh]   ; 11:573C
     ld   [$C1A6],a                  ; 11:573F
     xor  a                          ; 11:5742
     ld   [$C1A7],a                  ; 11:5743
@@ -2975,7 +2982,7 @@ Code115715:
     ld   a,[$C35D]                  ; 11:574B
     cp   $88                        ; 11:574E
     jr   nc,Code115769              ; 11:5750
-    call Sub115464                  ; 11:5752
+    call CalcScoreBarPixels         ; 11:5752
     ld   a,b                        ; 11:5755
     cp   $00                        ; 11:5756
     jr   z,Code115769               ; 11:5758
@@ -3016,13 +3023,13 @@ Code11576F:
     jr   z,Code1157A4               ; 11:5796
     jr   Code1157AE                 ; 11:5798
 Code11579A:
-    ld   de,Data11582F              ; 11:579A
+    ld   de,Pal_ChalMenuOrangeBG    ; 11:579A
     jr   Code1157A7                 ; 11:579D
 Code11579F:
-    ld   de,Data115833              ; 11:579F
+    ld   de,Pal_ChalMenuRedBG       ; 11:579F
     jr   Code1157A7                 ; 11:57A2
 Code1157A4:
-    ld   de,Data115837              ; 11:57A4
+    ld   de,Pal_ChalMenuBlueBG      ; 11:57A4
 Code1157A7:
     call Sub1154E0                  ; 11:57A7
     ld   a,$67                      ; 11:57AA
@@ -3058,7 +3065,7 @@ Code1157DD:
     ret                             ; 11:57E2
 
 Unused1157E3:
-    ld   hl,$DF01                   ; 11:57E3
+    ld   hl,W_TilemapUploadBuffer   ; 11:57E3
     ld   [hl],$9B                   ; 11:57E6
     inc  hl                         ; 11:57E8
     ld   [hl],$F2                   ; 11:57E9
@@ -3089,7 +3096,7 @@ Code115813:
     ld   [$C326],a                  ; 11:5817
     ret  nz                         ; 11:581A
     ld   a,$11                      ; 11:581B
-    rst  $10                        ; 11:581D
+    rst  $10                        ; 11:581D  24-bit call
 .dl SubL_0757EF                     ; 11:581E
     xor  a                          ; 11:5821
     ld   [$C168],a                  ; 11:5822
@@ -3099,13 +3106,15 @@ Code115813:
     ldh  [<H_GameState],a           ; 11:582C
     ret                             ; 11:582E
 
-Data11582F:                         ; 11:582F
+Pal_ChalMenuOrangeBG:               ; 11:582F
 .dw $07FF,$061F
-Data115833:                         ; 11:5833
+Pal_ChalMenuRedBG:                  ; 11:5833
 .dw $621F,$185F
-Data115837:                         ; 11:5837
+Pal_ChalMenuBlueBG:                 ; 11:5837
 .dw $7F0F,$7D2D
+
 Code11583B:
+; Challenge menu substate 1
     ld   a,[$C164]                  ; 11:583B
     cp   $00                        ; 11:583E
     jr   z,Code11584D               ; 11:5840
@@ -3128,13 +3137,13 @@ Code11584D:
     ld   [$C195],a                  ; 11:5860
 Code115863:
     ld   a,$FF                      ; 11:5863
-    ld   hl,$C18E                   ; 11:5865
+    ld   hl,W_ChalUnlockFlags       ; 11:5865
     ldi  [hl],a                     ; 11:5868
     ldi  [hl],a                     ; 11:5869
     ldi  [hl],a                     ; 11:586A
     ld   [hl],a                     ; 11:586B
 Code11586C:
-    ld   a,[$C18E]                  ; 11:586C
+    ld   a,[W_ChalUnlockFlags]      ; 11:586C
     and  $01                        ; 11:586F
     jr   z,Code115876               ; 11:5871
     call Sub115A77                  ; 11:5873
@@ -3154,7 +3163,7 @@ Code115876:
     ret                             ; 11:588F
 
 Code115890:
-    ld   a,[$C18E]                  ; 11:5890
+    ld   a,[W_ChalUnlockFlags]      ; 11:5890
     and  $01                        ; 11:5893
     jr   nz,Code11589C              ; 11:5895
     ld   a,$30                      ; 11:5897
@@ -3174,7 +3183,7 @@ Code11589C:
     ld   [$C17A],a                  ; 11:58B5
     ld   [$C17B],a                  ; 11:58B8
     ld   [$C17C],a                  ; 11:58BB
-    ld   [$C1F2],a                  ; 11:58BE
+    ld   [W_PlayerCoins],a          ; 11:58BE
     ld   [$C188],a                  ; 11:58C1
     ld   [$D30A],a                  ; 11:58C4
     ld   [$D30B],a                  ; 11:58C7
@@ -3200,22 +3209,22 @@ Sub1158F2:
     ldh  [<SVBK],a                  ; 11:58F4
     ld   a,$0E                      ; 11:58F6
     ld   [$C415],a                  ; 11:58F8
-    ld   hl,Data0E5800              ; 11:58FB
+    ld   hl,Ti_ChalMenu             ; 11:58FB
     ld   de,$DC00                   ; 11:58FE
     ld   bc,$02D0                   ; 11:5901
     ld   a,$11                      ; 11:5904
     call CopyBytesLong              ; 11:5906
-    ld   de,$C18E                   ; 11:5909
+    ld   de,W_ChalUnlockFlags       ; 11:5909
     ld   a,$00                      ; 11:590C
     ldh  [<$FFA6],a                 ; 11:590E
-Code115910:
+@ByteLoop:
     ld   a,[de]                     ; 11:5910
     ld   c,a                        ; 11:5911
     ld   a,$00                      ; 11:5912
     ldh  [<$FFA5],a                 ; 11:5914
-Code115916:
+@BitLoop:
     rrc  c                          ; 11:5916
-    jr   nc,Code115963              ; 11:5918
+    jr   nc,@Code115963             ; 11:5918
     push de                         ; 11:591A
     ldh  a,[<$FFA5]                 ; 11:591B
     and  $07                        ; 11:591D
@@ -3265,30 +3274,30 @@ Code115916:
     ldi  [hl],a                     ; 11:5960
     ld   [hl],a                     ; 11:5961
     pop  de                         ; 11:5962
-Code115963:
+@Code115963:
     ldh  a,[<$FFA5]                 ; 11:5963
     inc  a                          ; 11:5965
     ldh  [<$FFA5],a                 ; 11:5966
     cp   $08                        ; 11:5968
-    jr   c,Code115916               ; 11:596A
+    jr   c,@BitLoop                 ; 11:596A
     inc  de                         ; 11:596C
     ldh  a,[<$FFA6]                 ; 11:596D
     inc  a                          ; 11:596F
     ldh  [<$FFA6],a                 ; 11:5970
     cp   $04                        ; 11:5972
-    jr   c,Code115910               ; 11:5974
+    jr   c,@ByteLoop                ; 11:5974
     xor  a                          ; 11:5976
     ld   [$C19C],a                  ; 11:5977
     ld   [$C19D],a                  ; 11:597A
     ld   [$C198],a                  ; 11:597D
     ld   a,$00                      ; 11:5980
     ldh  [<$FFA6],a                 ; 11:5982
-Code115984:
+@Loop115984:
     ldh  a,[<$FFA6]                 ; 11:5984
     ld   [W_LevelID],a              ; 11:5986
     ld   a,$11                      ; 11:5989
-    rst  $10                        ; 11:598B
-.dl SubL_075B10                     ; 11:598C
+    rst  $10                        ; 11:598B  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 11:598C  Load current level's challenge mode save data
     ld   a,[$C18D]                  ; 11:598F
     ld   b,a                        ; 11:5992
     ld   a,[$C19C]                  ; 11:5993
@@ -3301,7 +3310,7 @@ Code115984:
     ld   [$C19D],a                  ; 11:59A2
     ld   a,[$C189]                  ; 11:59A5
     cp   $05                        ; 11:59A8
-    jr   c,Code1159CD               ; 11:59AA
+    jr   c,@Code1159CD              ; 11:59AA
     ld   hl,$C198                   ; 11:59AC
     inc  [hl]                       ; 11:59AF
     ld   a,[$C197]                  ; 11:59B0
@@ -3309,50 +3318,50 @@ Code115984:
     ld   b,a                        ; 11:59B5
     ldh  a,[<$FFA6]                 ; 11:59B6
     cp   b                          ; 11:59B8
-    jr   nz,Code1159C2              ; 11:59B9
+    jr   nz,@Code1159C2             ; 11:59B9
     ld   a,[$C197]                  ; 11:59BB
     and  $80                        ; 11:59BE
-    jr   nz,Code1159CD              ; 11:59C0
-Code1159C2:
+    jr   nz,@Code1159CD             ; 11:59C0
+@Code1159C2:
     call Sub115A27                  ; 11:59C2
     ld   [hl],$72                   ; 11:59C5
     ld   de,$0168                   ; 11:59C7
     add  hl,de                      ; 11:59CA
     ld   [hl],$06                   ; 11:59CB
-Code1159CD:
+@Code1159CD:
     ld   a,[$C18D]                  ; 11:59CD
     and  a                          ; 11:59D0
-    jr   z,Code1159F1               ; 11:59D1
+    jr   z,@Code1159F1              ; 11:59D1
     ld   a,[$C197]                  ; 11:59D3
     and  $1F                        ; 11:59D6
     ld   b,a                        ; 11:59D8
     ldh  a,[<$FFA6]                 ; 11:59D9
     cp   b                          ; 11:59DB
-    jr   nz,Code1159E5              ; 11:59DC
+    jr   nz,@Code1159E5             ; 11:59DC
     ld   a,[$C197]                  ; 11:59DE
     and  $40                        ; 11:59E1
-    jr   nz,Code1159F1              ; 11:59E3
-Code1159E5:
+    jr   nz,@Code1159F1             ; 11:59E3
+@Code1159E5:
     call Sub115A27                  ; 11:59E5
     inc  hl                         ; 11:59E8
     ld   [hl],$62                   ; 11:59E9
     ld   de,$0168                   ; 11:59EB
     add  hl,de                      ; 11:59EE
     ld   [hl],$05                   ; 11:59EF
-Code1159F1:
+@Code1159F1:
     ld   a,[$C194]                  ; 11:59F1
     and  a                          ; 11:59F4
-    jr   z,Code115A16               ; 11:59F5
+    jr   z,@Code115A16              ; 11:59F5
     ld   a,[$C197]                  ; 11:59F7
     and  $1F                        ; 11:59FA
     ld   b,a                        ; 11:59FC
     ldh  a,[<$FFA6]                 ; 11:59FD
     cp   b                          ; 11:59FF
-    jr   nz,Code115A09              ; 11:5A00
+    jr   nz,@Code115A09             ; 11:5A00
     ld   a,[$C197]                  ; 11:5A02
     and  $20                        ; 11:5A05
-    jr   nz,Code115A16              ; 11:5A07
-Code115A09:
+    jr   nz,@Code115A16             ; 11:5A07
+@Code115A09:
     call Sub115A27                  ; 11:5A09
     inc  hl                         ; 11:5A0C
     inc  hl                         ; 11:5A0D
@@ -3360,12 +3369,12 @@ Code115A09:
     ld   de,$0168                   ; 11:5A10
     add  hl,de                      ; 11:5A13
     ld   [hl],$04                   ; 11:5A14
-Code115A16:
+@Code115A16:
     ldh  a,[<$FFA6]                 ; 11:5A16
     inc  a                          ; 11:5A18
     ldh  [<$FFA6],a                 ; 11:5A19
     cp   $20                        ; 11:5A1B
-    jp   c,Code115984               ; 11:5A1D
+    jp   c,@Loop115984              ; 11:5A1D
     call Sub115A4C                  ; 11:5A20
     xor  a                          ; 11:5A23
     ldh  [<SVBK],a                  ; 11:5A24
@@ -3496,7 +3505,7 @@ Code115AEB:
     and  $1F                        ; 11:5AF0
     ld   [W_SublevelID],a           ; 11:5AF2
 Code115AF5:
-    ld   a,[$C283]                  ; 11:5AF5
+    ld   a,[W_ChallengeFlag]        ; 11:5AF5
     cp   $01                        ; 11:5AF8
     jr   nz,Code115B19              ; 11:5AFA
     ld   a,[W_SublevelID]           ; 11:5AFC
@@ -3510,7 +3519,7 @@ Code115AF5:
     ld   a,[W_SublevelID]           ; 11:5B0B
     and  $03                        ; 11:5B0E
     ld   e,a                        ; 11:5B10
-    ld   hl,$C18E                   ; 11:5B11
+    ld   hl,W_ChalUnlockFlags       ; 11:5B11
     add  hl,de                      ; 11:5B14
     ld   a,[hl]                     ; 11:5B15
     and  c                          ; 11:5B16
@@ -3630,55 +3639,58 @@ Data115CF5:                         ; 11:5CF5
 .db $9B,$09,$01,$00,$1F,$9B,$0D,$01,\
     $00,$1F,$00
 
-Sub115D00:
+OverworldInit_CallSubstate:
     ldh  a,[<H_GameSubstate]        ; 11:5D00
-    rst  $00                        ; 11:5D02
+    rst  $00                        ; 11:5D02  Execute from 16-bit pointer table
 .dw Code115D0D                      ; 11:5D03
 .dw Code115E47                      ; 11:5D05
 .dw Code115EFA                      ; 11:5D07
 .dw Code115F58                      ; 11:5D09
 .dw Code116009                      ; 11:5D0B
+
 Code115D0D:
+; Overworld init substate 0: Load overworld
     ld   a,[$C1B7]                  ; 11:5D0D
     cp   $01                        ; 11:5D10
-    jr   nz,Code115D41              ; 11:5D12
+    jr   nz,@Code115D41             ; 11:5D12
     xor  a                          ; 11:5D14
     ld   [$C1B8],a                  ; 11:5D15
     ld   hl,W_LevelID               ; 11:5D18
     dec  [hl]                       ; 11:5D1B
-Code115D1C:
-    call Sub1166D9                  ; 11:5D1C
-    ld   hl,Data116042              ; 11:5D1F
-    add  hl,de                      ; 11:5D22
+@Code115D1C:
+    call CalcSPAdjustedLevelID      ; 11:5D1C  de = adjusted level ID
+    ld   hl,OWLevelYCoords          ; 11:5D1F
+    add  hl,de                      ; 11:5D22  index with adjusted level ID
     ld   a,[hl]                     ; 11:5D23
-    ld   [$C1B9],a                  ; 11:5D24
-    ld   hl,Data116062              ; 11:5D27
-    add  hl,de                      ; 11:5D2A
+    ld   [$C1B9],a                  ; 11:5D24  set player Y
+    ld   hl,OWLevelXCoords          ; 11:5D27
+    add  hl,de                      ; 11:5D2A  index with adjusted level ID
     ld   a,[hl]                     ; 11:5D2B
-    ld   [$C1BA],a                  ; 11:5D2C
+    ld   [$C1BA],a                  ; 11:5D2C  set player X
     xor  a                          ; 11:5D2F
     ld   [$C1C0],a                  ; 11:5D30
     ld   a,[W_LevelID]              ; 11:5D33
-    cp   $1D                        ; 11:5D36
+    cp   $1D                        ; 11:5D36  1D: 8-1
     jr   nz,Code115D8F              ; 11:5D38
     ld   a,$01                      ; 11:5D3A
     ld   [$C1C0],a                  ; 11:5D3C
     jr   Code115D8F                 ; 11:5D3F
-Code115D41:
-    ld   a,[$C283]                  ; 11:5D41
+
+@Code115D41:
+    ld   a,[W_ChallengeFlag]        ; 11:5D41
     and  a                          ; 11:5D44
-    jr   nz,Code115D1C              ; 11:5D45
+    jr   nz,@Code115D1C             ; 11:5D45
     ld   a,[$C1B7]                  ; 11:5D47
     and  a                          ; 11:5D4A
-    jr   nz,Code115D1C              ; 11:5D4B
+    jr   nz,@Code115D1C             ; 11:5D4B
     xor  a                          ; 11:5D4D
     ld   [$C1B3],a                  ; 11:5D4E
     ld   [$C1B8],a                  ; 11:5D51
-    call Sub1166D9                  ; 11:5D54
+    call CalcSPAdjustedLevelID      ; 11:5D54  de = adjusted level ID
     sla  e                          ; 11:5D57
     ld   c,e                        ; 11:5D59
     ld   b,d                        ; 11:5D5A
-    ld   hl,DataPtrs116154          ; 11:5D5B
+    ld   hl,OWPlayerPathYPtrs       ; 11:5D5B
     add  hl,bc                      ; 11:5D5E
     ld   e,[hl]                     ; 11:5D5F
     inc  hl                         ; 11:5D60
@@ -3688,7 +3700,7 @@ Code115D41:
     inc  de                         ; 11:5D66
     ld   a,[de]                     ; 11:5D67
     ld   [$C1BD],a                  ; 11:5D68
-    ld   hl,DataPtrs116194          ; 11:5D6B
+    ld   hl,OWPlayerPathXPtrs       ; 11:5D6B
     add  hl,bc                      ; 11:5D6E
     ld   e,[hl]                     ; 11:5D6F
     inc  hl                         ; 11:5D70
@@ -3721,67 +3733,67 @@ Code115D8F:
     call Sub00128D                  ; 11:5D9F
     ld   a,[W_LevelID]              ; 11:5DA2
     srl  a                          ; 11:5DA5
-    srl  a                          ; 11:5DA7
-    and  $07                        ; 11:5DA9
+    srl  a                          ; 11:5DA7  world number (0-indexed)
+    and  $07                        ; 11:5DA9  cap to 0-7 range
     ld   b,a                        ; 11:5DAB
     ld   a,[W_SPFlag]               ; 11:5DAC
     and  a                          ; 11:5DAF
-    jr   z,Code115DC3               ; 11:5DB0
-    ld   a,b                        ; 11:5DB2
+    jr   z,Code115DC3               ; 11:5DB0  if not Super Players, skip
+    ld   a,b                        ; 11:5DB2 
     cp   $07                        ; 11:5DB3
-    jr   z,Code115DC3               ; 11:5DB5
+    jr   z,Code115DC3               ; 11:5DB5  if world 8, don't change index
     cp   $00                        ; 11:5DB7
-    jr   z,Code115DC3               ; 11:5DB9
+    jr   z,Code115DC3               ; 11:5DB9  if world 1, don't change index
     bit  0,b                        ; 11:5DBB
     jr   nz,Code115DC2              ; 11:5DBD
-    dec  b                          ; 11:5DBF
+    dec  b                          ; 11:5DBF  decrement if even internal (worlds 3/5/7)
     jr   Code115DC3                 ; 11:5DC0
 Code115DC2:
-    inc  b                          ; 11:5DC2
+    inc  b                          ; 11:5DC2  increment if odd internal (worlds 2/4/6)
 Code115DC3:
-    ld   hl,Data0E5B50              ; 11:5DC3
+    ld   hl,Ti_Overworlds           ; 11:5DC3
     ld   de,$02D0                   ; 11:5DC6
 Code115DC9:
-    ld   a,b                        ; 11:5DC9
-    cp   $00                        ; 11:5DCA
-    jr   z,Code115DD2               ; 11:5DCC
-    add  hl,de                      ; 11:5DCE
-    dec  b                          ; 11:5DCF
-    jr   Code115DC9                 ; 11:5DD0
+    ld   a,b                        ; 11:5DC9 \
+    cp   $00                        ; 11:5DCA |
+    jr   z,Code115DD2               ; 11:5DCC |
+    add  hl,de                      ; 11:5DCE | loop: add 02D0 * world index
+    dec  b                          ; 11:5DCF |
+    jr   Code115DC9                 ; 11:5DD0 /
 Code115DD2:
-    ld   a,$0E                      ; 11:5DD2
+    ld   a,:Ti_Overworlds           ; 11:5DD2
     ld   b,$11                      ; 11:5DD4
     ld   de,$99C0                   ; 11:5DD6
     call LoadScreenTilemapVRAM      ; 11:5DD9
     ld   a,[W_SPFlag]               ; 11:5DDC
     and  a                          ; 11:5DDF
-    jr   z,Code115E02               ; 11:5DE0
+    jr   z,Code115E02               ; 11:5DE0  if not Super Players, skip
     ld   a,[W_LevelID]              ; 11:5DE2
-    and  $1C                        ; 11:5DE5
+    and  $1C                        ; 11:5DE5  filter world bits
     cp   $04                        ; 11:5DE7
     jr   z,Code115DF1               ; 11:5DE9
     cp   $08                        ; 11:5DEB
     jr   z,Code115DF6               ; 11:5DED
     jr   Code115E02                 ; 11:5DEF
 Code115DF1:
-    ld   hl,Data115CEA              ; 11:5DF1
+    ld   hl,Data115CEA              ; 11:5DF1  used if world 2?
     jr   Code115DF9                 ; 11:5DF4
 Code115DF6:
-    ld   hl,Data115CF5              ; 11:5DF6
+    ld   hl,Data115CF5              ; 11:5DF6  used if world 3?
 Code115DF9:
-    ld   de,$DF01                   ; 11:5DF9
+    ld   de,W_TilemapUploadBuffer   ; 11:5DF9 \ runs if Super Players world 2 or 3
     ld   bc,$000B                   ; 11:5DFC
-    call CopyBytes                  ; 11:5DFF
+    call CopyBytes                  ; 11:5DFF /
 Code115E02:
     ld   a,$00                      ; 11:5E02
     ld   [$C0C4],a                  ; 11:5E04
     ld   [$C0C1],a                  ; 11:5E07
     ld   [$C168],a                  ; 11:5E0A
-    ldh  [<$FFB8],a                 ; 11:5E0D
-    ldh  [<$FFB9],a                 ; 11:5E0F
+    ldh  [<H_CameraXLow],a          ; 11:5E0D
+    ldh  [<H_CameraXHigh],a         ; 11:5E0F
     ldh  [<$FFBB],a                 ; 11:5E11
     ld   a,$70                      ; 11:5E13
-    ldh  [<$FFBA],a                 ; 11:5E15
+    ldh  [<H_CameraY],a             ; 11:5E15
     ld   a,[W_LevelID]              ; 11:5E17
     ld   [W_SublevelID],a           ; 11:5E1A
     ld   a,$FC                      ; 11:5E1D
@@ -3791,20 +3803,21 @@ Code115E02:
     ld   a,$1F                      ; 11:5E27
     ld   [$C164],a                  ; 11:5E29
     ld   a,$11                      ; 11:5E2C
-    rst  $10                        ; 11:5E2E
-.dl SubL_075B10                     ; 11:5E2F
+    rst  $10                        ; 11:5E2E  24-bit call
+.dl SubL_LoadChalLevelSaveData      ; 11:5E2F
     ld   a,[W_PlayerFireFlag]       ; 11:5E32
     ld   [$C1AF],a                  ; 11:5E35
     xor  a                          ; 11:5E38
     ld   [W_PlayerFireFlag],a       ; 11:5E39
     ld   a,$11                      ; 11:5E3C
-    rst  $10                        ; 11:5E3E
+    rst  $10                        ; 11:5E3E  24-bit call
 .dl SubL_0B421E                     ; 11:5E3F
     ld   hl,H_GameSubstate          ; 11:5E42
     inc  [hl]                       ; 11:5E45
     ret                             ; 11:5E46
 
 Code115E47:
+; Overworld init / Challenge results substate 1
     ld   a,[W_LevelID]              ; 11:5E47
     and  $03                        ; 11:5E4A
     add  $D1                        ; 11:5E4C
@@ -3821,7 +3834,7 @@ Code115E47:
     jr   z,Code115E65               ; 11:5E61
     ld   d,$FD                      ; 11:5E63
 Code115E65:
-    ld   hl,$DF01                   ; 11:5E65
+    ld   hl,W_TilemapUploadBuffer   ; 11:5E65
     ld   [hl],$9A                   ; 11:5E68
     inc  hl                         ; 11:5E6A
     ld   [hl],$03                   ; 11:5E6B
@@ -3837,7 +3850,7 @@ Code115E65:
     inc  hl                         ; 11:5E77
     ldi  [hl],a                     ; 11:5E78
     ld   [hl],c                     ; 11:5E79
-    ld   a,[$C283]                  ; 11:5E7A
+    ld   a,[W_ChallengeFlag]        ; 11:5E7A
     cp   $01                        ; 11:5E7D
     jr   z,Code115E93               ; 11:5E7F
     ld   de,$DF0A                   ; 11:5E81
@@ -3909,7 +3922,8 @@ Code115EEE:
     ret                             ; 11:5EF9
 
 Code115EFA:
-    ld   hl,$DF01                   ; 11:5EFA
+; Overworld init / Challenge results substate 2
+    ld   hl,W_TilemapUploadBuffer   ; 11:5EFA
     ld   de,Data115BDE              ; 11:5EFD
     ld   b,$1F                      ; 11:5F00
 Code115F02:
@@ -3967,17 +3981,18 @@ Code115F51:
     ret                             ; 11:5F57
 
 Code115F58:
+; Overworld init substate 3
     ld   a,[$C1B7]                  ; 11:5F58
     cp   $01                        ; 11:5F5B
     jp   nz,Code115F6F              ; 11:5F5D
-    ld   de,$DF01                   ; 11:5F60
+    ld   de,W_TilemapUploadBuffer   ; 11:5F60
     ld   hl,Data115C2A              ; 11:5F63
     ld   bc,$0010                   ; 11:5F66
     call CopyBytes                  ; 11:5F69
     jp   Code116004                 ; 11:5F6C
 Code115F6F:
     ld   hl,Data115BFD              ; 11:5F6F
-    ld   de,$DF01                   ; 11:5F72
+    ld   de,W_TilemapUploadBuffer   ; 11:5F72
     ld   bc,$002D                   ; 11:5F75
     call CopyBytes                  ; 11:5F78
     ld   de,$C1A9                   ; 11:5F7B
@@ -4075,7 +4090,8 @@ Code116004:
     ret                             ; 11:6008
 
 Code116009:
-    call Sub1166D9                  ; 11:6009
+; Overworld init substate 4
+    call CalcSPAdjustedLevelID      ; 11:6009  de = adjusted level ID
     ld   a,e                        ; 11:600C
     and  $1C                        ; 11:600D
     ld   e,a                        ; 11:600F
@@ -4090,7 +4106,7 @@ Code116009:
     ld   a,[W_LevelID]              ; 11:601C
     and  $03                        ; 11:601F
     ld   b,a                        ; 11:6021
-    ld   hl,$DF01                   ; 11:6022
+    ld   hl,W_TilemapUploadBuffer   ; 11:6022
 Code116025:
     ld   a,b                        ; 11:6025
     and  a                          ; 11:6026
@@ -4115,169 +4131,170 @@ Code11603B:
     inc  [hl]                       ; 11:6040
     ret                             ; 11:6041
 
-Data116042:                         ; 11:6042
+OWLevelYCoords:                     ; 11:6042
 .db $48,$40,$50,$48,$38,$38,$58,$58,\
     $48,$50,$58,$58,$58,$60,$48,$50,\
     $50,$30,$30,$58,$48,$40,$40,$40,\
     $48,$38,$58,$50,$58,$48,$38,$38
-Data116062:                         ; 11:6062
+OWLevelXCoords:                     ; 11:6062
 .db $0C,$34,$5C,$88,$1C,$64,$5C,$80,\
     $14,$34,$64,$88,$1C,$3C,$5C,$88,\
     $24,$2C,$64,$78,$0C,$34,$5C,$88,\
     $14,$3C,$5C,$88,$64,$4C,$34,$68
-Data116082:                         ; 11:6082
+OWPlayerPathY_1_1:                  ; 11:6082
 .db $48,$48
-Data116084:                         ; 11:6084
+OWPlayerPathY_1_2:                  ; 11:6084
 .db $48,$48,$40,$40
-Data116088:                         ; 11:6088
+OWPlayerPathY_1_3:                  ; 11:6088
 .db $50,$50
-Data11608A:                         ; 11:608A
+OWPlayerPathY_1_4:                  ; 11:608A
 .db $50,$50,$48,$48
-Data11608E:                         ; 11:608E
+OWPlayerPathY_2_1:                  ; 11:608E
 .db $40,$40,$38,$38
-Data116092:                         ; 11:6092
+OWPlayerPathY_2_2:                  ; 11:6092
 .db $38,$38
-Data116094:                         ; 11:6094
+OWPlayerPathY_2_3:                  ; 11:6094
 .db $58,$58
-Data116096:                         ; 11:6096
+OWPlayerPathY_2_4:                  ; 11:6096
 .db $58,$58
-Data116098:                         ; 11:6098
+OWPlayerPathY_3_1:                  ; 11:6098
 .db $48,$48
-Data11609A:                         ; 11:609A
+OWPlayerPathY_3_2:                  ; 11:609A
 .db $48,$48,$50,$50
-Data11609E:                         ; 11:609E
+OWPlayerPathY_3_3:                  ; 11:609E
 .db $50,$50,$58,$58
-Data1160A2:                         ; 11:60A2
+OWPlayerPathY_3_4:                  ; 11:60A2
 .db $58,$58
-Data1160A4:                         ; 11:60A4
+OWPlayerPathY_4_1:                  ; 11:60A4
 .db $48,$48,$58
-Data1160A7:                         ; 11:60A7
+OWPlayerPathY_4_2:                  ; 11:60A7
 .db $58,$58,$60,$60
-Data1160AB:                         ; 11:60AB
+OWPlayerPathY_4_3:                  ; 11:60AB
 .db $38,$48,$48
-Data1160AE:                         ; 11:60AE
+OWPlayerPathY_4_4:                  ; 11:60AE
 .db $48,$48,$50,$50
-Data1160B2:                         ; 11:60B2
+OWPlayerPathY_5_1:                  ; 11:60B2
 .db $48,$48,$50,$50
-Data1160B6:                         ; 11:60B6
+OWPlayerPathY_5_2:                  ; 11:60B6
 .db $50,$50,$48,$40,$40,$30,$30
-Data1160BD:                         ; 11:60BD
+OWPlayerPathY_5_3:                  ; 11:60BD
 .db $30,$30
-Data1160BF:                         ; 11:60BF
+OWPlayerPathY_5_4:                  ; 11:60BF
 .db $30,$30,$48,$48,$50,$58,$58
-Data1160C6:                         ; 11:60C6
+OWPlayerPathY_6_1:                  ; 11:60C6
 .db $48,$48
-Data1160C8:                         ; 11:60C8
+OWPlayerPathY_6_2:                  ; 11:60C8
 .db $48,$48,$40,$40
-Data1160CC:                         ; 11:60CC
+OWPlayerPathY_6_3:                  ; 11:60CC
 .db $40,$40
-Data1160CE:                         ; 11:60CE
+OWPlayerPathY_6_4:                  ; 11:60CE
 .db $40,$40
-Data1160D0:                         ; 11:60D0
+OWPlayerPathY_7_1:                  ; 11:60D0
 .db $48,$48
-Data1160D2:                         ; 11:60D2
+OWPlayerPathY_7_2:                  ; 11:60D2
 .db $48,$38,$38
-Data1160D5:                         ; 11:60D5
+OWPlayerPathY_7_3:                  ; 11:60D5
 .db $58,$58
-Data1160D7:                         ; 11:60D7
+OWPlayerPathY_7_4:                  ; 11:60D7
 .db $58,$58,$50,$50
-Data1160DB:                         ; 11:60DB
+OWPlayerPathY_8_1:                  ; 11:60DB
 .db $48,$48,$58,$58
-Data1160DF:                         ; 11:60DF
+OWPlayerPathY_8_2:                  ; 11:60DF
 .db $58,$58,$50,$48,$48
-Data1160E4:                         ; 11:60E4
+OWPlayerPathY_8_3:                  ; 11:60E4
 .db $48,$48,$40,$38,$38
-Data1160E9:                         ; 11:60E9
+OWPlayerPathY_8_4:                  ; 11:60E9
 .db $38,$38
-Data1160EB:                         ; 11:60EB
+OWPlayerPathX_1_1:                  ; 11:60EB
 .db $04,$0C
-Data1160ED:                         ; 11:60ED
+OWPlayerPathX_1_2:                  ; 11:60ED
 .db $0C,$1C,$24,$34
-Data1160F1:                         ; 11:60F1
+OWPlayerPathX_1_3:                  ; 11:60F1
 .db $2C,$5C
-Data1160F3:                         ; 11:60F3
+OWPlayerPathX_1_4:                  ; 11:60F3
 .db $5C,$74,$7C,$88
-Data1160F7:                         ; 11:60F7
+OWPlayerPathX_2_1:                  ; 11:60F7
 .db $04,$0C,$14,$1C
-Data1160FB:                         ; 11:60FB
+OWPlayerPathX_2_2:                  ; 11:60FB
 .db $1C,$64
-Data1160FD:                         ; 11:60FD
+OWPlayerPathX_2_3:                  ; 11:60FD
 .db $44,$5C
-Data1160FF:                         ; 11:60FF
+OWPlayerPathX_2_4:                  ; 11:60FF
 .db $5C,$80
-Data116101:                         ; 11:6101
+OWPlayerPathX_3_1:                  ; 11:6101
 .db $04,$14
-Data116103:                         ; 11:6103
+OWPlayerPathX_3_2:                  ; 11:6103
 .db $14,$1C,$24,$34
-Data116107:                         ; 11:6107
+OWPlayerPathX_3_3:                  ; 11:6107
 .db $34,$3C,$44,$64
-Data11610B:                         ; 11:610B
+OWPlayerPathX_3_4:                  ; 11:610B
 .db $64,$88
-Data11610D:                         ; 11:610D
+OWPlayerPathX_4_1:                  ; 11:610D
 .db $04,$0C,$1C
-Data116110:                         ; 11:6110
+OWPlayerPathX_4_2:                  ; 11:6110
 .db $1C,$2C,$34,$3C
-Data116114:                         ; 11:6114
+OWPlayerPathX_4_3:                  ; 11:6114
 .db $34,$44,$5C
-Data116117:                         ; 11:6117
+OWPlayerPathX_4_4:                  ; 11:6117
 .db $5C,$7C,$84,$88
-Data11611B:                         ; 11:611B
+OWPlayerPathX_5_1:                  ; 11:611B
 .db $04,$0C,$14,$24
-Data11611F:                         ; 11:611F
+OWPlayerPathX_5_2:                  ; 11:611F
 .db $24,$2C,$34,$2C,$24,$14,$2C
-Data116126:                         ; 11:6126
+OWPlayerPathX_5_3:                  ; 11:6126
 .db $2C,$64
-Data116128:                         ; 11:6128
+OWPlayerPathX_5_4:                  ; 11:6128
 .db $64,$8C,$74,$6C,$64,$6C,$78
-Data11612F:                         ; 11:612F
+OWPlayerPathX_6_1:                  ; 11:612F
 .db $04,$0C
-Data116131:                         ; 11:6131
+OWPlayerPathX_6_2:                  ; 11:6131
 .db $0C,$1C,$24,$34
-Data116135:                         ; 11:6135
+OWPlayerPathX_6_3:                  ; 11:6135
 .db $34,$5C
-Data116137:                         ; 11:6137
+OWPlayerPathX_6_4:                  ; 11:6137
 .db $5C,$88
-Data116139:                         ; 11:6139
+OWPlayerPathX_7_1:                  ; 11:6139
 .db $04,$14
-Data11613B:                         ; 11:613B
+OWPlayerPathX_7_2:                  ; 11:613B
 .db $14,$24,$3C
-Data11613E:                         ; 11:613E
+OWPlayerPathX_7_3:                  ; 11:613E
 .db $44,$5C
-Data116140:                         ; 11:6140
+OWPlayerPathX_7_4:                  ; 11:6140
 .db $5C,$74,$7C,$88
-Data116144:                         ; 11:6144
+OWPlayerPathX_8_1:                  ; 11:6144
 .db $04,$14,$24,$64
-Data116148:                         ; 11:6148
+OWPlayerPathX_8_2:                  ; 11:6148
 .db $64,$6C,$74,$6C,$4C
-Data11614D:                         ; 11:614D
+OWPlayerPathX_8_3:                  ; 11:614D
 .db $4C,$2C,$24,$2C,$34
-Data116152:                         ; 11:6152
+OWPlayerPathX_8_4:                  ; 11:6152
 .db $34,$68
-DataPtrs116154:                     ; 11:6154
-.dw Data116082, Data116084, Data116088, Data11608A,\
-    Data11608E, Data116092, Data116094, Data116096,\
-    Data116098, Data11609A, Data11609E, Data1160A2,\
-    Data1160A4, Data1160A7, Data1160AB, Data1160AE,\
-    Data1160B2, Data1160B6, Data1160BD, Data1160BF,\
-    Data1160C6, Data1160C8, Data1160CC, Data1160CE,\
-    Data1160D0, Data1160D2, Data1160D5, Data1160D7,\
-    Data1160DB, Data1160DF, Data1160E4, Data1160E9
-DataPtrs116194:                     ; 11:6194
-.dw Data1160EB, Data1160ED, Data1160F1, Data1160F3,\
-    Data1160F7, Data1160FB, Data1160FD, Data1160FF,\
-    Data116101, Data116103, Data116107, Data11610B,\
-    Data11610D, Data116110, Data116114, Data116117,\
-    Data11611B, Data11611F, Data116126, Data116128,\
-    Data11612F, Data116131, Data116135, Data116137,\
-    Data116139, Data11613B, Data11613E, Data116140,\
-    Data116144, Data116148, Data11614D, Data116152
+OWPlayerPathYPtrs:                  ; 11:6154
+.dw OWPlayerPathY_1_1, OWPlayerPathY_1_2, OWPlayerPathY_1_3, OWPlayerPathY_1_4,\
+    OWPlayerPathY_2_1, OWPlayerPathY_2_2, OWPlayerPathY_2_3, OWPlayerPathY_2_4,\
+    OWPlayerPathY_3_1, OWPlayerPathY_3_2, OWPlayerPathY_3_3, OWPlayerPathY_3_4,\
+    OWPlayerPathY_4_1, OWPlayerPathY_4_2, OWPlayerPathY_4_3, OWPlayerPathY_4_4,\
+    OWPlayerPathY_5_1, OWPlayerPathY_5_2, OWPlayerPathY_5_3, OWPlayerPathY_5_4,\
+    OWPlayerPathY_6_1, OWPlayerPathY_6_2, OWPlayerPathY_6_3, OWPlayerPathY_6_4,\
+    OWPlayerPathY_7_1, OWPlayerPathY_7_2, OWPlayerPathY_7_3, OWPlayerPathY_7_4,\
+    OWPlayerPathY_8_1, OWPlayerPathY_8_2, OWPlayerPathY_8_3, OWPlayerPathY_8_4
+OWPlayerPathXPtrs:                  ; 11:6194
+.dw OWPlayerPathX_1_1, OWPlayerPathX_1_2, OWPlayerPathX_1_3, OWPlayerPathX_1_4,\
+    OWPlayerPathX_2_1, OWPlayerPathX_2_2, OWPlayerPathX_2_3, OWPlayerPathX_2_4,\
+    OWPlayerPathX_3_1, OWPlayerPathX_3_2, OWPlayerPathX_3_3, OWPlayerPathX_3_4,\
+    OWPlayerPathX_4_1, OWPlayerPathX_4_2, OWPlayerPathX_4_3, OWPlayerPathX_4_4,\
+    OWPlayerPathX_5_1, OWPlayerPathX_5_2, OWPlayerPathX_5_3, OWPlayerPathX_5_4,\
+    OWPlayerPathX_6_1, OWPlayerPathX_6_2, OWPlayerPathX_6_3, OWPlayerPathX_6_4,\
+    OWPlayerPathX_7_1, OWPlayerPathX_7_2, OWPlayerPathX_7_3, OWPlayerPathX_7_4,\
+    OWPlayerPathX_8_1, OWPlayerPathX_8_2, OWPlayerPathX_8_3, OWPlayerPathX_8_4
 Data1161D4:                         ; 11:61D4
 .db $44,$40,$48
 
 Sub1161D7:
+; subroutine, called by overworld game state (05/08)
     ld   a,[$C1B7]                  ; 11:61D7
     and  $01                        ; 11:61DA
-    rst  $00                        ; 11:61DC
+    rst  $00                        ; 11:61DC  Execute from 16-bit pointer table
 .dw Code1161E1                      ; 11:61DD
 .dw Code1163F5                      ; 11:61DF
 Code1161E1:
@@ -4290,7 +4307,7 @@ Code1161E1:
     xor  $01                        ; 11:61EE
     ld   [W_CurrentPlayer],a        ; 11:61F0
     ld   a,$11                      ; 11:61F3
-    rst  $10                        ; 11:61F5
+    rst  $10                        ; 11:61F5  24-bit call
 .dl SubL_0B421E                     ; 11:61F6
 Code1161F9:
     call Sub116231                  ; 11:61F9
@@ -4310,7 +4327,7 @@ Code1161F9:
     ld   hl,$C067                   ; 11:6215
     ld   [hl],$24                   ; 11:6218
 Code11621A:
-    ld   a,[$C283]                  ; 11:621A
+    ld   a,[W_ChallengeFlag]        ; 11:621A
     cp   $01                        ; 11:621D
     ret  z                          ; 11:621F
     call Sub116319                  ; 11:6220
@@ -4384,13 +4401,13 @@ Sub11627C:
     ld   a,[$C1BE]                  ; 11:628A
     cp   b                          ; 11:628D
     jr   nz,Code1162EC              ; 11:628E
-    call Sub1166D9                  ; 11:6290
-    ld   hl,Data116042              ; 11:6293
+    call CalcSPAdjustedLevelID      ; 11:6290  de = adjusted level ID
+    ld   hl,OWLevelYCoords          ; 11:6293
     add  hl,de                      ; 11:6296
     ld   a,[$C1B9]                  ; 11:6297
     cp   [hl]                       ; 11:629A
     jr   nz,Code1162AD              ; 11:629B
-    ld   hl,Data116062              ; 11:629D
+    ld   hl,OWLevelXCoords          ; 11:629D
     add  hl,de                      ; 11:62A0
     ld   a,[$C1BA]                  ; 11:62A1
     cp   [hl]                       ; 11:62A4
@@ -4400,11 +4417,11 @@ Sub11627C:
     ret                             ; 11:62AC
 
 Code1162AD:
-    call Sub1166D9                  ; 11:62AD
+    call CalcSPAdjustedLevelID      ; 11:62AD  de = adjusted level ID
     sla  e                          ; 11:62B0
     ld   c,e                        ; 11:62B2
     ld   b,d                        ; 11:62B3
-    ld   hl,DataPtrs116154          ; 11:62B4
+    ld   hl,OWPlayerPathYPtrs       ; 11:62B4
     add  hl,bc                      ; 11:62B7
     ld   e,[hl]                     ; 11:62B8
     inc  hl                         ; 11:62B9
@@ -4417,7 +4434,7 @@ Code1162AD:
     add  hl,de                      ; 11:62C3
     ld   a,[hl]                     ; 11:62C4
     ld   [$C1BD],a                  ; 11:62C5
-    ld   hl,DataPtrs116194          ; 11:62C8
+    ld   hl,OWPlayerPathXPtrs       ; 11:62C8
     add  hl,bc                      ; 11:62CB
     ld   e,[hl]                     ; 11:62CC
     inc  hl                         ; 11:62CD
@@ -4609,7 +4626,7 @@ Code1163E9:
 
 Code1163F5:
     ld   a,[$C168]                  ; 11:63F5
-    rst  $00                        ; 11:63F8
+    rst  $00                        ; 11:63F8  Execute from 16-bit pointer table
 .dw Code116401                      ; 11:63F9
 .dw Code11645A                      ; 11:63FB
 .dw Code1164C8                      ; 11:63FD
@@ -4757,8 +4774,8 @@ Code1164E8:
     ld   b,a                        ; 11:64F5
     call Sub1165E0                  ; 11:64F6
 Code1164F9:
-    call Sub1166D9                  ; 11:64F9
-    ld   hl,Data116062              ; 11:64FC
+    call CalcSPAdjustedLevelID      ; 11:64F9  de = adjusted level ID
+    ld   hl,OWLevelXCoords          ; 11:64FC
     add  hl,de                      ; 11:64FF
     ld   a,[hl]                     ; 11:6500
     add  $10                        ; 11:6501
@@ -4890,13 +4907,13 @@ Code1165CB:
     ret                             ; 11:65DF
 
 Sub1165E0:
-    call Sub1166D9                  ; 11:65E0
-    ld   hl,Data116042              ; 11:65E3
+    call CalcSPAdjustedLevelID      ; 11:65E0  de = adjusted level ID
+    ld   hl,OWLevelYCoords          ; 11:65E3
     add  hl,de                      ; 11:65E6
     ld   a,[hl]                     ; 11:65E7
     sub  $04                        ; 11:65E8
     ld   c,a                        ; 11:65EA
-    ld   hl,Data116062              ; 11:65EB
+    ld   hl,OWLevelXCoords          ; 11:65EB
     add  hl,de                      ; 11:65EE
     ld   a,[hl]                     ; 11:65EF
     add  $04                        ; 11:65F0
@@ -4979,12 +4996,12 @@ Data11665B:                         ; 11:665B
 .db $32,$20,$30,$20,$1E,$20,$1C,$20
 
 Sub116663:
-    call Sub1166D9                  ; 11:6663
-    ld   hl,Data116042              ; 11:6666
+    call CalcSPAdjustedLevelID      ; 11:6663  de = adjusted level ID
+    ld   hl,OWLevelYCoords          ; 11:6666
     add  hl,de                      ; 11:6669
     ld   a,[hl]                     ; 11:666A
     ldh  [<$FFA0],a                 ; 11:666B
-    ld   hl,Data116062              ; 11:666D
+    ld   hl,OWLevelXCoords          ; 11:666D
     add  hl,de                      ; 11:6670
     ld   a,[hl]                     ; 11:6671
     sub  $08                        ; 11:6672
@@ -5014,7 +5031,7 @@ Data11668D:                         ; 11:668D
     $9A,$EE,$9A,$90,$9A,$D0,$9A,$6C
 
 Sub11669D:
-    call Sub1166D9                  ; 11:669D
+    call CalcSPAdjustedLevelID      ; 11:669D  de = adjusted level ID
     ld   a,e                        ; 11:66A0
     and  $1C                        ; 11:66A1
     srl  a                          ; 11:66A3
@@ -5026,7 +5043,7 @@ Sub11669D:
     ld   a,[hl]                     ; 11:66AC
     ld   e,a                        ; 11:66AD
     ld   c,$28                      ; 11:66AE
-    ld   hl,$DF01                   ; 11:66B0
+    ld   hl,W_TilemapUploadBuffer   ; 11:66B0
     ld   b,$02                      ; 11:66B3
 Code1166B5:
     ld   [hl],d                     ; 11:66B5
@@ -5058,29 +5075,30 @@ Code1166B5:
     ld   [hl],$00                   ; 11:66D6
     ret                             ; 11:66D8
 
-Sub1166D9:
+CalcSPAdjustedLevelID:
+; subroutine: calculate adjusted level ID for Super Players overworld. Returned in DE.
     ld   a,[W_LevelID]              ; 11:66D9
-    ld   e,a                        ; 11:66DC
+    ld   e,a                        ; 11:66DC  e = levelID
     ld   a,[W_SPFlag]               ; 11:66DD
     and  a                          ; 11:66E0
-    jr   z,Code1166FC               ; 11:66E1
+    jr   z,@ReturnDE                ; 11:66E1  if not Super Players, return
     ld   a,e                        ; 11:66E3
-    and  $1C                        ; 11:66E4
+    and  $1C                        ; 11:66E4  filter world number bits
     cp   $1C                        ; 11:66E6
-    jr   z,Code1166FC               ; 11:66E8
+    jr   z,@ReturnDE                ; 11:66E8  return if world 8 (level 1C-1F)
     cp   $00                        ; 11:66EA
-    jr   z,Code1166FC               ; 11:66EC
-    bit  2,e                        ; 11:66EE
-    jr   nz,Code1166F8              ; 11:66F0
-    ld   a,e                        ; 11:66F2
+    jr   z,@ReturnDE                ; 11:66EC  return if world 1 (level 00-03)
+    bit  2,e                        ; 11:66EE \
+    jr   nz,@Code1166F8             ; 11:66F0 | if world 3/5/7, return level ID - 4
+    ld   a,e                        ; 11:66F2 /
     sub  $04                        ; 11:66F3
     ld   e,a                        ; 11:66F5
-    jr   Code1166FC                 ; 11:66F6
-Code1166F8:
-    ld   a,e                        ; 11:66F8
-    add  $04                        ; 11:66F9
-    ld   e,a                        ; 11:66FB
-Code1166FC:
+    jr   @ReturnDE                  ; 11:66F6
+@Code1166F8:
+    ld   a,e                        ; 11:66F8 \
+    add  $04                        ; 11:66F9 | if world 2/4/6, return level ID + 4
+    ld   e,a                        ; 11:66FB /
+@ReturnDE:
     ld   d,$00                      ; 11:66FC
     ret                             ; 11:66FE
 
@@ -5146,40 +5164,42 @@ Data11683C:                         ; 11:683C
     $0B,$B9,$0B,$BA,$0B,$C9,$9A,$AF,\
     $01,$0B,$04,$00
 
-Sub116878:
+ChalResultsInit_CallSubstate:
     ldh  a,[<H_GameSubstate]        ; 11:6878
-    rst  $00                        ; 11:687A
+    rst  $00                        ; 11:687A  Execute from 16-bit pointer table
 .dw Code116881                      ; 11:687B
 .dw Code115E47                      ; 11:687D
 .dw Code115EFA                      ; 11:687F
+
 Code116881:
+; Challenge results init substate 0
     ld   a,:Gr_Bank1A               ; 11:6881
     ld   b,$11                      ; 11:6883
     call LoadGraphicsBank           ; 11:6885
     ld   a,[W_LevelID]              ; 11:6888
     and  $03                        ; 11:688B
-    cp   $03                        ; 11:688D
+    cp   $03                        ; 11:688D  test if level ID is x-4
     jr   nz,Code116896              ; 11:688F
-    ld   de,Data1A7620              ; 11:6891
+    ld   de,Pal_ChalResultsCastle   ; 11:6891
     jr   Code116899                 ; 11:6894
 Code116896:
-    ld   de,Data1A75A0              ; 11:6896
+    ld   de,Pal_ChalResultsNormal   ; 11:6896
 Code116899:
-    ld   a,:Data1A75A0              ; 11:6899
+    ld   a,:Pal_ChalResultsNormal   ; 11:6899
     ld   b,$11                      ; 11:689B
     call LoadFullPaletteLong        ; 11:689D
     ld   a,$11                      ; 11:68A0
-    rst  $10                        ; 11:68A2
+    rst  $10                        ; 11:68A2  24-bit call
 .dl SubL_0B421E                     ; 11:68A3
     call Sub00128D                  ; 11:68A6
     ld   a,[W_LevelID]              ; 11:68A9
     and  $03                        ; 11:68AC
-    cp   $03                        ; 11:68AE
+    cp   $03                        ; 11:68AE  test if level ID is x-4
     jr   nz,Code1168B7              ; 11:68B0
-    ld   hl,Data1A72D0              ; 11:68B2
+    ld   hl,Ti_ChalResultsCastle    ; 11:68B2
     jr   Code1168BA                 ; 11:68B5
 Code1168B7:
-    ld   hl,Data1A7000              ; 11:68B7
+    ld   hl,Ti_ChalResultsNormal    ; 11:68B7
 Code1168BA:
     ld   a,$1A                      ; 11:68BA
     ld   b,$11                      ; 11:68BC
@@ -5195,11 +5215,11 @@ Code1168BA:
     ld   [$C0C4],a                  ; 11:68D6
     ld   [$C290],a                  ; 11:68D9
     ld   [$C325],a                  ; 11:68DC
-    ldh  [<$FFB8],a                 ; 11:68DF
-    ldh  [<$FFB9],a                 ; 11:68E1
+    ldh  [<H_CameraXLow],a          ; 11:68DF
+    ldh  [<H_CameraXHigh],a         ; 11:68E1
     ldh  [<$FFBB],a                 ; 11:68E3
     ld   a,$70                      ; 11:68E5
-    ldh  [<$FFBA],a                 ; 11:68E7
+    ldh  [<H_CameraY],a             ; 11:68E7
     ld   a,$4E                      ; 11:68E9
     ld   [$C1B9],a                  ; 11:68EB
     ld   a,$FD                      ; 11:68EE
@@ -5219,10 +5239,10 @@ Code116902:
     ld   a,b                        ; 11:6905
     ld   [$C188],a                  ; 11:6906
     ld   a,$11                      ; 11:6909
-    rst  $10                        ; 11:690B
+    rst  $10                        ; 11:690B  24-bit call
 .dl SubL_034148                     ; 11:690C
     ld   a,$11                      ; 11:690F
-    rst  $10                        ; 11:6911
+    rst  $10                        ; 11:6911  24-bit call
 .dl SubL_034157                     ; 11:6912
     ld   a,$78                      ; 11:6915
     ld   [$DE68],a                  ; 11:6917
@@ -5233,7 +5253,7 @@ Code116902:
 ChallengeResultsMain:
 ; Game state 21
     ld   a,$11                      ; 11:691F
-    rst  $10                        ; 11:6921
+    rst  $10                        ; 11:6921  24-bit call
 .dl SubL_034157                     ; 11:6922
     call Sub116DB7                  ; 11:6925
     ld   a,[$C168]                  ; 11:6928
@@ -5246,7 +5266,7 @@ ChallengeResultsMain:
 Code116938:
     call Sub116E4E                  ; 11:6938
     ld   a,[$C168]                  ; 11:693B
-    rst  $00                        ; 11:693E
+    rst  $00                        ; 11:693E  Execute from 16-bit pointer table
 .dw Code116D5F                      ; 11:693F
 .dw Code11697B                      ; 11:6941
 .dw Code116D48                      ; 11:6943
@@ -5279,7 +5299,7 @@ Code116938:
 .dw Code116CBE                      ; 11:6979
 Code11697B:
     ld   hl,Data11672C              ; 11:697B
-    ld   de,$DF01                   ; 11:697E
+    ld   de,W_TilemapUploadBuffer   ; 11:697E
     ld   bc,$003C                   ; 11:6981
     call CopyBytes                  ; 11:6984
     ld   a,[W_LevelID]              ; 11:6987
@@ -5298,7 +5318,7 @@ Code116993:
 
 Code1169A1:
     ld   hl,Data116768              ; 11:69A1
-    ld   de,$DF01                   ; 11:69A4
+    ld   de,W_TilemapUploadBuffer   ; 11:69A4
     ld   bc,$003C                   ; 11:69A7
     call CopyBytes                  ; 11:69AA
     ld   a,[W_LevelID]              ; 11:69AD
@@ -5317,7 +5337,7 @@ Code1169B9:
 
 Code1169C7:
     ld   hl,Data1167A4              ; 11:69C7
-    ld   de,$DF01                   ; 11:69CA
+    ld   de,W_TilemapUploadBuffer   ; 11:69CA
     ld   bc,$000E                   ; 11:69CD
     call CopyBytes                  ; 11:69D0
     ld   a,[$C188]                  ; 11:69D3
@@ -5371,7 +5391,7 @@ Code116A0C:
     or   $80                        ; 11:6A25
     ld   [$C197],a                  ; 11:6A27
 Code116A2A:
-    ld   hl,$DF01                   ; 11:6A2A
+    ld   hl,W_TilemapUploadBuffer   ; 11:6A2A
     ld   [hl],$9B                   ; 11:6A2D
     inc  hl                         ; 11:6A2F
     ld   [hl],$69                   ; 11:6A30
@@ -5409,7 +5429,7 @@ Code116A5E:
     ld   a,[$C188]                  ; 11:6A5E
     cp   $05                        ; 11:6A61
     jr   c,Code116A87               ; 11:6A63
-    ld   de,$DF01                   ; 11:6A65
+    ld   de,W_TilemapUploadBuffer   ; 11:6A65
     ld   hl,Data1166FF              ; 11:6A68
     ld   bc,$000F                   ; 11:6A6B
     call CopyBytes                  ; 11:6A6E
@@ -5431,7 +5451,7 @@ Code116A87:
 
 Code116A8D:
     ld   hl,Data1167B2              ; 11:6A8D
-    ld   de,$DF01                   ; 11:6A90
+    ld   de,W_TilemapUploadBuffer   ; 11:6A90
     ld   bc,$003C                   ; 11:6A93
     call CopyBytes                  ; 11:6A96
     ld   a,[W_LevelID]              ; 11:6A99
@@ -5450,7 +5470,7 @@ Code116AA5:
 
 Code116AB3:
     ld   hl,Data1167EE              ; 11:6AB3
-    ld   de,$DF01                   ; 11:6AB6
+    ld   de,W_TilemapUploadBuffer   ; 11:6AB6
     ld   bc,$0012                   ; 11:6AB9
     call CopyBytes                  ; 11:6ABC
     ld   de,$C17A                   ; 11:6ABF
@@ -5496,7 +5516,7 @@ Code116AFA:
     ld   [$C18B],a                  ; 11:6B03
     ld   a,[$C17C]                  ; 11:6B06
     ld   [$C18C],a                  ; 11:6B09
-    ld   hl,$DF01                   ; 11:6B0C
+    ld   hl,W_TilemapUploadBuffer   ; 11:6B0C
     ld   [hl],$9B                   ; 11:6B0F
     inc  hl                         ; 11:6B11
     ld   [hl],$A7                   ; 11:6B12
@@ -5572,7 +5592,7 @@ Code116B82:
     ret                             ; 11:6B8C
 
 Code116B8D:
-    ld   de,$DF01                   ; 11:6B8D
+    ld   de,W_TilemapUploadBuffer   ; 11:6B8D
     ld   hl,Data11670E              ; 11:6B90
     ld   bc,$000F                   ; 11:6B93
     call CopyBytes                  ; 11:6B96
@@ -5706,7 +5726,7 @@ Code116C64:
     ret                             ; 11:6C70
 
 Code116C71:
-    ld   de,$DF01                   ; 11:6C71
+    ld   de,W_TilemapUploadBuffer   ; 11:6C71
     ld   hl,Data11671D              ; 11:6C74
     ld   bc,$000F                   ; 11:6C77
     call CopyBytes                  ; 11:6C7A
@@ -5751,7 +5771,7 @@ Code116CBE:
     ld   [$C326],a                  ; 11:6CC2
     ret  nz                         ; 11:6CC5
     ld   a,$11                      ; 11:6CC6
-    rst  $10                        ; 11:6CC8
+    rst  $10                        ; 11:6CC8  24-bit call
 .dl SubL_075BB7                     ; 11:6CC9
     call Sub11539E                  ; 11:6CCC
     ld   a,[$C198]                  ; 11:6CCF
@@ -5776,7 +5796,7 @@ Code116CED:
     ld   [$C42A],a                  ; 11:6CF9
 Code116CFC:
     ld   a,$11                      ; 11:6CFC
-    rst  $10                        ; 11:6CFE
+    rst  $10                        ; 11:6CFE  24-bit call
 .dl SubL_0757EF                     ; 11:6CFF
     ld   a,$1D                      ; 11:6D02
     ldh  [<H_GameState],a           ; 11:6D04
@@ -5792,7 +5812,7 @@ Code116D07:
 Code116D15:
     ld   hl,Data116800              ; 11:6D15
 Code116D18:
-    ld   de,$DF01                   ; 11:6D18
+    ld   de,W_TilemapUploadBuffer   ; 11:6D18
     ld   bc,$003C                   ; 11:6D1B
     call CopyBytes                  ; 11:6D1E
     ld   a,$30                      ; 11:6D21
@@ -5998,7 +6018,7 @@ Code116E68:
     inc  hl                         ; 11:6E72
     ld   h,[hl]                     ; 11:6E73
     ld   l,c                        ; 11:6E74
-    ld   de,$DF01                   ; 11:6E75
+    ld   de,W_TilemapUploadBuffer   ; 11:6E75
     ld   bc,$000F                   ; 11:6E78
     call CopyBytes                  ; 11:6E7B
 Code116E7E:
@@ -6008,34 +6028,36 @@ Code116E7E:
 Return116E85:
     ret                             ; 11:6E85
 
-ChallengeYoshiHatchMain:
-; Game state 1F
+ChalYoshiHatch_Main:
+; Game state 1F: Challenge Yoshi hatch screen
     ldh  a,[<H_GameSubstate]        ; 11:6E86
-    rst  $00                        ; 11:6E88
+    rst  $00                        ; 11:6E88  Execute from 16-bit pointer table
 .dw Code116E8D                      ; 11:6E89
 .dw Code116ED4                      ; 11:6E8B
+
 Code116E8D:
+; Challenge Yoshi hatch substate 0
     call Sub00126D                  ; 11:6E8D
     ld   a,$00                      ; 11:6E90
     ldh  [<IE],a                    ; 11:6E92
-    ld   a,:Gr_Bank1C               ; 11:6E94
+    ld   a,:Gr_ChalMissYoshiHatch   ; 11:6E94
     ld   b,$11                      ; 11:6E96
     call LoadGraphicsBank           ; 11:6E98
-    ld   a,:Data1C75E0              ; 11:6E9B
+    ld   a,:Pal_ChalYoshiHatch      ; 11:6E9B
     ld   b,$11                      ; 11:6E9D
-    ld   de,Data1C75E0              ; 11:6E9F
+    ld   de,Pal_ChalYoshiHatch      ; 11:6E9F
     call LoadFullPaletteLong        ; 11:6EA2
-    ld   a,:Data1C72D0              ; 11:6EA5
+    ld   a,:Ti_ChalYoshiHatch       ; 11:6EA5
     ld   b,$11                      ; 11:6EA7
     ld   de,$99C0                   ; 11:6EA9
-    ld   hl,Data1C72D0              ; 11:6EAC
+    ld   hl,Ti_ChalYoshiHatch       ; 11:6EAC
     call LoadScreenTilemapVRAM      ; 11:6EAF
     ld   a,$00                      ; 11:6EB2
-    ldh  [<$FFB8],a                 ; 11:6EB4
-    ldh  [<$FFB9],a                 ; 11:6EB6
+    ldh  [<H_CameraXLow],a          ; 11:6EB4
+    ldh  [<H_CameraXHigh],a         ; 11:6EB6
     ldh  [<$FFBB],a                 ; 11:6EB8
     ld   a,$70                      ; 11:6EBA
-    ldh  [<$FFBA],a                 ; 11:6EBC
+    ldh  [<H_CameraY],a             ; 11:6EBC
     ld   a,$80                      ; 11:6EBE
     ld   [$C326],a                  ; 11:6EC0
     ld   a,$61                      ; 11:6EC3
@@ -6049,6 +6071,7 @@ Code116E8D:
     ret                             ; 11:6ED3
 
 Code116ED4:
+; Challenge Yoshi hatch substate 1
     ldh  a,[<H_ButtonsPressed]      ; 11:6ED4
     and  $09                        ; 11:6ED6
     jr   nz,Code116EE4              ; 11:6ED8
@@ -6079,9 +6102,9 @@ Data116F08:                         ; 11:6F08
 
 Sub116F12:
 ; Game state 31
-    ldh  a,[<$FFB8]                 ; 11:6F12
+    ldh  a,[<H_CameraXLow]          ; 11:6F12
     ld   [$C175],a                  ; 11:6F14
-    ldh  a,[<$FFBA]                 ; 11:6F17
+    ldh  a,[<H_CameraY]             ; 11:6F17
     ld   [$C176],a                  ; 11:6F19
     call Sub00126D                  ; 11:6F1C
     ld   a,$00                      ; 11:6F1F
@@ -6094,12 +6117,12 @@ Sub116F12:
     ld   de,Data115C6A              ; 11:6F2D
     call LoadFullPaletteLong        ; 11:6F30
     ld   a,$11                      ; 11:6F33
-    rst  $10                        ; 11:6F35
+    rst  $10                        ; 11:6F35  24-bit call
 .dl SubL_0B421E                     ; 11:6F36
     call Sub00128D                  ; 11:6F39
     ld   a,$00                      ; 11:6F3C
-    ldh  [<$FFB8],a                 ; 11:6F3E
-    ldh  [<$FFB9],a                 ; 11:6F40
+    ldh  [<H_CameraXLow],a          ; 11:6F3E
+    ldh  [<H_CameraXHigh],a         ; 11:6F40
     ldh  [<$FFBB],a                 ; 11:6F42
     ld   [W_SublevelID],a           ; 11:6F44
     ld   [$C1EF],a                  ; 11:6F47
@@ -6108,8 +6131,8 @@ Sub116F12:
     ld   a,$01                      ; 11:6F50
     ldh  [<$FFA6],a                 ; 11:6F52
     ld   a,$70                      ; 11:6F54
-    ldh  [<$FFBA],a                 ; 11:6F56
-    ld   de,$DF01                   ; 11:6F58
+    ldh  [<H_CameraY],a             ; 11:6F56
+    ld   de,W_TilemapUploadBuffer   ; 11:6F58
     ld   hl,Data116EF7              ; 11:6F5B
     ld   bc,$001B                   ; 11:6F5E
     call CopyBytes                  ; 11:6F61
@@ -6159,7 +6182,7 @@ Code116FA6:
     ld   a,$33                      ; 11:6FB1
     ld   [W_SublevelID],a           ; 11:6FB3
 Code116FB6:
-    ld   de,$DF01                   ; 11:6FB6
+    ld   de,W_TilemapUploadBuffer   ; 11:6FB6
     ld   hl,Data116F08              ; 11:6FB9
     ld   bc,$000A                   ; 11:6FBC
     call CopyBytes                  ; 11:6FBF

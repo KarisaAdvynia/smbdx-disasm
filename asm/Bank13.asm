@@ -427,11 +427,11 @@ Code136546:
     xor  a                          ; 13:659C
     ld   [$C174],a                  ; 13:659D
     ld   [$C16C],a                  ; 13:65A0
-    ldh  [<$FFB8],a                 ; 13:65A3
-    ldh  [<$FFB9],a                 ; 13:65A5
+    ldh  [<H_CameraXLow],a          ; 13:65A3
+    ldh  [<H_CameraXHigh],a         ; 13:65A5
     ldh  [<$FFBB],a                 ; 13:65A7
     ld   a,$08                      ; 13:65A9
-    ldh  [<$FFBA],a                 ; 13:65AB
+    ldh  [<H_CameraY],a             ; 13:65AB
     ld   a,[$C36A]                  ; 13:65AD
     cp   $02                        ; 13:65B0
     jr   z,Code1365BB               ; 13:65B2
@@ -451,7 +451,7 @@ Code1365BB:
 Code1365CC:
     ld   a,$FF                      ; 13:65CC
     ld   [$DE68],a                  ; 13:65CE
-    ld   hl,$C17D                   ; 13:65D1
+    ld   hl,W_LevelTimerLow         ; 13:65D1
     ld   e,[hl]                     ; 13:65D4
     inc  hl                         ; 13:65D5
     ld   a,[hl]                     ; 13:65D6
@@ -528,7 +528,7 @@ Code136649:
 Code13665A:
     call Sub13683E                  ; 13:665A
     ld   a,$13                      ; 13:665D
-    rst  $10                        ; 13:665F
+    rst  $10                        ; 13:665F  24-bit call
 .dl SubL_0B5F9F                     ; 13:6660
     xor  a                          ; 13:6663
     ld   [$D087],a                  ; 13:6664
@@ -581,7 +581,7 @@ Data1366D5:                         ; 13:66D5
 
 Sub1366D9:
     ld   a,[$C16C]                  ; 13:66D9
-    rst  $00                        ; 13:66DC
+    rst  $00                        ; 13:66DC  Execute from 16-bit pointer table
 .dw Code1366E5                      ; 13:66DD
 .dw Code136712                      ; 13:66DF
 .dw Code136739                      ; 13:66E1
@@ -736,7 +736,7 @@ Sub1367D0:
     ld   d,$00                      ; 13:67D4
     ld   c,e                        ; 13:67D6
     ld   b,d                        ; 13:67D7
-    ld   hl,$DF01                   ; 13:67D8
+    ld   hl,W_TilemapUploadBuffer   ; 13:67D8
     add  hl,de                      ; 13:67DB
     ld   e,$00                      ; 13:67DC
 Code1367DE:
@@ -758,7 +758,7 @@ Sub1367EE:
     ld   d,$00                      ; 13:67F2
     ld   c,e                        ; 13:67F4
     ld   b,d                        ; 13:67F5
-    ld   hl,$DF01                   ; 13:67F6
+    ld   hl,W_TilemapUploadBuffer   ; 13:67F6
     add  hl,de                      ; 13:67F9
     ld   e,$00                      ; 13:67FA
 Code1367FC:
@@ -959,7 +959,7 @@ Code136946:
     jr   z,Code136955               ; 13:6949
     ld   [hl],a                     ; 13:694B
     ld   a,$13                      ; 13:694C
-    rst  $10                        ; 13:694E
+    rst  $10                        ; 13:694E  24-bit call
 .dl SubL_075D06                     ; 13:694F
     scf                             ; 13:6952
     ccf                             ; 13:6953
@@ -973,13 +973,13 @@ Sub136957:
     call Sub136964                  ; 13:6957
     ld   bc,$0000                   ; 13:695A
     ld   a,$13                      ; 13:695D
-    rst  $10                        ; 13:695F
+    rst  $10                        ; 13:695F  24-bit call
 .dl SubL_0B5DCD                     ; 13:6960
     ret                             ; 13:6963
 
 Sub136964:
     ld   a,[W_SpriteSubstate]       ; 13:6964
-    rst  $00                        ; 13:6967
+    rst  $00                        ; 13:6967  Execute from 16-bit pointer table
 .dw Code136974                      ; 13:6968
 .dw Return1369A4                    ; 13:696A
 .dw Code1369A5                      ; 13:696C
@@ -1069,7 +1069,7 @@ Code1369C0:
     ld   hl,W_SpriteSubstate        ; 13:69ED
     inc  [hl]                       ; 13:69F0
     ld   a,$13                      ; 13:69F1
-    rst  $10                        ; 13:69F3
+    rst  $10                        ; 13:69F3  24-bit call
 .dl SubL_0B5F9F                     ; 13:69F4
     ret                             ; 13:69F7
 
@@ -1129,7 +1129,7 @@ Code136A6A:
     ld   hl,Data136A40              ; 13:6A6A
     add  hl,de                      ; 13:6A6D
     ld   a,[hl]                     ; 13:6A6E
-    ld   hl,$DF01                   ; 13:6A6F
+    ld   hl,W_TilemapUploadBuffer   ; 13:6A6F
     add  hl,de                      ; 13:6A72
     ld   [hl],a                     ; 13:6A73
     inc  de                         ; 13:6A74

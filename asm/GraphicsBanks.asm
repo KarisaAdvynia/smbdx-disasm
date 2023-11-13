@@ -14,10 +14,10 @@ Gr_PlayerSmall:                     ; 01:7C00
 
 .orga $4000
 Gr_OW_ChalMenu:                     ; 0E:4000
-.incbin "data/Graphics/Overworld_ChallengeMenu.bin"
-Data0E5800:                         ; 0E:5800
-.incbin "data/Tilemaps/Data0E5800.bin"
-Data0E5AD0:                         ; 0E:5AD0
+.incbin "data/Graphics/Overworld_ChalMenu.bin"
+Ti_ChalMenu:                        ; 0E:5800
+.incbin "data/Tilemaps/ChalMenu.bin"
+Pal_ChalMenu:                       ; 0E:5AD0
 .dw $7FFF,$7E6F,$7D2D,$0000,$7FFF,$3F8B,$2682,$0000,\
     $0000,$0000,$0000,$0000,$7FFF,$7D2D,$0D16,$0000,\
     $7FFF,$22FF,$0200,$0000,$7FFF,$22FF,$7D2D,$0000,\
@@ -26,7 +26,7 @@ Data0E5AD0:                         ; 0E:5AD0
     $7DE0,$7FFF,$7D2D,$0000,$7DE0,$025F,$001F,$0000,\
     $7DE0,$3E9C,$08CB,$001D,$7DE0,$7FFF,$02A6,$001D,\
     $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120
-Data0E5B50:                         ; 0E:5B50
+Ti_Overworlds:                      ; 0E:5B50
 .incbin "data/Tilemaps/Overworld_W1.bin"
 .incbin "data/Tilemaps/Overworld_W2.bin"
 .incbin "data/Tilemaps/Overworld_W3.bin"
@@ -200,18 +200,29 @@ Data197C00:                         ; 19:7C00
 
 .orga $4000
 Gr_Bank1A:                          ; 1A:4000
-
-.orga $7000
-Data1A7000:                         ; 1A:7000
-
-.orga $72D0
-Data1A72D0:                         ; 1A:72D0
-
-.orga $75A0
-Data1A75A0:                         ; 1A:75A0
-
-.orga $7620
-Data1A7620:                         ; 1A:7620
+.incbin "data/Graphics/ChallengeResults.bin"
+Ti_ChalResultsNormal:               ; 1A:7000
+.incbin "data/Tilemaps/ChalResultsNormal.bin"
+Ti_ChalResultsCastle:               ; 1A:72D0
+.incbin "data/Tilemaps/ChalResultsCastle.bin"
+Pal_ChalResultsNormal:              ; 1A:75A0
+.dw $7FFF,$7E6F,$7D2D,$0000,$0000,$1D4A,$3A94,$7FFF,\
+    $7E6F,$034B,$7D2D,$0000,$1D4A,$001F,$3A94,$7FFF,\
+    $7FFF,$22FF,$0200,$0000,$7FFF,$22FF,$7D2D,$0000,\
+    $7FFF,$22FF,$001F,$0000,$7FFF,$034B,$0200,$0000,\
+    $7DE0,$7FFF,$3A94,$0000,$7DE0,$7FFF,$001F,$0000,\
+    $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,\
+    $7DE0,$3E9C,$08CB,$001D,$7DE0,$7FFF,$02A6,$001D,\
+    $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120
+Pal_ChalResultsCastle:              ; 1A:7620
+.dw $7FFF,$7E6F,$7D2D,$0000,$0000,$310B,$55D3,$7FFF,\
+    $7E6F,$034B,$7D2D,$0000,$0000,$194B,$3272,$7FFF,\
+    $7FFF,$22FF,$0200,$0000,$7FFF,$22FF,$7D2D,$0000,\
+    $7FFF,$22FF,$001F,$0000,$7FFF,$034B,$0200,$0000,\
+    $7DE0,$7FFF,$3A94,$0000,$7DE0,$7FFF,$001F,$0000,\
+    $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,\
+    $7DE0,$3E9C,$08CB,$001D,$7DE0,$7FFF,$02A6,$001D,\
+    $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -246,21 +257,22 @@ Ti_NonGBCError:                     ; 1B:7D50
 .bank $1C slot 1
 
 .orga $4000
-Gr_Bank1C:                          ; 1C:4000
-
-.orga $7000
-Data1C7000:                         ; 1C:7000
-
-.orga $72D0
-Data1C72D0:                         ; 1C:72D0
-
-.orga $75A0
-Data1C75A0:                         ; 1C:75A0
-
-.orga $75E0
-Data1C75E0:                         ; 1C:75E0
-
-.orga $7620
+Gr_ChalMissYoshiHatch:              ; 1C:4000
+.incbin "data/Graphics/ChalMissYoshiHatch.bin"
+Ti_ChalMiss:                        ; 1C:7000
+.incbin "data/Tilemaps/ChalMiss.bin"
+Ti_ChalYoshiHatch:                  ; 1C:72D0
+.incbin "data/Tilemaps/ChalYoshiHatch.bin"
+Pal_ChalMiss:                       ; 1C:75A0
+.dw $0000,$03FF,$023F,$0159,$7FFF,$7F79,$001F,$0000,\
+    $3F1F,$7F79,$2A3C,$0000,$3F1F,$6C16,$00ED,$0000,\
+    $3F1F,$00ED,$2A3C,$0000,$3F1F,$6C16,$7FFF,$0000,\
+    $03FF,$7FFF,$7F79,$0000,$03FF,$00ED,$2A3C,$0000
+Pal_ChalYoshiHatch:                 ; 1C:75E0
+.dw $7FFF,$0329,$0013,$0000,$7FFF,$0329,$01C7,$0000,\
+    $7FFF,$0329,$0113,$0000,$7FFF,$165E,$0113,$0000,\
+    $7FFF,$0329,$7716,$0000,$7FFF,$031E,$15DE,$0000,\
+    $7FFF,$7FFF,$7FFF,$0000,$7FFF,$7FFF,$7FFF,$0000
 Data1C7620:                         ; 1C:7620
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

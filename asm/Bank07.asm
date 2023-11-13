@@ -27,11 +27,11 @@ Return074021:
 
 SubL_074022:
     call Sub074026                  ; 07:4022
-    rst  $18                        ; 07:4025
+    rst  $18                        ; 07:4025  Return from 24-bit call
 
 Sub074026:
     ld   a,$41                      ; 07:4026
-    call Sub0026BE                  ; 07:4028
+    call LoadSpriteAnySlot          ; 07:4028
     jr   c,Return074078             ; 07:402B
     ldh  a,[<$FF9B]                 ; 07:402D
     and  a                          ; 07:402F
@@ -239,7 +239,7 @@ Code074180:
     jr   nc,ReturnL_0741A3          ; 07:419E
     call Sub0741A4                  ; 07:41A0
 ReturnL_0741A3:
-    rst  $18                        ; 07:41A3
+    rst  $18                        ; 07:41A3  Return from 24-bit call
 
 Sub0741A4:
     ld   hl,$D0FF                   ; 07:41A4
@@ -404,7 +404,7 @@ Code0742A2:
     ld   [hl],$48                   ; 07:42A6
     ld   hl,W_SpriteYLow            ; 07:42A8
     add  hl,bc                      ; 07:42AB
-    ldh  a,[<$FFBA]                 ; 07:42AC
+    ldh  a,[<H_CameraY]             ; 07:42AC
     add  $20                        ; 07:42AE
     ld   [hl],a                     ; 07:42B0
     ld   hl,$D096                   ; 07:42B1
@@ -486,7 +486,7 @@ Code07432F:
     ld   hl,Data0742B8              ; 07:4340
     add  hl,de                      ; 07:4343
     push hl                         ; 07:4344
-    call Sub0027BD                  ; 07:4345
+    call Disp16x16Sprite            ; 07:4345
     ld   hl,$D0D2                   ; 07:4348
     add  hl,bc                      ; 07:434B
     ld   a,[hl]                     ; 07:434C
@@ -525,7 +525,7 @@ Code07437C:
     pop  hl                         ; 07:437C
     ret                             ; 07:437D
 
-    rst  $18                        ; 07:437E
+    rst  $18                        ; 07:437E  Return from 24-bit call
 
 UnusedL_07437F:
     ld   de,$0000                   ; 07:437F
@@ -555,7 +555,7 @@ UnusedL_07437F:
     ldh  a,[<$FF9F]                 ; 07:43A9
     cp   [hl]                       ; 07:43AB
     jr   nz,@Code0743AF             ; 07:43AC
-    rst  $18                        ; 07:43AE
+    rst  $18                        ; 07:43AE  Return from 24-bit call
 
 @Code0743AF:
     inc  e                          ; 07:43AF
@@ -563,7 +563,7 @@ UnusedL_07437F:
     cp   $0F                        ; 07:43B1
     jr   nz,@Code074382             ; 07:43B3
     ld   a,$43                      ; 07:43B5
-    call Sub0026BE                  ; 07:43B7
+    call LoadSpriteAnySlot          ; 07:43B7
     jr   c,@ReturnL                 ; 07:43BA
     ld   hl,W_SpriteXLow            ; 07:43BC
     add  hl,de                      ; 07:43BF
@@ -596,7 +596,7 @@ UnusedL_07437F:
     add  hl,de                      ; 07:43EF
     ld   [hl],$40                   ; 07:43F0
 @ReturnL:
-    rst  $18                        ; 07:43F2
+    rst  $18                        ; 07:43F2  Return from 24-bit call
 
 Code0743F3:
     call Sub0025CB                  ; 07:43F3
@@ -610,7 +610,7 @@ Sub0743FF:
     ld   hl,W_SpriteSubstate        ; 07:43FF
     add  hl,bc                      ; 07:4402
     ld   a,[hl]                     ; 07:4403
-    rst  $00                        ; 07:4404
+    rst  $00                        ; 07:4404  Execute from 16-bit pointer table
 .dw Code074407                      ; 07:4405
 Code074407:
     ld   hl,$D096                   ; 07:4407
@@ -626,7 +626,7 @@ Return074411:
 
 SubL_074412:
     ld   a,$44                      ; 07:4412
-    call Sub0026BE                  ; 07:4414
+    call LoadSpriteAnySlot          ; 07:4414
     jr   c,ReturnL_074449           ; 07:4417
     ld   hl,W_SpriteXLow            ; 07:4419
     add  hl,de                      ; 07:441C
@@ -656,7 +656,7 @@ SubL_074412:
     ldh  a,[<$FF9F]                 ; 07:4446
     ld   [hl],a                     ; 07:4448
 ReturnL_074449:
-    rst  $18                        ; 07:4449
+    rst  $18                        ; 07:4449  Return from 24-bit call
 
 Data07444A:                         ; 07:444A
 .db $B8,$08,$BA,$08
@@ -666,7 +666,7 @@ Code07444E:
     call Sub07445D                  ; 07:4453
 Code074456:
     ld   hl,Data07444A              ; 07:4456
-    call Sub0027BD                  ; 07:4459
+    call Disp16x16Sprite            ; 07:4459
     ret                             ; 07:445C
 
 Sub07445D:
@@ -821,7 +821,7 @@ Sub07455A:
     ldh  a,[<$FFAC]                 ; 07:455A
     bit  7,a                        ; 07:455C
     jr   nz,Code074577              ; 07:455E
-    ldh  a,[<$FFA9]                 ; 07:4560
+    ldh  a,[<H_PlayerYLow]          ; 07:4560
     add  $18                        ; 07:4562
     ldh  [<$FF97],a                 ; 07:4564
     ld   hl,W_SpriteYLow            ; 07:4566
@@ -832,7 +832,7 @@ Sub07455A:
     cp   [hl]                       ; 07:4570
     jr   nc,Code074577              ; 07:4571
     sub  $18                        ; 07:4573
-    ldh  [<$FFA9],a                 ; 07:4575
+    ldh  [<H_PlayerYLow],a          ; 07:4575
 Code074577:
     ld   hl,$D0D2                   ; 07:4577
     add  hl,bc                      ; 07:457A
@@ -890,11 +890,11 @@ Sub0745A7:
     add  hl,bc                      ; 07:45D5
     ld   a,[hl]                     ; 07:45D6
     ldh  [<$FF98],a                 ; 07:45D7
-    ld   hl,$FFB8                   ; 07:45D9
+    ld   hl,H_CameraXLow            ; 07:45D9
     ldh  a,[<$FF97]                 ; 07:45DC
     sub  [hl]                       ; 07:45DE
     ldh  [<$FF9D],a                 ; 07:45DF
-    ld   hl,$FFB9                   ; 07:45E1
+    ld   hl,H_CameraXHigh           ; 07:45E1
     ldh  a,[<$FF99]                 ; 07:45E4
     sbc  [hl]                       ; 07:45E6
     ldh  [<$FF9E],a                 ; 07:45E7
@@ -936,14 +936,14 @@ Data074661:                         ; 07:4661
 .db $05,$19,$11,$15,$3F,$3F,$49,$49,\
     $55,$55,$7E,$7E,$87,$8C
 Data07466F:                         ; 07:466F
-.dw $FFD8,$0038,$FFB8,$0058,$FFC8,$0048,$FFE8,$0038,\
-    $FFE8,$0038,$FFE8,$0008,$FFF8,$0018,$FFB8,$0058,\
-    $FFA8,$0068,$FFE8,$0028,$FFE8,$0028,$FFC8,$0038,\
-    $FFD8,$0028,$FFC8,$0028,$FF98,$0058,$FFB8,$0048,\
+.dw $FFD8,$0038,H_CameraXLow,$0058,$FFC8,$0048,$FFE8,$0038,\
+    $FFE8,$0038,$FFE8,$0008,$FFF8,$0018,H_CameraXLow,$0058,\
+    H_PlayerXHigh,$0068,$FFE8,$0028,$FFE8,$0028,$FFC8,$0038,\
+    $FFD8,$0028,$FFC8,$0028,$FF98,$0058,H_CameraXLow,$0048,\
     $FFE8,$0018,$FFE8,$0018,$FF88,$0078,$FFE8,$0028,\
-    $FFB8,$0038,$FFE8,$0018,$FFD8,$0028,$FFD8,$0038,\
+    H_CameraXLow,$0038,$FFE8,$0018,$FFD8,$0028,$FFD8,$0038,\
     $FFE8,$0018,$FFE8,$0018,$FFD8,$0028,$FFE8,$0028,\
-    $FFE8,$0018,$FFF8,$0008,$FFD8,$0038,$FFA8,$0028,\
+    $FFE8,$0018,$FFF8,$0008,$FFD8,$0038,H_PlayerXHigh,$0028,\
     $FFE8,$0018,$FFC8,$0028,$FFE8,$0028,$FFE8,$0028
 Data0746FF:                         ; 07:46FF
 .db $00,$0C,$1C,$24,$4C,$84,$88
@@ -1158,10 +1158,10 @@ Code07484A:
     ret                             ; 07:4852
 
 Sub074853:
-    ldh  a,[<$FFA7]                 ; 07:4853
+    ldh  a,[<H_PlayerXLow]          ; 07:4853
     add  $08                        ; 07:4855
     ldh  [<$FF9D],a                 ; 07:4857
-    ldh  a,[<$FFA8]                 ; 07:4859
+    ldh  a,[<H_PlayerXHigh]         ; 07:4859
     adc  $00                        ; 07:485B
     ldh  [<$FF9E],a                 ; 07:485D
 
@@ -1249,7 +1249,7 @@ Code0748DF:
 
 SubL_0748E2:
     ld   a,$45                      ; 07:48E2
-    call Sub0026BE                  ; 07:48E4
+    call LoadSpriteAnySlot          ; 07:48E4
     jr   c,ReturnL_0748FB           ; 07:48E7
     ld   hl,$D11D                   ; 07:48E9
     add  hl,de                      ; 07:48EC
@@ -1261,7 +1261,7 @@ SubL_0748E2:
     add  hl,de                      ; 07:48F8
     ld   [hl],$40                   ; 07:48F9
 ReturnL_0748FB:
-    rst  $18                        ; 07:48FB
+    rst  $18                        ; 07:48FB  Return from 24-bit call
 
 Data0748FC:                         ; 07:48FC
 .db $18,$30,$D2,$09,$18,$38,$D0,$09,\
@@ -1371,7 +1371,7 @@ Sub0749E4:
     ld   hl,W_SpriteSubstate        ; 07:49E4
     add  hl,bc                      ; 07:49E7
     ld   a,[hl]                     ; 07:49E8
-    rst  $00                        ; 07:49E9
+    rst  $00                        ; 07:49E9  Execute from 16-bit pointer table
 .dw Code0749F0                      ; 07:49EA
 .dw Code0749FF                      ; 07:49EC
 .dw Return074A3E                    ; 07:49EE
@@ -1403,7 +1403,7 @@ Code074A0E:
     ldh  [<$FF97],a                 ; 07:4A10
     xor  a                          ; 07:4A12
     ldh  [<$FF98],a                 ; 07:4A13
-    call Sub002E30                  ; 07:4A15
+    call GivePointsFF97             ; 07:4A15
     ld   hl,$D11D                   ; 07:4A18
     add  hl,bc                      ; 07:4A1B
     ld   e,[hl]                     ; 07:4A1C
@@ -1564,7 +1564,7 @@ Code074B1C:
     adc  [hl]                       ; 07:4B40
     ld   [hl],a                     ; 07:4B41
     ld   hl,Data074AD0              ; 07:4B42
-    call Sub0027BD                  ; 07:4B45
+    call Disp16x16Sprite            ; 07:4B45
     ld   hl,W_SpriteXLow            ; 07:4B48
     add  hl,bc                      ; 07:4B4B
     ld   a,[$D2E4]                  ; 07:4B4C
@@ -1624,21 +1624,21 @@ Code074B7A:
     add  hl,bc                      ; 07:4BAD
     ld   [hl],a                     ; 07:4BAE
     ld   hl,Data074AD4              ; 07:4BAF
-    call Sub0027BD                  ; 07:4BB2
+    call Disp16x16Sprite            ; 07:4BB2
     ld   hl,W_SpriteYLow            ; 07:4BB5
     add  hl,bc                      ; 07:4BB8
     ld   a,[hl]                     ; 07:4BB9
     add  $10                        ; 07:4BBA
     ld   [hl],a                     ; 07:4BBC
     ld   hl,Data074AD4              ; 07:4BBD
-    call Sub0027BD                  ; 07:4BC0
+    call Disp16x16Sprite            ; 07:4BC0
     ld   hl,W_SpriteYLow            ; 07:4BC3
     add  hl,bc                      ; 07:4BC6
     ld   a,[hl]                     ; 07:4BC7
     add  $10                        ; 07:4BC8
     ld   [hl],a                     ; 07:4BCA
     ld   hl,Data074AD8              ; 07:4BCB
-    call Sub0027BD                  ; 07:4BCE
+    call Disp16x16Sprite            ; 07:4BCE
     ld   hl,W_SpriteXLow            ; 07:4BD1
     add  hl,bc                      ; 07:4BD4
     ld   a,[$D2E0]                  ; 07:4BD5
@@ -1659,7 +1659,7 @@ Sub074BED:
     ld   hl,W_SpriteSubstate        ; 07:4BED
     add  hl,bc                      ; 07:4BF0
     ld   a,[hl]                     ; 07:4BF1
-    rst  $00                        ; 07:4BF2
+    rst  $00                        ; 07:4BF2  Execute from 16-bit pointer table
 .dw Code074CA7                      ; 07:4BF3
 .dw Code074EA9                      ; 07:4BF5
 .dw Code075057                      ; 07:4BF7
@@ -1753,10 +1753,10 @@ Code074C66:
     ld   hl,W_SpriteXLow            ; 07:4C7E
     add  hl,bc                      ; 07:4C81
     ld   e,[hl]                     ; 07:4C82
-    ldh  a,[<$FFA7]                 ; 07:4C83
+    ldh  a,[<H_PlayerXLow]          ; 07:4C83
     add  $10                        ; 07:4C85
     ldh  [<$FF97],a                 ; 07:4C87
-    ldh  a,[<$FFA8]                 ; 07:4C89
+    ldh  a,[<H_PlayerXHigh]         ; 07:4C89
     adc  $00                        ; 07:4C8B
     ldh  [<$FF98],a                 ; 07:4C8D
     ld   hl,$FF97                   ; 07:4C8F
@@ -1768,9 +1768,9 @@ Code074C66:
     bit  7,a                        ; 07:4C99
     ret  z                          ; 07:4C9B
     ld   a,[$C1CA]                  ; 07:4C9C
-    ldh  [<$FFA7],a                 ; 07:4C9F
+    ldh  [<H_PlayerXLow],a          ; 07:4C9F
     ld   a,[$C1CB]                  ; 07:4CA1
-    ldh  [<$FFA8],a                 ; 07:4CA4
+    ldh  [<H_PlayerXHigh],a         ; 07:4CA4
     ret                             ; 07:4CA6
 
 Code074CA7:
@@ -1787,19 +1787,19 @@ Sub074CB4:
     ld   hl,W_SpriteXLow            ; 07:4CB9
     add  hl,bc                      ; 07:4CBC
     ld   e,[hl]                     ; 07:4CBD
-    ldh  a,[<$FFAA]                 ; 07:4CBE
+    ldh  a,[<H_PlayerYHigh]         ; 07:4CBE
     bit  7,a                        ; 07:4CC0
     jr   nz,Code074CCC              ; 07:4CC2
     cp   $01                        ; 07:4CC4
     ret  z                          ; 07:4CC6
-    ldh  a,[<$FFA9]                 ; 07:4CC7
+    ldh  a,[<H_PlayerYLow]          ; 07:4CC7
     cp   $F0                        ; 07:4CC9
     ret  nc                         ; 07:4CCB
 Code074CCC:
-    ldh  a,[<$FFA7]                 ; 07:4CCC
+    ldh  a,[<H_PlayerXLow]          ; 07:4CCC
     add  $11                        ; 07:4CCE
     ldh  [<$FF97],a                 ; 07:4CD0
-    ldh  a,[<$FFA8]                 ; 07:4CD2
+    ldh  a,[<H_PlayerXHigh]         ; 07:4CD2
     adc  $00                        ; 07:4CD4
     ldh  [<$FF98],a                 ; 07:4CD6
     ld   hl,$FF97                   ; 07:4CD8
@@ -1827,29 +1827,29 @@ Code074CCC:
     ld   [$C1C3],a                  ; 07:4D05
     ld   a,e                        ; 07:4D08
     add  $F0                        ; 07:4D09
-    ldh  [<$FFA7],a                 ; 07:4D0B
+    ldh  [<H_PlayerXLow],a          ; 07:4D0B
     ld   a,d                        ; 07:4D0D
     adc  $FF                        ; 07:4D0E
-    ldh  [<$FFA8],a                 ; 07:4D10
+    ldh  [<H_PlayerXHigh],a         ; 07:4D10
     ld   a,$46                      ; 07:4D12
     ldh  [<$FFF2],a                 ; 07:4D14
     ld   a,$00                      ; 07:4D16
     ld   [$C181],a                  ; 07:4D18
-    ldh  a,[<$FFAA]                 ; 07:4D1B
+    ldh  a,[<H_PlayerYHigh]         ; 07:4D1B
     bit  7,a                        ; 07:4D1D
     jr   nz,Code074D27              ; 07:4D1F
-    ldh  a,[<$FFA9]                 ; 07:4D21
+    ldh  a,[<H_PlayerYLow]          ; 07:4D21
     cp   $20                        ; 07:4D23
     jr   nc,Code074D2E              ; 07:4D25
 Code074D27:
     ld   a,$20                      ; 07:4D27
-    ldh  [<$FFA9],a                 ; 07:4D29
+    ldh  [<H_PlayerYLow],a          ; 07:4D29
     xor  a                          ; 07:4D2B
-    ldh  [<$FFAA],a                 ; 07:4D2C
+    ldh  [<H_PlayerYHigh],a         ; 07:4D2C
 Code074D2E:
     ld   hl,$D11D                   ; 07:4D2E
     add  hl,bc                      ; 07:4D31
-    ldh  a,[<$FFA9]                 ; 07:4D32
+    ldh  a,[<H_PlayerYLow]          ; 07:4D32
     ld   [hl],a                     ; 07:4D34
     call Sub074E79                  ; 07:4D35
     ld   a,[W_GameMode]             ; 07:4D38
@@ -2098,7 +2098,7 @@ Code074ECA:
     jr   Code074EF4                 ; 07:4ED2
 Code074ED4:
     push af                         ; 07:4ED4
-    ldh  a,[<$FFA9]                 ; 07:4ED5
+    ldh  a,[<H_PlayerYLow]          ; 07:4ED5
     cp   $C0                        ; 07:4ED7
     jr   z,Code074EF3               ; 07:4ED9
     ldh  a,[<H_GlobalTimer]         ; 07:4EDB
@@ -2119,7 +2119,7 @@ Code074EF4:
     ld   hl,$FF99                   ; 07:4EF4
     sub  [hl]                       ; 07:4EF7
     ld   [hl],a                     ; 07:4EF8
-    ldh  a,[<$FFA9]                 ; 07:4EF9
+    ldh  a,[<H_PlayerYLow]          ; 07:4EF9
     ld   [$C1CC],a                  ; 07:4EFB
     add  [hl]                       ; 07:4EFE
     cp   $C0                        ; 07:4EFF
@@ -2127,18 +2127,18 @@ Code074EF4:
     inc  e                          ; 07:4F03
     ld   a,$C0                      ; 07:4F04
 Code074F06:
-    ldh  [<$FFA9],a                 ; 07:4F06
+    ldh  [<H_PlayerYLow],a          ; 07:4F06
     ld   hl,$C1CC                   ; 07:4F08
     sub  [hl]                       ; 07:4F0B
     ld   [$C1D7],a                  ; 07:4F0C
     ld   a,[$C27D]                  ; 07:4F0F
-    ldh  [<$FFBA],a                 ; 07:4F12
+    ldh  [<H_CameraY],a             ; 07:4F12
     ld   a,[$C27E]                  ; 07:4F14
     ldh  [<$FFBB],a                 ; 07:4F17
     push bc                         ; 07:4F19
     push de                         ; 07:4F1A
     ld   a,$07                      ; 07:4F1B
-    rst  $10                        ; 07:4F1D
+    rst  $10                        ; 07:4F1D  24-bit call
 .dl SubL_0374C7                     ; 07:4F1E
     pop  de                         ; 07:4F21
     pop  bc                         ; 07:4F22
@@ -2188,15 +2188,15 @@ Code074F5A:
     ldh  [<$FF97],a                 ; 07:4F6A
     ld   a,[hl]                     ; 07:4F6C
     ldh  [<$FF98],a                 ; 07:4F6D
-    call Sub002E30                  ; 07:4F6F
-    call Sub002ED7                  ; 07:4F72
+    call GivePointsFF97             ; 07:4F6F
+    call SpawnScoreSprite           ; 07:4F72
 Return074F75:
     ret                             ; 07:4F75
 
 Code074F76:
     push bc                         ; 07:4F76
     ld   a,$07                      ; 07:4F77
-    rst  $10                        ; 07:4F79
+    rst  $10                        ; 07:4F79  24-bit call
 .dl SubL_075D06                     ; 07:4F7A
     pop  bc                         ; 07:4F7D
     ret                             ; 07:4F7E
@@ -2305,16 +2305,16 @@ Code075007:
     xor  a                          ; 07:501A
     ld   [$C366],a                  ; 07:501B
     ld   a,[$C27D]                  ; 07:501E
-    ldh  [<$FFBA],a                 ; 07:5021
+    ldh  [<H_CameraY],a             ; 07:5021
     ld   a,[$C27E]                  ; 07:5023
     ldh  [<$FFBB],a                 ; 07:5026
     push bc                         ; 07:5028
     push de                         ; 07:5029
     ld   a,$07                      ; 07:502A
-    rst  $10                        ; 07:502C
+    rst  $10                        ; 07:502C  24-bit call
 .dl SubL_037813                     ; 07:502D
     ld   a,$07                      ; 07:5030
-    rst  $10                        ; 07:5032
+    rst  $10                        ; 07:5032  24-bit call
 .dl SubL_0374C7                     ; 07:5033
     pop  de                         ; 07:5036
     pop  bc                         ; 07:5037
@@ -2370,12 +2370,12 @@ Code075079:
 Code075083:
     ld   a,$00                      ; 07:5083
     ld   [$C1C3],a                  ; 07:5085
-    ldh  a,[<$FFA7]                 ; 07:5088
+    ldh  a,[<H_PlayerXLow]          ; 07:5088
     add  $10                        ; 07:508A
-    ldh  [<$FFA7],a                 ; 07:508C
-    ldh  a,[<$FFA8]                 ; 07:508E
+    ldh  [<H_PlayerXLow],a          ; 07:508C
+    ldh  a,[<H_PlayerXHigh]         ; 07:508E
     adc  $00                        ; 07:5090
-    ldh  [<$FFA8],a                 ; 07:5092
+    ldh  [<H_PlayerXHigh],a         ; 07:5092
     ld   hl,W_SpriteSubstate        ; 07:5094
     add  hl,bc                      ; 07:5097
     inc  [hl]                       ; 07:5098
@@ -2393,7 +2393,7 @@ Code075083:
 
 Sub0750B0:
     ld   a,$46                      ; 07:50B0
-    call Sub0026BE                  ; 07:50B2
+    call LoadSpriteAnySlot          ; 07:50B2
     jr   c,Return075119             ; 07:50B5
     ld   a,$20                      ; 07:50B7
     ld   [$C3B0],a                  ; 07:50B9
@@ -2456,7 +2456,7 @@ Return075119:
 Return07511A:
     ret                             ; 07:511A
 
-Data07511B:                         ; 07:511B
+Boo_Tilemap:                        ; 07:511B
 .db $76,$03,$78,$03,$78,$23,$76,$23,\
     $8E,$23,$7A,$23,$7A,$03,$8E,$03
 Code07512B:
@@ -2476,7 +2476,7 @@ Sub07513E:
     ld   hl,W_SpriteSubstate        ; 07:513E
     add  hl,bc                      ; 07:5141
     ld   a,[hl]                     ; 07:5142
-    rst  $00                        ; 07:5143
+    rst  $00                        ; 07:5143  Execute from 16-bit pointer table
 .dw Code075154                      ; 07:5144
 .dw Return07530A                    ; 07:5146
 .dw Code075304                      ; 07:5148
@@ -2688,11 +2688,11 @@ Sub075292:
     ld   a,$00                      ; 07:52A0
     adc  d                          ; 07:52A2
     ld   d,a                        ; 07:52A3
-    ld   hl,$FFB8                   ; 07:52A4
+    ld   hl,H_CameraXLow            ; 07:52A4
     ld   a,e                        ; 07:52A7
     sub  [hl]                       ; 07:52A8
     ld   e,a                        ; 07:52A9
-    ld   hl,$FFB9                   ; 07:52AA
+    ld   hl,H_CameraXHigh           ; 07:52AA
     ld   a,d                        ; 07:52AD
     sbc  [hl]                       ; 07:52AE
     bit  7,a                        ; 07:52AF
@@ -2774,11 +2774,11 @@ Sub07530B:
     sla  a                          ; 07:5320
     ld   l,a                        ; 07:5322
     ld   h,$00                      ; 07:5323
-    ld   de,Data07511B              ; 07:5325
+    ld   de,Boo_Tilemap             ; 07:5325
     add  hl,de                      ; 07:5328
     pop  de                         ; 07:5329
     add  hl,de                      ; 07:532A
-    call Sub0027BD                  ; 07:532B
+    call Disp16x16Sprite            ; 07:532B
     ret                             ; 07:532E
 
 Sub07532F:
@@ -2859,7 +2859,7 @@ Code0753A4:
     ld   [hl],$00                   ; 07:53B3
     ld   hl,SRAMENABLE              ; 07:53B5
     ld   [hl],$FF                   ; 07:53B8
-    rst  $18                        ; 07:53BA
+    rst  $18                        ; 07:53BA  Return from 24-bit call
 
 SubL_0753BB:
     ld   hl,SRAMENABLE              ; 07:53BB
@@ -2979,7 +2979,7 @@ Code075478:
 Code07547D:
     ld   hl,SRAMENABLE              ; 07:547D
     ld   [hl],$FF                   ; 07:5480
-    rst  $18                        ; 07:5482
+    rst  $18                        ; 07:5482  Return from 24-bit call
 
 Original_InitialLives:              ; 07:5483
 .db $05,$0A
@@ -3005,7 +3005,7 @@ SubL_075485:
     ld   [$C17A],a                  ; 07:54B4
     ld   [$C17B],a                  ; 07:54B7
     ld   [$C17C],a                  ; 07:54BA
-    ld   [$C1F2],a                  ; 07:54BD
+    ld   [W_PlayerCoins],a          ; 07:54BD
     ld   [W_PlayerSize],a           ; 07:54C0
     ld   [W_PlayerFireFlag],a       ; 07:54C3
     ld   [$C287],a                  ; 07:54C6
@@ -3052,7 +3052,7 @@ Code0754FC:
     ld   [$C17A],a                  ; 07:5523
     ld   [$C17B],a                  ; 07:5526
     ld   [$C17C],a                  ; 07:5529
-    ld   [$C1F2],a                  ; 07:552C
+    ld   [W_PlayerCoins],a          ; 07:552C
     ld   hl,$A106                   ; 07:552F
     add  hl,de                      ; 07:5532
     ld   a,[hl]                     ; 07:5533
@@ -3093,11 +3093,11 @@ Code0754FC:
 Code07557E:
     ld   hl,SRAMENABLE              ; 07:557E
     ld   [hl],$FF                   ; 07:5581
-    rst  $18                        ; 07:5583
+    rst  $18                        ; 07:5583  Return from 24-bit call
 
 SubL_075584:
     call Sub075588                  ; 07:5584
-    rst  $18                        ; 07:5587
+    rst  $18                        ; 07:5587  Return from 24-bit call
 
 Sub075588:
     ld   a,[W_HardFlag]             ; 07:5588
@@ -3148,7 +3148,7 @@ Code07559B:
     ld   [hl],a                     ; 07:55E3
     ld   hl,$A105                   ; 07:55E4
     add  hl,de                      ; 07:55E7
-    ld   a,[$C1F2]                  ; 07:55E8
+    ld   a,[W_PlayerCoins]          ; 07:55E8
     ld   [hl],a                     ; 07:55EB
     ld   hl,$A106                   ; 07:55EC
     add  hl,de                      ; 07:55EF
@@ -3242,7 +3242,7 @@ SubL_075669:
     ld   [hl],a                     ; 07:569A
     ld   hl,SRAMENABLE              ; 07:569B
     ld   [hl],$FF                   ; 07:569E
-    rst  $18                        ; 07:56A0
+    rst  $18                        ; 07:56A0  Return from 24-bit call
 
 Data0756A1:                         ; 07:56A1
 .db $07,$BF,$07,$0F,$07,$C5,$04,$15,\
@@ -3259,13 +3259,13 @@ SubL_0756D9:
     call Sub0757CD                  ; 07:56DE
     jp   c,Code07575D               ; 07:56E1
     xor  a                          ; 07:56E4
-    ld   [$C18E],a                  ; 07:56E5
-    ld   [$C18F],a                  ; 07:56E8
-    ld   [$C190],a                  ; 07:56EB
-    ld   [$C191],a                  ; 07:56EE
-    ld   [$C1A1],a                  ; 07:56F1
-    ld   [$C1A2],a                  ; 07:56F4
-    ld   [$C1A3],a                  ; 07:56F7
+    ld   [W_ChalUnlockFlags],a      ; 07:56E5
+    ld   [W_ChalUnlockFlags_x_2],a  ; 07:56E8
+    ld   [W_ChalUnlockFlags_x_3],a  ; 07:56EB
+    ld   [W_ChalUnlockFlags_x_4],a  ; 07:56EE
+    ld   [W_ChalTotalScoreLow],a    ; 07:56F1
+    ld   [W_ChalTotalScoreMid],a    ; 07:56F4
+    ld   [W_ChalTotalScoreHigh],a   ; 07:56F7
     ld   [$C192],a                  ; 07:56FA
     ld   [$C42D],a                  ; 07:56FD
     ld   [$C42E],a                  ; 07:5700
@@ -3318,21 +3318,21 @@ Code075745:
     ld   [hl],$05                   ; 07:5758
     jp   Code0757F4                 ; 07:575A
 Code07575D:
-    ld   hl,$A370                   ; 07:575D
+    ld   hl,$A370                   ; 07:575D \ load level unlock flags ($A370 to $C18E)
     ldi  a,[hl]                     ; 07:5760
-    ld   [$C18E],a                  ; 07:5761
+    ld   [W_ChalUnlockFlags],a      ; 07:5761
     ldi  a,[hl]                     ; 07:5764
-    ld   [$C18F],a                  ; 07:5765
+    ld   [W_ChalUnlockFlags_x_2],a  ; 07:5765
     ldi  a,[hl]                     ; 07:5768
-    ld   [$C190],a                  ; 07:5769
+    ld   [W_ChalUnlockFlags_x_3],a  ; 07:5769
     ldi  a,[hl]                     ; 07:576C
-    ld   [$C191],a                  ; 07:576D
-    ldi  a,[hl]                     ; 07:5770
-    ld   [$C1A1],a                  ; 07:5771
+    ld   [W_ChalUnlockFlags_x_4],a  ; 07:576D /
+    ldi  a,[hl]                     ; 07:5770 \ load total high score ($A374 to $C1A1)
+    ld   [W_ChalTotalScoreLow],a    ; 07:5771
     ldi  a,[hl]                     ; 07:5774
-    ld   [$C1A2],a                  ; 07:5775
+    ld   [W_ChalTotalScoreMid],a    ; 07:5775
     ld   a,[hl]                     ; 07:5778
-    ld   [$C1A3],a                  ; 07:5779
+    ld   [W_ChalTotalScoreHigh],a   ; 07:5779 /
     ld   a,[$A37B]                  ; 07:577C
     ld   [$C192],a                  ; 07:577F
     ld   a,[$A3BF]                  ; 07:5782
@@ -3374,7 +3374,7 @@ Code0757C1:
     jr   nz,Code0757C1              ; 07:57C5
     ld   hl,SRAMENABLE              ; 07:57C7
     ld   [hl],$FF                   ; 07:57CA
-    rst  $18                        ; 07:57CC
+    rst  $18                        ; 07:57CC  Return from 24-bit call
 
 Sub0757CD:
     ld   hl,$A370                   ; 07:57CD
@@ -3404,19 +3404,19 @@ SubL_0757EF:
     ld   [hl],$0A                   ; 07:57F2
 Code0757F4:
     ld   hl,$A370                   ; 07:57F4
-    ld   a,[$C18E]                  ; 07:57F7
+    ld   a,[W_ChalUnlockFlags]      ; 07:57F7
     ldi  [hl],a                     ; 07:57FA
-    ld   a,[$C18F]                  ; 07:57FB
+    ld   a,[W_ChalUnlockFlags_x_2]  ; 07:57FB
     ldi  [hl],a                     ; 07:57FE
-    ld   a,[$C190]                  ; 07:57FF
+    ld   a,[W_ChalUnlockFlags_x_3]  ; 07:57FF
     ldi  [hl],a                     ; 07:5802
-    ld   a,[$C191]                  ; 07:5803
+    ld   a,[W_ChalUnlockFlags_x_4]  ; 07:5803
     ldi  [hl],a                     ; 07:5806
-    ld   a,[$C1A1]                  ; 07:5807
+    ld   a,[W_ChalTotalScoreLow]    ; 07:5807
     ldi  [hl],a                     ; 07:580A
-    ld   a,[$C1A2]                  ; 07:580B
+    ld   a,[W_ChalTotalScoreMid]    ; 07:580B
     ldi  [hl],a                     ; 07:580E
-    ld   a,[$C1A3]                  ; 07:580F
+    ld   a,[W_ChalTotalScoreHigh]   ; 07:580F
     ld   [hl],a                     ; 07:5812
     ld   a,[$C192]                  ; 07:5813
     ld   [$A37B],a                  ; 07:5816
@@ -3460,7 +3460,7 @@ Code075858:
     call Sub075875                  ; 07:585E
     ld   hl,SRAMENABLE              ; 07:5861
     ld   [hl],$FF                   ; 07:5864
-    rst  $18                        ; 07:5866
+    rst  $18                        ; 07:5866  Return from 24-bit call
 
 UnusedL_075867:
     ld   hl,SRAMENABLE              ; 07:5867
@@ -3468,7 +3468,7 @@ UnusedL_075867:
     call Sub075875                  ; 07:586C
     ld   hl,SRAMENABLE              ; 07:586F
     ld   [hl],$FF                   ; 07:5872
-    rst  $18                        ; 07:5874
+    rst  $18                        ; 07:5874  Return from 24-bit call
 
 Sub075875:
     ld   hl,$A3BE                   ; 07:5875
@@ -3505,7 +3505,7 @@ Code0758A5:
     ldh  [<SVBK],a                  ; 07:58AC
     ld   hl,SRAMENABLE              ; 07:58AE
     ld   [hl],$FF                   ; 07:58B1
-    rst  $18                        ; 07:58B3
+    rst  $18                        ; 07:58B3  Return from 24-bit call
 
 Sub0758B4:
     call Sub0758D1                  ; 07:58B4
@@ -3810,9 +3810,10 @@ Code075AFB:
     ldh  [<SVBK],a                  ; 07:5B08
     ld   hl,SRAMENABLE              ; 07:5B0A
     ld   [hl],$FF                   ; 07:5B0D
-    rst  $18                        ; 07:5B0F
+    rst  $18                        ; 07:5B0F  Return from 24-bit call
 
-SubL_075B10:
+SubL_LoadChalLevelSaveData:
+; subroutine (24-bit): Load current level's challenge mode save data
     ld   hl,SRAMENABLE              ; 07:5B10
     ld   [hl],$0A                   ; 07:5B13
     call Sub075B61                  ; 07:5B15
@@ -3821,40 +3822,40 @@ SubL_075B10:
 Code075B1D:
     ld   a,[W_LevelID]              ; 07:5B1D
     ld   e,a                        ; 07:5B20
-    ld   d,$00                      ; 07:5B21
-    ld   hl,$A30D                   ; 07:5B23
+    ld   d,$00                      ; 07:5B21  de = levelID
+    ld   hl,$A30D                   ; 07:5B23  SRAM red coin table
     add  hl,de                      ; 07:5B26
-    ld   a,[hl]                     ; 07:5B27
+    ld   a,[hl]                     ; 07:5B27  red coin count
     cp   $05                        ; 07:5B28
-    jr   c,Code075B2E               ; 07:5B2A
-    ld   a,$05                      ; 07:5B2C
+    jr   c,Code075B2E               ; 07:5B2A \ if red coins > 5, set to 5
+    ld   a,$05                      ; 07:5B2C /
 Code075B2E:
-    ld   [$C189],a                  ; 07:5B2E
-    ld   hl,$A32D                   ; 07:5B31
+    ld   [$C189],a                  ; 07:5B2E  set current level's best red coin count
+    ld   hl,$A32D                   ; 07:5B31  SRAM Yoshi egg table
     add  hl,de                      ; 07:5B34
     ld   a,[hl]                     ; 07:5B35
-    ld   [$C194],a                  ; 07:5B36
-    ld   hl,$A34D                   ; 07:5B39
+    ld   [$C194],a                  ; 07:5B36  set current level's Yoshi egg flag
+    ld   hl,$A34D                   ; 07:5B39  SRAM high score medal table
     add  hl,de                      ; 07:5B3C
     ld   a,[hl]                     ; 07:5B3D
-    ld   [$C18D],a                  ; 07:5B3E
+    ld   [$C18D],a                  ; 07:5B3E  set current level's high score medal flag
     ld   a,[W_LevelID]              ; 07:5B41
-    ld   e,a                        ; 07:5B44
-    sla  a                          ; 07:5B45
-    add  e                          ; 07:5B47
-    ld   e,a                        ; 07:5B48
-    ld   d,$00                      ; 07:5B49
-    ld   hl,$A2AD                   ; 07:5B4B
+    ld   e,a                        ; 07:5B44 \
+    sla  a                          ; 07:5B45 |
+    add  e                          ; 07:5B47 | de = levelID * 3
+    ld   e,a                        ; 07:5B48 |  (capped to 8-bit)
+    ld   d,$00                      ; 07:5B49 /
+    ld   hl,$A2AD                   ; 07:5B4B  SRAM high score table
     add  hl,de                      ; 07:5B4E
-    ldi  a,[hl]                     ; 07:5B4F
-    ld   [$C18A],a                  ; 07:5B50
-    ldi  a,[hl]                     ; 07:5B53
-    ld   [$C18B],a                  ; 07:5B54
-    ld   a,[hl]                     ; 07:5B57
-    ld   [$C18C],a                  ; 07:5B58
+    ldi  a,[hl]                     ; 07:5B4F \
+    ld   [$C18A],a                  ; 07:5B50 | set current level's high score
+    ldi  a,[hl]                     ; 07:5B53 |
+    ld   [$C18B],a                  ; 07:5B54 |
+    ld   a,[hl]                     ; 07:5B57 |
+    ld   [$C18C],a                  ; 07:5B58 /
     ld   hl,SRAMENABLE              ; 07:5B5B
     ld   [hl],$FF                   ; 07:5B5E
-    rst  $18                        ; 07:5B60
+    rst  $18                        ; 07:5B60  Return from 24-bit call
 
 Sub075B61:
     call Sub075B7F                  ; 07:5B61
@@ -3961,11 +3962,11 @@ SubL_075BB7:
     ld   [hl],a                     ; 07:5C0F
     ld   hl,SRAMENABLE              ; 07:5C10
     ld   [hl],$FF                   ; 07:5C13
-    rst  $18                        ; 07:5C15
+    rst  $18                        ; 07:5C15  Return from 24-bit call
 
 Data075C16:                         ; 07:5C16
 .dw $1239,$0F39,$0F19,$0DC4,$0F59,$0F89,$0F59,$0ECC
-Data075C26:                         ; 07:5C26
+YouVsBoo_InitialBestTimes:          ; 07:5C26
 .dw $0C9A,$0BCE,$0BA8,$0D93,$0D2A,$0D80,$0D01,$0E11
 
 Sub075C36:
@@ -4000,7 +4001,7 @@ Code075C5B:
     jr   nz,Code075C5B              ; 07:5C69
     ld   de,$0000                   ; 07:5C6B
 Code075C6E:
-    ld   hl,Data075C26              ; 07:5C6E
+    ld   hl,YouVsBoo_InitialBestTimes; 07:5C6E
     add  hl,de                      ; 07:5C71
     ld   a,[hl]                     ; 07:5C72
     ld   hl,$C3C6                   ; 07:5C73
@@ -4083,7 +4084,7 @@ SubL_075CCE:
     add  hl,de                      ; 07:5CEC
     ldi  [hl],a                     ; 07:5CED
     ld   [hl],b                     ; 07:5CEE
-    ld   hl,Data075C26              ; 07:5CEF
+    ld   hl,YouVsBoo_InitialBestTimes; 07:5CEF
     add  hl,de                      ; 07:5CF2
     ldi  a,[hl]                     ; 07:5CF3
     ld   b,[hl]                     ; 07:5CF4
@@ -4097,7 +4098,7 @@ SubL_075CCE:
     ldi  [hl],a                     ; 07:5D00
     ld   [hl],a                     ; 07:5D01
     call Sub075D36                  ; 07:5D02
-    rst  $18                        ; 07:5D05
+    rst  $18                        ; 07:5D05  Return from 24-bit call
 
 SubL_075D06:
     ld   a,[$C36B]                  ; 07:5D06
@@ -4115,9 +4116,9 @@ SubL_075D06:
     ld   d,$00                      ; 07:5D1A
     ld   hl,$C3B6                   ; 07:5D1C
     add  hl,de                      ; 07:5D1F
-    ldh  a,[<$FFA7]                 ; 07:5D20
+    ldh  a,[<H_PlayerXLow]          ; 07:5D20
     ldi  [hl],a                     ; 07:5D22
-    ldh  a,[<$FFA8]                 ; 07:5D23
+    ldh  a,[<H_PlayerXHigh]         ; 07:5D23
     ld   [hl],a                     ; 07:5D25
     ld   hl,$C3C6                   ; 07:5D26
     add  hl,de                      ; 07:5D29
@@ -4126,7 +4127,7 @@ SubL_075D06:
     ld   a,[$C3AF]                  ; 07:5D2E
     ld   [hl],a                     ; 07:5D31
     call Sub075D36                  ; 07:5D32
-    rst  $18                        ; 07:5D35
+    rst  $18                        ; 07:5D35  Return from 24-bit call
 
 Sub075D36:
     ld   hl,SRAMENABLE              ; 07:5D36
@@ -4244,7 +4245,7 @@ Code075DED:
     call CopyBytes                  ; 07:5DF3
     ld   hl,SRAMENABLE              ; 07:5DF6
     ld   [hl],$FF                   ; 07:5DF9
-    rst  $18                        ; 07:5DFB
+    rst  $18                        ; 07:5DFB  Return from 24-bit call
 
 SubL_075DFC:
     ld   hl,SRAMENABLE              ; 07:5DFC
@@ -4314,7 +4315,7 @@ Code075E5E:
     call CopyBytes                  ; 07:5E64
     ld   hl,SRAMENABLE              ; 07:5E67
     ld   [hl],$FF                   ; 07:5E6A
-    rst  $18                        ; 07:5E6C
+    rst  $18                        ; 07:5E6C  Return from 24-bit call
 
 SubL_075E6D:
     ld   hl,SRAMENABLE              ; 07:5E6D
@@ -4358,7 +4359,7 @@ SubL_075E6D:
     call CopyBytes                  ; 07:5EAE
     ld   hl,SRAMENABLE              ; 07:5EB1
     ld   [hl],$FF                   ; 07:5EB4
-    rst  $18                        ; 07:5EB6
+    rst  $18                        ; 07:5EB6  Return from 24-bit call
 
 SubL_075EB7:
     ld   hl,SRAMENABLE              ; 07:5EB7
@@ -4406,7 +4407,7 @@ SubL_075EB7:
     call CopyBytes                  ; 07:5EFC
     ld   hl,SRAMENABLE              ; 07:5EFF
     ld   [hl],$FF                   ; 07:5F02
-    rst  $18                        ; 07:5F04
+    rst  $18                        ; 07:5F04  Return from 24-bit call
 
 SRAMPtrs075F05:                     ; 07:5F05
 .dw $AF1D,$AF1D,$AF1D,$AF89,$AF89,$AFF5,$AFF5,$B061
@@ -4428,7 +4429,7 @@ SubL_075F15:
     call CopyBytes                  ; 07:5F2F
     ld   a,$FF                      ; 07:5F32
     ld   [SRAMENABLE],a             ; 07:5F34
-    rst  $18                        ; 07:5F37
+    rst  $18                        ; 07:5F37  Return from 24-bit call
 
 SubL_075F38:
     ld   a,$0A                      ; 07:5F38
@@ -4447,4 +4448,4 @@ SubL_075F38:
     call CopyBytes                  ; 07:5F52
     ld   hl,SRAMENABLE              ; 07:5F55
     ld   [hl],$FF                   ; 07:5F58
-    rst  $18                        ; 07:5F5A
+    rst  $18                        ; 07:5F5A  Return from 24-bit call

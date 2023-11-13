@@ -104,7 +104,8 @@ Code1D4099:
     ld   [de],a                     ; 1D:40A0
     ret                             ; 1D:40A1
 
-DataPtrs1D40A2:                     ; 1D:40A2
+MusicPtrs:                          ; 1D:40A2
+; indexed by musicID -$40
 .dw Data1D5125, Data1D5125, Data1D5125, Data1D5125,\
     Data1D5125, Data1D5125, Data1D5125, Data1D5125,\
     Data1D5125, Data1D5125, Data1D5125, Data1D5125,\
@@ -123,6 +124,8 @@ DataPtrs1D40A2:                     ; 1D:40A2
     Data1D77EF, Data1D7ABD, Data1D7D7C
 
 Sub1D4120:
+; Subroutine: Load music pointer
+; e: music ID, hl: MusicPtrs
     inc  e                          ; 1D:4120
     dec  a                          ; 1D:4121
     sla  a                          ; 1D:4122
@@ -151,6 +154,7 @@ Code1D4132:
     ret                             ; 1D:413B
 
 Sub1D413C:
+; subroutine: related to music initialization
     xor  a                          ; 1D:413C
     ld   [$DE79],a                  ; 1D:413D
     ld   [$DE4F],a                  ; 1D:4140
@@ -278,6 +282,7 @@ Sub1D4192:
     $00,$00,$00,$00,$01,$00
 
 @Code1D4238:
+; starts with music ID +22 in A
     ld   b,a                        ; 1D:4238
     sub  $22                        ; 1D:4239
     ld   hl,@Data1D421A             ; 1D:423B
@@ -301,7 +306,7 @@ Sub1D4192:
     ld   a,b                        ; 1D:4256
     ld   [hl],a                     ; 1D:4257
     ld   b,a                        ; 1D:4258
-    ld   hl,DataPtrs1D40A2          ; 1D:4259
+    ld   hl,MusicPtrs               ; 1D:4259
     and  $7F                        ; 1D:425C
     call Sub1D4120                  ; 1D:425E
     call Sub1D446D                  ; 1D:4261
@@ -1709,6 +1714,7 @@ Code1D4DA2:
     ld   [$DE69],a                  ; 1D:4DCD
 
 Sub1D4DD0:
+; subroutine: related to music initialization
     xor  a                          ; 1D:4DD0
     ld   [$DE61],a                  ; 1D:4DD1
     ld   [$DE71],a                  ; 1D:4DD4

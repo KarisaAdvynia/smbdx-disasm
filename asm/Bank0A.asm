@@ -39,7 +39,7 @@ DataPtrs0A4E9A:                     ; 0A:4E9A
 AlbumMain:
 ; Game state 2C
     ldh  a,[<H_GameSubstate]        ; 0A:4EA4
-    rst  $00                        ; 0A:4EA6
+    rst  $00                        ; 0A:4EA6  Execute from 16-bit pointer table
 .dw Code0A4EC6                      ; 0A:4EA7
 .dw Code0A4F18                      ; 0A:4EA9
 .dw Code0A53F8                      ; 0A:4EAB
@@ -68,7 +68,7 @@ Code0A4EC6:
     ld   bc,$0077                   ; 0A:4ED1
     call ClearBytes                 ; 0A:4ED4
     ld   a,$0A                      ; 0A:4ED7
-    rst  $10                        ; 0A:4ED9
+    rst  $10                        ; 0A:4ED9  24-bit call
 .dl SubL_0756D9                     ; 0A:4EDA
     ld   a,[$C42C]                  ; 0A:4EDD
     and  $01                        ; 0A:4EE0
@@ -91,7 +91,7 @@ Code0A4EC6:
     or   $01                        ; 0A:4EFF
     ld   [hl],a                     ; 0A:4F01
     ld   a,$0A                      ; 0A:4F02
-    rst  $10                        ; 0A:4F04
+    rst  $10                        ; 0A:4F04  24-bit call
 .dl SubL_0757EF                     ; 0A:4F05
 Code0A4F08:
     ld   a,$02                      ; 0A:4F08
@@ -169,9 +169,9 @@ Code0A4F20:
     ld   a,$90                      ; 0A:4FB5
     ld   [$C178],a                  ; 0A:4FB7
     xor  a                          ; 0A:4FBA
-    ldh  [<$FFB8],a                 ; 0A:4FBB
-    ldh  [<$FFB9],a                 ; 0A:4FBD
-    ldh  [<$FFBA],a                 ; 0A:4FBF
+    ldh  [<H_CameraXLow],a          ; 0A:4FBB
+    ldh  [<H_CameraXHigh],a         ; 0A:4FBD
+    ldh  [<H_CameraY],a             ; 0A:4FBF
     ldh  [<$FFBB],a                 ; 0A:4FC1
     ld   [$C177],a                  ; 0A:4FC3
     ld   a,$08                      ; 0A:4FC6
@@ -202,7 +202,7 @@ Sub0A4FE2:
     ld   a,$0A                      ; 0A:4FF6
     call LoadScreenTilemapD000      ; 0A:4FF8
     ld   a,[$D900]                  ; 0A:4FFB
-    rst  $00                        ; 0A:4FFE
+    rst  $00                        ; 0A:4FFE  Execute from 16-bit pointer table
 .dw Code0A5013                      ; 0A:4FFF
 .dw Code0A50A9                      ; 0A:5001
 .dw Code0A50A9                      ; 0A:5003
@@ -485,7 +485,7 @@ Sub0A51B0:
     ld   a,$17                      ; 0A:51B0
     ld   [$C415],a                  ; 0A:51B2
     ld   a,[$D900]                  ; 0A:51B5
-    rst  $00                        ; 0A:51B8
+    rst  $00                        ; 0A:51B8  Execute from 16-bit pointer table
 .dw Code0A51C3                      ; 0A:51B9
 .dw Code0A5228                      ; 0A:51BB
 .dw Code0A5228                      ; 0A:51BD
@@ -1449,7 +1449,7 @@ Code0A5CC4:
     ldi  a,[hl]                     ; 0A:5CD1
     ld   h,[hl]                     ; 0A:5CD2
     ld   l,a                        ; 0A:5CD3
-    ld   de,$DFC0                   ; 0A:5CD4
+    ld   de,W_PaletteBufferSpr      ; 0A:5CD4
     ld   bc,$0008                   ; 0A:5CD7
     call CopyBytes                  ; 0A:5CDA
     ld   a,$01                      ; 0A:5CDD
@@ -1599,7 +1599,7 @@ Code0A5DB2:
 
 Sub0A5DC4:
     ld   a,[$D900]                  ; 0A:5DC4
-    rst  $00                        ; 0A:5DC7
+    rst  $00                        ; 0A:5DC7  Execute from 16-bit pointer table
 .dw Code0A5DF0                      ; 0A:5DC8
 .dw Code0A5EE7                      ; 0A:5DCA
 .dw Code0A5EE7                      ; 0A:5DCC
@@ -2666,10 +2666,10 @@ Code0A6C67:
     ldh  [<IE],a                    ; 0A:6C6B
     ldh  [<$FF93],a                 ; 0A:6C6D
     ld   a,$0A                      ; 0A:6C6F
-    rst  $10                        ; 0A:6C71
+    rst  $10                        ; 0A:6C71  24-bit call
 .dl SubL_0757EF                     ; 0A:6C72
     ld   a,$0A                      ; 0A:6C75
-    rst  $10                        ; 0A:6C77
+    rst  $10                        ; 0A:6C77  24-bit call
 .dl SubL_075D90                     ; 0A:6C78
     ld   a,[$D90F]                  ; 0A:6C7B
     sla  a                          ; 0A:6C7E
@@ -2755,9 +2755,9 @@ Code0A6C67:
     ld   a,$0A                      ; 0A:6D1E
     call Sub000FCF                  ; 0A:6D20
     xor  a                          ; 0A:6D23
-    ldh  [<$FFB8],a                 ; 0A:6D24
-    ldh  [<$FFB9],a                 ; 0A:6D26
-    ldh  [<$FFBA],a                 ; 0A:6D28
+    ldh  [<H_CameraXLow],a          ; 0A:6D24
+    ldh  [<H_CameraXHigh],a         ; 0A:6D26
+    ldh  [<H_CameraY],a             ; 0A:6D28
     ldh  [<$FFBB],a                 ; 0A:6D2A
     ld   [$C431],a                  ; 0A:6D2C
     ld   [$C418],a                  ; 0A:6D2F
@@ -3269,9 +3269,9 @@ Code0A71C6:
     call LoadFullPaletteLong        ; 0A:7220
     call Sub000E29                  ; 0A:7223
     xor  a                          ; 0A:7226
-    ldh  [<$FFB8],a                 ; 0A:7227
-    ldh  [<$FFB9],a                 ; 0A:7229
-    ldh  [<$FFBA],a                 ; 0A:722B
+    ldh  [<H_CameraXLow],a          ; 0A:7227
+    ldh  [<H_CameraXHigh],a         ; 0A:7229
+    ldh  [<H_CameraY],a             ; 0A:722B
     ldh  [<$FFBB],a                 ; 0A:722D
     ld   [$C4EC],a                  ; 0A:722F
     ld   [$C418],a                  ; 0A:7232
@@ -3407,7 +3407,7 @@ Code0A7396:
     ldh  [<IE],a                    ; 0A:739A
     ldh  [<$FF93],a                 ; 0A:739C
     ld   a,$0A                      ; 0A:739E
-    rst  $10                        ; 0A:73A0
+    rst  $10                        ; 0A:73A0  24-bit call
 .dl SubL_075D90                     ; 0A:73A1
     ld   a,$21                      ; 0A:73A4
     ld   [$C415],a                  ; 0A:73A6
@@ -3461,9 +3461,9 @@ Code0A7396:
     ld   a,$0A                      ; 0A:7424
     call Sub000FCF                  ; 0A:7426
     xor  a                          ; 0A:7429
-    ldh  [<$FFB8],a                 ; 0A:742A
-    ldh  [<$FFB9],a                 ; 0A:742C
-    ldh  [<$FFBA],a                 ; 0A:742E
+    ldh  [<H_CameraXLow],a          ; 0A:742A
+    ldh  [<H_CameraXHigh],a         ; 0A:742C
+    ldh  [<H_CameraY],a             ; 0A:742E
     ldh  [<$FFBB],a                 ; 0A:7430
     ld   [$C177],a                  ; 0A:7432
     ld   a,$01                      ; 0A:7435
