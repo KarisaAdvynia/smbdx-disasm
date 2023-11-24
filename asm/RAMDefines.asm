@@ -82,22 +82,48 @@
 .define H_PlInitY_SubLvType   $FFC2 ; high digit is player initial Y, low digit is sublevel type
 
 ; WRAM bank 0
+.define W_OAMBuffer           $C000
+.define W_NonGBCError         $C0C0
 .define W_SPFlag              $C160
 .define W_SubLvScreenCount    $C161
 .define W_SublevelID          $C162
 .define W_LevelID             $C163
 .define W_HardFlag            $C166
+.define W_SaveFileNum         $C16B
+.define W_PlayerScoreLow      $C17A
+.define W_PlayerScoreMid      $C17B
+.define W_PlayerScoreHigh     $C17C
 .define W_LevelTimerLow       $C17D
 .define W_LevelTimerHigh      $C17E
 .define W_PlayerLives         $C17F
+.define W_RedCoinsCurrent     $C188
+.define W_RedCoinsBest        $C189
+.define W_ChalLvHiScoreLow    $C18A
+.define W_ChalLvHiScoreMid    $C18B
+.define W_ChalLvHiScoreHigh   $C18C
+.define W_HighScoreMedalFlag  $C18D
 .define W_ChalUnlockFlags     $C18E
 .define W_ChalUnlockFlags_x_2 $C18F
 .define W_ChalUnlockFlags_x_3 $C190
 .define W_ChalUnlockFlags_x_4 $C191
+.define W_ModeUnlockFlags     $C192
+.define W_YoshiEggItemFlag    $C193
+.define W_YoshiEggMedalFlag   $C194
+.define W_ChalMedalsToAdd     $C197
+.define W_TotalRedCoinMedals  $C198
+.define W_TotalHighScMedals   $C19C
+.define W_TotalYoshiEggMedals $C19D
+.define W_ChalLvTargetScLow   $C19E
+.define W_ChalLvTargetScMid   $C19F
+.define W_ChalLvTargetScHigh  $C1A0
 .define W_ChalTotalScoreLow   $C1A1
 .define W_ChalTotalScoreMid   $C1A2
 .define W_ChalTotalScoreHigh  $C1A3
+.define W_ChalDispTotalScLow  $C1A4
+.define W_ChalDispTotalScMid  $C1A5
+.define W_ChalDispTotalScHigh $C1A6
 .define W_GameMode            $C1A8
+.define W_AwardToGive         $C1B0
 .define W_PlayerState         $C1C1
 .define W_PlayerSize          $C1C5
 .define W_PlayerFireFlag      $C1CE
@@ -105,8 +131,12 @@
 .define W_PitScreenExitFlag   $C1E6
 .define W_PlayerCoins         $C1F2
 .define W_ChallengeFlag       $C283
+.define W_ChalScoreBarPixels  $C35D
 .define W_CurrentPlayer       $C383
 .define W_RaceHeaderFlags     $C3A2
+.define W_ScoreTileBuffer     $C34F
+.define W_AlbumUnlockFlags    $C429
+.define W_AlbumViewFlags      $C42D
 
 ; WRAM bank 1
 .enum $D000
@@ -161,9 +191,9 @@ W_SpriteD2C1         dsb $0F        ; $1:D2C1
 W_SpriteD2D0         dsb $0F        ; $1:D2D0
 .ende
 
-.define W_TilemapUploadBuffer $DF01
-.define W_PaletteBuffer       $DF80
-.define W_PaletteBufferSpr    $DFC0
+.define W_TiUpBuffer          $DF01
+.define W_PalBuffer           $DF80
+.define W_PalBufferSpr        $DFC0
 
 ; WRAM bank 2-3
 .define W_SubLvSprTilemap     $D000

@@ -572,9 +572,9 @@ Code1366B5:
     inc  [hl]                       ; 13:66C3
     ret                             ; 13:66C4
 
-Data1366C5:                         ; 13:66C5
+TiUp_1366C5:                        ; 13:66C5
 .db $9A,$26,$02,$00,$00,$00,$00,$00
-Data1366CD:                         ; 13:66CD
+TiUp_1366CD:                        ; 13:66CD
 .db $9A,$32,$02,$00,$00,$00,$00,$00
 Data1366D5:                         ; 13:66D5
 .db $00,$80,$80,$00
@@ -586,6 +586,7 @@ Sub1366D9:
 .dw Code136712                      ; 13:66DF
 .dw Code136739                      ; 13:66E1
 .dw Code136789                      ; 13:66E3
+
 Code1366E5:
     ld   hl,$C389                   ; 13:66E5
     ld   a,[hl]                     ; 13:66E8
@@ -736,12 +737,12 @@ Sub1367D0:
     ld   d,$00                      ; 13:67D4
     ld   c,e                        ; 13:67D6
     ld   b,d                        ; 13:67D7
-    ld   hl,W_TilemapUploadBuffer   ; 13:67D8
+    ld   hl,W_TiUpBuffer            ; 13:67D8
     add  hl,de                      ; 13:67DB
     ld   e,$00                      ; 13:67DC
 Code1367DE:
     push hl                         ; 13:67DE
-    ld   hl,Data1366C5              ; 13:67DF
+    ld   hl,TiUp_1366C5             ; 13:67DF
     add  hl,de                      ; 13:67E2
     ld   a,[hl]                     ; 13:67E3
     pop  hl                         ; 13:67E4
@@ -758,12 +759,12 @@ Sub1367EE:
     ld   d,$00                      ; 13:67F2
     ld   c,e                        ; 13:67F4
     ld   b,d                        ; 13:67F5
-    ld   hl,W_TilemapUploadBuffer   ; 13:67F6
+    ld   hl,W_TiUpBuffer            ; 13:67F6
     add  hl,de                      ; 13:67F9
     ld   e,$00                      ; 13:67FA
 Code1367FC:
     push hl                         ; 13:67FC
-    ld   hl,Data1366CD              ; 13:67FD
+    ld   hl,TiUp_1366CD             ; 13:67FD
     add  hl,de                      ; 13:6800
     ld   a,[hl]                     ; 13:6801
     pop  hl                         ; 13:6802
@@ -782,13 +783,13 @@ Code13680A:
     jr   z,Code136820               ; 13:6816
     ld   a,d                        ; 13:6818
     or   $40                        ; 13:6819
-    ld   hl,$DF05                   ; 13:681B
+    ld   hl,W_TiUpBuffer+$04        ; 13:681B
     add  hl,bc                      ; 13:681E
     ld   [hl],a                     ; 13:681F
 Code136820:
     ld   a,e                        ; 13:6820
     or   $40                        ; 13:6821
-    ld   hl,$DF07                   ; 13:6823
+    ld   hl,W_TiUpBuffer+$06        ; 13:6823
     add  hl,bc                      ; 13:6826
     ld   [hl],a                     ; 13:6827
     ret                             ; 13:6828
@@ -1129,7 +1130,7 @@ Code136A6A:
     ld   hl,Data136A40              ; 13:6A6A
     add  hl,de                      ; 13:6A6D
     ld   a,[hl]                     ; 13:6A6E
-    ld   hl,W_TilemapUploadBuffer   ; 13:6A6F
+    ld   hl,W_TiUpBuffer            ; 13:6A6F
     add  hl,de                      ; 13:6A72
     ld   [hl],a                     ; 13:6A73
     inc  de                         ; 13:6A74

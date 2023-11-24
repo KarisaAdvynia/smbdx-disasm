@@ -2,6 +2,7 @@
 .orga $4000
 
 Return024000:
+; sprite 01,0A-0E,1D-1E,20-21,23,25,2F-30,35,3D-41,43-45,48 init, 49-4C,4E-4F main
     ret                             ; 02:4000
 
 Data024001:                         ; 02:4001
@@ -105,7 +106,8 @@ SubL_024030:
 ReturnL_0240A5:
     rst  $18                        ; 02:40A5  Return from 24-bit call
 
-Code0240A6:
+MarioFireball_Main:
+; sprite 0D main
     call Sub0025CB                  ; 02:40A6
     jp   c,Code0240C5               ; 02:40A9
     call Sub002920                  ; 02:40AC
@@ -745,7 +747,9 @@ Data0244E7:                         ; 02:44E7
     $88,$07,$8A,$07
 Data0244F3:                         ; 02:44F3
 .db $F0,$10
-Code0244F5:
+
+BounceSpr01_Main:
+; sprite 01 main
     call Sub0025CB                  ; 02:44F5
     jp   c,Code0245BD               ; 02:44F8
     call Sub0245DF                  ; 02:44FB
@@ -886,11 +890,11 @@ Sub0245DF:
     jr   z,Code0245F7               ; 02:45EA
     cp   $04                        ; 02:45EC
     jr   nz,Code0245FC              ; 02:45EE
-    ld   hl,$C42A                   ; 02:45F0
+    ld   hl,W_AlbumUnlockFlags+1    ; 02:45F0
     set  1,[hl]                     ; 02:45F3
     jr   Code0245FC                 ; 02:45F5
 Code0245F7:
-    ld   hl,$C42B                   ; 02:45F7
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:45F7
     set  5,[hl]                     ; 02:45FA
 Code0245FC:
     call Sub024686                  ; 02:45FC
@@ -1000,14 +1004,14 @@ Code02469A:
     jr   z,Code0246B2               ; 02:46A0
     cp   $31                        ; 02:46A2
     jr   nz,Code0246D4              ; 02:46A4
-    ld   hl,$C42B                   ; 02:46A6
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:46A6
     set  1,[hl]                     ; 02:46A9
     ld   hl,W_SpriteSubstate        ; 02:46AB
     add  hl,de                      ; 02:46AE
     ld   a,[hl]                     ; 02:46AF
     jr   Code0246CE                 ; 02:46B0
 Code0246B2:
-    ld   hl,$C42B                   ; 02:46B2
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:46B2
     set  3,[hl]                     ; 02:46B5
     ld   hl,W_SpriteSubstate        ; 02:46B7
     add  hl,de                      ; 02:46BA
@@ -1215,7 +1219,9 @@ Data0247F7:                         ; 02:47F7
 .db $54,$06,$5A,$06,$58,$06,$56,$06,\
     $54,$05,$5A,$05,$58,$05,$56,$05,\
     $54,$05,$5A,$05,$58,$05,$56,$05
-Code02480F:
+
+CoinFromBlock_Main:
+; sprite 0B main
     ld   hl,W_SpriteYSpeed          ; 02:480F
     add  hl,bc                      ; 02:4812
     ld   a,[hl]                     ; 02:4813
@@ -1418,7 +1424,7 @@ Code024951:
     jr   z,Code024978               ; 02:496D
     cp   $03                        ; 02:496F
     ret  nz                         ; 02:4971
-    ld   hl,$C429                   ; 02:4972
+    ld   hl,W_AlbumUnlockFlags      ; 02:4972
     set  1,[hl]                     ; 02:4975
     ret                             ; 02:4977
 
@@ -1487,20 +1493,21 @@ Code0249CC:
     add  hl,de                      ; 02:49E0
     ld   [hl],a                     ; 02:49E1
     ret                             ; 02:49E2
-
 Code0249E3:
     pop  de                         ; 02:49E3
     ret                             ; 02:49E4
 
-Data0249E5:                         ; 02:49E5
-.db $2A,$86,$2C,$86,$2A,$06,$2C,$06,\
-    $2E,$87,$2E,$A7,$2E,$07,$2E,$27,\
-    $64,$87,$64,$A7,$64,$07,$64,$27,\
-    $2A,$87,$2C,$87,$2A,$07,$2C,$07,\
-    $90,$88,$92,$88,$90,$08,$92,$08,\
-    $24,$8A,$24,$AA,$24,$0A,$24,$2A,\
-    $80,$8D,$82,$8D,$80,$0D,$82,$0D
-Code024A1D:
+ItemFromBlock_Tilemap:              ; 02:49E5
+.db $2A,$86,$2C,$86,$2A,$06,$2C,$06 ; 00 Super Mushroom
+.db $2E,$87,$2E,$A7,$2E,$07,$2E,$27 ; 01 Fire Flower
+.db $64,$87,$64,$A7,$64,$07,$64,$27 ; 02 Starman
+.db $2A,$87,$2C,$87,$2A,$07,$2C,$07 ; 03 1up Mushroom
+.db $90,$88,$92,$88,$90,$08,$92,$08 ; 04 Yoshi egg
+.db $24,$8A,$24,$AA,$24,$0A,$24,$2A ; 05 Poison Mushroom
+.db $80,$8D,$82,$8D,$80,$0D,$82,$0D ; 06 Red Coin
+
+ItemFromBlock_Main:
+; sprite 0C main
     call Sub0025CB                  ; 02:4A1D
     jp   c,Code024A3D               ; 02:4A20
     call Sub002920                  ; 02:4A23
@@ -1540,7 +1547,7 @@ Code024A3D:
     add  $04                        ; 02:4A5E
     ld   e,a                        ; 02:4A60
 Code024A61:
-    ld   hl,Data0249E5              ; 02:4A61
+    ld   hl,ItemFromBlock_Tilemap   ; 02:4A61
     add  hl,de                      ; 02:4A64
     call Disp16x16Sprite            ; 02:4A65
 Return024A68:
@@ -2108,7 +2115,7 @@ Code024E2A:
 
 Code024E33:
     ld   a,$01                      ; 02:4E33
-    ld   [$C193],a                  ; 02:4E35
+    ld   [W_YoshiEggItemFlag],a     ; 02:4E35
     ld   a,$62                      ; 02:4E38
     ldh  [<$FFF2],a                 ; 02:4E3A
     ld   de,$0008                   ; 02:4E3C
@@ -2155,11 +2162,12 @@ Code024E68:
     call GivePointsFF97             ; 02:4E85
     ret                             ; 02:4E88
 
-SubL_024E89:
-    call Sub024E8D                  ; 02:4E89
+SubL_KoopaBuzzy_Init:
+    call KoopaBuzzy_Init            ; 02:4E89
     rst  $18                        ; 02:4E8C  Return from 24-bit call
 
-Sub024E8D:
+KoopaBuzzy_Init:
+; sprite 02-03,31 init
     ld   e,$01                      ; 02:4E8D
     ld   hl,W_SpriteID              ; 02:4E8F
     add  hl,bc                      ; 02:4E92
@@ -2211,7 +2219,9 @@ Data024ED7:                         ; 02:4ED7
 .db $F8,$08,$F4,$0C
 Data024EDB:                         ; 02:4EDB
 .db $40,$40,$40,$40
-Code024EDF:
+
+KoopaBuzzy_Main:
+; sprite 02-03,31 main
     call Sub0025CB                  ; 02:4EDF
     jp   c,Code024F26               ; 02:4EE2
     ld   a,[$C1D8]                  ; 02:4EE5
@@ -2337,11 +2347,11 @@ Code024F46:
     ld   a,[hl]                     ; 02:4FB7
     cp   $31                        ; 02:4FB8
     jr   z,Code024FC3               ; 02:4FBA
-    ld   hl,$C42B                   ; 02:4FBC
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:4FBC
     set  3,[hl]                     ; 02:4FBF
     jr   Code024FF4                 ; 02:4FC1
 Code024FC3:
-    ld   hl,$C42B                   ; 02:4FC3
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:4FC3
     set  1,[hl]                     ; 02:4FC6
     jr   Code024FF4                 ; 02:4FC8
 Code024FCA:
@@ -2361,12 +2371,12 @@ Code024FD5:
     ld   a,[hl]                     ; 02:4FE3
     cp   $31                        ; 02:4FE4
     jr   z,Code024FEE               ; 02:4FE6
-    ld   hl,$C42B                   ; 02:4FE8
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:4FE8
     set  3,[hl]                     ; 02:4FEB
     ret                             ; 02:4FED
 
 Code024FEE:
-    ld   hl,$C42B                   ; 02:4FEE
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:4FEE
     set  1,[hl]                     ; 02:4FF1
     ret                             ; 02:4FF3
 
@@ -2607,7 +2617,7 @@ Code02515B:
     or   [hl]                       ; 02:516E
     jr   z,Code02517C               ; 02:516F
     call Sub001965                  ; 02:5171
-    ld   hl,$C42B                   ; 02:5174
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:5174
     set  3,[hl]                     ; 02:5177
     jp   Code02521A                 ; 02:5179
 Code02517C:
@@ -2887,7 +2897,7 @@ Code025344:
     ld   a,$03                      ; 02:5348
     ld   [hl],a                     ; 02:534A
     call Sub001965                  ; 02:534B
-    ld   hl,$C42B                   ; 02:534E
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:534E
     set  3,[hl]                     ; 02:5351
 Code025353:
     call Sub00218B                  ; 02:5353
@@ -3338,7 +3348,7 @@ Code0255F4:
     ld   a,$00                      ; 02:5663
     adc  [hl]                       ; 02:5665
     ld   [hl],a                     ; 02:5666
-    ld   hl,$C000                   ; 02:5667
+    ld   hl,W_OAMBuffer             ; 02:5667
     ldh  a,[<$FFC1]                 ; 02:566A
     ld   e,a                        ; 02:566C
     ld   d,$00                      ; 02:566D
@@ -3471,11 +3481,12 @@ Code02574E:
     call Disp16x16Sprite            ; 02:5750
     ret                             ; 02:5753
 
-SubL_025754:
-    call Sub025758                  ; 02:5754
+SubL_Goomba_Init:
+    call Goomba_Init                ; 02:5754
     rst  $18                        ; 02:5757  Return from 24-bit call
 
-Sub025758:
+Goomba_Init:
+; sprite 04 init
     ld   hl,W_SpriteXSpeed          ; 02:5758
     add  hl,bc                      ; 02:575B
     ld   [hl],$F8                   ; 02:575C
@@ -3496,7 +3507,8 @@ Sub025758:
     ld   [hl],a                     ; 02:5775
     ret                             ; 02:5776
 
-Code025777:
+Goomba_Main:
+; sprite 04 main
     call Sub0025CB                  ; 02:5777
     jp   c,Code025798               ; 02:577A
     call Sub0029DA                  ; 02:577D
@@ -3580,7 +3592,7 @@ Code025802:
     ld   [hl],a                     ; 02:5808
     call Sub001965                  ; 02:5809
 Code02580C:
-    ld   hl,$C42A                   ; 02:580C
+    ld   hl,W_AlbumUnlockFlags+1    ; 02:580C
     set  1,[hl]                     ; 02:580F
     ret                             ; 02:5811
 
@@ -3733,7 +3745,9 @@ ReturnL_0258FC:
 
 Data0258FD:                         ; 02:58FD
 .db $60,$01,$62,$01,$62,$21,$60,$21
-Code025905:
+
+BrokenBrick_Main:
+; sprite 0E main
     call Sub0025CB                  ; 02:5905
     jp   c,Code0259DD               ; 02:5908
     ld   hl,W_SpriteYSpeed          ; 02:590B
@@ -3966,7 +3980,9 @@ Code0259DD:
 
 Data025A76:                         ; 02:5A76
 .db $80,$0A,$90,$06
-Code025A7A:
+
+HammerBro_Init:
+; sprite 17 init
     ld   e,$00                      ; 02:5A7A
     ld   hl,W_SpriteYLow            ; 02:5A7C
     add  hl,bc                      ; 02:5A7F
@@ -4051,7 +4067,9 @@ Code025AEA:
 
 Data025AFC:                         ; 02:5AFC
 .db $02,$03,$02
-Code025AFF:
+
+HammerBro_Main:
+; sprite 17 main
     call Sub0025CB                  ; 02:5AFF
     jp   c,Code025B2B               ; 02:5B02
     ld   hl,W_SpriteSubstate        ; 02:5B05
@@ -4177,7 +4195,7 @@ Code025B93:
     call Sub0025F8                  ; 02:5BD2
     ld   a,$05                      ; 02:5BD5
     call Sub002E90                  ; 02:5BD7
-    ld   hl,$C42B                   ; 02:5BDA
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:5BDA
     set  5,[hl]                     ; 02:5BDD
     ret                             ; 02:5BDF
 
@@ -4199,7 +4217,7 @@ Code025BE8:
     pop  hl                         ; 02:5BF8
     pop  af                         ; 02:5BF9
     ld   [hl],a                     ; 02:5BFA
-    ld   hl,$C42B                   ; 02:5BFB
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:5BFB
     set  5,[hl]                     ; 02:5BFE
     ret                             ; 02:5C00
 
@@ -4286,7 +4304,7 @@ Code025C64:
     and  a                          ; 02:5C80
     jr   z,Code025C88               ; 02:5C81
     ld   [hl],$00                   ; 02:5C83
-    call Sub025EF4                  ; 02:5C85
+    call Hammer_Init                ; 02:5C85
 Code025C88:
     ld   a,[$D2F8]                  ; 02:5C88
     ld   e,a                        ; 02:5C8B
@@ -4643,7 +4661,8 @@ Data025EF0:                         ; 02:5EF0
 Data025EF2:                         ; 02:5EF2
 .db $E0,$E8
 
-Sub025EF4:
+Hammer_Init:
+; sprite 18 init
     push bc                         ; 02:5EF4
     ld   a,$18                      ; 02:5EF5
     call LoadSpriteAnySlot          ; 02:5EF7
@@ -4719,7 +4738,8 @@ Code025F64:
     pop  bc                         ; 02:5F64
     ret                             ; 02:5F65
 
-Code025F66:
+Hammer_Main:
+; sprite 18 main
     call Sub0025CB                  ; 02:5F66
     jp   c,Code025F97               ; 02:5F69
     ld   hl,$D0C3                   ; 02:5F6C
@@ -4902,7 +4922,8 @@ Code026045:
 PiranhaUp_WarpZoneScreens:          ; 02:609C
 .db $0B,$0D,$03
 
-Code02609F:
+PiranhaUp_Init:
+; sprite 19 init
     ld   a,[W_GameMode]             ; 02:609F
     cp   $07                        ; 02:60A2
     jr   z,@Code026115              ; 02:60A4
@@ -5017,7 +5038,8 @@ Data02614E:                         ; 02:614E
     $D0,$09,$10,$0A,$00,$00,$00,$00,\
     $00,$00,$00,$00,$00,$00,$00,$00
 
-Code02616E:
+PiranhaUp_Main:
+; sprite 19 main
     call Sub0025CB                  ; 02:616E
     jp   c,Code0261DC               ; 02:6171
     call Sub002920                  ; 02:6174
@@ -5413,7 +5435,9 @@ Return0263F4:
 Data0263F5:                         ; 02:63F5
 .db $00,$00,$00,$00,$00,$00,$90,$0D,\
     $00,$00,$00,$00,$00,$00,$90,$0E
-Code026405:
+
+Bowser_Init:
+; sprite 1A init
     ld   a,$02                      ; 02:6405
     rst  $10                        ; 02:6407  24-bit call
 .dl SubL_0B536D                     ; 02:6408
@@ -5509,7 +5533,8 @@ Code026405:
     ld   [hl],$01                   ; 02:64A9
     ret                             ; 02:64AB
 
-Code0264AC:
+Bowser_Main:
+; sprite 1A main
     call Sub0025CB                  ; 02:64AC
     jp   c,Code0264F0               ; 02:64AF
     ld   a,[$C268]                  ; 02:64B2
@@ -6343,7 +6368,7 @@ Code0269E7:
     ld   a,[W_LevelID]              ; 02:69E7
     and  $FC                        ; 02:69EA
     jr   nz,Code0269F5              ; 02:69EC
-    ld   hl,$C42B                   ; 02:69EE
+    ld   hl,W_AlbumUnlockFlags+2    ; 02:69EE
     set  0,[hl]                     ; 02:69F1
     jr   Code026A08                 ; 02:69F3
 Code0269F5:
@@ -6354,9 +6379,9 @@ Code0269F5:
     ld   d,$00                      ; 02:69FB
     ld   hl,Data0269A7              ; 02:69FD
     add  hl,de                      ; 02:6A00
-    ld   a,[$C42C]                  ; 02:6A01
+    ld   a,[W_AlbumUnlockFlags+3]   ; 02:6A01
     or   [hl]                       ; 02:6A04
-    ld   [$C42C],a                  ; 02:6A05
+    ld   [W_AlbumUnlockFlags+3],a   ; 02:6A05
 Code026A08:
     ld   hl,W_SpriteSubstate        ; 02:6A08
     add  hl,bc                      ; 02:6A0B
@@ -6788,7 +6813,8 @@ Code026D28:
 Return026D37:
     ret                             ; 02:6D37
 
-Code026D38:
+BowserFire_Init:
+; sprite 1B init
     ld   hl,W_SpriteXSpeed          ; 02:6D38
     add  hl,bc                      ; 02:6D3B
     ld   [hl],$F0                   ; 02:6D3C
@@ -6823,7 +6849,8 @@ Code026D66:
     cp   $02                        ; 02:6D67
     ret                             ; 02:6D69
 
-Code026D6A:
+BowserFire_Main:
+; sprite 1B main
     call Sub0025CB                  ; 02:6D6A
     jp   c,Code026D83               ; 02:6D6D
     call Sub002920                  ; 02:6D70
@@ -7049,7 +7076,9 @@ Data026EFB:                         ; 02:6EFB
 .db $70,$80
 Data026EFD:                         ; 02:6EFD
 .db $08,$08,$0C,$0C,$08,$08
-Code026F03:
+
+ElevatorGen_Init:
+; sprite 50-55 init
     ld   hl,W_SpriteID              ; 02:6F03
     add  hl,bc                      ; 02:6F06
     ld   a,[hl]                     ; 02:6F07
@@ -7108,7 +7137,8 @@ Data026F58:                         ; 02:6F58
 Data026F5C:                         ; 02:6F5C
 .db $F0,$10
 
-Code026F5E:
+ElevatorGen_Main:
+; sprite 50-55 main
     call Sub0025CB                  ; 02:6F5E
     jp   c,Return026FE7             ; 02:6F61
     call Sub002920                  ; 02:6F64
@@ -7227,7 +7257,8 @@ Data027029:                         ; 02:7029
 Data02703F:                         ; 02:703F
 .db $01,$01,$01,$01,$01,$01,$01,$01,\
     $01,$01,$01
-Code02704A:
+MovingPlatform_Init:
+; sprite 56-5F,64 init
     ld   hl,W_SpriteID              ; 02:704A
     add  hl,bc                      ; 02:704D
     ld   a,[hl]                     ; 02:704E
@@ -7313,7 +7344,8 @@ Code02708E:
     ld   [hl],a                     ; 02:70CF
     ret                             ; 02:70D0
 
-Code0270D1:
+MovingPlatform_Main:
+; sprite 56-5F,64 main
     call Sub0025CB                  ; 02:70D1
     jp   c,Code02713D               ; 02:70D4
     ld   hl,$D13B                   ; 02:70D7
@@ -8054,7 +8086,9 @@ Data0275D2:                         ; 02:75D2
     $80,$01,$82,$01,$88,$07,$8A,$07
 Data0275E2:                         ; 02:75E2
 .db $24,$7A
-Code0275E4:
+
+Spr1D_Main:
+; sprite 1D main
     call Sub0025CB                  ; 02:75E4
     jp   c,Code027696               ; 02:75E7
     call Sub0245DF                  ; 02:75EA
@@ -8243,7 +8277,9 @@ ScoreSpr_Tilemap:                   ; 02:76FA
     $B0,$00,$BC,$00                 ;          10000
 ScoreSpr_10000ExtraTile:            ; 02:772A
 .db $BA,$00
-Code02772C:
+
+Spr1E_Main:
+; sprite 1E main
     call Sub001A79                  ; 02:772C
     ld   hl,$D096                   ; 02:772F
     add  hl,bc                      ; 02:7732
@@ -8348,7 +8384,7 @@ Code0277C4:
     ld   hl,W_SpriteYSpeed          ; 02:77CA
     add  hl,de                      ; 02:77CD
     ld   [hl],$F8                   ; 02:77CE
-    ld   hl,$C429                   ; 02:77D0
+    ld   hl,W_AlbumUnlockFlags      ; 02:77D0
     set  0,[hl]                     ; 02:77D3
     ld   a,[$C28D]                  ; 02:77D5
     and  a                          ; 02:77D8
@@ -8407,7 +8443,9 @@ Data02782D:                         ; 02:782D
 .db $2E,$8F,$30,$8F
 Data027831:                         ; 02:7831
 .db $32,$8F,$34,$8F
-Code027835:
+
+VineSpr_Main:
+; sprite 20 main
     call Sub0025CB                  ; 02:7835
     jp   c,Code02783E               ; 02:7838
     call Sub0278AC                  ; 02:783B
@@ -8665,11 +8703,14 @@ Return0279E8:
     ret                             ; 02:79E8
 
 Return0279E9:
+; sprite 32 init
     ret                             ; 02:79E9
 
 Data0279EA:                         ; 02:79EA
 .db $A0,$80,$A0,$90
-Code0279EE:
+
+BowserFireGen_Main:
+; sprite 32 main
     call Sub0025CB                  ; 02:79EE
     jp   c,Return027A73             ; 02:79F1
     ld   de,$0000                   ; 02:79F4
@@ -8834,7 +8875,9 @@ ReturnL_027AF8:
 
 Data027AF9:                         ; 02:7AF9
 .db $84,$01,$86,$01
-Code027AFD:
+
+Spr3E_Main:
+; sprite 3E main
     call Sub0025CB                  ; 02:7AFD
     jp   c,Code027B69               ; 02:7B00
     call Sub0245DF                  ; 02:7B03
@@ -8968,7 +9011,8 @@ Unused027B9E:
 Return027BD3:
     ret                             ; 02:7BD3
 
-Code027BD4:
+Spr3F_Main:
+; sprite 3F main
     call Sub0025CB                  ; 02:7BD4
     jp   c,Code027BE3               ; 02:7BD7
     call Sub002920                  ; 02:7BDA
@@ -8993,7 +9037,7 @@ Code027BE3:
     add  $04                        ; 02:7BFC
     ld   e,a                        ; 02:7BFE
 Code027BFF:
-    ld   hl,Data0249E5              ; 02:7BFF
+    ld   hl,ItemFromBlock_Tilemap   ; 02:7BFF
     add  hl,de                      ; 02:7C02
     call Disp16x16Sprite            ; 02:7C03
 Return027C06:
@@ -9082,7 +9126,8 @@ Data027C92:                         ; 02:7C92
 .db $00,$00,$08,$08
 Data027C96:                         ; 02:7C96
 .db $00,$00,$06,$06
-Code027C9A:
+ScaleLift_Init:
+; sprite 60-63 init
     ld   hl,W_SpriteYHigh           ; 02:7C9A
     add  hl,bc                      ; 02:7C9D
     push hl                         ; 02:7C9E
@@ -9141,7 +9186,8 @@ Code027C9A:
 
 Data027CF2:                         ; 02:7CF2
 .db $18,$10,$10,$08
-Code027CF6:
+ScaleLift_Main:
+; sprite 60-63 main
     call Sub0025CB                  ; 02:7CF6
     jp   c,Code027DE0               ; 02:7CF9
     call Sub027FC0                  ; 02:7CFC

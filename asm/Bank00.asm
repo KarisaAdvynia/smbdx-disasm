@@ -4,7 +4,7 @@
 .orga $0000
     jp   rst_ExecutePtrTable        ; 00:0000  rst $00
 .orga $0008
-    jp   rst_ExecutePtrTableLong    ; 00:0008  rst $08
+    jp   rst_ExecutePtrTableLong    ; 00:0008  rst $08 (unused)
 .orga $0010
     jp   rst_CallLong               ; 00:0010  rst $10
 .orga $0018
@@ -26,7 +26,7 @@
     nop                             ; 00:0100
     jp   CodeStart                  ; 00:0101
 
-; Internal header goes here
+; Internal header                     00:0104-0150
 
 .orga $0150
 CodeStart:
@@ -46,7 +46,7 @@ CodeStart:
 Code000167:
     xor  a                          ; 00:0167
 Code000168:
-    ld   [$C0C0],a                  ; 00:0168
+    ld   [W_NonGBCError],a          ; 00:0168  $C0C0 = 0 normally, nonzero if on non-color GB
     call Sub00126D                  ; 00:016B
     ld   sp,$CFFF                   ; 00:016E  set stack pointer
     ld   a,:Sub0B6074               ; 00:0171
@@ -69,10 +69,10 @@ Code000168:
     ldh  [<$FFB4],a                 ; 00:0199
     ld   a,$00                      ; 00:019B
     ld   [$DA78],a                  ; 00:019D
-    ld   a,[$C0C0]                  ; 00:01A0
+    ld   a,[W_NonGBCError]          ; 00:01A0
     and  a                          ; 00:01A3
     jr   z,Code0001AA               ; 00:01A4
-    ld   a,$37                      ; 00:01A6
+    ld   a,$37                      ; 00:01A6  if not GBC, display error message
     ldh  [<H_GameState],a           ; 00:01A8
 Code0001AA:
     ei                              ; 00:01AA
@@ -96,7 +96,7 @@ MainLoop:
     jr   z,Code0001EA               ; 00:01CE
     cp   $28                        ; 00:01D0
     jr   z,Code0001EA               ; 00:01D2
-    ld   a,[$C0C0]                  ; 00:01D4
+    ld   a,[W_NonGBCError]          ; 00:01D4
     and  a                          ; 00:01D7
     jr   nz,Code0001EA              ; 00:01D8
     ld   a,$00                      ; 00:01DA
@@ -179,14 +179,14 @@ RunGameState:
 .dw TitleScreenMain                 ; 03
 .dw OverworldInit                   ; 04
 .dw OverworldMain                   ; 05
-.dw Code0002EA                      ; 06
+.dw LevelLoad_Main                  ; 06
 .dw OverworldInit                   ; 07
 .dw OverworldMain                   ; 08
-.dw Code0002EA                      ; 09
-.dw Code0002EA                      ; 0A
+.dw LevelLoad_Main                  ; 09
+.dw LevelLoad_Main                  ; 0A
 .dw NormalGameplay                  ; 0B
 .dw PauseWrapper                    ; 0C
-.dw Code000473                      ; 0D
+.dw SublevelLoad_Main               ; 0D
 .dw Code000A09                      ; 0E
 .dw GameOverWrapper                 ; 0F
 .dw Code000A1B                      ; 10
@@ -216,7 +216,7 @@ RunGameState:
 .dw Code0006C0                      ; 28
 .dw Code000A69                      ; 29
 .dw Code000A7A                      ; 2A
-.dw RankingWrapper                  ; 2B
+.dw RecordsWrapper                  ; 2B
 .dw AlbumWrapper                    ; 2C
 .dw ToyBoxWrapper                   ; 2D
 .dw PrintMenuBank00Wrapper          ; 2E
@@ -240,44 +240,44 @@ RunGameState:
 .dw Code0009B3                      ; 40
 .dw ToadPeachRoom_Wrapper           ; 41
 
-Code0002EA:
+LevelLoad_Main:
 ; Game state 06/09/0A
     ld   a,[$0003]                  ; 00:02EA
     and  a                          ; 00:02ED
-    jr   z,Code0002F5               ; 00:02EE
-    ld   a,$20                      ; 00:02F0
-    ld   [W_SublevelID],a           ; 00:02F2
-Code0002F5:
+    jr   z,@Code0002F5              ; 00:02EE  if debug byte is set...
+    ld   a,$20                      ; 00:02F0  force load sublevel 20
+    ld   [W_SublevelID],a           ; 00:02F2   (debug level in Original, 9-1 in SP)
+@Code0002F5:
     ld   a,:Sub0B61AC               ; 00:02F5
     call SetROMBank                 ; 00:02F7
     call Sub0B61AC                  ; 00:02FA
     call Sub0003A4                  ; 00:02FD
-    call Sub00036B                  ; 00:0300
-    ld   l,$34                      ; 00:0303
+    call LoadSublevelBrickGraphics  ; 00:0300
+    ld   l,$34                      ; 00:0303  34: Original pipe intro
     ld   a,[W_SPFlag]               ; 00:0305
     and  a                          ; 00:0308
-    jr   z,Code00030D               ; 00:0309
-    ld   l,$62                      ; 00:030B
-Code00030D:
+    jr   z,@Code00030D              ; 00:0309
+    ld   l,$62                      ; 00:030B  62: SP pipe intro
+@Code00030D:
     ld   a,[W_SublevelID]           ; 00:030D
     cp   l                          ; 00:0310
-    jr   nz,Code00031D              ; 00:0311
-    ld   a,$10                      ; 00:0313
+    jr   nz,@Code00031D             ; 00:0311
+    ld   a,$10                      ; 00:0313  if pipe intro, set player state to pipe intro
     ld   [W_PlayerState],a          ; 00:0315
     ld   a,$01                      ; 00:0318
     ld   [$C1F3],a                  ; 00:031A
-Code00031D:
+@Code00031D:
     ld   hl,$D2F8                   ; 00:031D
     ld   [hl],$00                   ; 00:0320
     ld   a,[W_HardFlag]             ; 00:0322
     and  a                          ; 00:0325
-    jr   nz,Code00032F              ; 00:0326
+    jr   nz,@Code00032F             ; 00:0326
     ld   a,[W_LevelID]              ; 00:0328
-    cp   $12                        ; 00:032B
-    jr   c,Code000330               ; 00:032D
-Code00032F:
-    inc  [hl]                       ; 00:032F
-Code000330:
+    cp   $12                        ; 00:032B  12: 5-3
+    jr   c,@Code000330              ; 00:032D
+@Code00032F:
+    inc  [hl]                       ; 00:032F  if hard mode, or 5-3 or later, increment $D2F8
+@Code000330:
     ldh  a,[<H_CameraXLow]          ; 00:0330
     ld   [$C175],a                  ; 00:0332
     ldh  a,[<H_CameraY]             ; 00:0335
@@ -305,7 +305,8 @@ Code000330:
     ldh  [<H_GameState],a           ; 00:0368
     ret                             ; 00:036A
 
-Sub00036B:
+LoadSublevelBrickGraphics:
+; Change brick graphics based on sublevel type
     ldh  a,[<H_PlInitY_SubLvType]   ; 00:036B
     and  $0F                        ; 00:036D
     cp   $01                        ; 00:036F
@@ -354,9 +355,9 @@ Sub0003B1:
     call Sub00375A                  ; 00:03C4
     ld   a,[W_ChallengeFlag]        ; 00:03C7
     and  a                          ; 00:03CA
-    jr   z,Code0003D0               ; 00:03CB
+    jr   z,@Code0003D0              ; 00:03CB
     call LoadChallengeObjData       ; 00:03CD
-Code0003D0:
+@Code0003D0:
     call Sub002A18                  ; 00:03D0
     call Sub003593                  ; 00:03D3
     ld   a,:Sub0371A9               ; 00:03D6
@@ -380,9 +381,9 @@ Code0003E5:
     call Sub00375A                  ; 00:03FD
     ld   a,[W_ChallengeFlag]        ; 00:0400
     and  a                          ; 00:0403
-    jr   z,Code000409               ; 00:0404
+    jr   z,@Code000409              ; 00:0404
     call LoadChallengeObjData       ; 00:0406
-Code000409:
+@Code000409:
     call Sub002A18                  ; 00:0409
     call Sub003593                  ; 00:040C
     ld   a,:Sub037178               ; 00:040F
@@ -394,29 +395,28 @@ Code000414:
 NormalGameplay:
 ; Game state 0B
     ldh  a,[<H_ButtonsPressed]      ; 00:0418
-    and  $08                        ; 00:041A
-    jr   z,Code000434               ; 00:041C
+    and  $08                        ; 00:041A  08: Start
+    jr   z,@Code000434              ; 00:041C
     ld   a,[$C1F3]                  ; 00:041E
     and  a                          ; 00:0421
-    jr   nz,Code000434              ; 00:0422
-    xor  a                          ; 00:0424
+    jr   nz,@Code000434             ; 00:0422
+    xor  a                          ; 00:0424 \ pause the game
     ld   [$C168],a                  ; 00:0425
     ld   [$C174],a                  ; 00:0428
     ld   a,$0C                      ; 00:042B
     ldh  [<H_GameState],a           ; 00:042D
     ld   a,$4D                      ; 00:042F
     ldh  [<$FFF2],a                 ; 00:0431
-    ret                             ; 00:0433
-
-Code000434:
+    ret                             ; 00:0433 /
+@Code000434:
     ldh  a,[<H_GameState]           ; 00:0434
     cp   $24                        ; 00:0436
-    jp   z,Code000445               ; 00:0438
+    jp   z,@Code000445              ; 00:0438
     ldh  a,[<H_CameraXLow]          ; 00:043B
     ld   [$C175],a                  ; 00:043D
     ldh  a,[<H_CameraY]             ; 00:0440
     ld   [$C176],a                  ; 00:0442
-Code000445:
+@Code000445:
     ld   a,:Sub0341C2               ; 00:0445
     call SetROMBank                 ; 00:0447
     call Sub0341C2                  ; 00:044A
@@ -435,7 +435,7 @@ Code000445:
     call Sub0B62BF                  ; 00:046F
     ret                             ; 00:0472
 
-Code000473:
+SublevelLoad_Main:
 ; Game state 0D
     ldh  a,[<H_CameraXLow]          ; 00:0473
     ld   [$C175],a                  ; 00:0475
@@ -459,15 +459,15 @@ Code000473:
     ld   [$C181],a                  ; 00:04A0
     ld   a,[W_ChallengeFlag]        ; 00:04A3
     and  a                          ; 00:04A6
-    jr   z,Code0004AC               ; 00:04A7
+    jr   z,@Code0004AC              ; 00:04A7
     call LoadChallengeObjData       ; 00:04A9
-Code0004AC:
+@Code0004AC:
     call Sub002A18                  ; 00:04AC
     ld   a,:Sub0444A6               ; 00:04AF
     call SetROMBank                 ; 00:04B1
     call Sub0444A6                  ; 00:04B4
     call Sub003593                  ; 00:04B7
-    call Sub00036B                  ; 00:04BA
+    call LoadSublevelBrickGraphics  ; 00:04BA
     ld   a,:Sub037376               ; 00:04BD
     call SetROMBank                 ; 00:04BF
     call Sub037376                  ; 00:04C2
@@ -504,25 +504,25 @@ Sub0004EE:
 Code0004FA:
     ld   a,[$DA6A]                  ; 00:04FA
     cp   $01                        ; 00:04FD
-    jr   z,Code000506               ; 00:04FF
+    jr   z,@Code000506              ; 00:04FF
     ld   a,$01                      ; 00:0501
     ld   [$DA78],a                  ; 00:0503
-Code000506:
+@Code000506:
     ld   a,:Sub064DBE               ; 00:0506
     call SetROMBank                 ; 00:0508
     call Sub064DBE                  ; 00:050B
     cp   $01                        ; 00:050E
-    jr   z,Return000528             ; 00:0510
+    jr   z,@Return                  ; 00:0510
     cp   $02                        ; 00:0512
-    jp   z,Return000528             ; 00:0514
+    jp   z,@Return                  ; 00:0514
     ld   a,[$C168]                  ; 00:0517
     inc  a                          ; 00:051A
     ld   [$C168],a                  ; 00:051B
     ld   a,:Sub0B572E               ; 00:051E
     call SetROMBank                 ; 00:0520
     call Sub0B572E                  ; 00:0523
-    jr   Return000528               ; 00:0526
-Return000528:
+    jr   @Return                    ; 00:0526
+@Return:
     ret                             ; 00:0528
 
 Sub000529:
@@ -538,7 +538,7 @@ Code000536:
     call SetROMBank                 ; 00:0538
     call Sub0B6204                  ; 00:053B
     call Sub0003B1                  ; 00:053E
-    call Sub00036B                  ; 00:0541
+    call LoadSublevelBrickGraphics  ; 00:0541
     xor  a                          ; 00:0544
     ld   [W_PlayerCoins],a          ; 00:0545
     ld   a,:Sub0371C5               ; 00:0548
@@ -566,11 +566,11 @@ Code000536:
     ldh  a,[<H_PlInitY_SubLvType]   ; 00:0583
     and  $0F                        ; 00:0585
     cp   $02                        ; 00:0587
-    jr   nz,Code000593              ; 00:0589
+    jr   nz,@Code000593             ; 00:0589
     ld   a,$08                      ; 00:058B
     ld   [$C50A],a                  ; 00:058D
     ld   [$C58A],a                  ; 00:0590
-Code000593:
+@Code000593:
     xor  a                          ; 00:0593
     ld   [$D977],a                  ; 00:0594
     ldh  [<SB],a                    ; 00:0597
@@ -728,9 +728,11 @@ Sub00069F:
 
 Code0006AD:
     jr   Code0006FC                 ; 00:06AD
+
 Code0006AF:
     call Sub0005CA                  ; 00:06AF
     jr   Code0006B7                 ; 00:06B2
+
 Code0006B4:
     call Sub0005F2                  ; 00:06B4
 Code0006B7:
@@ -775,10 +777,11 @@ Return0006F3:
 
 YouVsBooMenu_Init:
 ; Game state 33
-    ld   a,:Sub075C36               ; 00:06F4
+    ld   a,:YouVsBoo_LoadSaveData   ; 00:06F4
     call SetROMBank                 ; 00:06F6
-    call Sub075C36                  ; 00:06F9
+    call YouVsBoo_LoadSaveData      ; 00:06F9
 Code0006FC:
+; also referenced by game state 27
     ld   a,:Sub0B575E               ; 00:06FC
     call SetROMBank                 ; 00:06FE
     call Sub0B575E                  ; 00:0701
@@ -799,11 +802,11 @@ YouVsBooRace_Init:
     ld   a,:Sub0B401F               ; 00:0716
     call SetROMBank                 ; 00:0718
     call Sub0B401F                  ; 00:071B
-    ld   a,:Sub075C36               ; 00:071E
+    ld   a,:YouVsBoo_LoadSaveData   ; 00:071E
     call SetROMBank                 ; 00:0720
-    call Sub075C36                  ; 00:0723
+    call YouVsBoo_LoadSaveData      ; 00:0723
     call Sub0003B1                  ; 00:0726
-    call Sub00036B                  ; 00:0729
+    call LoadSublevelBrickGraphics  ; 00:0729
     xor  a                          ; 00:072C
     ld   [W_PlayerCoins],a          ; 00:072D
     ld   a,:Sub0444A6               ; 00:0730
@@ -924,7 +927,7 @@ Code0007FE:
     call SetROMBank                 ; 00:0830
     call Sub0B61AC                  ; 00:0833
     call Sub0003B1                  ; 00:0836
-    call Sub00036B                  ; 00:0839
+    call LoadSublevelBrickGraphics  ; 00:0839
     ld   a,:Sub037376               ; 00:083C
     call SetROMBank                 ; 00:083E
     call Sub037376                  ; 00:0841
@@ -1006,7 +1009,7 @@ Code0008B1:
     call SetROMBank                 ; 00:08F5
     call Sub0B6204                  ; 00:08F8
     call Sub0003B1                  ; 00:08FB
-    call Sub00036B                  ; 00:08FE
+    call LoadSublevelBrickGraphics  ; 00:08FE
     xor  a                          ; 00:0901
     ld   [W_PlayerCoins],a          ; 00:0902
     ld   [W_PlayerFireFlag],a       ; 00:0905
@@ -1227,11 +1230,11 @@ Code000A7A:
     call Sub064B28                  ; 00:0A7F
     ret                             ; 00:0A82
 
-RankingWrapper:
+RecordsWrapper:
 ; Game state 2B wrapper
-    ld   a,:RankingMain             ; 00:0A83
+    ld   a,:RecordsMain             ; 00:0A83
     call SetROMBank                 ; 00:0A85
-    call RankingMain                ; 00:0A88
+    call RecordsMain                ; 00:0A88
     ret                             ; 00:0A8B
 
 AlbumWrapper:
@@ -1336,9 +1339,9 @@ ChalMenuInit:
     call Sub00126D                  ; 00:0B28
     ld   a,$00                      ; 00:0B2B
     ldh  [<IE],a                    ; 00:0B2D
-    ld   a,:Sub1152D2               ; 00:0B2F
+    ld   a,:ChalMenuInit_Bank11     ; 00:0B2F
     call SetROMBank                 ; 00:0B31
-    call Sub1152D2                  ; 00:0B34
+    call ChalMenuInit_Bank11        ; 00:0B34
     ld   a,$01                      ; 00:0B37
     ldh  [<IE],a                    ; 00:0B39
     ld   a,$87                      ; 00:0B3B
@@ -1389,9 +1392,9 @@ ChalResultsInit:
 
 ChalResultsMain_Wrapper:
 ; Game state 21 wrapper
-    ld   a,:ChallengeResultsMain    ; 00:0B87
+    ld   a,:ChalResultsMain         ; 00:0B87
     call SetROMBank                 ; 00:0B89
-    call ChallengeResultsMain       ; 00:0B8C
+    call ChalResultsMain            ; 00:0B8C
     ret                             ; 00:0B8F
 
 ChalYoshiHatch_Wrapper:
@@ -1754,7 +1757,7 @@ Sub000E02:
     ldh  [<BGPI],a                  ; 00:0E0B
     ldh  [<OBPI],a                  ; 00:0E0D
     ld   e,$20                      ; 00:0E0F
-    ld   hl,W_PaletteBuffer         ; 00:0E11
+    ld   hl,W_PalBuffer             ; 00:0E11
 Code000E14:
     ldi  a,[hl]                     ; 00:0E14
     ldh  [<BGPD],a                  ; 00:0E15
@@ -1784,11 +1787,11 @@ Sub000E29:
     ldh  [<OBPI],a                  ; 00:0E35
     ld   de,$0000                   ; 00:0E37
 @Loop:
-    ld   hl,W_PaletteBuffer         ; 00:0E3A \ loop: load 0x40 colors each to BG/sprite palette
+    ld   hl,W_PalBuffer             ; 00:0E3A \ loop: load 0x40 colors each to BG/sprite palette
     add  hl,de                      ; 00:0E3D
     ld   a,[hl]                     ; 00:0E3E
     ldh  [<BGPD],a                  ; 00:0E3F
-    ld   hl,W_PaletteBufferSpr      ; 00:0E41
+    ld   hl,W_PalBufferSpr          ; 00:0E41
     add  hl,de                      ; 00:0E44
     ld   a,[hl]                     ; 00:0E45
     ldh  [<OBPD],a                  ; 00:0E46
@@ -1822,7 +1825,7 @@ Code000E73:
     ld   a,b                        ; 00:0E73
     ldh  [<OBPI],a                  ; 00:0E74
 Code000E76:
-    ld   hl,W_PaletteBufferSpr      ; 00:0E76
+    ld   hl,W_PalBufferSpr          ; 00:0E76
     add  hl,de                      ; 00:0E79
     ld   a,[hl]                     ; 00:0E7A
     ldh  [<OBPD],a                  ; 00:0E7B
@@ -1840,7 +1843,7 @@ Code000E82:
     ld   a,$B8                      ; 00:0E8F
     ldh  [<OBPI],a                  ; 00:0E91
 Code000E93:
-    ld   hl,W_PaletteBufferSpr      ; 00:0E93
+    ld   hl,W_PalBufferSpr          ; 00:0E93
     add  hl,de                      ; 00:0E96
     ld   a,[hl]                     ; 00:0E97
     ldh  [<OBPD],a                  ; 00:0E98
@@ -1859,7 +1862,7 @@ Code000EA0:
     ld   de,$000A                   ; 00:0EAC
     ld   c,$0C                      ; 00:0EAF
 Code000EB1:
-    ld   hl,W_PaletteBuffer         ; 00:0EB1
+    ld   hl,W_PalBuffer             ; 00:0EB1
     add  hl,de                      ; 00:0EB4
     ld   a,[hl]                     ; 00:0EB5
     ldh  [<BGPD],a                  ; 00:0EB6
@@ -1938,7 +1941,7 @@ Sub000F13:
 
 LoadFullPaletteLong:
     ld   [ROMBANK],a                ; 00:0F28
-    ld   hl,W_PaletteBuffer         ; 00:0F2B
+    ld   hl,W_PalBuffer             ; 00:0F2B
     ld   c,$80                      ; 00:0F2E
 Code000F30:
     ld   a,[de]                     ; 00:0F30
@@ -1954,7 +1957,7 @@ Code000F30:
 
 LoadSprPaletteLong:
     ld   [ROMBANK],a                ; 00:0F3F
-    ld   hl,W_PaletteBufferSpr      ; 00:0F42
+    ld   hl,W_PalBufferSpr          ; 00:0F42
     ld   c,$40                      ; 00:0F45
 Code000F47:
     ld   a,[de]                     ; 00:0F47
@@ -2079,8 +2082,10 @@ Sub000FE5:
     ld   a,[hl]                     ; 00:0FF4
     ret                             ; 00:0FF5
 
-Sub000FF6:
+VerifySaveFileChecksum:
 ; A: save file number
+; Checks if $A118+$40*file is 1, and $A119+$40*file is the sum of the previous $19 bytes
+; Sets carry flag if checksum is valid, clears it if not
     swap a                          ; 00:0FF6
     sla  a                          ; 00:0FF8
     sla  a                          ; 00:0FFA
@@ -2088,32 +2093,36 @@ Sub000FF6:
     ld   d,$00                      ; 00:0FFD
     ld   hl,$A100                   ; 00:0FFF
     add  hl,de                      ; 00:1002  hl = pointer to save file
-    call Sub001025                  ; 00:1003
+    call Calc19ByteSum              ; 00:1003  $FF97 = sum of $19 bytes at [HL]
     ldh  a,[<$FF97]                 ; 00:1006
     ld   hl,$A119                   ; 00:1008
     add  hl,de                      ; 00:100B
     cp   [hl]                       ; 00:100C
-    jr   nz,@Code001022             ; 00:100D
+    jr   nz,@ClearCarry             ; 00:100D
     inc  hl                         ; 00:100F
     ldh  a,[<$FF98]                 ; 00:1010
     cp   [hl]                       ; 00:1012
-    jr   nz,@Code001022             ; 00:1013
+    jr   nz,@ClearCarry             ; 00:1013
     ld   hl,$A118                   ; 00:1015
     add  hl,de                      ; 00:1018
     ld   a,[hl]                     ; 00:1019
     cp   $01                        ; 00:101A
-    jr   nz,@Code001022             ; 00:101C
+    jr   nz,@ClearCarry             ; 00:101C
     ld   a,$00                      ; 00:101E
     scf                             ; 00:1020
     ret                             ; 00:1021
-@Code001022:
+@ClearCarry:
     scf                             ; 00:1022
     ccf                             ; 00:1023
     ret                             ; 00:1024
 
-Sub001025:
+Calc19ByteSum:
+; subroutine: Calculate the sum of $19 bytes, starting at [HL]
+; returns 16-bit sum in $FF97
     ld   a,$19                      ; 00:1025
-Sub001027:
+CalculateSum:
+; subroutine: Calculate the sum of A bytes, starting at [HL]
+; returns 16-bit sum in $FF97
     ld   c,a                        ; 00:1027
     xor  a                          ; 00:1028
     ldh  [<$FF97],a                 ; 00:1029
@@ -2234,7 +2243,7 @@ Sub0010E4:
     push hl                         ; 00:10E4
     ld   a,[W_GameMode]             ; 00:10E5
     cp   $02                        ; 00:10E8
-    jr   z,Code0010FB               ; 00:10EA
+    jr   z,@Code0010FB              ; 00:10EA
     ldh  a,[<H_GlobalTimer]         ; 00:10EC
     ld   hl,$FFBC                   ; 00:10EE
     add  [hl]                       ; 00:10F1
@@ -2244,8 +2253,7 @@ Sub0010E4:
     ldh  [<$FFBC],a                 ; 00:10F7
     pop  hl                         ; 00:10F9
     ret                             ; 00:10FA
-
-Code0010FB:
+@Code0010FB:
     ldh  a,[<H_GlobalTimer]         ; 00:10FB
     ldh  [<$FFBC],a                 ; 00:10FD
     pop  hl                         ; 00:10FF
@@ -2416,6 +2424,7 @@ Sub0011C8:
     ret                             ; 00:11F8
 
 Sub0011F9:
+; Copy subroutine $1207 to HRAM $FF80
     ld   c,<H_DMATransferOAM        ; 00:11F9
     ld   b,ROM_DMATransferOAM_End-ROM_DMATransferOAM; 00:11FB
     ld   hl,ROM_DMATransferOAM      ; 00:11FD
@@ -2428,7 +2437,8 @@ Sub0011F9:
     ret                             ; 00:1206
 
 ROM_DMATransferOAM:
-    ld   a,$C0                      ; 00:1207/FF80
+; DMA transfer from the OAM buffer ($C000) to OAM
+    ld   a,>W_OAMBuffer             ; 00:1207/FF80
     ldh  [<DMA],a                   ; 00:1209/FF82
     ld   a,$28                      ; 00:120B/FF84
 -   dec  a                          ; 00:120D/FF86
@@ -2805,11 +2815,11 @@ CopyBytes:
     ret                             ; 00:1449
 
 DataPtrs00144A:                     ; 00:144A
-.dl $00DF01, Data094647, Data0955DA, Data044AB2,\
-    Data1146EA, Data11470A, Data11471D, Data114753,\
-    Data114732, Data1146E5, Data114000, Data064A79,\
-    Data1150E4, Data115162, Data1151E0, Data115123,\
-    Data1151A1, Data11520F
+.dl $00DF01, TiUp_094647, TiUp_0955DA, TiUp_044AB2,\
+    TiUp_1146EA, TiUp_11470A, TiUp_11471D, TiUp_114753,\
+    TiUp_114732, TiUp_1146E5, TiUp_114000, TiUp_064A79,\
+    TiUp_1150E4, TiUp_115162, TiUp_1151E0, TiUp_115123,\
+    TiUp_1151A1, TiUp_11520F
 
 Sub001480:
     push af                         ; 00:1480
@@ -2835,7 +2845,7 @@ Code001489:
     jr   nz,Code0014A5              ; 00:149C
     xor  a                          ; 00:149E
     ld   [$DF00],a                  ; 00:149F
-    ld   [W_TilemapUploadBuffer],a  ; 00:14A2
+    ld   [W_TiUpBuffer],a           ; 00:14A2
 Code0014A5:
     xor  a                          ; 00:14A5
     ld   [$C171],a                  ; 00:14A6
@@ -2861,7 +2871,7 @@ Sub0014AA:
     jr   nz,Code001489              ; 00:14C3
     xor  a                          ; 00:14C5
     ld   [$DF00],a                  ; 00:14C6
-    ld   [W_TilemapUploadBuffer],a  ; 00:14C9
+    ld   [W_TiUpBuffer],a           ; 00:14C9
     ret                             ; 00:14CC
 
 Sub0014CD:
@@ -2977,12 +2987,12 @@ Code001541:
     ret                             ; 00:1557
 
 Sub001558:
-    ld   a,:Sub0758B4               ; 00:1558
+    ld   a,:VerifyRecordsChecksum   ; 00:1558
     ld   [ROMBANK],a                ; 00:155A
-    call Sub0758B4                  ; 00:155D
-    jr   c,Code001565               ; 00:1560
-    call Sub075997                  ; 00:1562
-Code001565:
+    call VerifyRecordsChecksum      ; 00:155D
+    jr   c,@Code001565              ; 00:1560
+    call SetRecordsDefaults         ; 00:1562
+@Code001565:
     ldh  a,[<$FFBE]                 ; 00:1565
     ld   [ROMBANK],a                ; 00:1567
     ret                             ; 00:156A
@@ -5769,7 +5779,7 @@ Code002824:
     ld   a,e                        ; 00:2832
     cp   $B8                        ; 00:2833
     jr   nc,Return002860            ; 00:2835
-    ld   hl,$C000                   ; 00:2837
+    ld   hl,W_OAMBuffer             ; 00:2837
     ldh  a,[<$FFC1]                 ; 00:283A
     ld   e,a                        ; 00:283C
     ld   d,$00                      ; 00:283D
@@ -5880,7 +5890,7 @@ Code0028D1:
     ld   a,e                        ; 00:28DF
     cp   $B8                        ; 00:28E0
     jr   nc,Return0028FC            ; 00:28E2
-    ld   hl,$C000                   ; 00:28E4
+    ld   hl,W_OAMBuffer             ; 00:28E4
     ldh  a,[<$FFC1]                 ; 00:28E7
     ld   e,a                        ; 00:28E9
     ld   d,$00                      ; 00:28EA
@@ -5914,7 +5924,7 @@ Code002914:
     ld   a,$28                      ; 00:2914
 Code002916:
     ldh  [<$FFC1],a                 ; 00:2916
-    ld   hl,$C000                   ; 00:2918
+    ld   hl,W_OAMBuffer             ; 00:2918
     ld   e,a                        ; 00:291B
     ld   d,$00                      ; 00:291C
     add  hl,de                      ; 00:291E
@@ -6555,7 +6565,7 @@ Sub002CE2:
     ld   a,[W_HardFlag]             ; 00:2D08
     and  a                          ; 00:2D0B
     jr   z,@Code002D15              ; 00:2D0C
-    ld   a,e                        ; 00:2D0E \
+    ld   a,e                        ; 00:2D0E \ in hard mode...
     cp   $04                        ; 00:2D0F | if sprite to load would be Goomba
     jr   nz,@Code002D15             ; 00:2D11 |
     ld   e,$31                      ; 00:2D13 | replace it by Buzzy Beetle
@@ -6676,7 +6686,7 @@ Code002DB3:
     ld   a,[hl]                     ; 00:2DC7
     ld   de,$0008                   ; 00:2DC8
     call Return0010B2               ; 00:2DCB
-    ld   hl,$C188                   ; 00:2DCE
+    ld   hl,W_RedCoinsCurrent       ; 00:2DCE
     inc  [hl]                       ; 00:2DD1
     pop  bc                         ; 00:2DD2
     ret                             ; 00:2DD3
@@ -6741,7 +6751,7 @@ Code002DE5:
 
 GivePointsFF97:
 ; subroutine: Add 16-bit value at $FF97 to current score. Cap to 0F423F (9,999,990 displayed) if applicable
-    ld   hl,$C17A                   ; 00:2E30
+    ld   hl,W_PlayerScoreLow        ; 00:2E30
     ldh  a,[<$FF97]                 ; 00:2E33 \
     add  [hl]                       ; 00:2E35 | add byte at $FF97 to low byte
     ldi  [hl],a                     ; 00:2E36 /
@@ -6767,7 +6777,7 @@ GivePointsFF97:
     cp   $3F                        ; 00:2E53
     jr   c,@Return                  ; 00:2E55
 @CapScore:
-    ld   hl,$C17A                   ; 00:2E57 \
+    ld   hl,W_PlayerScoreLow        ; 00:2E57 \
     ld   a,$3F                      ; 00:2E5A |
     ldi  [hl],a                     ; 00:2E5C |
     ld   a,$42                      ; 00:2E5D | set score to 0F423F (9,999,990 displayed)
@@ -8265,22 +8275,22 @@ Sub00375A:
     call InitSubLv16x16Tilemap      ; 00:375A
     ld   a,[W_SublevelID]           ; 00:375D
     ld   c,a                        ; 00:3760
-    ld   b,$00                      ; 00:3761
+    ld   b,$00                      ; 00:3761  bc = sublevelID
     ld   l,c                        ; 00:3763
-    ld   h,b                        ; 00:3764
+    ld   h,b                        ; 00:3764  hl = sublevelID
     sla  c                          ; 00:3765
-    rl   b                          ; 00:3767
+    rl   b                          ; 00:3767  bc = sublevelID*2
     add  hl,bc                      ; 00:3769
     ld   c,l                        ; 00:376A
-    ld   b,h                        ; 00:376B
+    ld   b,h                        ; 00:376B  bc = sublevelID*3
     ld   a,[W_SPFlag]               ; 00:376C
     and  a                          ; 00:376F
-    jr   nz,@Code00377C             ; 00:3770
+    jr   nz,@SuperPlayers           ; 00:3770
     ld   a,:SublevelMainPtrs0       ; 00:3772
     call SetROMBank                 ; 00:3774
     ld   hl,SublevelMainPtrs0       ; 00:3777
     jr   @Code003784                ; 00:377A
-@Code00377C:
+@SuperPlayers:
     ld   a,:SublevelMainPtrsSP      ; 00:377C
     call SetROMBank                 ; 00:377E
     ld   hl,SublevelMainPtrsSP      ; 00:3781
@@ -8583,10 +8593,10 @@ OverworldMain:
     ret                             ; 00:396B
 @Code00396C:
     ldh  a,[<H_ButtonsPressed]      ; 00:396C
-    and  $0B                        ; 00:396E
+    and  $0B                        ; 00:396E  Start/B/A
     ret  z                          ; 00:3970
     ldh  a,[<H_ButtonsPressed]      ; 00:3971
-    and  $09                        ; 00:3973
+    and  $09                        ; 00:3973  Start/A
     jr   nz,@Code00397C             ; 00:3975
     ld   a,$1D                      ; 00:3977
     ldh  [<H_GameState],a           ; 00:3979
@@ -8623,9 +8633,9 @@ OverworldMain:
     cp   $05                        ; 00:39AB
     jr   c,@Loop00399B              ; 00:39AD
     ld   a,$00                      ; 00:39AF
-    ld   [$C188],a                  ; 00:39B1
+    ld   [W_RedCoinsCurrent],a      ; 00:39B1
     ld   [$D30A],a                  ; 00:39B4
-    ld   [$C193],a                  ; 00:39B7
+    ld   [W_YoshiEggItemFlag],a     ; 00:39B7
     ld   [$C1B3],a                  ; 00:39BA
     ld   a,$0A                      ; 00:39BD
     ldh  [<H_GameState],a           ; 00:39BF
@@ -8777,103 +8787,103 @@ Code003AF4:
     ret                             ; 00:3AFE
 
 Sub003AFF:
-    call Sub003CEF                  ; 00:3AFF
+    call LoadStatusBarScore         ; 00:3AFF
     ld   a,[W_ChallengeFlag]        ; 00:3B02
     cp   $01                        ; 00:3B05
-    jr   z,Code003B3C               ; 00:3B07
+    jr   z,@Challenge               ; 00:3B07
     ld   hl,$C10B                   ; 00:3B09
     call Sub003D04                  ; 00:3B0C
     ld   a,[$C170]                  ; 00:3B0F
     and  a                          ; 00:3B12
-    jr   nz,Code003B33              ; 00:3B13
+    jr   nz,@HideTimer              ; 00:3B13
     ld   a,[W_SPFlag]               ; 00:3B15
     and  a                          ; 00:3B18
-    jr   nz,Code003B24              ; 00:3B19
+    jr   nz,@SuperPlayers           ; 00:3B19
     ld   a,[W_SublevelID]           ; 00:3B1B
     cp   $34                        ; 00:3B1E
-    jr   z,Code003B33               ; 00:3B20
-    jr   Code003B2B                 ; 00:3B22
-Code003B24:
+    jr   z,@HideTimer               ; 00:3B20
+    jr   @Code003B2B                ; 00:3B22
+@SuperPlayers:
     ld   a,[W_SublevelID]           ; 00:3B24
     cp   $62                        ; 00:3B27
-    jr   z,Code003B33               ; 00:3B29
-Code003B2B:
+    jr   z,@HideTimer               ; 00:3B29
+@Code003B2B:
     ld   hl,$C111                   ; 00:3B2B
     call Sub003D0D                  ; 00:3B2E
-    jr   Return003B3B               ; 00:3B31
-Code003B33:
+    jr   @Return                    ; 00:3B31
+@HideTimer:
     ld   hl,$C111                   ; 00:3B33
     ld   a,$F4                      ; 00:3B36
     ldi  [hl],a                     ; 00:3B38
     ldi  [hl],a                     ; 00:3B39
     ld   [hl],a                     ; 00:3B3A
-Return003B3B:
+@Return:
     ret                             ; 00:3B3B
 
-Code003B3C:
+@Challenge:
     ld   a,[$D32C]                  ; 00:3B3C
     cp   $00                        ; 00:3B3F
-    jr   z,Code003B85               ; 00:3B41
+    jr   z,@Code003B85              ; 00:3B41
     cp   $70                        ; 00:3B43
-    jr   nz,Code003B4F              ; 00:3B45
+    jr   nz,@Code003B4F             ; 00:3B45
     ld   a,[$D30A]                  ; 00:3B47
     ld   c,a                        ; 00:3B4A
     ld   d,$78                      ; 00:3B4B
-    jr   Code003B70                 ; 00:3B4D
-Code003B4F:
+    jr   @Code003B70                ; 00:3B4D
+@Code003B4F:
     and  $0F                        ; 00:3B4F
-    jr   nz,Code003B7E              ; 00:3B51
+    jr   nz,@Code003B7E             ; 00:3B51
     ld   a,[$D30A]                  ; 00:3B53
     cp   $1F                        ; 00:3B56
-    jr   nz,Code003B5D              ; 00:3B58
+    jr   nz,@Code003B5D             ; 00:3B58
     ld   c,a                        ; 00:3B5A
-    jr   Code003B63                 ; 00:3B5B
-Code003B5D:
+    jr   @Code003B63                ; 00:3B5B
+@Code003B5D:
     ld   b,a                        ; 00:3B5D
     ld   a,[$D30B]                  ; 00:3B5E
     xor  b                          ; 00:3B61
     ld   c,a                        ; 00:3B62
-Code003B63:
+@Code003B63:
     ld   a,[$D32C]                  ; 00:3B63
     bit  4,a                        ; 00:3B66
-    jr   nz,Code003B6E              ; 00:3B68
+    jr   nz,@Code003B6E             ; 00:3B68
     ld   d,$77                      ; 00:3B6A
-    jr   Code003B70                 ; 00:3B6C
-Code003B6E:
+    jr   @Code003B70                ; 00:3B6C
+@Code003B6E:
     ld   d,$78                      ; 00:3B6E
-Code003B70:
+@Code003B70:
     ld   hl,$C109                   ; 00:3B70
     ld   b,$05                      ; 00:3B73
-Code003B75:
+@Code003B75:
     rrc  c                          ; 00:3B75
-    jr   nc,Code003B7A              ; 00:3B77
+    jr   nc,@Code003B7A             ; 00:3B77
     ld   [hl],d                     ; 00:3B79
-Code003B7A:
+@Code003B7A:
     inc  hl                         ; 00:3B7A
     dec  b                          ; 00:3B7B
-    jr   nz,Code003B75              ; 00:3B7C
-Code003B7E:
+    jr   nz,@Code003B75             ; 00:3B7C
+@Code003B7E:
     ld   a,[$D32C]                  ; 00:3B7E
     dec  a                          ; 00:3B81
     ld   [$D32C],a                  ; 00:3B82
-Code003B85:
-    ld   a,[$C193]                  ; 00:3B85
+@Code003B85:
+    ld   a,[W_YoshiEggItemFlag]     ; 00:3B85
     and  a                          ; 00:3B88
-    jr   z,Code003B90               ; 00:3B89
+    jr   z,@Code003B90              ; 00:3B89
     ld   a,$79                      ; 00:3B8B
     ld   [$C10E],a                  ; 00:3B8D
-Code003B90:
+@Code003B90:
     ld   a,[$C170]                  ; 00:3B90
     and  a                          ; 00:3B93
-    jr   nz,Code003BA4              ; 00:3B94
-    ld   a,[W_SublevelID]           ; 00:3B96
-    cp   $34                        ; 00:3B99
-    jr   z,Code003BA4               ; 00:3B9B
+    jr   nz,@HideTimer_Chal         ; 00:3B94
+    ld   a,[W_SublevelID]           ; 00:3B96  This code only runs in Challenge mode, so why is it checking for the pipe intro sublevel?
+    cp   $34                        ; 00:3B99  34: Original pipe intro
+    jr   z,@HideTimer_Chal          ; 00:3B9B
     ld   hl,$C111                   ; 00:3B9D
     call Sub003D0D                  ; 00:3BA0
     ret                             ; 00:3BA3
 
-Code003BA4:
+@HideTimer_Chal:
     ld   hl,$C111                   ; 00:3BA4
     ld   a,$F4                      ; 00:3BA7
     ldi  [hl],a                     ; 00:3BA9
@@ -9097,24 +9107,24 @@ Code003CCD:
     ld   [hl],c                     ; 00:3CED
     ret                             ; 00:3CEE
 
-Sub003CEF:
-    ld   de,$C17A                   ; 00:3CEF
-    call Sub003DFB                  ; 00:3CF2
-    ld   de,$C34F                   ; 00:3CF5
+LoadStatusBarScore:
+    ld   de,W_PlayerScoreLow        ; 00:3CEF
+    call LoadScoreTileBuffer        ; 00:3CF2
+    ld   de,W_ScoreTileBuffer       ; 00:3CF5
     ld   hl,$C101                   ; 00:3CF8
     ld   b,$06                      ; 00:3CFB
-Code003CFD:
-    ld   a,[de]                     ; 00:3CFD
+@Loop:
+    ld   a,[de]                     ; 00:3CFD \ load score to status bar buffer
     ldi  [hl],a                     ; 00:3CFE
     inc  de                         ; 00:3CFF
     dec  b                          ; 00:3D00
-    jr   nz,Code003CFD              ; 00:3D01
+    jr   nz,@Loop                   ; 00:3D01 /
     ret                             ; 00:3D03
 
 Sub003D04:
     ld   a,[W_PlayerCoins]          ; 00:3D04
     ldh  [<$FFA5],a                 ; 00:3D07
-    call Sub003DE4                  ; 00:3D09
+    call HexToDec8bit               ; 00:3D09
     ret                             ; 00:3D0C
 
 Sub003D0D:
@@ -9122,7 +9132,7 @@ Sub003D0D:
     ldh  [<$FFA5],a                 ; 00:3D10
     ld   a,[W_LevelTimerHigh]       ; 00:3D12
     ldh  [<$FFA4],a                 ; 00:3D15
-    call Sub003DC5                  ; 00:3D17
+    call HexToDec16bit              ; 00:3D17
     ret                             ; 00:3D1A
 
 Sub003D1B:
@@ -9162,15 +9172,16 @@ Sub003D1B:
     ldh  [<HDMA5],a                 ; 00:3D51
     ret                             ; 00:3D53
 
-Sub003D54:
+HexToDec24bit:
+; subroutine: Convert 24-bit big-endian value in $FFA3 to 6-digit decimal tiles in [hl]
     ldh  a,[<$FFA5]                 ; 00:3D54
     ld   e,a                        ; 00:3D56
     ldh  a,[<$FFA4]                 ; 00:3D57
     ld   d,a                        ; 00:3D59
     ldh  a,[<$FFA3]                 ; 00:3D5A
     ld   c,a                        ; 00:3D5C
-    ld   b,$00                      ; 00:3D5D
-Code003D5F:
+    ld   b,$00                      ; 00:3D5D  output digit = 0
+@Loop_Subtract100000:
     ld   a,e                        ; 00:3D5F
     sub  $A0                        ; 00:3D60
     ld   e,a                        ; 00:3D62
@@ -9180,18 +9191,18 @@ Code003D5F:
     ld   a,c                        ; 00:3D67
     sbc  $01                        ; 00:3D68
     ld   c,a                        ; 00:3D6A
-    jr   c,Code003D79               ; 00:3D6B
+    jr   c,@Loop_Subtract100000_End ; 00:3D6B
     ld   a,e                        ; 00:3D6D
     ldh  [<$FFA5],a                 ; 00:3D6E
     ld   a,d                        ; 00:3D70
     ldh  [<$FFA4],a                 ; 00:3D71
     ld   a,c                        ; 00:3D73
     ldh  [<$FFA3],a                 ; 00:3D74
-    inc  b                          ; 00:3D76
-    jr   Code003D5F                 ; 00:3D77
-Code003D79:
+    inc  b                          ; 00:3D76  increment output digit
+    jr   @Loop_Subtract100000       ; 00:3D77
+@Loop_Subtract100000_End:
     ld   a,b                        ; 00:3D79
-    add  $D0                        ; 00:3D7A
+    add  $D0                        ; 00:3D7A  output tile ID = digit + $D0
     ldi  [hl],a                     ; 00:3D7C
     ldh  a,[<$FFA5]                 ; 00:3D7D
     ld   e,a                        ; 00:3D7F
@@ -9200,7 +9211,7 @@ Code003D79:
     ldh  a,[<$FFA3]                 ; 00:3D83
     ld   c,a                        ; 00:3D85
     ld   b,$00                      ; 00:3D86
-Code003D88:
+@Loop_Subtract10000:
     ld   a,e                        ; 00:3D88
     sub  $10                        ; 00:3D89
     ld   e,a                        ; 00:3D8B
@@ -9210,7 +9221,7 @@ Code003D88:
     ld   a,c                        ; 00:3D90
     sbc  $00                        ; 00:3D91
     ld   c,a                        ; 00:3D93
-    jr   c,Code003DA2               ; 00:3D94
+    jr   c,@Loop_Subtract10000_End  ; 00:3D94
     ld   a,e                        ; 00:3D96
     ldh  [<$FFA5],a                 ; 00:3D97
     ld   a,d                        ; 00:3D99
@@ -9218,8 +9229,8 @@ Code003D88:
     ld   a,c                        ; 00:3D9C
     ldh  [<$FFA3],a                 ; 00:3D9D
     inc  b                          ; 00:3D9F
-    jr   Code003D88                 ; 00:3DA0
-Code003DA2:
+    jr   @Loop_Subtract10000        ; 00:3DA0
+@Loop_Subtract10000_End:
     ld   a,b                        ; 00:3DA2
     add  $D0                        ; 00:3DA3
     ldi  [hl],a                     ; 00:3DA5
@@ -9228,92 +9239,97 @@ Code003DA2:
     ldh  a,[<$FFA4]                 ; 00:3DA9
     ld   d,a                        ; 00:3DAB
     ld   b,$00                      ; 00:3DAC
-Code003DAE:
+@Loop_Subtract1000:
     ld   a,e                        ; 00:3DAE
     sub  $E8                        ; 00:3DAF
     ld   e,a                        ; 00:3DB1
     ld   a,d                        ; 00:3DB2
     sbc  $03                        ; 00:3DB3
     ld   d,a                        ; 00:3DB5
-    jr   c,Code003DC1               ; 00:3DB6
+    jr   c,@Loop_Subtract1000_End   ; 00:3DB6
     ld   a,e                        ; 00:3DB8
     ldh  [<$FFA5],a                 ; 00:3DB9
     ld   a,d                        ; 00:3DBB
     ldh  [<$FFA4],a                 ; 00:3DBC
     inc  b                          ; 00:3DBE
-    jr   Code003DAE                 ; 00:3DBF
-Code003DC1:
+    jr   @Loop_Subtract1000         ; 00:3DBF
+@Loop_Subtract1000_End:
     ld   a,b                        ; 00:3DC1
     add  $D0                        ; 00:3DC2
     ldi  [hl],a                     ; 00:3DC4
 
-Sub003DC5:
+HexToDec16bit:
+; subroutine: Convert 16-bit big-endian value in $FFA4 to 3-digit decimal tiles in [hl]
+; 24-bit conversion also continues here
     ldh  a,[<$FFA5]                 ; 00:3DC5
     ld   e,a                        ; 00:3DC7
     ldh  a,[<$FFA4]                 ; 00:3DC8
     ld   d,a                        ; 00:3DCA
     ld   b,$00                      ; 00:3DCB
-Code003DCD:
+@Loop_Subtract100:
     ld   a,e                        ; 00:3DCD
     sub  $64                        ; 00:3DCE
     ld   e,a                        ; 00:3DD0
     ld   a,d                        ; 00:3DD1
     sbc  $00                        ; 00:3DD2
     ld   d,a                        ; 00:3DD4
-    jr   c,Code003DE0               ; 00:3DD5
+    jr   c,@Loop_Subtract100_End    ; 00:3DD5
     ld   a,e                        ; 00:3DD7
     ldh  [<$FFA5],a                 ; 00:3DD8
     ld   a,d                        ; 00:3DDA
     ldh  [<$FFA4],a                 ; 00:3DDB
     inc  b                          ; 00:3DDD
-    jr   Code003DCD                 ; 00:3DDE
-Code003DE0:
+    jr   @Loop_Subtract100          ; 00:3DDE
+@Loop_Subtract100_End:
     ld   a,b                        ; 00:3DE0
     add  $D0                        ; 00:3DE1
     ldi  [hl],a                     ; 00:3DE3
 
-Sub003DE4:
+HexToDec8bit:
+; subroutine: Convert 8-bit value in $FFA5 to 2-digit decimal tiles in [hl]
+; 16-bit and 24-bit conversion also continue here
     ldh  a,[<$FFA5]                 ; 00:3DE4
     ld   b,$00                      ; 00:3DE6
-Code003DE8:
+@Loop_Subtract10:
     sub  $0A                        ; 00:3DE8
-    jr   c,Code003DF1               ; 00:3DEA
+    jr   c,@Loop_Subtract10_End     ; 00:3DEA
     ldh  [<$FFA5],a                 ; 00:3DEC
     inc  b                          ; 00:3DEE
-    jr   Code003DE8                 ; 00:3DEF
-Code003DF1:
+    jr   @Loop_Subtract10           ; 00:3DEF
+@Loop_Subtract10_End:
     ld   a,b                        ; 00:3DF1
     add  $D0                        ; 00:3DF2
     ldi  [hl],a                     ; 00:3DF4
     ldh  a,[<$FFA5]                 ; 00:3DF5
     add  $D0                        ; 00:3DF7
-    ld   [hl],a                     ; 00:3DF9
+    ld   [hl],a                     ; 00:3DF9  set final tile to 0
     ret                             ; 00:3DFA
 
-Sub003DFB:
-    ld   a,[de]                     ; 00:3DFB
-    ldh  [<$FFA5],a                 ; 00:3DFC
-    inc  de                         ; 00:3DFE
-    ld   a,[de]                     ; 00:3DFF
-    ldh  [<$FFA4],a                 ; 00:3E00
-    inc  de                         ; 00:3E02
-    ld   a,[de]                     ; 00:3E03
-    ldh  [<$FFA3],a                 ; 00:3E04
-    ld   hl,$C34F                   ; 00:3E06
-    call Sub003D54                  ; 00:3E09
+LoadScoreTileBuffer:
+; subroutine: Convert 24-bit value in [DE] to 6-digit decimal tiles in W_ScoreTileBuffer
+    ld   a,[de]                     ; 00:3DFB \ load value from [de] (little-endian)
+    ldh  [<$FFA5],a                 ; 00:3DFC | into $FFA3 (big-endian)
+    inc  de                         ; 00:3DFE |
+    ld   a,[de]                     ; 00:3DFF |
+    ldh  [<$FFA4],a                 ; 00:3E00 |
+    inc  de                         ; 00:3E02 |
+    ld   a,[de]                     ; 00:3E03 |
+    ldh  [<$FFA3],a                 ; 00:3E04 /
+    ld   hl,W_ScoreTileBuffer       ; 00:3E06
+    call HexToDec24bit              ; 00:3E09
     inc  hl                         ; 00:3E0C
     ld   [hl],$D0                   ; 00:3E0D
-    ld   hl,$C34F                   ; 00:3E0F
+    ld   hl,W_ScoreTileBuffer       ; 00:3E0F
     ld   b,$06                      ; 00:3E12
-Code003E14:
+@Loop_HideLeadingZeros:             ;         \ Replace up to 6 "0" tiles with empty
     ld   a,[hl]                     ; 00:3E14
-    cp   $D0                        ; 00:3E15
-    jr   nz,Return003E1F            ; 00:3E17
-    ld   [hl],$F4                   ; 00:3E19
+    cp   $D0                        ; 00:3E15  D0: "0"
+    jr   nz,@Return                 ; 00:3E17
+    ld   [hl],$F4                   ; 00:3E19  F4: empty tile
     inc  hl                         ; 00:3E1B
     dec  b                          ; 00:3E1C
-    jr   nz,Code003E14              ; 00:3E1D
-Return003E1F:
+    jr   nz,@Loop_HideLeadingZeros  ; 00:3E1D /
+@Return:
     ret                             ; 00:3E1F
 
 AwardCutsceneTilemapPtrs:           ; 00:3E20
@@ -9333,7 +9349,7 @@ Code003E2F:
     swap a                          ; 00:3E40
     ld   e,a                        ; 00:3E42
     push de                         ; 00:3E43
-    ld   a,[$C1B0]                  ; 00:3E44
+    ld   a,[W_AwardToGive]          ; 00:3E44
     dec  a                          ; 00:3E47
     ld   c,a                        ; 00:3E48
     sla  a                          ; 00:3E49

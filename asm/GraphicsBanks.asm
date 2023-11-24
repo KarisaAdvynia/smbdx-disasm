@@ -80,8 +80,6 @@ Data0F6DA0:                         ; 0F:6DA0
 .bank $16 slot 1
 
 .orga $4000
-
-.orga $4000
 Data164000:                         ; 16:4000
 
 .orga $5000
@@ -199,8 +197,8 @@ Data197C00:                         ; 19:7C00
 .bank $1A slot 1
 
 .orga $4000
-Gr_Bank1A:                          ; 1A:4000
-.incbin "data/Graphics/ChallengeResults.bin"
+Gr_ChalResults:                     ; 1A:4000
+.incbin "data/Graphics/ChalResults.bin"
 Ti_ChalResultsNormal:               ; 1A:7000
 .incbin "data/Tilemaps/ChalResultsNormal.bin"
 Ti_ChalResultsCastle:               ; 1A:72D0
@@ -230,11 +228,9 @@ Pal_ChalResultsCastle:              ; 1A:7620
 
 .orga $4000
 Gr_Bank1B:                          ; 1B:4000
-
-.orga $7000
+.incbin "data/Graphics/Data1B4000.bin"
 Data1B7000:                         ; 1B:7000
-
-.orga $72D0
+.incbin "data/Tilemaps/Data1B4000.bin"
 Data1B72D0:                         ; 1B:72D0
 .dw $7FFF,$35AD,$0000,$7D40,$7FFF,$35AD,$0000,$001B,\
     $7FFF,$56B5,$35AD,$0000,$7FFF,$7D40,$4400,$0000,\
@@ -245,8 +241,7 @@ Data1B72D0:                         ; 1B:72D0
     $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$00F0,$7FFF,$7FFF,\
     $7FFF,$00F0,$7FFF,$7FFF,$7FFF,$00F0,$7FFF,$7FFF
 Data1B7350:                         ; 1B:7350
-
-.orga $7750
+.incbin "data/Graphics/Data1B7350.bin"
 Gr_NonGBCError:                     ; 1B:7750
 .incbin "data/Graphics/NonGBCError.bin"
 Ti_NonGBCError:                     ; 1B:7D50

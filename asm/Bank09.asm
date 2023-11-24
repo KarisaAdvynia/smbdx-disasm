@@ -40,8 +40,8 @@ Code09401D:
     ldh  [<H_CameraXLow],a          ; 09:404B
     ld   a,$70                      ; 09:404D
     ldh  [<H_CameraY],a             ; 09:404F
-    ld   hl,W_TilemapUploadBuffer   ; 09:4051
-    ld   [hl],$99                   ; 09:4054
+    ld   hl,W_TiUpBuffer            ; 09:4051
+    ld   [hl],$99                   ; 09:4054 \ Tilemap upload: 99 D4 D2 08 7F 00
     inc  hl                         ; 09:4056
     ld   [hl],$D4                   ; 09:4057
     inc  hl                         ; 09:4059
@@ -51,7 +51,7 @@ Code09401D:
     inc  hl                         ; 09:405F
     ld   [hl],$7F                   ; 09:4060
     inc  hl                         ; 09:4062
-    ld   [hl],$00                   ; 09:4063
+    ld   [hl],$00                   ; 09:4063 /
     ld   a,$09                      ; 09:4065
     call Sub001480                  ; 09:4067
     jr   Code094096                 ; 09:406A
@@ -160,7 +160,7 @@ Sub094105:
     call LoadFullPaletteLong        ; 09:4121
     xor  a                          ; 09:4124
     ldh  [<SVBK],a                  ; 09:4125
-    ld   hl,W_PaletteBuffer         ; 09:4127
+    ld   hl,W_PalBuffer             ; 09:4127
     ld   b,$20                      ; 09:412A
 Code09412C:
     ld   [hl],$FF                   ; 09:412C
@@ -169,7 +169,7 @@ Code09412C:
     inc  hl                         ; 09:4131
     dec  b                          ; 09:4132
     jr   nz,Code09412C              ; 09:4133
-    ld   hl,W_PaletteBufferSpr      ; 09:4135
+    ld   hl,W_PalBufferSpr          ; 09:4135
     ld   de,Data0940F5              ; 09:4138
     ld   b,$10                      ; 09:413B
 Code09413D:
@@ -208,9 +208,9 @@ Code09413D:
     ld   [$C0C1],a                  ; 09:4188
     ld   [$C170],a                  ; 09:418B
     ld   [W_PlayerCoins],a          ; 09:418E
-    ld   [$C17A],a                  ; 09:4191
-    ld   [$C17B],a                  ; 09:4194
-    ld   [$C17C],a                  ; 09:4197
+    ld   [W_PlayerScoreLow],a       ; 09:4191
+    ld   [W_PlayerScoreMid],a       ; 09:4194
+    ld   [W_PlayerScoreHigh],a      ; 09:4197
     ld   [$C187],a                  ; 09:419A
     ld   [W_SublevelID],a           ; 09:419D
     ld   [W_LevelID],a              ; 09:41A0
@@ -384,7 +384,7 @@ Code0943ED:
     call Sub001802                  ; 09:43F5
     ld   hl,Pal_TitleScreen         ; 09:43F8
     add  hl,de                      ; 09:43FB
-    ld   de,W_PaletteBuffer         ; 09:43FC
+    ld   de,W_PalBuffer             ; 09:43FC
     ld   bc,$0040                   ; 09:43FF
     ld   a,[$C40C]                  ; 09:4402
     and  a                          ; 09:4405
@@ -397,7 +397,7 @@ Code0943ED:
     ld   c,a                        ; 09:4413
     add  hl,bc                      ; 09:4414
     push hl                         ; 09:4415
-    ld   hl,W_PaletteBuffer         ; 09:4416
+    ld   hl,W_PalBuffer             ; 09:4416
     add  hl,bc                      ; 09:4419
     ld   d,h                        ; 09:441A
     ld   e,l                        ; 09:441B
@@ -476,7 +476,7 @@ Code094497:
     add  hl,de                      ; 09:44A8
     ld   d,h                        ; 09:44A9
     ld   e,l                        ; 09:44AA
-    ld   hl,$C000                   ; 09:44AB
+    ld   hl,W_OAMBuffer             ; 09:44AB
     call Sub0945BB                  ; 09:44AE
     ld   hl,$C401                   ; 09:44B1
     dec  [hl]                       ; 09:44B4
@@ -666,7 +666,7 @@ Code0945C6:
     and  a                          ; 09:45C9
     jr   nz,Code0945EE              ; 09:45CA
     ldh  a,[<H_ButtonsPressed]      ; 09:45CC
-    and  $09                        ; 09:45CE
+    and  %00001001                  ; 09:45CE  Start or A
     jr   z,Code09460D               ; 09:45D0
     call Sub0010A9                  ; 09:45D2
     ld   a,$76                      ; 09:45D5
@@ -702,17 +702,17 @@ Return09460C:
 Code09460D:
     ld   a,$00                      ; 09:460D
     cp   $01                        ; 09:460F
-    ret  nz                         ; 09:4611
-    ldh  a,[<H_ButtonsHeld]         ; 09:4612
-    and  $40                        ; 09:4614
+    ret  nz                         ; 09:4611  return always (if 0 != 1)
+    ldh  a,[<H_ButtonsHeld]         ; 09:4612 \ debug code
+    and  $40                        ; 09:4614  if up is held...
     ret  z                          ; 09:4616
     ldh  a,[<H_ButtonsPressed]      ; 09:4617
-    and  $02                        ; 09:4619
+    and  $02                        ; 09:4619  ...and B is pressed...
     ret  z                          ; 09:461B
-    ld   a,$24                      ; 09:461C
+    ld   a,$24                      ; 09:461C  24: coin sound
     ldh  [<$FFF3],a                 ; 09:461E
-    call Sub094624                  ; 09:4620
-    ret                             ; 09:4623
+    call Sub094624                  ; 09:4620  run debug code? clear $A2AA, $B6B5, $A37C
+    ret                             ; 09:4623 /
 
 Sub094624:
     ld   hl,SRAMENABLE              ; 09:4624
@@ -737,7 +737,7 @@ Code094642:
     ld   [$C282],a                  ; 09:4643
     ret                             ; 09:4646
 
-Data094647:                         ; 09:4647
+TiUp_094647:                        ; 09:4647
 .db $9A,$A6,$09,$00,$E0,$00,$DA,$00,\
     $E6,$00,$DE,$00,$F4,$00,$E8,$00,\
     $EF,$00,$DE,$00,$EB,$00
@@ -764,7 +764,7 @@ Sub09465D:
     ld   a,$09                      ; 09:4684
     call Sub001480                  ; 09:4686
     xor  a                          ; 09:4689
-    ld   hl,W_PaletteBuffer         ; 09:468A
+    ld   hl,W_PalBuffer             ; 09:468A
     ldi  [hl],a                     ; 09:468D
     ld   [hl],a                     ; 09:468E
     inc  a                          ; 09:468F
@@ -779,34 +779,34 @@ Sub09465D:
     call Sub0946FB                  ; 09:46A2
     jr   Code0946E9                 ; 09:46A5
 Code0946A7:
-    ld   a,[$C17C]                  ; 09:46A7
+    ld   a,[W_PlayerScoreHigh]      ; 09:46A7
     and  a                          ; 09:46AA
     jr   nz,Code0946BD              ; 09:46AB
-    ld   a,[$C17B]                  ; 09:46AD
+    ld   a,[W_PlayerScoreMid]       ; 09:46AD
     cp   $27                        ; 09:46B0
     jr   c,Code0946E3               ; 09:46B2
     jr   nz,Code0946BD              ; 09:46B4
-    ld   a,[$C17A]                  ; 09:46B6
+    ld   a,[W_PlayerScoreLow]       ; 09:46B6
     cp   $10                        ; 09:46B9
     jr   c,Code0946E3               ; 09:46BB
 Code0946BD:
-    ld   a,[$C192]                  ; 09:46BD
+    ld   a,[W_ModeUnlockFlags]      ; 09:46BD
     or   $02                        ; 09:46C0
-    ld   [$C192],a                  ; 09:46C2
-    ld   a,[$C17C]                  ; 09:46C5
+    ld   [W_ModeUnlockFlags],a      ; 09:46C2
+    ld   a,[W_PlayerScoreHigh]      ; 09:46C5
     and  a                          ; 09:46C8
     jr   nz,Code0946DB              ; 09:46C9
-    ld   a,[$C17B]                  ; 09:46CB
+    ld   a,[W_PlayerScoreMid]       ; 09:46CB
     cp   $75                        ; 09:46CE
     jr   c,Code0946E3               ; 09:46D0
     jr   nz,Code0946DB              ; 09:46D2
-    ld   a,[$C17A]                  ; 09:46D4
+    ld   a,[W_PlayerScoreLow]       ; 09:46D4
     cp   $30                        ; 09:46D7
     jr   c,Code0946E3               ; 09:46D9
 Code0946DB:
-    ld   a,[$C192]                  ; 09:46DB
+    ld   a,[W_ModeUnlockFlags]      ; 09:46DB
     or   $01                        ; 09:46DE
-    ld   [$C192],a                  ; 09:46E0
+    ld   [W_ModeUnlockFlags],a      ; 09:46E0
 Code0946E3:
     ld   a,$09                      ; 09:46E3
     rst  $10                        ; 09:46E5  24-bit call
@@ -823,27 +823,27 @@ Code0946E9:
     ret                             ; 09:46FA
 
 Sub0946FB:
-    ld   hl,$C17C                   ; 09:46FB
+    ld   hl,W_PlayerScoreHigh       ; 09:46FB
     ld   a,[$C16F]                  ; 09:46FE
     cp   [hl]                       ; 09:4701
-    jr   z,Code094708               ; 09:4702
-    jr   nc,Return094735            ; 09:4704
-    jr   c,Code094720               ; 09:4706
-Code094708:
-    ld   hl,$C17B                   ; 09:4708
+    jr   z,@CheckMid                ; 09:4702
+    jr   nc,@Return                 ; 09:4704
+    jr   c,@SetHighScore            ; 09:4706
+@CheckMid:
+    ld   hl,W_PlayerScoreMid        ; 09:4708
     ld   a,[$C16E]                  ; 09:470B
     cp   [hl]                       ; 09:470E
-    jr   z,Code094715               ; 09:470F
-    jr   nc,Return094735            ; 09:4711
-    jr   c,Code094720               ; 09:4713
-Code094715:
-    ld   hl,$C17A                   ; 09:4715
+    jr   z,@CheckLow                ; 09:470F
+    jr   nc,@Return                 ; 09:4711
+    jr   c,@SetHighScore            ; 09:4713
+@CheckLow:
+    ld   hl,W_PlayerScoreLow        ; 09:4715
     ld   a,[$C16D]                  ; 09:4718
     cp   [hl]                       ; 09:471B
-    jr   z,Return094735             ; 09:471C
-    jr   nc,Return094735            ; 09:471E
-Code094720:
-    ld   hl,$C17A                   ; 09:4720
+    jr   z,@Return                  ; 09:471C
+    jr   nc,@Return                 ; 09:471E
+@SetHighScore:
+    ld   hl,W_PlayerScoreLow        ; 09:4720
     ldi  a,[hl]                     ; 09:4723
     ld   [$C16D],a                  ; 09:4724
     ldi  a,[hl]                     ; 09:4727
@@ -853,31 +853,31 @@ Code094720:
     ld   a,$09                      ; 09:472F
     rst  $10                        ; 09:4731  24-bit call
 .dl SubL_075669                     ; 09:4732
-Return094735:
+@Return:
     ret                             ; 09:4735
 
 SubL_094736:
-    ld   hl,$C17C                   ; 09:4736
+    ld   hl,W_PlayerScoreHigh       ; 09:4736
     ld   a,[$C16F]                  ; 09:4739
     cp   [hl]                       ; 09:473C
     jr   z,Code094743               ; 09:473D
     jr   nc,ReturnL_09476A          ; 09:473F
     jr   c,Code09475B               ; 09:4741
 Code094743:
-    ld   hl,$C17B                   ; 09:4743
+    ld   hl,W_PlayerScoreMid        ; 09:4743
     ld   a,[$C16E]                  ; 09:4746
     cp   [hl]                       ; 09:4749
     jr   z,Code094750               ; 09:474A
     jr   nc,ReturnL_09476A          ; 09:474C
     jr   c,Code09475B               ; 09:474E
 Code094750:
-    ld   hl,$C17A                   ; 09:4750
+    ld   hl,W_PlayerScoreLow        ; 09:4750
     ld   a,[$C16D]                  ; 09:4753
     cp   [hl]                       ; 09:4756
     jr   z,ReturnL_09476A           ; 09:4757
     jr   nc,ReturnL_09476A          ; 09:4759
 Code09475B:
-    ld   hl,$C17A                   ; 09:475B
+    ld   hl,W_PlayerScoreLow        ; 09:475B
     ldi  a,[hl]                     ; 09:475E
     ld   [$C16D],a                  ; 09:475F
     ldi  a,[hl]                     ; 09:4762
@@ -941,7 +941,7 @@ Code0947B7:
 Return0947BB:
     ret                             ; 09:47BB
 
-Data0947BC:                         ; 09:47BC
+TiUp_0947BC:                        ; 09:47BC
 .db $9A,$A7,$07,$00,$ED,$00,$E2,$00,\
     $E6,$00,$DE,$00,$F4,$00,$EE,$00,\
     $E9,$00
@@ -961,14 +961,14 @@ Sub0947CE:
     ldh  [<$FFBB],a                 ; 09:47E5
     ld   a,$70                      ; 09:47E7
     ldh  [<H_CameraY],a             ; 09:47E9
-    ld   de,W_TilemapUploadBuffer   ; 09:47EB
-    ld   hl,Data0947BC              ; 09:47EE
+    ld   de,W_TiUpBuffer            ; 09:47EB
+    ld   hl,TiUp_0947BC             ; 09:47EE
     ld   bc,$0012                   ; 09:47F1
     call CopyBytes                  ; 09:47F4
     ld   a,$09                      ; 09:47F7
     call Sub001480                  ; 09:47F9
     ld   a,$00                      ; 09:47FC
-    ld   hl,W_PaletteBuffer         ; 09:47FE
+    ld   hl,W_PalBuffer             ; 09:47FE
     ldi  [hl],a                     ; 09:4801
     ld   [hl],a                     ; 09:4802
     inc  a                          ; 09:4803
@@ -1058,10 +1058,11 @@ Code094889:
 Return09488D:
     ret                             ; 09:488D
 
-Data09488E:                         ; 09:488E
-.incbin "data/Tilemaps/Data09488E.bin"
+Ti_RecordsTitleDemo:                ; 09:488E
+.incbin "data/Tilemaps/RecordsTitleDemo.bin"
 
 Sub094B5E:
+; called by game state 3F
     call Sub00126D                  ; 09:4B5E
     ld   a,$00                      ; 09:4B61
     ldh  [<IE],a                    ; 09:4B63
@@ -1096,12 +1097,12 @@ Code094B82:
     ld   [$C357],a                  ; 09:4B9D
     ld   a,$09                      ; 09:4BA0
     ld   b,a                        ; 09:4BA2
-    ld   de,Data0950A7              ; 09:4BA3
+    ld   de,Pal_RecordsTitleDemo    ; 09:4BA3
     call LoadFullPaletteLong        ; 09:4BA6
     ld   a,:Code094B82              ; 09:4BA9
     ld   b,a                        ; 09:4BAB
     ld   de,$99C0                   ; 09:4BAC
-    ld   hl,Data09488E              ; 09:4BAF
+    ld   hl,Ti_RecordsTitleDemo     ; 09:4BAF
     call LoadScreenTilemapVRAM      ; 09:4BB2
     ld   a,:Code094B82              ; 09:4BB5
     rst  $10                        ; 09:4BB7  24-bit call
@@ -1218,7 +1219,7 @@ Sub094C60:
     add  hl,bc                      ; 09:4C75
     push hl                         ; 09:4C76
     pop  de                         ; 09:4C77
-    call Sub003DFB                  ; 09:4C78
+    call LoadScoreTileBuffer        ; 09:4C78
     ld   hl,Data09507F              ; 09:4C7B
     ldh  a,[<$FFA0]                 ; 09:4C7E
     sla  a                          ; 09:4C80
@@ -1236,7 +1237,7 @@ Code094C8F:
     inc  de                         ; 09:4C91
     dec  b                          ; 09:4C92
     jr   nz,Code094C8F              ; 09:4C93
-    ld   de,$C34F                   ; 09:4C95
+    ld   de,W_ScoreTileBuffer       ; 09:4C95
     ld   b,$06                      ; 09:4C98
 Code094C9A:
     ld   a,$04                      ; 09:4C9A
@@ -1335,7 +1336,7 @@ Sub094D0C:
     add  hl,bc                      ; 09:4D23
     ld   c,l                        ; 09:4D24
     ld   b,h                        ; 09:4D25
-    ld   hl,W_TilemapUploadBuffer   ; 09:4D26
+    ld   hl,W_TiUpBuffer            ; 09:4D26
     ld   [hl],b                     ; 09:4D29
     inc  hl                         ; 09:4D2A
     ld   [hl],c                     ; 09:4D2B
@@ -1364,7 +1365,7 @@ Sub094D3E:
     add  hl,bc                      ; 09:4D4D
     ld   c,l                        ; 09:4D4E
     ld   b,h                        ; 09:4D4F
-    ld   hl,W_TilemapUploadBuffer   ; 09:4D50
+    ld   hl,W_TiUpBuffer            ; 09:4D50
     ld   [hl],b                     ; 09:4D53
     inc  hl                         ; 09:4D54
     ld   [hl],c                     ; 09:4D55
@@ -1430,7 +1431,7 @@ Code094DA7:
     ldh  [<H_GameState],a           ; 09:4DAC
     ret                             ; 09:4DAE
 
-Data094DAF:                         ; 09:4DAF
+Ti_Data094DAF:                      ; 09:4DAF
 .incbin "data/Tilemaps/Data094DAF.bin"
 Data09507F:                         ; 09:507F
 .db $05,$C4,$05,$C5,$05,$C6,$05,$C7,\
@@ -1438,7 +1439,7 @@ Data09507F:                         ; 09:507F
     $04,$74,$04,$75,$04,$76,$04,$77,\
     $04,$78,$04,$79,$04,$7A,$04,$7B,\
     $04,$7C,$04,$7D,$04,$C2,$04,$C3
-Data0950A7:                         ; 09:50A7
+Pal_RecordsTitleDemo:               ; 09:50A7
 .dw $0000,$7FFF,$0000,$0000,$639F,$3A98,$25D2,$0000,\
     $0000,$0000,$0000,$7FFF,$0000,$0000,$0000,$0000,\
     $0000,$7FFF,$0000,$0000,$0000,$001F,$0000,$0000,\
@@ -1477,7 +1478,7 @@ Sub0950F1:
     ld   [$C326],a                  ; 09:5125
     ld   a,:Sub0950F1               ; 09:5128
     ld   b,a                        ; 09:512A
-    ld   de,Data0950A7              ; 09:512B
+    ld   de,Pal_RecordsTitleDemo    ; 09:512B
     call LoadFullPaletteLong        ; 09:512E
     ld   hl,$DFC2                   ; 09:5131
     ld   [hl],$FF                   ; 09:5134
@@ -1486,7 +1487,7 @@ Sub0950F1:
     ld   a,:Sub0950F1               ; 09:5139
     ld   b,a                        ; 09:513B
     ld   de,$99C0                   ; 09:513C
-    ld   hl,Data094DAF              ; 09:513F
+    ld   hl,Ti_Data094DAF           ; 09:513F
     call LoadScreenTilemapVRAM      ; 09:5142
     ld   hl,$C291                   ; 09:5145
     ld   b,$06                      ; 09:5148
@@ -1508,8 +1509,8 @@ Code09514A:
     ld   a,$00                      ; 09:5165
     ld   [W_HardFlag],a             ; 09:5167
 Code09516A:
-    ld   de,$C17A                   ; 09:516A
-    call Sub003DFB                  ; 09:516D
+    ld   de,W_PlayerScoreLow        ; 09:516A
+    call LoadScoreTileBuffer        ; 09:516D
     ld   a,[W_HardFlag]             ; 09:5170
     and  a                          ; 09:5173
     jr   nz,Code09517A              ; 09:5174
@@ -1528,7 +1529,7 @@ Code09517C:
     add  $D1                        ; 09:518B
     ld   e,a                        ; 09:518D
     ld   a,$04                      ; 09:518E
-    ld   hl,W_TilemapUploadBuffer   ; 09:5190
+    ld   hl,W_TiUpBuffer            ; 09:5190
     ld   [hl],$9A                   ; 09:5193
     inc  hl                         ; 09:5195
     ld   [hl],$41                   ; 09:5196
@@ -1547,7 +1548,7 @@ Code09517C:
     ldi  [hl],a                     ; 09:51A5
     ld   [hl],$F4                   ; 09:51A6
     inc  hl                         ; 09:51A8
-    ld   de,$C34F                   ; 09:51A9
+    ld   de,W_ScoreTileBuffer       ; 09:51A9
     ld   b,$06                      ; 09:51AC
 Code0951AE:
     ld   a,$04                      ; 09:51AE
@@ -1592,7 +1593,7 @@ Code0951E7:
     ld   d,$00                      ; 09:51F0
     ld   hl,$D87A                   ; 09:51F2
     add  hl,de                      ; 09:51F5
-    ld   de,$C17C                   ; 09:51F6
+    ld   de,W_PlayerScoreHigh       ; 09:51F6
     ld   c,$03                      ; 09:51F9
 Code0951FB:
     ld   a,[hl]                     ; 09:51FB
@@ -1726,7 +1727,7 @@ Code09539B:
     ld   hl,Data09535E              ; 09:53B1
     add  hl,bc                      ; 09:53B4
     ld   c,[hl]                     ; 09:53B5
-    ld   hl,$C000                   ; 09:53B6
+    ld   hl,W_OAMBuffer             ; 09:53B6
     ld   [hl],d                     ; 09:53B9
     inc  hl                         ; 09:53BA
     ld   [hl],e                     ; 09:53BB
@@ -1884,7 +1885,7 @@ Code0954B8:
     ret                             ; 09:54C6
 
 Code0954C7:
-    ld   hl,W_TilemapUploadBuffer   ; 09:54C7
+    ld   hl,W_TiUpBuffer            ; 09:54C7
     ld   [hl],$9A                   ; 09:54CA
     inc  hl                         ; 09:54CC
     ld   [hl],$4D                   ; 09:54CD
@@ -2064,7 +2065,7 @@ Code0955D3:
     jr   nz,Code0955D3              ; 09:55D7
     ret                             ; 09:55D9
 
-Data0955DA:                         ; 09:55DA
+TiUp_0955DA:                        ; 09:55DA
 .db $00
 
 NonGBCError_Main:
@@ -2142,7 +2143,7 @@ Code095AF4:
     ldh  [<SCX],a                   ; 09:5B03
     ld   a,$09                      ; 09:5B05
     rst  $10                        ; 09:5B07  24-bit call
-.dl SubL_075485                     ; 09:5B08
+.dl SubL_LoadSaveFile               ; 09:5B08
     call SPTitle_LoadGraphics       ; 09:5B0B
     call Sub095D37                  ; 09:5B0E
     ld   a,$01                      ; 09:5B11
@@ -2440,7 +2441,7 @@ Sub095CFE:
     ld   a,[$C16F]                  ; 09:5D0D
     ldh  [<$FFA3],a                 ; 09:5D10
     ld   hl,$FF97                   ; 09:5D12
-    call Sub003D54                  ; 09:5D15
+    call HexToDec24bit              ; 09:5D15
     ld   de,$9A2F                   ; 09:5D18
     ld   c,$06                      ; 09:5D1B
 Code095D1D:
@@ -2473,8 +2474,8 @@ Sub095D37:
     jr   nz,Code095D51              ; 09:5D3D
     ld   hl,SRAMENABLE              ; 09:5D3F
     ld   [hl],$0A                   ; 09:5D42
-    ld   a,[$C16B]                  ; 09:5D44
-    call Sub000FF6                  ; 09:5D47
+    ld   a,[W_SaveFileNum]          ; 09:5D44
+    call VerifySaveFileChecksum     ; 09:5D47
     ld   hl,SRAMENABLE              ; 09:5D4A
     ld   [hl],$FF                   ; 09:5D4D
     jr   nc,Code095D70              ; 09:5D4F

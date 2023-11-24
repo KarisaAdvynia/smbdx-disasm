@@ -144,7 +144,7 @@ Code15426E:
     inc  hl                         ; 15:427B
     ld   d,[hl]                     ; 15:427C
 Code15427D:
-    ld   hl,$C000                   ; 15:427D
+    ld   hl,W_OAMBuffer             ; 15:427D
     ld   a,[$C178]                  ; 15:4280
     ld   c,a                        ; 15:4283
     ld   b,$10                      ; 15:4284
@@ -241,6 +241,7 @@ Sub154307:
 .dw Code154350                      ; 15:4317
 .dw Sub1543C5                       ; 15:4319
 .dw Code15432B                      ; 15:431B
+
 Code15431D:
     ld   a,$2F                      ; 15:431D
     ldh  [<H_GameState],a           ; 15:431F
@@ -723,9 +724,9 @@ Sub154F81:
 .dw Code154FD5                      ; 15:4F91
 .dw Return154FD8                    ; 15:4F93
 .dw Code154FD2                      ; 15:4F95
+
 Return154F97:
     ret                             ; 15:4F97
-
 Return154F98:
     ret                             ; 15:4F98
 
@@ -924,7 +925,7 @@ Code1550DB:
     ld   a,[$C419]                  ; 15:50DB
     swap a                          ; 15:50DE
     add  $48                        ; 15:50E0
-    ld   [$C000],a                  ; 15:50E2
+    ld   [W_OAMBuffer],a            ; 15:50E2
     add  $10                        ; 15:50E5
     ld   [$C004],a                  ; 15:50E7
     ld   a,[$C41A]                  ; 15:50EA
@@ -1274,6 +1275,7 @@ Code155429:
 .dw Code1554C3                      ; 15:5435
 .dw Code155514                      ; 15:5437
 .dw Code1555C0                      ; 15:5439
+
 Code15543B:
     ld   a,$47                      ; 15:543B
     ldh  [<$FFF2],a                 ; 15:543D
@@ -1420,9 +1422,9 @@ Code155514:
 .dw Code1555B3                      ; 15:5528
 .dw Code1555B3                      ; 15:552A
 .dw Sub155588                       ; 15:552C
+
 Return15552E:
     ret                             ; 15:552E
-
 Return15552F:
     ret                             ; 15:552F
 
@@ -1581,6 +1583,7 @@ Code15560D:
 .dw Code1556BD                      ; 15:5622
 .dw Code1556BD                      ; 15:5624
 .dw Code1556A6                      ; 15:5626
+
 Code155628:
     ld   a,[$CDE1]                  ; 15:5628
     and  a                          ; 15:562B
@@ -1715,6 +1718,7 @@ Code1556F2:
 .dw Code15574C                      ; 15:5700
 .dw Return155777                    ; 15:5702
 .dw Return155778                    ; 15:5704
+
 Code155706:
     ld   a,[$CDE1]                  ; 15:5706
     cp   $01                        ; 15:5709
@@ -1749,10 +1753,8 @@ Code15572B:
     jp   Code155638                 ; 15:5746
 Return155749:
     ret                             ; 15:5749
-
 Return15574A:
     ret                             ; 15:574A
-
 Return15574B:
     ret                             ; 15:574B
 
@@ -2369,7 +2371,7 @@ Sub155BC4:
     ld   [$C40D],a                  ; 15:5BCB
 Code155BCE:
     ld   de,Data155BAF              ; 15:5BCE
-    ld   hl,$C000                   ; 15:5BD1
+    ld   hl,W_OAMBuffer             ; 15:5BD1
 Code155BD4:
     ld   a,[de]                     ; 15:5BD4
     cp   $FF                        ; 15:5BD5
@@ -2418,7 +2420,7 @@ Code155C0A:
 
 Code155C2B:
     ld   de,Data155BE5              ; 15:5C2B
-    ld   hl,$C000                   ; 15:5C2E
+    ld   hl,W_OAMBuffer             ; 15:5C2E
 Code155C31:
     ld   a,[de]                     ; 15:5C31
     cp   $FF                        ; 15:5C32
@@ -2514,7 +2516,7 @@ Code155CF8:
     ld   e,[hl]                     ; 15:5D05
     inc  hl                         ; 15:5D06
     ld   d,[hl]                     ; 15:5D07
-    ld   hl,$C000                   ; 15:5D08
+    ld   hl,W_OAMBuffer             ; 15:5D08
 Code155D0B:
     ld   a,[de]                     ; 15:5D0B
     cp   $FF                        ; 15:5D0C
@@ -3124,6 +3126,7 @@ Sub15612F:
 .dw Code156149                      ; 15:6143
 .dw Code156149                      ; 15:6145
 .dw Code156149                      ; 15:6147
+
 Code156149:
     di                              ; 15:6149
     call Sub001783                  ; 15:614A
@@ -3932,7 +3935,7 @@ Code156946:
     ld   a,$02                      ; 15:6959
     ldh  [<$FF97],a                 ; 15:695B
     ld   bc,Data1567FC              ; 15:695D
-    ld   hl,$C000                   ; 15:6960
+    ld   hl,W_OAMBuffer             ; 15:6960
 Code156963:
     ld   a,[bc]                     ; 15:6963
     add  e                          ; 15:6964
@@ -4055,7 +4058,7 @@ Code156AFB:
     ldi  a,[hl]                     ; 15:6B7D
     ld   h,[hl]                     ; 15:6B7E
     ld   l,a                        ; 15:6B7F
-    ld   de,W_PaletteBuffer         ; 15:6B80
+    ld   de,W_PalBuffer             ; 15:6B80
     ld   bc,$0038                   ; 15:6B83
     call CopyBytes                  ; 15:6B86
 Code156B89:
@@ -4092,6 +4095,7 @@ Sub156BB9:
 .dw Code156D4A                      ; 15:6BC7
 .dw Code156D8E                      ; 15:6BC9
 .dw Code156DBA                      ; 15:6BCB
+
 Code156BCD:
     xor  a                          ; 15:6BCD
     ld   [$C4EC],a                  ; 15:6BCE
@@ -4373,6 +4377,7 @@ Sub156E05:
 .dw Code156E78                      ; 15:6E13
 .dw Return156E77                    ; 15:6E15
 .dw Return156E77                    ; 15:6E17
+
 Code156E19:
     ld   a,$1C                      ; 15:6E19
     ld   [$C415],a                  ; 15:6E1B
@@ -5230,7 +5235,7 @@ Code1574AF:
     and  $20                        ; 15:74B6
     ret  nz                         ; 15:74B8
     ld   hl,Data15748A              ; 15:74B9
-    ld   de,$C000                   ; 15:74BC
+    ld   de,W_OAMBuffer             ; 15:74BC
     ld   c,$02                      ; 15:74BF
 Code1574C1:
     ldi  a,[hl]                     ; 15:74C1
@@ -6269,7 +6274,7 @@ SubL_157B22:
     ldi  a,[hl]                     ; 15:7B6E
     ld   h,[hl]                     ; 15:7B6F
     ld   l,a                        ; 15:7B70
-    ld   de,W_PaletteBuffer         ; 15:7B71
+    ld   de,W_PalBuffer             ; 15:7B71
     ld   bc,$0038                   ; 15:7B74
     call CopyBytes                  ; 15:7B77
     ld   a,$01                      ; 15:7B7A

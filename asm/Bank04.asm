@@ -6,77 +6,77 @@ Pal_SublevelBGs:                    ; 04:4000
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$1BEE,$0222,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
 ; Layer palette 1
 .dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$4620,\
     $0000,$1BEE,$0222,$0120,$0000,$7BF7,$4620,$0000,\
     $0F5F,$0133,$0009,$0000,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 ; Layer palette 2
 .dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$3A52,$0000,\
     $7D47,$3FF3,$0204,$0000,$7D47,$7FFF,$3A52,$0000,\
     $7D47,$3018,$7D47,$515F,$7D47,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180
 ; Layer palette 3
 .dw $0000,$7FFF,$7F53,$50A6,$0000,$0F5F,$0133,$31AC,\
     $0000,$7FFF,$5AF6,$31AC,$0000,$7FFF,$5AF6,$31AC,\
     $0000,$7FFF,$00FD,$3E0F,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 ; Layer palette 4
 .dw $0000,$7FFF,$7E86,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$7FFF,$35AD,$4A94,$0000,$4F1F,$0133,$0000,\
     $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 ; Layer palette 5
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$7FFF,$35AD,$4A94,$7E2D,$4F1F,$0133,$0000,\
     $7E2D,$0173,$0173,$0173,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
 ; Layer palette 6
 .dw $0000,$7FFF,$7E86,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$1BEE,$0222,$0000,$0000,$4F1F,$0133,$0000,\
     $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 ; Layer palette 7
 .dw $0000,$7FFF,$00D9,$31AC,$0000,$0F5F,$0133,$0000,\
     $0000,$7FFF,$5AF6,$318B,$0000,$7FFF,$5AF6,$318B,\
     $0000,$03EC,$03EC,$03EC,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
 ; Layer palette 8
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$1BEE,$0222,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$3A10,$0000,\
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$3A10,$0000
 ; Layer palette 9
 .dw $0000,$7FFF,$7F53,$50A6,$0000,$0F5F,$0133,$31AC,\
     $0000,$7FFF,$5AF6,$31AC,$0000,$7FFF,$5AF6,$31AC,\
     $0000,$7FFF,$00FD,$3E0F,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4DEE,$3000,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4DEE,$3000
 ; Layer palette A
 .dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$3A52,$0000,\
     $7D47,$3FF3,$0204,$0000,$7D47,$7FFF,$3A52,$0000,\
     $7D47,$2C17,$7D47,$557F,$7D47,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$46A0,$2000,\
+    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$46A0,$2000
 ; Layer palette B
 .dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$0000,\
     $0000,$1BEE,$0222,$0000,$0000,$7BF7,$4620,$0000,\
     $0000,$0000,$0000,$0000,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$2EE6,$1CE0,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$2EE6,$1CE0
 ; Layer palette C
 .dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$0133,$4620,\
     $0000,$1BEE,$0222,$0120,$0000,$7BF7,$4620,$0000,\
     $035E,$0133,$0009,$0000,$0000,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4583,$0008,\
+    $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$4583,$0008
 ; Layer palette D
 .dw $7E2D,$7FFF,$7E86,$0000,$7E2D,$0F5F,$0133,$0000,\
     $7E2D,$0A9F,$0019,$0000,$7E2D,$4F1F,$0133,$0000,\
     $0F5F,$0133,$0009,$0000,$7E2D,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$7E2D,$7FFF,$02BC,$0180
 ; Layer palette E
 .dw $7D47,$7FFF,$7E6F,$0000,$7D47,$0F5F,$0133,$0000,\
     $7E6F,$3018,$7D47,$515F,$7E6F,$4BF4,$0204,$0000,\
     $7D47,$7FFF,$3A52,$0000,$7D47,$7B5F,$001F,$0000,\
-    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180,\
+    $0000,$7FFF,$7D86,$0000,$7D47,$7FFF,$02BC,$0180
 ; Layer palette F
 .dw $0000,$7FFF,$7E6F,$0000,$0000,$0F5F,$7D47,$0000,\
     $0000,$7FFF,$5F17,$35CD,$0000,$7FFF,$5F17,$35CD,\
@@ -136,7 +136,7 @@ Code0444D0:
     ld   hl,Pal_SublevelBGs         ; 04:44D0
     add  hl,de                      ; 04:44D3
     ld   a,[hl]                     ; 04:44D4
-    ld   hl,W_PaletteBuffer         ; 04:44D5
+    ld   hl,W_PalBuffer             ; 04:44D5
     add  hl,bc                      ; 04:44D8
     ld   [hl],a                     ; 04:44D9
     inc  e                          ; 04:44DA
@@ -153,77 +153,77 @@ Pal_SublevelSprites:                ; 04:44E8
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette 1
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
-    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
+    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 ; Sprite palette 2
 .dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
-    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
+    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52
 ; Sprite palette 3
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
-    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
+    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 ; Sprite palette 4
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette 5
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette 6
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette 7
 .dw $7EA8,$7FFF,$0A00,$0000,$7EA8,$7FFF,$5AF6,$318B,\
     $7EA8,$72BF,$3C7C,$4620,$7EA8,$0ADF,$01AE,$02C0,\
     $7EA8,$0ADF,$01AE,$001B,$7EA8,$7B5F,$001F,$0C0A,\
-    $7EA8,$7FFF,$0ADF,$001B,$7EA8,$5B7F,$0133,$4620,\
+    $7EA8,$7FFF,$0ADF,$001B,$7EA8,$5B7F,$0133,$4620
 ; Sprite palette 8
 .dw $7E2D,$1BEE,$0222,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette 9
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
-    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
+    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 ; Sprite palette A
 .dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
-    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
+    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52
 ; Sprite palette B
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
-    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
+    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 ; Sprite palette C
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7BF8,$4620,$3502,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
     $0000,$0ADF,$01AE,$001B,$0000,$7B5F,$001F,$0C0A,\
-    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620,\
+    $0000,$7FFF,$0ADF,$001B,$0000,$5B7F,$0133,$4620
 ; Sprite palette D
 .dw $7F2B,$7FFF,$0A00,$0000,$7F2B,$4F1F,$0133,$0000,\
     $7F2B,$72BF,$3C7C,$0A00,$7F2B,$0ADF,$01AE,$02C0,\
     $7F2B,$0ADF,$01AE,$001B,$7F2B,$7B5F,$001F,$0C0A,\
-    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00,\
+    $7F2B,$7FFF,$0ADF,$001B,$7F2B,$7FFF,$0ADF,$0A00
 ; Sprite palette E
 .dw $7D06,$7FFF,$0A00,$0000,$7D06,$7FFF,$3A52,$0000,\
     $7D06,$72BF,$3C7C,$3A52,$7D06,$0ADF,$01AE,$02C0,\
     $7D06,$0ADF,$01AE,$001B,$7D06,$7B5F,$001F,$0C0A,\
-    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52,\
+    $7D06,$7FFF,$0ADF,$001B,$7D06,$7FFF,$0ADF,$3A52
 ; Sprite palette F
 .dw $0000,$7FFF,$0A00,$0000,$0000,$7FFF,$5F17,$360F,\
     $0000,$72BF,$3C7C,$4620,$0000,$0ADF,$01AE,$02C0,\
@@ -257,7 +257,7 @@ Code044912:
     ld   hl,Pal_SublevelSprites     ; 04:4912
     add  hl,de                      ; 04:4915
     ld   a,[hl]                     ; 04:4916
-    ld   hl,W_PaletteBufferSpr      ; 04:4917
+    ld   hl,W_PalBufferSpr          ; 04:4917
     add  hl,bc                      ; 04:491A
     ld   [hl],a                     ; 04:491B
     inc  e                          ; 04:491C
@@ -273,7 +273,7 @@ Code044912:
 Sub04492A:
     ld   b,$28                      ; 04:492A
     ld   a,$F4                      ; 04:492C
-    ld   hl,$C000                   ; 04:492E
+    ld   hl,W_OAMBuffer             ; 04:492E
 Code044931:
     ldi  [hl],a                     ; 04:4931
     inc  hl                         ; 04:4932
@@ -416,9 +416,9 @@ SetLevelTimerRace:
     ld   [$DED0],a                  ; 04:4AAE
     ret                             ; 04:4AB1
 
-Data044AB2:                         ; 04:4AB2
+TiUp_044AB2:                        ; 04:4AB2
 .db $00
-Data044AB3:                         ; 04:4AB3
+TiUp_044AB3:                        ; 04:4AB3
 .db $9D,$06,$01,$0E,$7E,$9D,$46,$01,\
     $06,$F7,$9D,$86,$01,$06,$F7,$00
 
@@ -435,6 +435,7 @@ Sub044AC7:
 .dw Code044B00                      ; 04:4AD0
 .dw Code044BB5                      ; 04:4AD2
 .dw Code044BD5                      ; 04:4AD4
+
 Code044AD6:
     ld   a,$90                      ; 04:4AD6
     ld   [$C178],a                  ; 04:4AD8
@@ -526,10 +527,10 @@ Code044B64:
     ld   de,$0000                   ; 04:4B6B
     ld   bc,$0000                   ; 04:4B6E
 Code044B71:
-    ld   hl,Data044AB3              ; 04:4B71
+    ld   hl,TiUp_044AB3             ; 04:4B71
     add  hl,de                      ; 04:4B74
     ld   a,[hl]                     ; 04:4B75
-    ld   hl,W_TilemapUploadBuffer   ; 04:4B76
+    ld   hl,W_TiUpBuffer            ; 04:4B76
     add  hl,bc                      ; 04:4B79
     ld   [hl],a                     ; 04:4B7A
     inc  e                          ; 04:4B7B
@@ -542,15 +543,15 @@ Code044B71:
     jr   z,Return044BA2             ; 04:4B86
     cp   $01                        ; 04:4B88
     jr   nz,Code044B98              ; 04:4B8A
-    ld   hl,$DF02                   ; 04:4B8C
+    ld   hl,W_TiUpBuffer+$01        ; 04:4B8C
     ld   [hl],$46                   ; 04:4B8F
-    ld   hl,$DF07                   ; 04:4B91
+    ld   hl,W_TiUpBuffer+$06        ; 04:4B91
     ld   [hl],$06                   ; 04:4B94
     jr   Return044BA2               ; 04:4B96
 Code044B98:
-    ld   hl,$DF02                   ; 04:4B98
+    ld   hl,W_TiUpBuffer+$01        ; 04:4B98
     ld   [hl],$86                   ; 04:4B9B
-    ld   hl,$DF0C                   ; 04:4B9D
+    ld   hl,W_TiUpBuffer+$0B        ; 04:4B9D
     ld   [hl],$06                   ; 04:4BA0
 Return044BA2:
     ret                             ; 04:4BA2
@@ -638,10 +639,10 @@ Sub044C10:
 .dw Code044DC6                      ; 04:4C26
 .dw Code044DF3                      ; 04:4C28
 
-Data044C2A:                         ; 04:4C2A
+TiUp_044C2A:                        ; 04:4C2A
 .db $9C,$8C,$03,$0E,$51,$0E,$7D,$0E,\
     $51,$9D,$8C,$44,$06,$F7
-Data044C38:                         ; 04:4C38
+TiUp_044C38:                        ; 04:4C38
 .db $9D,$46,$01,$0E,$7E,$9D,$86,$01,\
     $06,$F7,$9D,$C6,$01,$06,$F7,$00
 
@@ -649,10 +650,10 @@ Code044C48:
     ld   de,$0000                   ; 04:4C48
     ld   bc,$0000                   ; 04:4C4B
 Code044C4E:
-    ld   hl,Data044C2A              ; 04:4C4E
+    ld   hl,TiUp_044C2A             ; 04:4C4E
     add  hl,de                      ; 04:4C51
     ld   a,[hl]                     ; 04:4C52
-    ld   hl,W_TilemapUploadBuffer   ; 04:4C53
+    ld   hl,W_TiUpBuffer            ; 04:4C53
     add  hl,bc                      ; 04:4C56
     ld   [hl],a                     ; 04:4C57
     inc  e                          ; 04:4C58
@@ -663,7 +664,7 @@ Code044C4E:
     ld   a,[W_HardFlag]             ; 04:4C5F
     and  a                          ; 04:4C62
     jr   z,Code044C6A               ; 04:4C63
-    ld   hl,$DF07                   ; 04:4C65
+    ld   hl,W_TiUpBuffer+$06        ; 04:4C65
     ld   [hl],$69                   ; 04:4C68
 Code044C6A:
     ld   a,[W_LevelID]              ; 04:4C6A
@@ -672,13 +673,13 @@ Code044C6A:
     srl  a                          ; 04:4C70
     inc  a                          ; 04:4C72
     or   $50                        ; 04:4C73
-    ld   hl,$DF05                   ; 04:4C75
+    ld   hl,W_TiUpBuffer+$04        ; 04:4C75
     ld   [hl],a                     ; 04:4C78
     pop  af                         ; 04:4C79
     and  $03                        ; 04:4C7A
     inc  a                          ; 04:4C7C
     or   $50                        ; 04:4C7D
-    ld   hl,$DF09                   ; 04:4C7F
+    ld   hl,W_TiUpBuffer+$08        ; 04:4C7F
     ld   [hl],a                     ; 04:4C82
     ld   a,$90                      ; 04:4C83
     ld   [$C178],a                  ; 04:4C85
@@ -759,7 +760,7 @@ Code044D0C:
     ld   [W_PlayerFireFlag],a       ; 04:4D0F
     ld   a,$04                      ; 04:4D12
     rst  $10                        ; 04:4D14  24-bit call
-.dl SubL_075584                     ; 04:4D15
+.dl SubL_SaveToFile                 ; 04:4D15
     xor  a                          ; 04:4D18
     ld   [W_PlayerFireFlag],a       ; 04:4D19
     ld   a,$04                      ; 04:4D1C
@@ -771,8 +772,8 @@ Code044D0C:
     ld   [$C326],a                  ; 04:4D29
     ld   a,$44                      ; 04:4D2C
     ldh  [<$FFF2],a                 ; 04:4D2E
-    ld   hl,W_TilemapUploadBuffer   ; 04:4D30
-    ld   [hl],$9D                   ; 04:4D33
+    ld   hl,W_TiUpBuffer            ; 04:4D30
+    ld   [hl],$9D                   ; 04:4D33 \ tilemap upload data: 9D 86 01 06 F7 00
     inc  hl                         ; 04:4D35
     ld   [hl],$86                   ; 04:4D36
     inc  hl                         ; 04:4D38
@@ -782,7 +783,7 @@ Code044D0C:
     inc  hl                         ; 04:4D3E
     ld   [hl],$F7                   ; 04:4D3F
     inc  hl                         ; 04:4D41
-    ld   [hl],$00                   ; 04:4D42
+    ld   [hl],$00                   ; 04:4D42 /
     ret                             ; 04:4D44
 
 Code044D45:
@@ -829,10 +830,10 @@ Code044D8A:
     ld   de,$0000                   ; 04:4D8E
     ld   bc,$0000                   ; 04:4D91
 Code044D94:
-    ld   hl,Data044C38              ; 04:4D94
+    ld   hl,TiUp_044C38             ; 04:4D94
     add  hl,de                      ; 04:4D97
     ld   a,[hl]                     ; 04:4D98
-    ld   hl,W_TilemapUploadBuffer   ; 04:4D99
+    ld   hl,W_TiUpBuffer            ; 04:4D99
     add  hl,bc                      ; 04:4D9C
     ld   [hl],a                     ; 04:4D9D
     inc  e                          ; 04:4D9E
@@ -845,16 +846,16 @@ Code044D94:
     jr   z,Return044DC5             ; 04:4DAA
     cp   $01                        ; 04:4DAC
     jr   z,Code044DBB               ; 04:4DAE
-    ld   hl,$DF02                   ; 04:4DB0
+    ld   hl,W_TiUpBuffer+$01        ; 04:4DB0
     ld   [hl],$C6                   ; 04:4DB3
-    ld   hl,$DF0C                   ; 04:4DB5
+    ld   hl,W_TiUpBuffer+$0B        ; 04:4DB5
     ld   [hl],$46                   ; 04:4DB8
     ret                             ; 04:4DBA
 
 Code044DBB:
-    ld   hl,$DF02                   ; 04:4DBB
+    ld   hl,W_TiUpBuffer+$01        ; 04:4DBB
     ld   [hl],$86                   ; 04:4DBE
-    ld   hl,$DF07                   ; 04:4DC0
+    ld   hl,W_TiUpBuffer+$06        ; 04:4DC0
     ld   [hl],$46                   ; 04:4DC3
 Return044DC5:
     ret                             ; 04:4DC5
@@ -901,7 +902,7 @@ Code044DF3:
     ld   [$C168],a                  ; 04:4E0C
     ret                             ; 04:4E0F
 
-Data044E10:                         ; 04:4E10
+TiUp_044E10:                        ; 04:4E10
 .db $9C,$C6,$0A,$0D,$3C,$0D,$3D,$0D,\
     $3C,$0D,$3D,$0D,$3C,$0D,$3D,$0D,\
     $3C,$0D,$3D,$0D,$3C,$0D,$3D,$9C,\
@@ -910,9 +911,10 @@ Data044E10:                         ; 04:4E10
     $0D,$4D,$0D,$4C,$0D,$4D,$9D,$87,\
     $04,$0E,$5D,$0E,$6A,$0E,$5C,$06,\
     $F4,$9D,$C7,$43,$06,$F4,$00
+
 Code044E4F:
-    ld   hl,W_TilemapUploadBuffer   ; 04:4E4F
-    ld   de,Data044E10              ; 04:4E52
+    ld   hl,W_TiUpBuffer            ; 04:4E4F
+    ld   de,TiUp_044E10             ; 04:4E52
     ld   b,$3F                      ; 04:4E55
 Code044E57:
     ld   a,[de]                     ; 04:4E57
@@ -932,13 +934,13 @@ Code044E65:
     rl   d                          ; 04:4E6C
     sla  e                          ; 04:4E6E
     rl   d                          ; 04:4E70
-    ld   hl,$DF05                   ; 04:4E72
+    ld   hl,W_TiUpBuffer+$04        ; 04:4E72
     add  hl,de                      ; 04:4E75
     ld   [hl],$3E                   ; 04:4E76
     inc  hl                         ; 04:4E78
     inc  hl                         ; 04:4E79
     ld   [hl],$3F                   ; 04:4E7A
-    ld   hl,$DF1C                   ; 04:4E7C
+    ld   hl,W_TiUpBuffer+$1B        ; 04:4E7C
     add  hl,de                      ; 04:4E7F
     ld   [hl],$4E                   ; 04:4E80
     inc  hl                         ; 04:4E82
@@ -966,10 +968,10 @@ Code044E91:
     ld   de,$0000                   ; 04:4EA4
     ld   bc,$0000                   ; 04:4EA7
 Code044EAA:
-    ld   hl,Data044C38              ; 04:4EAA
+    ld   hl,TiUp_044C38             ; 04:4EAA
     add  hl,de                      ; 04:4EAD
     ld   a,[hl]                     ; 04:4EAE
-    ld   hl,W_TilemapUploadBuffer   ; 04:4EAF
+    ld   hl,W_TiUpBuffer            ; 04:4EAF
     add  hl,bc                      ; 04:4EB2
     ld   [hl],a                     ; 04:4EB3
     inc  e                          ; 04:4EB4
@@ -980,9 +982,9 @@ Code044EAA:
     ld   a,[$C322]                  ; 04:4EBB
     and  a                          ; 04:4EBE
     jr   z,Code044ECB               ; 04:4EBF
-    ld   hl,$DF02                   ; 04:4EC1
+    ld   hl,W_TiUpBuffer+$01        ; 04:4EC1
     ld   [hl],$86                   ; 04:4EC4
-    ld   hl,$DF07                   ; 04:4EC6
+    ld   hl,W_TiUpBuffer+$06        ; 04:4EC6
     ld   [hl],$46                   ; 04:4EC9
 Code044ECB:
     ldh  a,[<H_ButtonsPressed]      ; 04:4ECB
@@ -1039,7 +1041,7 @@ Code044F2B:
     ld   [$C178],a                  ; 04:4F2B
     ret                             ; 04:4F2E
 
-Data044F2F:                         ; 04:4F2F
+TiUp_044F2F:                        ; 04:4F2F
 .db $9D,$46,$01,$0E,$7E,$9D,$86,$01,\
     $06,$F7,$9D,$8C,$04,$0E,$5C,$0E,\
     $6B,$0E,$6A,$0E,$5D,$9D,$CD,$43,\
@@ -1052,10 +1054,10 @@ Sub044F67:
     ld   de,$0000                   ; 04:4F67
     ld   bc,$0000                   ; 04:4F6A
 Code044F6D:
-    ld   hl,Data044F2F              ; 04:4F6D
+    ld   hl,TiUp_044F2F             ; 04:4F6D
     add  hl,de                      ; 04:4F70
     ld   a,[hl]                     ; 04:4F71
-    ld   hl,W_TilemapUploadBuffer   ; 04:4F72
+    ld   hl,W_TiUpBuffer            ; 04:4F72
     add  hl,bc                      ; 04:4F75
     ld   [hl],a                     ; 04:4F76
     inc  c                          ; 04:4F77
@@ -1096,7 +1098,7 @@ Return044FB4:
     ret                             ; 04:4FB4
 
 Sub044FB5:
-    ld   a,[$C193]                  ; 04:4FB5
+    ld   a,[W_YoshiEggItemFlag]     ; 04:4FB5
     and  a                          ; 04:4FB8
     jr   z,Return044FDE             ; 04:4FB9
     ld   a,[$C178]                  ; 04:4FBB
@@ -1104,7 +1106,7 @@ Sub044FB5:
     cp   $90                        ; 04:4FC0
     jr   nc,Return044FDE            ; 04:4FC2
     add  $04                        ; 04:4FC4
-    ld   hl,$C000                   ; 04:4FC6
+    ld   hl,W_OAMBuffer             ; 04:4FC6
     ld   [hl],a                     ; 04:4FC9
     inc  hl                         ; 04:4FCA
     ld   [hl],$80                   ; 04:4FCB
@@ -1128,7 +1130,7 @@ Code044FDF:
     inc  [hl]                       ; 04:4FE2
     ld   a,$04                      ; 04:4FE3
     rst  $10                        ; 04:4FE5  24-bit call
-.dl SubL_075584                     ; 04:4FE6
+.dl SubL_SaveToFile                 ; 04:4FE6
     ret                             ; 04:4FE9
 
 .db $40,$30,$C2,$08,$40,$40,$C4,$08,\
@@ -1194,7 +1196,7 @@ Code0450A2:
 Code0450A8:
     ldi  a,[hl]                     ; 04:50A8
     push hl                         ; 04:50A9
-    ld   hl,$C000                   ; 04:50AA
+    ld   hl,W_OAMBuffer             ; 04:50AA
     add  hl,de                      ; 04:50AD
     ld   [hl],a                     ; 04:50AE
     pop  hl                         ; 04:50AF
@@ -1251,21 +1253,21 @@ Code0450F1:
     ret                             ; 04:5102
 
 Sub045103:
-    ld   hl,$C000                   ; 04:5103
+    ld   hl,W_OAMBuffer             ; 04:5103
     ld   de,$0040                   ; 04:5106
     add  hl,de                      ; 04:5109
     ld   a,[hl]                     ; 04:510A
     add  $10                        ; 04:510B
     ld   [hl],a                     ; 04:510D
-    ld   hl,$C000                   ; 04:510E
+    ld   hl,W_OAMBuffer             ; 04:510E
     ld   e,$44                      ; 04:5111
     add  hl,de                      ; 04:5113
     ld   [hl],a                     ; 04:5114
-    ld   hl,$C000                   ; 04:5115
+    ld   hl,W_OAMBuffer             ; 04:5115
     ld   e,$48                      ; 04:5118
     add  hl,de                      ; 04:511A
     ld   [hl],$F4                   ; 04:511B
-    ld   hl,$C000                   ; 04:511D
+    ld   hl,W_OAMBuffer             ; 04:511D
     ld   e,$4C                      ; 04:5120
     add  hl,de                      ; 04:5122
     ld   [hl],$F4                   ; 04:5123
@@ -1286,7 +1288,7 @@ Code045137:
     ldh  [<$FF97],a                 ; 04:5139
     ld   a,[hl]                     ; 04:513B
     ldh  [<$FF98],a                 ; 04:513C
-    ld   hl,$C000                   ; 04:513E
+    ld   hl,W_OAMBuffer             ; 04:513E
     add  hl,bc                      ; 04:5141
     ldh  a,[<$FF97]                 ; 04:5142
     ldi  [hl],a                     ; 04:5144
@@ -1364,14 +1366,14 @@ SubL_0451A8:
     ld   a,[$C1AE]                  ; 04:51A8
     ld   c,a                        ; 04:51AB
     ld   b,$00                      ; 04:51AC
-    ld   hl,W_PaletteBuffer         ; 04:51AE
+    ld   hl,W_PalBuffer             ; 04:51AE
     add  hl,bc                      ; 04:51B1
     ld   d,$01                      ; 04:51B2
     call Sub0451BD                  ; 04:51B4
     rst  $18                        ; 04:51B7  Return from 24-bit call
 
 Sub0451B8:
-    ld   hl,W_PaletteBuffer         ; 04:51B8
+    ld   hl,W_PalBuffer             ; 04:51B8
     ld   d,$20                      ; 04:51BB
 
 Sub0451BD:
@@ -1451,7 +1453,7 @@ SubL_045225:
     ld   a,[$C1AE]                  ; 04:5225
     ld   c,a                        ; 04:5228
     ld   b,$00                      ; 04:5229
-    ld   hl,W_PaletteBuffer         ; 04:522B
+    ld   hl,W_PalBuffer             ; 04:522B
     add  hl,bc                      ; 04:522E
     ld   a,$01                      ; 04:522F
     ldh  [<$FF9A],a                 ; 04:5231
@@ -1459,14 +1461,14 @@ SubL_045225:
     rst  $18                        ; 04:5236  Return from 24-bit call
 
 SubL_045237:
-    ld   hl,W_PaletteBufferSpr      ; 04:5237
+    ld   hl,W_PalBufferSpr          ; 04:5237
     ld   a,$0C                      ; 04:523A
     ldh  [<$FF9A],a                 ; 04:523C
     call Sub045249                  ; 04:523E
     rst  $18                        ; 04:5241  Return from 24-bit call
 
 Sub045242:
-    ld   hl,W_PaletteBuffer         ; 04:5242
+    ld   hl,W_PalBuffer             ; 04:5242
     ld   a,$20                      ; 04:5245
     ldh  [<$FF9A],a                 ; 04:5247
 
@@ -2254,7 +2256,7 @@ Code0469AF:
     and  a                          ; 04:69B7
     jr   z,Code0469C1               ; 04:69B8
     ld   a,$05                      ; 04:69BA
-    ld   [$C1B0],a                  ; 04:69BC
+    ld   [W_AwardToGive],a          ; 04:69BC
     jr   Code0469C8                 ; 04:69BF
 Code0469C1:
     nop                             ; 04:69C1
@@ -2370,7 +2372,7 @@ Sub046A79:
     ld   a,$07                      ; 04:6A79
     ldh  [<SVBK],a                  ; 04:6A7B
     ld   hl,Data0466E2              ; 04:6A7D
-    ld   de,W_PaletteBuffer         ; 04:6A80
+    ld   de,W_PalBuffer             ; 04:6A80
     ld   bc,$0040                   ; 04:6A83
     call CopyBytes                  ; 04:6A86
     ret                             ; 04:6A89
@@ -2378,7 +2380,7 @@ Sub046A79:
 Sub046A8A:
     xor  a                          ; 04:6A8A
     ldh  [<SVBK],a                  ; 04:6A8B
-    ld   hl,W_PaletteBuffer         ; 04:6A8D
+    ld   hl,W_PalBuffer             ; 04:6A8D
     ld   c,$20                      ; 04:6A90
 Code046A92:
     ld   [hl],$FF                   ; 04:6A92

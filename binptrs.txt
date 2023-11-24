@@ -100,7 +100,7 @@
 05664F 056686 Sublevels/32_SpritesHard.bin
 065CB0        Graphics/Data065CB0.bin
 065FB0 066280 Tilemaps/Data065FB0.bin
-09488E 094B5E Tilemaps/Data09488E.bin
+09488E 094B5E Tilemaps/RecordsTitleDemo.bin
 094DAF 09507F Tilemaps/Data094DAF.bin
 095629        Tilemaps/SPTitle_Tiles.bin
 095869 095AA9 Tilemaps/SPTitle_Attr.bin
@@ -109,7 +109,7 @@
 0A4620        Tilemaps/Data0A4620.bin
 0A48F0        Tilemaps/Data0A48F0.bin
 0A4BC0 0A4E90 Tilemaps/Data0A4BC0.bin
-0B53A2 0B5672 Tilemaps/Data0B53A2.bin
+0B53A2 0B5672 Tilemaps/YouVsBooMenu.bin
 0C4000        Sublevels/3A_Main.bin
 0C472F        Sublevels/3B_Main.bin
 0C4BC1        Sublevels/3C_Main.bin
@@ -406,10 +406,12 @@
 197000        Tilemaps/MainMenu.bin
 1972D0 1975A0 Tilemaps/FileSelect.bin
 
-1A4000        Graphics/ChallengeResults.bin
+1A4000        Graphics/ChalResults.bin
 1A7000        Tilemaps/ChalResultsNormal.bin
 1A72D0 1A75A0 Tilemaps/ChalResultsCastle.bin
-
+1B4000        Graphics/Data1B4000.bin
+1B7000 1B72D0 Tilemaps/Data1B4000.bin
+1B7350        Graphics/Data1B7350.bin
 1B7750        Graphics/NonGBCError.bin
 1B7D50 1B7F90 Tilemaps/NonGBCError.bin
 1C4000        Graphics/ChalMissYoshiHatch.bin

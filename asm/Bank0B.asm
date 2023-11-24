@@ -1113,7 +1113,7 @@ Code0B538A:
     ld   hl,Data0B5365              ; 0B:538A
     add  hl,bc                      ; 0B:538D
     ld   a,[hl]                     ; 0B:538E
-    ld   hl,W_PaletteBufferSpr      ; 0B:538F
+    ld   hl,W_PalBufferSpr          ; 0B:538F
     add  hl,de                      ; 0B:5392
     ld   [hl],a                     ; 0B:5393
     inc  bc                         ; 0B:5394
@@ -1127,24 +1127,24 @@ Code0B538A:
 ReturnL_0B53A1:
     rst  $18                        ; 0B:53A1  Return from 24-bit call
 
-Data0B53A2:                         ; 0B:53A2
-.incbin "data/Tilemaps/Data0B53A2.bin"
-Data0B5672:                         ; 0B:5672
+Ti_YouVsBooMenu:                    ; 0B:53A2
+.incbin "data/Tilemaps/YouVsBooMenu.bin"
+Pal_YouVsBooMenu_BG:                ; 0B:5672
 .dw $0000,$7FFF,$001F,$0000,$3F9F,$034B,$0D16,$0000,\
     $6009,$0000,$0000,$0000,$7FFF,$7D2D,$0D16,$0000,\
     $7FFF,$22FF,$0200,$0000,$7FFF,$22FF,$7D2D,$0000,\
     $7FFF,$0000,$0D16,$0000,$0000,$0000,$0000,$0000
-Data0B56B2:                         ; 0B:56B2
+Pal_YouVsBooMenu_Spr:               ; 0B:56B2
 .dw $6009,$7FFF,$001F,$0000,$7DE0,$7FFF,$7D2D,$0000,\
     $7DE0,$025F,$001F,$0000,$7DE0,$3E9C,$08CB,$0320,\
     $7DE0,$3E9C,$08CB,$001D,$7DE0,$7FFF,$02A6,$001D,\
     $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120
-Data0B56F2:                         ; 0B:56F2
+TiUp_0B56F2:                        ; 0B:56F2
 .db $9A,$24,$0E,$01,$CE,$06,$B0,$06,\
     $C3,$06,$C4,$06,$C5,$06,$C6,$01,\
     $CE,$06,$B0,$06,$C7,$06,$C8,$06,\
     $C9,$06,$CA,$01,$CE,$06,$B0,$00
-Data0B5712:                         ; 0B:5712
+TiUp_0B5712:                        ; 0B:5712
 .db $9A,$24,$0C,$01,$CE,$06,$B0,$06,\
     $C3,$01,$CE,$01,$CE,$01,$CE,$06,\
     $C4,$06,$C5,$06,$C6,$01,$CE,$06,\
@@ -1203,11 +1203,11 @@ Sub0B575E:
     call LoadGraphicsBank           ; 0B:578A
     ld   a,$0B                      ; 0B:578D
     ld   b,a                        ; 0B:578F
-    ld   de,Data0B5672              ; 0B:5790
+    ld   de,Pal_YouVsBooMenu_BG     ; 0B:5790
     call LoadFullPaletteLong        ; 0B:5793
     ld   a,$0B                      ; 0B:5796
     ld   b,a                        ; 0B:5798
-    ld   de,Data0B56B2              ; 0B:5799
+    ld   de,Pal_YouVsBooMenu_Spr    ; 0B:5799
     call LoadSprPaletteLong         ; 0B:579C
     call Sub0B600C                  ; 0B:579F
     ld   a,[$C36C]                  ; 0B:57A2
@@ -1218,7 +1218,7 @@ Sub0B575E:
     ld   a,$0B                      ; 0B:57AE
     ld   b,a                        ; 0B:57B0
     ld   de,$9820                   ; 0B:57B1
-    ld   hl,Data0B53A2              ; 0B:57B4
+    ld   hl,Ti_YouVsBooMenu         ; 0B:57B4
     call LoadScreenTilemapVRAM      ; 0B:57B7
     ld   a,$7C                      ; 0B:57BA
     ld   [$DE68],a                  ; 0B:57BC
@@ -1278,11 +1278,11 @@ Code0B57EA:
     ret                             ; 0B:5833
 
 Sub0B5834:
-    ld   hl,W_TilemapUploadBuffer   ; 0B:5834
+    ld   hl,W_TiUpBuffer            ; 0B:5834
     ld   de,$0000                   ; 0B:5837
 Code0B583A:
     push hl                         ; 0B:583A
-    ld   hl,Data0B56F2              ; 0B:583B
+    ld   hl,TiUp_0B56F2             ; 0B:583B
     add  hl,de                      ; 0B:583E
     ld   a,[hl]                     ; 0B:583F
     pop  hl                         ; 0B:5840
@@ -1299,53 +1299,53 @@ Code0B583A:
     cp   $00                        ; 0B:5853
     jr   z,Code0B5861               ; 0B:5855
     or   $B0                        ; 0B:5857
-    ld   [$DF05],a                  ; 0B:5859
+    ld   [W_TiUpBuffer+$04],a       ; 0B:5859
     ld   a,$06                      ; 0B:585C
-    ld   [$DF04],a                  ; 0B:585E
+    ld   [W_TiUpBuffer+$03],a       ; 0B:585E
 Code0B5861:
     ld   a,e                        ; 0B:5861
     or   $B0                        ; 0B:5862
-    ld   [$DF07],a                  ; 0B:5864
+    ld   [W_TiUpBuffer+$06],a       ; 0B:5864
     ld   a,$06                      ; 0B:5867
-    ld   [$DF06],a                  ; 0B:5869
+    ld   [W_TiUpBuffer+$05],a       ; 0B:5869
     ld   a,[$C390]                  ; 0B:586C
     call Sub0B5906                  ; 0B:586F
     ld   a,d                        ; 0B:5872
     cp   $00                        ; 0B:5873
     jr   z,Code0B5881               ; 0B:5875
     or   $B0                        ; 0B:5877
-    ld   [$DF11],a                  ; 0B:5879
+    ld   [W_TiUpBuffer+$10],a       ; 0B:5879
     ld   a,$06                      ; 0B:587C
-    ld   [$DF10],a                  ; 0B:587E
+    ld   [W_TiUpBuffer+$0F],a       ; 0B:587E
 Code0B5881:
     ld   a,e                        ; 0B:5881
     or   $B0                        ; 0B:5882
-    ld   [$DF13],a                  ; 0B:5884
+    ld   [W_TiUpBuffer+$12],a       ; 0B:5884
     ld   a,$06                      ; 0B:5887
-    ld   [$DF12],a                  ; 0B:5889
+    ld   [W_TiUpBuffer+$11],a       ; 0B:5889
     ld   a,[$C391]                  ; 0B:588C
     call Sub0B5906                  ; 0B:588F
     ld   a,d                        ; 0B:5892
     cp   $00                        ; 0B:5893
     jr   z,Code0B58A1               ; 0B:5895
     or   $B0                        ; 0B:5897
-    ld   [$DF1D],a                  ; 0B:5899
+    ld   [W_TiUpBuffer+$1C],a       ; 0B:5899
     ld   a,$06                      ; 0B:589C
-    ld   [$DF1C],a                  ; 0B:589E
+    ld   [W_TiUpBuffer+$1B],a       ; 0B:589E
 Code0B58A1:
     ld   a,e                        ; 0B:58A1
     or   $B0                        ; 0B:58A2
-    ld   [$DF1F],a                  ; 0B:58A4
+    ld   [W_TiUpBuffer+$1E],a       ; 0B:58A4
     ld   a,$06                      ; 0B:58A7
-    ld   [$DF1E],a                  ; 0B:58A9
+    ld   [W_TiUpBuffer+$1D],a       ; 0B:58A9
     ret                             ; 0B:58AC
 
 Sub0B58AD:
-    ld   hl,W_TilemapUploadBuffer   ; 0B:58AD
+    ld   hl,W_TiUpBuffer            ; 0B:58AD
     ld   de,$0000                   ; 0B:58B0
 Code0B58B3:
     push hl                         ; 0B:58B3
-    ld   hl,Data0B5712              ; 0B:58B4
+    ld   hl,TiUp_0B5712             ; 0B:58B4
     add  hl,de                      ; 0B:58B7
     ld   a,[hl]                     ; 0B:58B8
     pop  hl                         ; 0B:58B9
@@ -1362,30 +1362,30 @@ Code0B58B3:
     cp   $00                        ; 0B:58CC
     jr   z,Code0B58DA               ; 0B:58CE
     or   $B0                        ; 0B:58D0
-    ld   [$DF05],a                  ; 0B:58D2
+    ld   [W_TiUpBuffer+$04],a       ; 0B:58D2
     ld   a,$06                      ; 0B:58D5
-    ld   [$DF04],a                  ; 0B:58D7
+    ld   [W_TiUpBuffer+$03],a       ; 0B:58D7
 Code0B58DA:
     ld   a,e                        ; 0B:58DA
     or   $B0                        ; 0B:58DB
-    ld   [$DF07],a                  ; 0B:58DD
+    ld   [W_TiUpBuffer+$06],a       ; 0B:58DD
     ld   a,$06                      ; 0B:58E0
-    ld   [$DF06],a                  ; 0B:58E2
+    ld   [W_TiUpBuffer+$05],a       ; 0B:58E2
     ld   a,[$C390]                  ; 0B:58E5
     call Sub0B5906                  ; 0B:58E8
     ld   a,d                        ; 0B:58EB
     cp   $00                        ; 0B:58EC
     jr   z,Code0B58FA               ; 0B:58EE
     or   $B0                        ; 0B:58F0
-    ld   [$DF17],a                  ; 0B:58F2
+    ld   [W_TiUpBuffer+$16],a       ; 0B:58F2
     ld   a,$06                      ; 0B:58F5
-    ld   [$DF16],a                  ; 0B:58F7
+    ld   [W_TiUpBuffer+$15],a       ; 0B:58F7
 Code0B58FA:
     ld   a,e                        ; 0B:58FA
     or   $B0                        ; 0B:58FB
-    ld   [$DF19],a                  ; 0B:58FD
+    ld   [W_TiUpBuffer+$18],a       ; 0B:58FD
     ld   a,$06                      ; 0B:5900
-    ld   [$DF18],a                  ; 0B:5902
+    ld   [W_TiUpBuffer+$17],a       ; 0B:5902
     ret                             ; 0B:5905
 
 Sub0B5906:
@@ -2017,7 +2017,7 @@ Code0B5E43:
     call Sub002769                  ; 0B:5E4E
     ret                             ; 0B:5E51
 
-Data0B5E52:                         ; 0B:5E52
+TiUp_0B5E52:                        ; 0B:5E52
 .db $9A,$22,$0F,$01,$C0,$06,$EB,$06,\
     $E0,$06,$E1,$06,$E2,$06,$EB,$01,\
     $C0,$06,$E3,$06,$E5,$06,$E4,$06,\
@@ -2028,7 +2028,7 @@ Data0B5E52:                         ; 0B:5E52
     $06,$EB,$06,$E6,$01,$C0,$01,$C0,\
     $01,$C0,$01,$C0,$01,$C0,$01,$C0,\
     $21,$D3
-Data0B5E9C:                         ; 0B:5E9C
+TiUp_0B5E9C:                        ; 0B:5E9C
 .db $9A,$45,$01,$06,$EC,$9A,$48,$01,\
     $01,$C0,$00
 
@@ -2042,8 +2042,8 @@ Code0B5EA7:
 .dw Code0B5F51                      ; 0B:5EB2
 
 Code0B5EB4:
-    ld   hl,Data0B5E52              ; 0B:5EB4
-    ld   de,W_TilemapUploadBuffer   ; 0B:5EB7
+    ld   hl,TiUp_0B5E52             ; 0B:5EB4
+    ld   de,W_TiUpBuffer            ; 0B:5EB7
     ld   bc,$0055                   ; 0B:5EBA
     call CopyBytes                  ; 0B:5EBD
     xor  a                          ; 0B:5EC0
@@ -2070,8 +2070,8 @@ Code0B5EDC:
     jr   z,Code0B5F09               ; 0B:5EE0
     ld   a,$47                      ; 0B:5EE2
     ldh  [<$FFF2],a                 ; 0B:5EE4
-    ld   hl,Data0B5E9C              ; 0B:5EE6
-    ld   de,W_TilemapUploadBuffer   ; 0B:5EE9
+    ld   hl,TiUp_0B5E9C             ; 0B:5EE6
+    ld   de,W_TiUpBuffer            ; 0B:5EE9
     ld   bc,$000B                   ; 0B:5EEC
     call CopyBytes                  ; 0B:5EEF
     ld   a,[$C361]                  ; 0B:5EF2
@@ -2080,9 +2080,9 @@ Code0B5EDC:
     ld   [$C361],a                  ; 0B:5EF8
     cp   $01                        ; 0B:5EFB
     jr   nz,Code0B5F09              ; 0B:5EFD
-    ld   hl,$DF02                   ; 0B:5EFF
+    ld   hl,W_TiUpBuffer+$01        ; 0B:5EFF
     ld   [hl],$48                   ; 0B:5F02
-    ld   hl,$DF07                   ; 0B:5F04
+    ld   hl,W_TiUpBuffer+$06        ; 0B:5F04
     ld   [hl],$45                   ; 0B:5F07
 Code0B5F09:
     ldh  a,[<H_ButtonsPressed]      ; 0B:5F09
@@ -2131,7 +2131,7 @@ Code0B5F48:
 Code0B5F51:
     call Sub0B58AD                  ; 0B:5F51
     ld   hl,Data0B5F68              ; 0B:5F54
-    ld   de,$DF1C                   ; 0B:5F57
+    ld   de,W_TiUpBuffer+$1B        ; 0B:5F57
     ld   bc,$0017                   ; 0B:5F5A
     call CopyBytes                  ; 0B:5F5D
     xor  a                          ; 0B:5F60
@@ -2278,7 +2278,7 @@ Sub0B6074:
     call Sub00128D                  ; 0B:607A
     ld   b,$A0                      ; 0B:607D
     ld   a,$00                      ; 0B:607F
-    ld   hl,$C000                   ; 0B:6081
+    ld   hl,W_OAMBuffer             ; 0B:6081
 Code0B6084:
     ldi  [hl],a                     ; 0B:6084
     dec  b                          ; 0B:6085
@@ -2297,9 +2297,9 @@ Code0B6084:
     ldh  [<$FFF2],a                 ; 0B:60A5
     ldh  [<$FFF3],a                 ; 0B:60A7
     ldh  [<$FFF4],a                 ; 0B:60A9
-    ld   [$C17A],a                  ; 0B:60AB
-    ld   [$C17B],a                  ; 0B:60AE
-    ld   [$C17C],a                  ; 0B:60B1
+    ld   [W_PlayerScoreLow],a       ; 0B:60AB
+    ld   [W_PlayerScoreMid],a       ; 0B:60AE
+    ld   [W_PlayerScoreHigh],a      ; 0B:60B1
     ld   [W_PlayerCoins],a          ; 0B:60B4
     ld   [W_PlayerLives],a          ; 0B:60B7
     ld   [$C180],a                  ; 0B:60BA
@@ -2310,7 +2310,7 @@ Code0B6084:
     ld   [$C28B],a                  ; 0B:60C9
     ld   [$C28C],a                  ; 0B:60CC
     ld   [$C28E],a                  ; 0B:60CF
-    ld   [$C16B],a                  ; 0B:60D2
+    ld   [W_SaveFileNum],a          ; 0B:60D2
     ld   [W_ChallengeFlag],a        ; 0B:60D5
     ld   [W_ChalUnlockFlags],a      ; 0B:60D8
     ld   [W_ChalUnlockFlags_x_2],a  ; 0B:60DB
@@ -2512,9 +2512,9 @@ Sub0B6204:
     ld   a,$0B                      ; 0B:629E
     rst  $10                        ; 0B:62A0  24-bit call
 .dl SubL_0756D9                     ; 0B:62A1
-    ld   a,[$C42A]                  ; 0B:62A4
+    ld   a,[W_AlbumUnlockFlags+1]   ; 0B:62A4
     or   $80                        ; 0B:62A7
-    ld   [$C42A],a                  ; 0B:62A9
+    ld   [W_AlbumUnlockFlags+1],a   ; 0B:62A9
     ld   a,$0B                      ; 0B:62AC
     rst  $10                        ; 0B:62AE  24-bit call
 .dl SubL_0757EF                     ; 0B:62AF

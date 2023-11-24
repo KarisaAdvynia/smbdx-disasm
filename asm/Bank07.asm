@@ -78,7 +78,8 @@ Code074069:
 Return074078:
     ret                             ; 07:4078
 
-Code074079:
+Spr41_Main:
+; sprite 41 main
     ld   hl,$D096                   ; 07:4079
     add  hl,bc                      ; 07:407C
     ld   a,[hl]                     ; 07:407D
@@ -398,7 +399,8 @@ Code074292:
 Return0742A1:
     ret                             ; 07:42A1
 
-Code0742A2:
+RaceCountdown_Init:
+; sprite 42 init
     ld   hl,W_SpriteXLow            ; 07:42A2
     add  hl,bc                      ; 07:42A5
     ld   [hl],$48                   ; 07:42A6
@@ -418,7 +420,9 @@ Data0742B8:                         ; 07:42B8
     $98,$0E,$9A,$0E
 RaceLevelMusicIDs:                  ; 07:42CC
 .db $7E,$7E,$7E,$68,$7E,$7E,$7E,$68
-Code0742D4:
+
+RaceCountdown_Main:
+; sprite 42 main
     ld   hl,$D096                   ; 07:42D4
     add  hl,bc                      ; 07:42D7
     ld   a,[hl]                     ; 07:42D8
@@ -598,7 +602,8 @@ UnusedL_07437F:
 @ReturnL:
     rst  $18                        ; 07:43F2  Return from 24-bit call
 
-Code0743F3:
+Spr43_Main:
+; sprite 43 main
     call Sub0025CB                  ; 07:43F3
     jr   c,Return0743FE             ; 07:43F6
     call Sub0029DA                  ; 07:43F8
@@ -612,6 +617,7 @@ Sub0743FF:
     ld   a,[hl]                     ; 07:4403
     rst  $00                        ; 07:4404  Execute from 16-bit pointer table
 .dw Code074407                      ; 07:4405
+
 Code074407:
     ld   hl,$D096                   ; 07:4407
     add  hl,bc                      ; 07:440A
@@ -660,7 +666,9 @@ ReturnL_074449:
 
 Data07444A:                         ; 07:444A
 .db $B8,$08,$BA,$08
-Code07444E:
+
+Spr44_Main:
+; sprite 44 main
     call Sub0025CB                  ; 07:444E
     jr   c,Code074456               ; 07:4451
     call Sub07445D                  ; 07:4453
@@ -936,18 +944,20 @@ Data074661:                         ; 07:4661
 .db $05,$19,$11,$15,$3F,$3F,$49,$49,\
     $55,$55,$7E,$7E,$87,$8C
 Data07466F:                         ; 07:466F
-.dw $FFD8,$0038,H_CameraXLow,$0058,$FFC8,$0048,$FFE8,$0038,\
-    $FFE8,$0038,$FFE8,$0008,$FFF8,$0018,H_CameraXLow,$0058,\
-    H_PlayerXHigh,$0068,$FFE8,$0028,$FFE8,$0028,$FFC8,$0038,\
-    $FFD8,$0028,$FFC8,$0028,$FF98,$0058,H_CameraXLow,$0048,\
+.dw $FFD8,$0038,$FFB8,$0058,$FFC8,$0048,$FFE8,$0038,\
+    $FFE8,$0038,$FFE8,$0008,$FFF8,$0018,$FFB8,$0058,\
+    $FFA8,$0068,$FFE8,$0028,$FFE8,$0028,$FFC8,$0038,\
+    $FFD8,$0028,$FFC8,$0028,$FF98,$0058,$FFB8,$0048,\
     $FFE8,$0018,$FFE8,$0018,$FF88,$0078,$FFE8,$0028,\
-    H_CameraXLow,$0038,$FFE8,$0018,$FFD8,$0028,$FFD8,$0038,\
+    $FFB8,$0038,$FFE8,$0018,$FFD8,$0028,$FFD8,$0038,\
     $FFE8,$0018,$FFE8,$0018,$FFD8,$0028,$FFE8,$0028,\
-    $FFE8,$0018,$FFF8,$0008,$FFD8,$0038,H_PlayerXHigh,$0028,\
+    $FFE8,$0018,$FFF8,$0008,$FFD8,$0038,$FFA8,$0028,\
     $FFE8,$0018,$FFC8,$0028,$FFE8,$0028,$FFE8,$0028
 Data0746FF:                         ; 07:46FF
 .db $00,$0C,$1C,$24,$4C,$84,$88
-Code074706:
+
+Spr33_Init:
+; sprite 33 init
     ld   a,[W_LevelID]              ; 07:4706
     ld   e,a                        ; 07:4709
     ld   a,[W_SPFlag]               ; 07:470A
@@ -1065,7 +1075,9 @@ Code0747A9:
 
 Data0747B2:                         ; 07:47B2
 .db $08,$F8
-Code0747B4:
+
+Spr33_Main:
+; sprite 33 main
     call Sub0025CB                  ; 07:47B4
     jp   c,Return07483E             ; 07:47B7
     ld   a,[W_GameMode]             ; 07:47BA
@@ -1275,7 +1287,9 @@ Data0748FC:                         ; 07:48FC
     $18,$18,$C6,$01,$18,$20,$C8,$01,\
     $D0,$D2,$D4,$D6,$D8,$DA,$DC,$DE,\
     $E0,$E2
-Code07494E:
+
+CloudBonusPerfect_Main:
+; sprite 45 main
     call Sub0749E4                  ; 07:494E
     ld   hl,$D11D                   ; 07:4951
     add  hl,bc                      ; 07:4954
@@ -1341,7 +1355,7 @@ Code0749B2:
     ldh  [<$FFA5],a                 ; 07:49BB
     pop  de                         ; 07:49BD
 Code0749BE:
-    ld   hl,$C000                   ; 07:49BE
+    ld   hl,W_OAMBuffer             ; 07:49BE
     ldh  a,[<$FFC1]                 ; 07:49C1
     ld   c,a                        ; 07:49C3
     ld   b,$00                      ; 07:49C4
@@ -1375,6 +1389,7 @@ Sub0749E4:
 .dw Code0749F0                      ; 07:49EA
 .dw Code0749FF                      ; 07:49EC
 .dw Return074A3E                    ; 07:49EE
+
 Code0749F0:
     ld   hl,$D096                   ; 07:49F0
     add  hl,bc                      ; 07:49F3
@@ -1478,7 +1493,9 @@ Code074A6C:
 Data074A78:                         ; 07:4A78
 .db $40,$12,$40,$0F,$20,$0F,$00,$00,\
     $60,$0F,$90,$0F,$60,$0F,$00,$00
-Code074A88:
+
+FlagpoleSpr_Init:
+; sprite 09 init
     ld   a,[W_GameMode]             ; 07:4A88
     cp   $07                        ; 07:4A8B
     jr   z,Code074A93               ; 07:4A8D
@@ -1542,7 +1559,9 @@ Data074AFC:                         ; 07:4AFC
     $67,$67,$77,$00,$67,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$67,$00,\
     $67,$47,$77,$00,$67,$57,$67,$00
-Code074B1C:
+
+FlagpoleSpr_Main:
+; sprite 09 main
     xor  a                          ; 07:4B1C
     ld   [$C1FA],a                  ; 07:4B1D
     ld   [$C542],a                  ; 07:4B20
@@ -1664,6 +1683,7 @@ Sub074BED:
 .dw Code074EA9                      ; 07:4BF5
 .dw Code075057                      ; 07:4BF7
 .dw Return074BFB                    ; 07:4BF9
+
 Return074BFB:
     ret                             ; 07:4BFB
 
@@ -2454,12 +2474,15 @@ Return075119:
     ret                             ; 07:5119
 
 Return07511A:
+; sprite 46 init
     ret                             ; 07:511A
 
 Boo_Tilemap:                        ; 07:511B
 .db $76,$03,$78,$03,$78,$23,$76,$23,\
     $8E,$23,$7A,$23,$7A,$03,$8E,$03
-Code07512B:
+
+Boo_Main:
+; sprite 46 main
     ld   a,[$C38D]                  ; 07:512B
     and  a                          ; 07:512E
     jr   z,Code07513A               ; 07:512F
@@ -2843,6 +2866,7 @@ Code075389:
     ret                             ; 07:539B
 
 SubL_07539C:
+; subroutine (24-bit): write 00 to 0x325 bytes at A100-A325
     ld   hl,SRAMENABLE              ; 07:539C
     ld   [hl],$0A                   ; 07:539F
     ld   de,$0324                   ; 07:53A1
@@ -2865,118 +2889,118 @@ SubL_0753BB:
     ld   hl,SRAMENABLE              ; 07:53BB
     ld   [hl],$0A                   ; 07:53BE
     ld   a,$00                      ; 07:53C0
-    ld   [$C16B],a                  ; 07:53C2
-    call Sub000FF6                  ; 07:53C5
-    jr   c,Code0753D8               ; 07:53C8
+    ld   [W_SaveFileNum],a          ; 07:53C2
+    call VerifySaveFileChecksum     ; 07:53C5
+    jr   c,@CheckFile1              ; 07:53C8
     ld   e,$00                      ; 07:53CA
     ld   hl,$A100                   ; 07:53CC
-Code0753CF:
+@Loop_ClearFile0:
     ld   [hl],$00                   ; 07:53CF
     inc  hl                         ; 07:53D1
     inc  e                          ; 07:53D2
     ld   a,e                        ; 07:53D3
     cp   $40                        ; 07:53D4
-    jr   nz,Code0753CF              ; 07:53D6
-Code0753D8:
+    jr   nz,@Loop_ClearFile0        ; 07:53D6
+@CheckFile1:
     ld   a,$01                      ; 07:53D8
-    ld   [$C16B],a                  ; 07:53DA
-    call Sub000FF6                  ; 07:53DD
-    jr   c,Code0753F0               ; 07:53E0
+    ld   [W_SaveFileNum],a          ; 07:53DA
+    call VerifySaveFileChecksum     ; 07:53DD
+    jr   c,@CheckFile2              ; 07:53E0
     ld   e,$00                      ; 07:53E2
     ld   hl,$A140                   ; 07:53E4
-Code0753E7:
+@Loop_ClearFile1:
     ld   [hl],$00                   ; 07:53E7
     inc  hl                         ; 07:53E9
     inc  e                          ; 07:53EA
     ld   a,e                        ; 07:53EB
     cp   $40                        ; 07:53EC
-    jr   nz,Code0753E7              ; 07:53EE
-Code0753F0:
+    jr   nz,@Loop_ClearFile1        ; 07:53EE
+@CheckFile2:
     ld   a,$02                      ; 07:53F0
-    ld   [$C16B],a                  ; 07:53F2
-    call Sub000FF6                  ; 07:53F5
-    jr   c,Code075408               ; 07:53F8
+    ld   [W_SaveFileNum],a          ; 07:53F2
+    call VerifySaveFileChecksum     ; 07:53F5
+    jr   c,@CheckSPFile             ; 07:53F8
     ld   e,$00                      ; 07:53FA
     ld   hl,$A180                   ; 07:53FC
-Code0753FF:
+@Loop_ClearFile2:
     ld   [hl],$00                   ; 07:53FF
     inc  hl                         ; 07:5401
     inc  e                          ; 07:5402
     ld   a,e                        ; 07:5403
     cp   $40                        ; 07:5404
-    jr   nz,Code0753FF              ; 07:5406
-Code075408:
+    jr   nz,@Loop_ClearFile2        ; 07:5406
+@CheckSPFile:
     ld   a,$03                      ; 07:5408
-    ld   [$C16B],a                  ; 07:540A
-    call Sub000FF6                  ; 07:540D
-    jr   c,Code075420               ; 07:5410
+    ld   [W_SaveFileNum],a          ; 07:540A
+    call VerifySaveFileChecksum     ; 07:540D
+    jr   c,@CheckA370               ; 07:5410
     ld   e,$00                      ; 07:5412
     ld   hl,$A1C0                   ; 07:5414
-Code075417:
+@Loop_ClearSPFile:
     ld   [hl],$00                   ; 07:5417
     inc  hl                         ; 07:5419
     inc  e                          ; 07:541A
     ld   a,e                        ; 07:541B
     cp   $40                        ; 07:541C
-    jr   nz,Code075417              ; 07:541E
-Code075420:
-    call Sub0757CD                  ; 07:5420
-    jp   c,Code075434               ; 07:5423
+    jr   nz,@Loop_ClearSPFile       ; 07:541E
+@CheckA370:
+    call VerifyChecksumA370_A3C0    ; 07:5420
+    jp   c,@CheckYouVsBooData       ; 07:5423
     ld   e,$00                      ; 07:5426
     ld   hl,$A370                   ; 07:5428
-Code07542B:
+@Loop_ClearA370:
     ld   [hl],$00                   ; 07:542B
     inc  hl                         ; 07:542D
     inc  e                          ; 07:542E
     ld   a,e                        ; 07:542F
     cp   $52                        ; 07:5430
-    jr   nz,Code07542B              ; 07:5432
-Code075434:
+    jr   nz,@Loop_ClearA370         ; 07:5432
+@CheckYouVsBooData:
     ld   hl,$A3F2                   ; 07:5434
     ld   a,$31                      ; 07:5437
-    call Sub001027                  ; 07:5439
+    call CalculateSum               ; 07:5439  $FF97 = sum of A bytes at [HL]
     ld   hl,$A423                   ; 07:543C
     ldh  a,[<$FF97]                 ; 07:543F
     cp   [hl]                       ; 07:5441
-    jr   nz,Code075451              ; 07:5442
+    jr   nz,@YouVsBooChecksumFailed ; 07:5442
     inc  hl                         ; 07:5444
     ldh  a,[<$FF98]                 ; 07:5445
     cp   [hl]                       ; 07:5447
-    jr   nz,Code075451              ; 07:5448
+    jr   nz,@YouVsBooChecksumFailed ; 07:5448
     ld   a,[$A422]                  ; 07:544A
     cp   $01                        ; 07:544D
-    jr   z,Code07545F               ; 07:544F
-Code075451:
+    jr   z,@CheckRecordsData        ; 07:544F
+@YouVsBooChecksumFailed:
     ld   e,$00                      ; 07:5451
     ld   hl,$A3F2                   ; 07:5453
-Code075456:
+@Loop_ClearYouVsBooData:
     ld   [hl],$00                   ; 07:5456
     inc  hl                         ; 07:5458
     inc  e                          ; 07:5459
     ld   a,e                        ; 07:545A
     cp   $33                        ; 07:545B
-    jr   nz,Code075456              ; 07:545D
-Code07545F:
-    call Sub0758B4                  ; 07:545F
-    jr   c,Code07546E               ; 07:5462
+    jr   nz,@Loop_ClearYouVsBooData ; 07:545D
+@CheckRecordsData:
+    call VerifyRecordsChecksum      ; 07:545F
+    jr   c,@CheckChalData           ; 07:5462
     ld   hl,$A200                   ; 07:5464
     ld   b,$AD                      ; 07:5467
-Code075469:
+@Loop_ClearRecordsData:
     xor  a                          ; 07:5469
     ldi  [hl],a                     ; 07:546A
     dec  b                          ; 07:546B
-    jr   nz,Code075469              ; 07:546C
-Code07546E:
-    call Sub075B61                  ; 07:546E
-    jr   c,Code07547D               ; 07:5471
+    jr   nz,@Loop_ClearRecordsData  ; 07:546C
+@CheckChalData:
+    call VerifyChallengeChecksum    ; 07:546E
+    jr   c,@Return                  ; 07:5471
     ld   hl,$A2AD                   ; 07:5473
     ld   b,$C3                      ; 07:5476
-Code075478:
+@Loop_ClearChalData:
     xor  a                          ; 07:5478
     ldi  [hl],a                     ; 07:5479
     dec  b                          ; 07:547A
-    jr   nz,Code075478              ; 07:547B
-Code07547D:
+    jr   nz,@Loop_ClearChalData     ; 07:547B
+@Return:
     ld   hl,SRAMENABLE              ; 07:547D
     ld   [hl],$FF                   ; 07:5480
     rst  $18                        ; 07:5482  Return from 24-bit call
@@ -2984,12 +3008,13 @@ Code07547D:
 Original_InitialLives:              ; 07:5483
 .db $05,$0A
 
-SubL_075485:
+SubL_LoadSaveFile:
+; subroutine (24-bit): Initialize or load Original mode save file
     ld   hl,SRAMENABLE              ; 07:5485
     ld   [hl],$0A                   ; 07:5488
-    ld   a,[$C16B]                  ; 07:548A
-    call Sub000FF6                  ; 07:548D
-    jr   c,Code0754FC               ; 07:5490
+    ld   a,[W_SaveFileNum]          ; 07:548A
+    call VerifySaveFileChecksum     ; 07:548D
+    jr   c,@LoadFile                ; 07:5490
     xor  a                          ; 07:5492
     ld   [W_LevelID],a              ; 07:5493
     ld   [W_SublevelID],a           ; 07:5496
@@ -3002,9 +3027,9 @@ SubL_075485:
     ld   [$C184],a                  ; 07:54AB
     ld   [$C185],a                  ; 07:54AE
     ld   [$C186],a                  ; 07:54B1
-    ld   [$C17A],a                  ; 07:54B4
-    ld   [$C17B],a                  ; 07:54B7
-    ld   [$C17C],a                  ; 07:54BA
+    ld   [W_PlayerScoreLow],a       ; 07:54B4
+    ld   [W_PlayerScoreMid],a       ; 07:54B7
+    ld   [W_PlayerScoreHigh],a      ; 07:54BA
     ld   [W_PlayerCoins],a          ; 07:54BD
     ld   [W_PlayerSize],a           ; 07:54C0
     ld   [W_PlayerFireFlag],a       ; 07:54C3
@@ -3017,9 +3042,9 @@ SubL_075485:
     ld   [$C1AB],a                  ; 07:54D8
     ld   [$C1AC],a                  ; 07:54DB
     ld   [$C16F],a                  ; 07:54DE
-    ld   a,$D0                      ; 07:54E1
+    ld   a,$D0                      ; 07:54E1 \ set unused high score?
     ld   [$C16D],a                  ; 07:54E3
-    ld   a,$07                      ; 07:54E6
+    ld   a,$07                      ; 07:54E6 /
     ld   [$C16E],a                  ; 07:54E8
     ld   a,[$C1B2]                  ; 07:54EB
     ld   e,a                        ; 07:54EE
@@ -3028,9 +3053,9 @@ SubL_075485:
     add  hl,de                      ; 07:54F4
     ld   a,[hl]                     ; 07:54F5
     ld   [W_PlayerLives],a          ; 07:54F6
-    jp   Code07557E                 ; 07:54F9
-Code0754FC:
-    ld   a,[$C16B]                  ; 07:54FC
+    jp   @Return                    ; 07:54F9
+@LoadFile:
+    ld   a,[W_SaveFileNum]          ; 07:54FC
     swap a                          ; 07:54FF
     sla  a                          ; 07:5501
     sla  a                          ; 07:5503
@@ -3049,9 +3074,9 @@ Code0754FC:
     ld   [W_PlayerSize],a           ; 07:551C
     ld   [W_PlayerFireFlag],a       ; 07:551F
     xor  a                          ; 07:5522
-    ld   [$C17A],a                  ; 07:5523
-    ld   [$C17B],a                  ; 07:5526
-    ld   [$C17C],a                  ; 07:5529
+    ld   [W_PlayerScoreLow],a       ; 07:5523
+    ld   [W_PlayerScoreMid],a       ; 07:5526
+    ld   [W_PlayerScoreHigh],a      ; 07:5529
     ld   [W_PlayerCoins],a          ; 07:552C
     ld   hl,$A106                   ; 07:552F
     add  hl,de                      ; 07:5532
@@ -3090,16 +3115,16 @@ Code0754FC:
     ld   [$C16E],a                  ; 07:5577
     ldi  a,[hl]                     ; 07:557A
     ld   [$C16F],a                  ; 07:557B
-Code07557E:
+@Return:
     ld   hl,SRAMENABLE              ; 07:557E
     ld   [hl],$FF                   ; 07:5581
     rst  $18                        ; 07:5583  Return from 24-bit call
 
-SubL_075584:
-    call Sub075588                  ; 07:5584
+SubL_SaveToFile:
+    call SaveToFile                 ; 07:5584
     rst  $18                        ; 07:5587  Return from 24-bit call
 
-Sub075588:
+SaveToFile:
     ld   a,[W_HardFlag]             ; 07:5588
     and  a                          ; 07:558B
     jr   z,Code07559B               ; 07:558C
@@ -3112,12 +3137,12 @@ Sub075588:
 Code07559B:
     ld   hl,SRAMENABLE              ; 07:559B
     ld   [hl],$0A                   ; 07:559E
-    ld   a,[$C16B]                  ; 07:55A0
+    ld   a,[W_SaveFileNum]          ; 07:55A0 \
     swap a                          ; 07:55A3
     sla  a                          ; 07:55A5
     sla  a                          ; 07:55A7
     ld   e,a                        ; 07:55A9
-    ld   d,$00                      ; 07:55AA
+    ld   d,$00                      ; 07:55AA / de = save file *$40
     ld   hl,$A100                   ; 07:55AC
     add  hl,de                      ; 07:55AF
     ld   a,[W_LevelID]              ; 07:55B0
@@ -3136,15 +3161,15 @@ Code07559B:
     ld   [hl],a                     ; 07:55CB
     ld   hl,$A102                   ; 07:55CC
     add  hl,de                      ; 07:55CF
-    ld   a,[$C17A]                  ; 07:55D0
+    ld   a,[W_PlayerScoreLow]       ; 07:55D0
     ld   [hl],a                     ; 07:55D3
     ld   hl,$A103                   ; 07:55D4
     add  hl,de                      ; 07:55D7
-    ld   a,[$C17B]                  ; 07:55D8
+    ld   a,[W_PlayerScoreMid]       ; 07:55D8
     ld   [hl],a                     ; 07:55DB
     ld   hl,$A104                   ; 07:55DC
     add  hl,de                      ; 07:55DF
-    ld   a,[$C17C]                  ; 07:55E0
+    ld   a,[W_PlayerScoreHigh]      ; 07:55E0
     ld   [hl],a                     ; 07:55E3
     ld   hl,$A105                   ; 07:55E4
     add  hl,de                      ; 07:55E7
@@ -3203,7 +3228,7 @@ Code07559B:
     ld   [hl],$01                   ; 07:5650
     ld   hl,$A100                   ; 07:5652
     add  hl,de                      ; 07:5655
-    call Sub001025                  ; 07:5656
+    call Calc19ByteSum              ; 07:5656  $FF97 = sum of $19 bytes at [HL]
     ld   hl,$A119                   ; 07:5659
     add  hl,de                      ; 07:565C
     ldh  a,[<$FF97]                 ; 07:565D
@@ -3217,7 +3242,7 @@ Code07559B:
 SubL_075669:
     ld   hl,SRAMENABLE              ; 07:5669
     ld   [hl],$0A                   ; 07:566C
-    ld   a,[$C16B]                  ; 07:566E
+    ld   a,[W_SaveFileNum]          ; 07:566E
     swap a                          ; 07:5671
     sla  a                          ; 07:5673
     sla  a                          ; 07:5675
@@ -3233,7 +3258,7 @@ SubL_075669:
     ld   [hl],a                     ; 07:5689
     ld   hl,$A100                   ; 07:568A
     add  hl,de                      ; 07:568D
-    call Sub001025                  ; 07:568E
+    call Calc19ByteSum              ; 07:568E  $FF97 = sum of $19 bytes at [HL]
     ld   hl,$A119                   ; 07:5691
     add  hl,de                      ; 07:5694
     ldh  a,[<$FF97]                 ; 07:5695
@@ -3256,9 +3281,9 @@ Data0756A1:                         ; 07:56A1
 SubL_0756D9:
     ld   hl,SRAMENABLE              ; 07:56D9
     ld   [hl],$0A                   ; 07:56DC
-    call Sub0757CD                  ; 07:56DE
-    jp   c,Code07575D               ; 07:56E1
-    xor  a                          ; 07:56E4
+    call VerifyChecksumA370_A3C0    ; 07:56DE
+    jp   c,@Load                    ; 07:56E1
+    xor  a                          ; 07:56E4 \ if checksum is invalid, init region
     ld   [W_ChalUnlockFlags],a      ; 07:56E5
     ld   [W_ChalUnlockFlags_x_2],a  ; 07:56E8
     ld   [W_ChalUnlockFlags_x_3],a  ; 07:56EB
@@ -3266,44 +3291,44 @@ SubL_0756D9:
     ld   [W_ChalTotalScoreLow],a    ; 07:56F1
     ld   [W_ChalTotalScoreMid],a    ; 07:56F4
     ld   [W_ChalTotalScoreHigh],a   ; 07:56F7
-    ld   [$C192],a                  ; 07:56FA
-    ld   [$C42D],a                  ; 07:56FD
-    ld   [$C42E],a                  ; 07:5700
-    ld   [$C42F],a                  ; 07:5703
-    ld   [$C430],a                  ; 07:5706
+    ld   [W_ModeUnlockFlags],a      ; 07:56FA
+    ld   [W_AlbumViewFlags],a       ; 07:56FD
+    ld   [W_AlbumViewFlags+1],a     ; 07:5700
+    ld   [W_AlbumViewFlags+2],a     ; 07:5703
+    ld   [W_AlbumViewFlags+3],a     ; 07:5706
     ld   [$C4FB],a                  ; 07:5709
-    ld   [$C429],a                  ; 07:570C
-    ld   [$C42A],a                  ; 07:570F
-    ld   [$C42B],a                  ; 07:5712
-    ld   [$C42C],a                  ; 07:5715
+    ld   [W_AlbumUnlockFlags],a     ; 07:570C
+    ld   [W_AlbumUnlockFlags+1],a   ; 07:570F
+    ld   [W_AlbumUnlockFlags+2],a   ; 07:5712
+    ld   [W_AlbumUnlockFlags+3],a   ; 07:5715
     ld   a,$00                      ; 07:5718
     and  a                          ; 07:571A
-    jr   z,Code075731               ; 07:571B
-    ld   a,$FF                      ; 07:571D
-    ld   [$C429],a                  ; 07:571F
-    ld   a,$FF                      ; 07:5722
-    ld   [$C42A],a                  ; 07:5724
-    ld   a,$FF                      ; 07:5727
-    ld   [$C42B],a                  ; 07:5729
-    ld   a,$FE                      ; 07:572C
-    ld   [$C42C],a                  ; 07:572E
-Code075731:
+    jr   z,@BranchAlways            ; 07:571B
+    ld   a,$FF                      ; 07:571D \ debug init values?
+    ld   [W_AlbumUnlockFlags],a     ; 07:571F |
+    ld   a,$FF                      ; 07:5722 |
+    ld   [W_AlbumUnlockFlags+1],a   ; 07:5724 |
+    ld   a,$FF                      ; 07:5727 |
+    ld   [W_AlbumUnlockFlags+2],a   ; 07:5729 |
+    ld   a,$FE                      ; 07:572C |
+    ld   [W_AlbumUnlockFlags+3],a   ; 07:572E /
+@BranchAlways:
     ld   hl,Data0756A1              ; 07:5731
     ld   de,$C439                   ; 07:5734
     ld   c,$38                      ; 07:5737
-Code075739:
+@LoopC439:
     ldi  a,[hl]                     ; 07:5739
     ld   [de],a                     ; 07:573A
     inc  de                         ; 07:573B
     dec  c                          ; 07:573C
-    jr   nz,Code075739              ; 07:573D
+    jr   nz,@LoopC439               ; 07:573D
     ld   hl,$D960                   ; 07:573F
     ld   c,$09                      ; 07:5742
     xor  a                          ; 07:5744
-Code075745:
+@LoopD960:
     ldi  [hl],a                     ; 07:5745
     dec  c                          ; 07:5746
-    jr   nz,Code075745              ; 07:5747
+    jr   nz,@LoopD960               ; 07:5747
     ldi  [hl],a                     ; 07:5749
     ldi  [hl],a                     ; 07:574A
     ldi  [hl],a                     ; 07:574B
@@ -3316,8 +3341,9 @@ Code075745:
     ld   [hl],$01                   ; 07:5755
     inc  hl                         ; 07:5757
     ld   [hl],$05                   ; 07:5758
-    jp   Code0757F4                 ; 07:575A
-Code07575D:
+    jp   Code0757F4                 ; 07:575A / then save these addresses back to SRAM
+
+@Load:
     ld   hl,$A370                   ; 07:575D \ load level unlock flags ($A370 to $C18E)
     ldi  a,[hl]                     ; 07:5760
     ld   [W_ChalUnlockFlags],a      ; 07:5761
@@ -3334,67 +3360,69 @@ Code07575D:
     ld   a,[hl]                     ; 07:5778
     ld   [W_ChalTotalScoreHigh],a   ; 07:5779 /
     ld   a,[$A37B]                  ; 07:577C
-    ld   [$C192],a                  ; 07:577F
+    ld   [W_ModeUnlockFlags],a      ; 07:577F
     ld   a,[$A3BF]                  ; 07:5782
     ld   [$C4FB],a                  ; 07:5785
     ld   hl,$A37C                   ; 07:5788
     ldi  a,[hl]                     ; 07:578B
-    ld   [$C429],a                  ; 07:578C
+    ld   [W_AlbumUnlockFlags],a     ; 07:578C
     ldi  a,[hl]                     ; 07:578F
-    ld   [$C42A],a                  ; 07:5790
+    ld   [W_AlbumUnlockFlags+1],a   ; 07:5790
     ldi  a,[hl]                     ; 07:5793
-    ld   [$C42B],a                  ; 07:5794
+    ld   [W_AlbumUnlockFlags+2],a   ; 07:5794
     ldi  a,[hl]                     ; 07:5797
-    ld   [$C42C],a                  ; 07:5798
+    ld   [W_AlbumUnlockFlags+3],a   ; 07:5798
     ldi  a,[hl]                     ; 07:579B
-    ld   [$C42D],a                  ; 07:579C
+    ld   [W_AlbumViewFlags],a       ; 07:579C
     ldi  a,[hl]                     ; 07:579F
-    ld   [$C42E],a                  ; 07:57A0
+    ld   [W_AlbumViewFlags+1],a     ; 07:57A0
     ldi  a,[hl]                     ; 07:57A3
-    ld   [$C42F],a                  ; 07:57A4
+    ld   [W_AlbumViewFlags+2],a     ; 07:57A4
     ld   a,[hl]                     ; 07:57A7
-    ld   [$C430],a                  ; 07:57A8
+    ld   [W_AlbumViewFlags+3],a     ; 07:57A8
     ld   hl,$A384                   ; 07:57AB
     ld   de,$C439                   ; 07:57AE
     ld   c,$38                      ; 07:57B1
-Code0757B3:
+@Loop0757B3:
     ldi  a,[hl]                     ; 07:57B3
     ld   [de],a                     ; 07:57B4
     inc  de                         ; 07:57B5
     dec  c                          ; 07:57B6
-    jr   nz,Code0757B3              ; 07:57B7
+    jr   nz,@Loop0757B3             ; 07:57B7
     ld   hl,$B6B7                   ; 07:57B9
     ld   de,$D960                   ; 07:57BC
     ld   c,$0E                      ; 07:57BF
-Code0757C1:
+@Loop0757C1:
     ldi  a,[hl]                     ; 07:57C1
     ld   [de],a                     ; 07:57C2
     inc  de                         ; 07:57C3
     dec  c                          ; 07:57C4
-    jr   nz,Code0757C1              ; 07:57C5
+    jr   nz,@Loop0757C1             ; 07:57C5
     ld   hl,SRAMENABLE              ; 07:57C7
     ld   [hl],$FF                   ; 07:57CA
     rst  $18                        ; 07:57CC  Return from 24-bit call
 
-Sub0757CD:
+VerifyChecksumA370_A3C0:
+; subroutine: Verify global unlocks(?) save data checksum
+; Checks if $A3BE is 1, and $A3C0 is the sum of A370-A3BF
+; Sets carry flag if checksum is valid, clears it if not
     ld   hl,$A370                   ; 07:57CD
     ld   a,$50                      ; 07:57D0
-    call Sub001027                  ; 07:57D2
+    call CalculateSum               ; 07:57D2  $FF97 = sum of A bytes at [HL]
     ld   hl,$A3C0                   ; 07:57D5
     ldh  a,[<$FF97]                 ; 07:57D8
     cp   [hl]                       ; 07:57DA
-    jr   nz,Code0757EC              ; 07:57DB
+    jr   nz,@ClearCarry             ; 07:57DB
     inc  hl                         ; 07:57DD
     ldh  a,[<$FF98]                 ; 07:57DE
     cp   [hl]                       ; 07:57E0
-    jr   nz,Code0757EC              ; 07:57E1
+    jr   nz,@ClearCarry             ; 07:57E1
     ld   a,[$A3BE]                  ; 07:57E3
     cp   $01                        ; 07:57E6
-    jr   nz,Code0757EC              ; 07:57E8
+    jr   nz,@ClearCarry             ; 07:57E8
     scf                             ; 07:57EA
     ret                             ; 07:57EB
-
-Code0757EC:
+@ClearCarry:
     scf                             ; 07:57EC
     ccf                             ; 07:57ED
     ret                             ; 07:57EE
@@ -3418,64 +3446,65 @@ Code0757F4:
     ldi  [hl],a                     ; 07:580E
     ld   a,[W_ChalTotalScoreHigh]   ; 07:580F
     ld   [hl],a                     ; 07:5812
-    ld   a,[$C192]                  ; 07:5813
+    ld   a,[W_ModeUnlockFlags]      ; 07:5813
     ld   [$A37B],a                  ; 07:5816
     ld   a,[$C4FB]                  ; 07:5819
     ld   [$A3BF],a                  ; 07:581C
     ld   hl,$A37C                   ; 07:581F
-    ld   a,[$C429]                  ; 07:5822
+    ld   a,[W_AlbumUnlockFlags]     ; 07:5822
     ldi  [hl],a                     ; 07:5825
-    ld   a,[$C42A]                  ; 07:5826
+    ld   a,[W_AlbumUnlockFlags+1]   ; 07:5826
     ldi  [hl],a                     ; 07:5829
-    ld   a,[$C42B]                  ; 07:582A
+    ld   a,[W_AlbumUnlockFlags+2]   ; 07:582A
     ldi  [hl],a                     ; 07:582D
-    ld   a,[$C42C]                  ; 07:582E
+    ld   a,[W_AlbumUnlockFlags+3]   ; 07:582E
     ldi  [hl],a                     ; 07:5831
-    ld   a,[$C42D]                  ; 07:5832
+    ld   a,[W_AlbumViewFlags]       ; 07:5832
     ldi  [hl],a                     ; 07:5835
-    ld   a,[$C42E]                  ; 07:5836
+    ld   a,[W_AlbumViewFlags+1]     ; 07:5836
     ldi  [hl],a                     ; 07:5839
-    ld   a,[$C42F]                  ; 07:583A
+    ld   a,[W_AlbumViewFlags+2]     ; 07:583A
     ldi  [hl],a                     ; 07:583D
-    ld   a,[$C430]                  ; 07:583E
+    ld   a,[W_AlbumViewFlags+3]     ; 07:583E
     ld   [hl],a                     ; 07:5841
     ld   hl,$A384                   ; 07:5842
     ld   de,$C439                   ; 07:5845
     ld   c,$38                      ; 07:5848
-Code07584A:
+@LoopC439:
     ld   a,[de]                     ; 07:584A
     ldi  [hl],a                     ; 07:584B
     inc  de                         ; 07:584C
     dec  c                          ; 07:584D
-    jr   nz,Code07584A              ; 07:584E
+    jr   nz,@LoopC439               ; 07:584E
     ld   hl,$B6B7                   ; 07:5850
     ld   de,$D960                   ; 07:5853
     ld   c,$0E                      ; 07:5856
-Code075858:
+@LoopD960:
     ld   a,[de]                     ; 07:5858
     ldi  [hl],a                     ; 07:5859
     inc  de                         ; 07:585A
     dec  c                          ; 07:585B
-    jr   nz,Code075858              ; 07:585C
-    call Sub075875                  ; 07:585E
+    jr   nz,@LoopD960               ; 07:585C
+    call SetChecksumA370_A3C0       ; 07:585E
     ld   hl,SRAMENABLE              ; 07:5861
     ld   [hl],$FF                   ; 07:5864
     rst  $18                        ; 07:5866  Return from 24-bit call
 
-UnusedL_075867:
+SubL_SetChecksumA370_A3C0:
     ld   hl,SRAMENABLE              ; 07:5867
     ld   [hl],$0A                   ; 07:586A
-    call Sub075875                  ; 07:586C
+    call SetChecksumA370_A3C0       ; 07:586C
     ld   hl,SRAMENABLE              ; 07:586F
     ld   [hl],$FF                   ; 07:5872
     rst  $18                        ; 07:5874  Return from 24-bit call
 
-Sub075875:
+SetChecksumA370_A3C0:
+; Sets $A3BE to 1, then $A3C0 to the sum of A370-A3BF
     ld   hl,$A3BE                   ; 07:5875
     ld   [hl],$01                   ; 07:5878
     ld   a,$50                      ; 07:587A
     ld   hl,$A370                   ; 07:587C
-    call Sub001027                  ; 07:587F
+    call CalculateSum               ; 07:587F  $FF97 = sum of A bytes at [HL]
     ld   hl,$A3C0                   ; 07:5882
     ldh  a,[<$FF97]                 ; 07:5885
     ldi  [hl],a                     ; 07:5887
@@ -3486,56 +3515,58 @@ Sub075875:
 SubL_07588C:
     ld   hl,SRAMENABLE              ; 07:588C
     ld   [hl],$0A                   ; 07:588F
-    call Sub0758B4                  ; 07:5891
+    call VerifyRecordsChecksum      ; 07:5891
     jr   c,Code075899               ; 07:5894
-    call Sub075997                  ; 07:5896
+    call SetRecordsDefaults         ; 07:5896
 Code075899:
     ld   a,$07                      ; 07:5899
     ldh  [<SVBK],a                  ; 07:589B
     ld   hl,$D800                   ; 07:589D
     ld   de,$A200                   ; 07:58A0
     ld   b,$AA                      ; 07:58A3
-Code0758A5:
+@Loop0758A5:
     ld   a,[de]                     ; 07:58A5
     ldi  [hl],a                     ; 07:58A6
     inc  de                         ; 07:58A7
     dec  b                          ; 07:58A8
-    jr   nz,Code0758A5              ; 07:58A9
+    jr   nz,@Loop0758A5             ; 07:58A9
     xor  a                          ; 07:58AB
     ldh  [<SVBK],a                  ; 07:58AC
     ld   hl,SRAMENABLE              ; 07:58AE
     ld   [hl],$FF                   ; 07:58B1
     rst  $18                        ; 07:58B3  Return from 24-bit call
 
-Sub0758B4:
-    call Sub0758D1                  ; 07:58B4
+VerifyRecordsChecksum:
+; subroutine: Verify records save data checksum
+; Checks if A2AA is 1, and A2AB is the sum of A200-A2AA
+; Sets carry flag if checksum is valid, clears it if not
+    call CalcRecordsChecksum        ; 07:58B4
     ld   a,[$A2AA]                  ; 07:58B7
     cp   $01                        ; 07:58BA
-    jr   nz,Code0758CE              ; 07:58BC
+    jr   nz,@ClearCarry             ; 07:58BC
     ldh  a,[<$FF97]                 ; 07:58BE
     ld   hl,$A2AB                   ; 07:58C0
     cp   [hl]                       ; 07:58C3
-    jr   nz,Code0758CE              ; 07:58C4
+    jr   nz,@ClearCarry             ; 07:58C4
     inc  hl                         ; 07:58C6
     ldh  a,[<$FF98]                 ; 07:58C7
     cp   [hl]                       ; 07:58C9
-    jr   nz,Code0758CE              ; 07:58CA
+    jr   nz,@ClearCarry             ; 07:58CA
     scf                             ; 07:58CC
     ret                             ; 07:58CD
-
-Code0758CE:
+@ClearCarry:
     scf                             ; 07:58CE
     ccf                             ; 07:58CF
     ret                             ; 07:58D0
 
-Sub0758D1:
+CalcRecordsChecksum:
     ld   a,$AB                      ; 07:58D1
     ld   b,a                        ; 07:58D3
     ld   hl,$A200                   ; 07:58D4
     ld   a,$00                      ; 07:58D7
     ldh  [<$FF97],a                 ; 07:58D9
     ldh  [<$FF98],a                 ; 07:58DB
-Code0758DD:
+@Loop:
     ldh  a,[<$FF97]                 ; 07:58DD
     add  [hl]                       ; 07:58DF
     ldh  [<$FF97],a                 ; 07:58E0
@@ -3544,47 +3575,43 @@ Code0758DD:
     ldh  [<$FF98],a                 ; 07:58E6
     inc  hl                         ; 07:58E8
     dec  b                          ; 07:58E9
-    jr   nz,Code0758DD              ; 07:58EA
+    jr   nz,@Loop                   ; 07:58EA
     ret                             ; 07:58EC
 
-Data0758ED:                         ; 07:58ED
-.db $06,$E5,$06,$EE,$06,$E2,$06,$E0,\
-    $06,$E2,$06,$F4,$04,$E9,$04,$DE,\
-    $04,$DA,$04,$DC,$04,$E1,$04,$F4,\
-    $05,$E6,$05,$DA,$05,$EB,$05,$E2,\
-    $05,$E8,$05,$F4,$07,$DB,$07,$E8,\
-    $07,$F0,$07,$EC,$07,$DE,$07,$EB,\
-    $04,$DB,$04,$E8,$04,$E8,$04,$F4,\
-    $04,$F4,$04,$F4,$06,$F2,$06,$E8,\
-    $06,$EC,$06,$E1,$06,$E2,$04,$F4,\
-    $04,$E5,$04,$DA,$04,$E4,$04,$E2,\
-    $04,$ED,$04,$EE,$06,$ED,$06,$EB,\
-    $06,$E8,$06,$E8,$06,$E9,$06,$DA,\
-    $05,$ED,$05,$E8,$05,$DA,$05,$DD,\
-    $04,$F4,$04,$F4,$04,$E0,$04,$E8,\
-    $04,$E8,$04,$E6,$04,$DB,$04,$DA,\
-    $30,$75,$00,$A8,$61,$00,$20,$4E,\
-    $00,$98,$3A,$00,$10,$27,$00,$40,\
-    $1F,$00,$58,$1B,$00,$88,$13,$00,\
-    $A0,$0F,$00,$B8,$0B,$00,$13,$0F,\
-    $0B,$08,$05,$04,$03,$02,$02,$01,\
-    $00,$00,$00,$00,$00,$00,$00,$00,\
-    $00,$00
+Records_Defaults:                   ; 07:58ED
+; Player names (palette then tile ID)
+.db $06,$E5,$06,$EE,$06,$E2,$06,$E0,$06,$E2,$06,$F4; LUIGI
+.db $04,$E9,$04,$DE,$04,$DA,$04,$DC,$04,$E1,$04,$F4; PEACH
+.db $05,$E6,$05,$DA,$05,$EB,$05,$E2,$05,$E8,$05,$F4; MARIO
+.db $07,$DB,$07,$E8,$07,$F0,$07,$EC,$07,$DE,$07,$EB; BOWSER
+.db $04,$DB,$04,$E8,$04,$E8,$04,$F4,$04,$F4,$04,$F4; BOO
+.db $06,$F2,$06,$E8,$06,$EC,$06,$E1,$06,$E2,$04,$F4; YOSHI
+.db $04,$E5,$04,$DA,$04,$E4,$04,$E2,$04,$ED,$04,$EE; LAKITU
+.db $06,$ED,$06,$EB,$06,$E8,$06,$E8,$06,$E9,$06,$DA; TROOPA
+.db $05,$ED,$05,$E8,$05,$DA,$05,$DD,$04,$F4,$04,$F4; TOAD
+.db $04,$E0,$04,$E8,$04,$E8,$04,$E6,$04,$DB,$04,$DA; GOOMBA
+; High scores
+.dl 30000, 25000, 20000, 15000, 10000,\
+    8000, 7000, 5000, 4000, 3000
+; Level IDs
+.db $13,$0F,$0B,$08,$05,$04,$03,$02,$02,$01
+; Hard mode flags
+.db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-Sub075997:
-    ld   de,Data0758ED              ; 07:5997
+SetRecordsDefaults:
+    ld   de,Records_Defaults        ; 07:5997
     ld   hl,$A200                   ; 07:599A
     ld   b,$AA                      ; 07:599D
-Code07599F:
+@Loop:
     ld   a,[de]                     ; 07:599F
     ldi  [hl],a                     ; 07:59A0
     inc  de                         ; 07:59A1
     dec  b                          ; 07:59A2
-    jr   nz,Code07599F              ; 07:59A3
+    jr   nz,@Loop                   ; 07:59A3
     ld   a,$00                      ; 07:59A5
     and  a                          ; 07:59A7
-    jr   z,Code0759D8               ; 07:59A8
-    ld   hl,$A201                   ; 07:59AA
+    jr   z,@BranchAlways            ; 07:59A8
+    ld   hl,$A201                   ; 07:59AA \ debug code
     ld   [hl],$EF                   ; 07:59AD
     inc  hl                         ; 07:59AF
     inc  hl                         ; 07:59B0
@@ -3611,11 +3638,11 @@ Code07599F:
     ldi  [hl],a                     ; 07:59D3
     inc  hl                         ; 07:59D4
     ld   a,$F4                      ; 07:59D5
-    ld   [hl],a                     ; 07:59D7
-Code0759D8:
+    ld   [hl],a                     ; 07:59D7 /
+@BranchAlways:
     ld   a,$01                      ; 07:59D8
     ld   [$A2AA],a                  ; 07:59DA
-    call Sub0758D1                  ; 07:59DD
+    call CalcRecordsChecksum        ; 07:59DD
     ld   hl,$A2AB                   ; 07:59E0
     ldh  a,[<$FF97]                 ; 07:59E3
     ldi  [hl],a                     ; 07:59E5
@@ -3631,13 +3658,13 @@ SubL_0759EA:
     ld   hl,$D800                   ; 07:59F3
     ld   de,$A200                   ; 07:59F6
     ld   b,$AA                      ; 07:59F9
-Code0759FB:
+@Loop:
     ldi  a,[hl]                     ; 07:59FB
     ld   [de],a                     ; 07:59FC
     inc  de                         ; 07:59FD
     dec  b                          ; 07:59FE
-    jr   nz,Code0759FB              ; 07:59FF
-    jp   Code075AFB                 ; 07:5A01
+    jr   nz,@Loop                   ; 07:59FF
+    jp   SetRecordsChecksum         ; 07:5A01
 
 SubL_075A04:
     ld   hl,SRAMENABLE              ; 07:5A04
@@ -3654,13 +3681,13 @@ SubL_075A04:
     ld   hl,$A200                   ; 07:5A1A
     add  hl,bc                      ; 07:5A1D
     ld   b,$0C                      ; 07:5A1E
-Code075A20:
+@Loop075A20:
     ld   a,[de]                     ; 07:5A20
     ldi  [hl],a                     ; 07:5A21
     inc  de                         ; 07:5A22
     dec  b                          ; 07:5A23
-    jr   nz,Code075A20              ; 07:5A24
-    ld   de,$C17A                   ; 07:5A26
+    jr   nz,@Loop075A20             ; 07:5A24
+    ld   de,W_PlayerScoreLow        ; 07:5A26
     ld   a,[$C356]                  ; 07:5A29
     ld   c,a                        ; 07:5A2C
     sla  a                          ; 07:5A2D
@@ -3670,12 +3697,12 @@ Code075A20:
     ld   hl,$A278                   ; 07:5A33
     add  hl,bc                      ; 07:5A36
     ld   b,$03                      ; 07:5A37
-Code075A39:
+@Loop075A39:
     ld   a,[de]                     ; 07:5A39
     ldi  [hl],a                     ; 07:5A3A
     inc  de                         ; 07:5A3B
     dec  b                          ; 07:5A3C
-    jr   nz,Code075A39              ; 07:5A3D
+    jr   nz,@Loop075A39             ; 07:5A3D
     ld   a,[$C356]                  ; 07:5A3F
     ld   c,a                        ; 07:5A42
     ld   b,$00                      ; 07:5A43
@@ -3711,20 +3738,20 @@ Code075A39:
     add  hl,bc                      ; 07:5A7A
     ld   a,[$C356]                  ; 07:5A7B
     ld   c,a                        ; 07:5A7E
-Code075A7F:
+@Loop075A7F:
     ld   a,c                        ; 07:5A7F
     cp   $09                        ; 07:5A80
-    jr   nc,Code075A8F              ; 07:5A82
+    jr   nc,@Code075A8F             ; 07:5A82
     ld   b,$0C                      ; 07:5A84
-Code075A86:
+@Loop075A86:
     ld   a,[de]                     ; 07:5A86
     ldi  [hl],a                     ; 07:5A87
     inc  de                         ; 07:5A88
     dec  b                          ; 07:5A89
-    jr   nz,Code075A86              ; 07:5A8A
+    jr   nz,@Loop075A86             ; 07:5A8A
     inc  c                          ; 07:5A8C
-    jr   Code075A7F                 ; 07:5A8D
-Code075A8F:
+    jr   @Loop075A7F                ; 07:5A8D
+@Code075A8F:
     ld   a,[$C356]                  ; 07:5A8F
     ld   c,a                        ; 07:5A92
     sla  a                          ; 07:5A93
@@ -3742,20 +3769,20 @@ Code075A8F:
     add  hl,bc                      ; 07:5AA6
     ld   a,[$C356]                  ; 07:5AA7
     ld   c,a                        ; 07:5AAA
-Code075AAB:
+@Loop075AAB:
     ld   a,c                        ; 07:5AAB
     cp   $09                        ; 07:5AAC
-    jr   nc,Code075ABB              ; 07:5AAE
+    jr   nc,@Code075ABB             ; 07:5AAE
     ld   b,$03                      ; 07:5AB0
-Code075AB2:
+@Loop075AB2:
     ld   a,[de]                     ; 07:5AB2
     ldi  [hl],a                     ; 07:5AB3
     inc  de                         ; 07:5AB4
     dec  b                          ; 07:5AB5
-    jr   nz,Code075AB2              ; 07:5AB6
+    jr   nz,@Loop075AB2             ; 07:5AB6
     inc  c                          ; 07:5AB8
-    jr   Code075AAB                 ; 07:5AB9
-Code075ABB:
+    jr   @Loop075AAB                ; 07:5AB9
+@Code075ABB:
     ld   a,[$C356]                  ; 07:5ABB
     ld   c,a                        ; 07:5ABE
     ld   b,$00                      ; 07:5ABF
@@ -3768,16 +3795,16 @@ Code075ABB:
     add  hl,bc                      ; 07:5ACB
     ld   a,[$C356]                  ; 07:5ACC
     ld   c,a                        ; 07:5ACF
-Code075AD0:
+@Loop075AD0:
     ld   a,c                        ; 07:5AD0
     cp   $09                        ; 07:5AD1
-    jr   nc,Code075ADB              ; 07:5AD3
+    jr   nc,@Code075ADB             ; 07:5AD3
     ld   a,[de]                     ; 07:5AD5
     ldi  [hl],a                     ; 07:5AD6
     inc  de                         ; 07:5AD7
     inc  c                          ; 07:5AD8
-    jr   Code075AD0                 ; 07:5AD9
-Code075ADB:
+    jr   @Loop075AD0                ; 07:5AD9
+@Code075ADB:
     ld   a,[$C356]                  ; 07:5ADB
     ld   c,a                        ; 07:5ADE
     ld   b,$00                      ; 07:5ADF
@@ -3790,17 +3817,17 @@ Code075ADB:
     add  hl,bc                      ; 07:5AEB
     ld   a,[$C356]                  ; 07:5AEC
     ld   c,a                        ; 07:5AEF
-Code075AF0:
+@Loop075AF0:
     ld   a,c                        ; 07:5AF0
     cp   $09                        ; 07:5AF1
-    jr   nc,Code075AFB              ; 07:5AF3
+    jr   nc,SetRecordsChecksum      ; 07:5AF3
     ld   a,[de]                     ; 07:5AF5
     ldi  [hl],a                     ; 07:5AF6
     inc  de                         ; 07:5AF7
     inc  c                          ; 07:5AF8
-    jr   Code075AF0                 ; 07:5AF9
-Code075AFB:
-    call Sub0758D1                  ; 07:5AFB
+    jr   @Loop075AF0                ; 07:5AF9
+SetRecordsChecksum:
+    call CalcRecordsChecksum        ; 07:5AFB
     ld   hl,$A2AB                   ; 07:5AFE
     ldh  a,[<$FF97]                 ; 07:5B01
     ldi  [hl],a                     ; 07:5B03
@@ -3812,14 +3839,14 @@ Code075AFB:
     ld   [hl],$FF                   ; 07:5B0D
     rst  $18                        ; 07:5B0F  Return from 24-bit call
 
-SubL_LoadChalLevelSaveData:
+SubL_LoadChalSaveData:
 ; subroutine (24-bit): Load current level's challenge mode save data
     ld   hl,SRAMENABLE              ; 07:5B10
     ld   [hl],$0A                   ; 07:5B13
-    call Sub075B61                  ; 07:5B15
-    jr   c,Code075B1D               ; 07:5B18
-    call Sub075B9B                  ; 07:5B1A
-Code075B1D:
+    call VerifyChallengeChecksum    ; 07:5B15
+    jr   c,@Code075B1D              ; 07:5B18
+    call SetChallengeChecksum       ; 07:5B1A
+@Code075B1D:
     ld   a,[W_LevelID]              ; 07:5B1D
     ld   e,a                        ; 07:5B20
     ld   d,$00                      ; 07:5B21  de = levelID
@@ -3827,18 +3854,18 @@ Code075B1D:
     add  hl,de                      ; 07:5B26
     ld   a,[hl]                     ; 07:5B27  red coin count
     cp   $05                        ; 07:5B28
-    jr   c,Code075B2E               ; 07:5B2A \ if red coins > 5, set to 5
+    jr   c,@Code075B2E              ; 07:5B2A \ if red coins > 5, set to 5
     ld   a,$05                      ; 07:5B2C /
-Code075B2E:
-    ld   [$C189],a                  ; 07:5B2E  set current level's best red coin count
+@Code075B2E:
+    ld   [W_RedCoinsBest],a         ; 07:5B2E  set current level's best red coin count
     ld   hl,$A32D                   ; 07:5B31  SRAM Yoshi egg table
     add  hl,de                      ; 07:5B34
     ld   a,[hl]                     ; 07:5B35
-    ld   [$C194],a                  ; 07:5B36  set current level's Yoshi egg flag
+    ld   [W_YoshiEggMedalFlag],a    ; 07:5B36  set current level's Yoshi egg flag
     ld   hl,$A34D                   ; 07:5B39  SRAM high score medal table
     add  hl,de                      ; 07:5B3C
     ld   a,[hl]                     ; 07:5B3D
-    ld   [$C18D],a                  ; 07:5B3E  set current level's high score medal flag
+    ld   [W_HighScoreMedalFlag],a   ; 07:5B3E  set current level's high score medal flag
     ld   a,[W_LevelID]              ; 07:5B41
     ld   e,a                        ; 07:5B44 \
     sla  a                          ; 07:5B45 |
@@ -3848,44 +3875,47 @@ Code075B2E:
     ld   hl,$A2AD                   ; 07:5B4B  SRAM high score table
     add  hl,de                      ; 07:5B4E
     ldi  a,[hl]                     ; 07:5B4F \
-    ld   [$C18A],a                  ; 07:5B50 | set current level's high score
+    ld   [W_ChalLvHiScoreLow],a     ; 07:5B50 | set current level's high score
     ldi  a,[hl]                     ; 07:5B53 |
-    ld   [$C18B],a                  ; 07:5B54 |
+    ld   [W_ChalLvHiScoreMid],a     ; 07:5B54 |
     ld   a,[hl]                     ; 07:5B57 |
-    ld   [$C18C],a                  ; 07:5B58 /
+    ld   [W_ChalLvHiScoreHigh],a    ; 07:5B58 /
     ld   hl,SRAMENABLE              ; 07:5B5B
     ld   [hl],$FF                   ; 07:5B5E
     rst  $18                        ; 07:5B60  Return from 24-bit call
 
-Sub075B61:
-    call Sub075B7F                  ; 07:5B61
+VerifyChallengeChecksum:
+; subroutine: Verify challenge save data checksum
+; Checks if A36D is 1, and A36E is the sum of A2AD-A36D
+; Sets carry flag if checksum is valid, clears it if not
+    call CalcChallengeChecksum      ; 07:5B61
     ld   hl,$A36D                   ; 07:5B64
     ld   a,[hl]                     ; 07:5B67
     cp   $01                        ; 07:5B68
-    jr   nz,Code075B7C              ; 07:5B6A
+    jr   nz,@ClearCarry             ; 07:5B6A
     ld   hl,$A36E                   ; 07:5B6C
     ldh  a,[<$FF97]                 ; 07:5B6F
     cp   [hl]                       ; 07:5B71
-    jr   nz,Code075B7C              ; 07:5B72
+    jr   nz,@ClearCarry             ; 07:5B72
     inc  hl                         ; 07:5B74
     ldh  a,[<$FF98]                 ; 07:5B75
     cp   [hl]                       ; 07:5B77
-    jr   nz,Code075B7C              ; 07:5B78
+    jr   nz,@ClearCarry             ; 07:5B78
     scf                             ; 07:5B7A
     ret                             ; 07:5B7B
-Code075B7C:
+@ClearCarry:
     scf                             ; 07:5B7C
     ccf                             ; 07:5B7D
     ret                             ; 07:5B7E
 
-Sub075B7F:
+CalcChallengeChecksum:
     ld   a,$C1                      ; 07:5B7F
     ld   b,a                        ; 07:5B81
     ld   hl,$A2AD                   ; 07:5B82
     ld   a,$00                      ; 07:5B85
     ldh  [<$FF97],a                 ; 07:5B87
     ldh  [<$FF98],a                 ; 07:5B89
-Code075B8B:
+@Loop:
     ldh  a,[<$FF97]                 ; 07:5B8B
     add  [hl]                       ; 07:5B8D
     ldh  [<$FF97],a                 ; 07:5B8E
@@ -3894,20 +3924,20 @@ Code075B8B:
     ldh  [<$FF98],a                 ; 07:5B94
     inc  hl                         ; 07:5B96
     dec  b                          ; 07:5B97
-    jr   nz,Code075B8B              ; 07:5B98
+    jr   nz,@Loop                   ; 07:5B98
     ret                             ; 07:5B9A
 
-Sub075B9B:
+SetChallengeChecksum:
     ld   hl,$A2AD                   ; 07:5B9B
     ld   b,$C0                      ; 07:5B9E
-Code075BA0:
+@Loop:
     xor  a                          ; 07:5BA0
     ldi  [hl],a                     ; 07:5BA1
     dec  b                          ; 07:5BA2
-    jr   nz,Code075BA0              ; 07:5BA3
+    jr   nz,@Loop                   ; 07:5BA3
     ld   hl,$A36D                   ; 07:5BA5
     ld   [hl],$01                   ; 07:5BA8
-    call Sub075B7F                  ; 07:5BAA
+    call CalcChallengeChecksum      ; 07:5BAA
     ld   hl,$A36E                   ; 07:5BAD
     ldh  a,[<$FF97]                 ; 07:5BB0
     ldi  [hl],a                     ; 07:5BB2
@@ -3915,46 +3945,47 @@ Code075BA0:
     ld   [hl],a                     ; 07:5BB5
     ret                             ; 07:5BB6
 
-SubL_075BB7:
-    ld   a,[$C194]                  ; 07:5BB7
-    ld   b,a                        ; 07:5BBA
-    ld   a,[$C193]                  ; 07:5BBB
-    or   b                          ; 07:5BBE
-    ld   [$C194],a                  ; 07:5BBF
+SubL_SaveChalData:
+; subroutine (24-bit): Save current level's challenge mode data
+    ld   a,[W_YoshiEggMedalFlag]    ; 07:5BB7 \
+    ld   b,a                        ; 07:5BBA |
+    ld   a,[W_YoshiEggItemFlag]     ; 07:5BBB | set Yoshi egg medal flag, if newly acquired
+    or   b                          ; 07:5BBE |
+    ld   [W_YoshiEggMedalFlag],a    ; 07:5BBF /
     ld   hl,SRAMENABLE              ; 07:5BC2
     ld   [hl],$0A                   ; 07:5BC5
     ld   a,[W_LevelID]              ; 07:5BC7
     ld   e,a                        ; 07:5BCA
-    ld   d,$00                      ; 07:5BCB
+    ld   d,$00                      ; 07:5BCB  de = levelID
     ld   hl,$A30D                   ; 07:5BCD
-    add  hl,de                      ; 07:5BD0
-    ld   a,[$C189]                  ; 07:5BD1
+    add  hl,de                      ; 07:5BD0  index with levelID
+    ld   a,[W_RedCoinsBest]         ; 07:5BD1
     ld   [hl],a                     ; 07:5BD4
     ld   hl,$A32D                   ; 07:5BD5
-    add  hl,de                      ; 07:5BD8
-    ld   a,[$C194]                  ; 07:5BD9
+    add  hl,de                      ; 07:5BD8  index with levelID
+    ld   a,[W_YoshiEggMedalFlag]    ; 07:5BD9
     ld   [hl],a                     ; 07:5BDC
     ld   hl,$A34D                   ; 07:5BDD
-    add  hl,de                      ; 07:5BE0
-    ld   a,[$C18D]                  ; 07:5BE1
+    add  hl,de                      ; 07:5BE0  index with levelID
+    ld   a,[W_HighScoreMedalFlag]   ; 07:5BE1
     ld   [hl],a                     ; 07:5BE4
     ld   a,[W_LevelID]              ; 07:5BE5
     ld   e,a                        ; 07:5BE8
     sla  a                          ; 07:5BE9
     add  e                          ; 07:5BEB
     ld   e,a                        ; 07:5BEC
-    ld   d,$00                      ; 07:5BED
+    ld   d,$00                      ; 07:5BED  de = levelID*3
     ld   hl,$A2AD                   ; 07:5BEF
-    add  hl,de                      ; 07:5BF2
-    ld   a,[$C18A]                  ; 07:5BF3
+    add  hl,de                      ; 07:5BF2  index with levelID*3
+    ld   a,[W_ChalLvHiScoreLow]     ; 07:5BF3
     ldi  [hl],a                     ; 07:5BF6
-    ld   a,[$C18B]                  ; 07:5BF7
+    ld   a,[W_ChalLvHiScoreMid]     ; 07:5BF7
     ldi  [hl],a                     ; 07:5BFA
-    ld   a,[$C18C]                  ; 07:5BFB
+    ld   a,[W_ChalLvHiScoreHigh]    ; 07:5BFB
     ld   [hl],a                     ; 07:5BFE
     ld   hl,$A36D                   ; 07:5BFF
     ld   [hl],$01                   ; 07:5C02
-    call Sub075B7F                  ; 07:5C04
+    call CalcChallengeChecksum      ; 07:5C04
     ld   hl,$A36E                   ; 07:5C07
     ldh  a,[<$FF97]                 ; 07:5C0A
     ldi  [hl],a                     ; 07:5C0C
@@ -3969,12 +4000,12 @@ Data075C16:                         ; 07:5C16
 YouVsBoo_InitialBestTimes:          ; 07:5C26
 .dw $0C9A,$0BCE,$0BA8,$0D93,$0D2A,$0D80,$0D01,$0E11
 
-Sub075C36:
+YouVsBoo_LoadSaveData:
     ld   hl,SRAMENABLE              ; 07:5C36
     ld   [hl],$0A                   ; 07:5C39
     ld   hl,$A3F2                   ; 07:5C3B
     ld   a,$31                      ; 07:5C3E
-    call Sub001027                  ; 07:5C40
+    call CalculateSum               ; 07:5C40  $FF97 = sum of A bytes at [HL]
     ld   hl,$A423                   ; 07:5C43
     ldh  a,[<$FF97]                 ; 07:5C46
     cp   [hl]                       ; 07:5C48
@@ -4172,7 +4203,7 @@ Code075D64:
     ld   [hl],$01                   ; 07:5D77
     ld   hl,$A3F2                   ; 07:5D79
     ld   a,$31                      ; 07:5D7C
-    call Sub001027                  ; 07:5D7E
+    call CalculateSum               ; 07:5D7E  $FF97 = sum of A bytes at [HL]
     ld   hl,$A423                   ; 07:5D81
     ldh  a,[<$FF97]                 ; 07:5D84
     ldi  [hl],a                     ; 07:5D86

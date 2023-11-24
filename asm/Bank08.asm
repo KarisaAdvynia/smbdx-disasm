@@ -1,7 +1,8 @@
 .bank $08 slot 1
 .orga $4000
 
-Code084000:
+Spr22_Init:
+; sprite 22 init
     ld   de,$0000                   ; 08:4000
 Code084003:
     ld   a,e                        ; 08:4003
@@ -37,7 +38,9 @@ Return084035:
 
 Data084036:                         ; 08:4036
 .db $10,$60,$20,$48
-Code08403A:
+
+Spr22_Main:
+; sprite 22 main
     call Sub0025CB                  ; 08:403A
     jp   c,Return0840BF             ; 08:403D
     ld   hl,$D11D                   ; 08:4040
@@ -266,7 +269,9 @@ Return0841C5:
 Data0841C6:                         ; 08:41C6
 .db $4A,$06,$4C,$06,$4E,$06,$4C,$06,\
     $4C,$26,$4A,$26,$4C,$26,$4E,$26
-Code0841D6:
+
+Spr23_Main:
+; sprite 23 main
     call Sub0025CB                  ; 08:41D6
     jp   c,Code08428D               ; 08:41D9
     call Sub002920                  ; 08:41DC
@@ -341,7 +346,7 @@ Code08423B:
     call Sub0025F8                  ; 08:4254
     ld   a,$01                      ; 08:4257
     call Sub002E90                  ; 08:4259
-    ld   hl,$C42B                   ; 08:425C
+    ld   hl,W_AlbumUnlockFlags+2    ; 08:425C
     set  6,[hl]                     ; 08:425F
     ret                             ; 08:4261
 
@@ -356,7 +361,7 @@ Code08426A:
     ld   a,$03                      ; 08:426E
     ld   [hl],a                     ; 08:4270
     call Sub001965                  ; 08:4271
-    ld   hl,$C42B                   ; 08:4274
+    ld   hl,W_AlbumUnlockFlags+2    ; 08:4274
     set  6,[hl]                     ; 08:4277
 Code084279:
     ld   hl,$D096                   ; 08:4279
@@ -394,7 +399,8 @@ Code08428D:
     call Disp16x16Sprite            ; 08:42AC
     ret                             ; 08:42AF
 
-Code0842B0:
+BulletBillShooter_Init:
+; sprite 24 init
     call Sub0010E4                  ; 08:42B0
     and  $1F                        ; 08:42B3
     add  $20                        ; 08:42B5
@@ -472,7 +478,6 @@ Code08432A:
 Code08432D:
     scf                             ; 08:432D
     ret                             ; 08:432E
-
 Code08432F:
     scf                             ; 08:432F
     ccf                             ; 08:4330
@@ -480,7 +485,9 @@ Code08432F:
 
 Data084332:                         ; 08:4332
 .db $0F,$07
-Code084334:
+
+BulletBillShooter_Main:
+; sprite 24 main
     call Sub0025CB                  ; 08:4334
     jp   c,Return0843EB             ; 08:4337
     call Sub002920                  ; 08:433A
@@ -674,7 +681,9 @@ Return084468:
 Data084469:                         ; 08:4469
 .db $58,$29,$56,$29,$56,$09,$58,$09,\
     $58,$A9,$56,$A9,$56,$89,$58,$89
-Code084479:
+
+BulletBill_Main:
+; sprite 25 main
     call Sub0025CB                  ; 08:4479
     jp   c,Code084491               ; 08:447C
     call Sub002920                  ; 08:447F
@@ -753,6 +762,7 @@ Sub0844FB:
     rst  $00                        ; 08:4500  Execute from 16-bit pointer table
 .dw Code084505                      ; 08:4501
 .dw Code084569                      ; 08:4503
+
 Code084505:
     call Sub001D21                  ; 08:4505
     jr   nc,Return084568            ; 08:4508
@@ -807,7 +817,7 @@ Code084555:
     inc  [hl]                       ; 08:455E
     ld   a,$45                      ; 08:455F
     ldh  [<$FFF2],a                 ; 08:4561
-    ld   hl,$C42B                   ; 08:4563
+    ld   hl,W_AlbumUnlockFlags+2    ; 08:4563
     set  4,[hl]                     ; 08:4566
 Return084568:
     ret                             ; 08:4568
@@ -829,7 +839,8 @@ Code08457A:
 Data08457C:                         ; 08:457C
 .db $00,$00,$00,$00,$00,$00
 
-Sub084582:
+Paratroopa_Init:
+; sprite 26-2B init
     ld   hl,W_SpriteID              ; 08:4582
     add  hl,bc                      ; 08:4585
     ld   a,[hl]                     ; 08:4586
@@ -884,6 +895,7 @@ Sub0845C8:
 .dw Code0845D4                      ; 08:45CE
 .dw Code0845E5                      ; 08:45D0
 .dw Return0845EC                    ; 08:45D2
+
 Code0845D4:
     ld   hl,$D11D                   ; 08:45D4
     add  hl,bc                      ; 08:45D7
@@ -915,7 +927,9 @@ Data08460D:                         ; 08:460D
     $5A,$0E,$3C,$06,$5E,$0E,$42,$06,\
     $3C,$27,$5A,$2F,$42,$27,$5E,$2F,\
     $5A,$0F,$3C,$07,$5E,$0F,$42,$07
-Code08462D:
+
+Paratroopa_Main:
+; sprite 26-2B main
     call Sub0025CB                  ; 08:462D
     jp   c,Code084659               ; 08:4630
     call Sub002920                  ; 08:4633
@@ -1401,6 +1415,7 @@ Return084949:
     ret                             ; 08:4949
 
 Return08494A:
+; sprite 2C init
     ret                             ; 08:494A
 
 Data08494B:                         ; 08:494B
@@ -1409,7 +1424,9 @@ Data08494D:                         ; 08:494D
 .db $26,$09,$26,$29,$2A,$09,$2A,$29
 Data084955:                         ; 08:4955
 .db $28,$09,$28,$29
-Code084959:
+
+Blooper_Main:
+; sprite 2C main
     call Sub0025CB                  ; 08:4959
     jp   c,Code0849E9               ; 08:495C
     call Sub002920                  ; 08:495F
@@ -1596,7 +1613,7 @@ Code084A8A:
     ld   [hl],a                     ; 08:4A90
     call Sub001965                  ; 08:4A91
 Code084A94:
-    ld   hl,$C42A                   ; 08:4A94
+    ld   hl,W_AlbumUnlockFlags+1    ; 08:4A94
     set  0,[hl]                     ; 08:4A97
     ret                             ; 08:4A99
 
@@ -1697,7 +1714,8 @@ Code084B1E:
 Return084B29:
     ret                             ; 08:4B29
 
-Code084B2A:
+Lakitu_Init:
+; sprite 2E init
     ld   de,$0000                   ; 08:4B2A
     ld   a,e                        ; 08:4B2D
     ldh  [<$FF97],a                 ; 08:4B2E
@@ -1768,7 +1786,8 @@ Code084B9E:
     ld   [hl],$01                   ; 08:4BA2
     ret                             ; 08:4BA4
 
-Code084BA5:
+Lakitu_Main:
+; sprite 2E main
     ld   hl,$D14A                   ; 08:4BA5
     add  hl,bc                      ; 08:4BA8
     ld   a,[hl]                     ; 08:4BA9
@@ -2019,7 +2038,7 @@ Code084D1C:
     ld   [hl],$01                   ; 08:4D31
     ld   a,$45                      ; 08:4D33
     ldh  [<$FFF2],a                 ; 08:4D35
-    ld   hl,$C42B                   ; 08:4D37
+    ld   hl,W_AlbumUnlockFlags+2    ; 08:4D37
     set  7,[hl]                     ; 08:4D3A
     ret                             ; 08:4D3C
 
@@ -2397,7 +2416,9 @@ Code084F9F:
 
 Data084FA1:                         ; 08:4FA1
 .db $50,$0E,$50,$6E,$52,$0E,$52,$6E
-Code084FA9:
+
+SpinyEgg_Main:
+; sprite 2F main
     call Sub0025CB                  ; 08:4FA9
     jp   c,Code084FE7               ; 08:4FAC
     call Sub002920                  ; 08:4FAF
@@ -2526,7 +2547,9 @@ Data08507E:                         ; 08:507E
     $48,$0E,$4A,$0E,$4C,$0E,$4E,$0E,\
     $4A,$6E,$48,$6E,$4A,$6E,$48,$6E,\
     $48,$4E,$4A,$4E,$48,$4E,$4A,$4E
-Code08509E:
+
+SPiny_Main:
+; sprite 30 main
     call Sub0025CB                  ; 08:509E
     jp   c,Code0850F2               ; 08:50A1
     call Sub002920                  ; 08:50A4
@@ -2614,6 +2637,7 @@ Sub085124:
 .dw Return0851A9                    ; 08:512C
 .dw Return0851A9                    ; 08:512E
 .dw Code0851AA                      ; 08:5130
+
 Code085132:
     call Sub001D21                  ; 08:5132
     jr   nc,Code085160              ; 08:5135
@@ -2635,7 +2659,7 @@ Code085151:
     ld   a,$03                      ; 08:5155
     ld   [hl],a                     ; 08:5157
     call Sub001965                  ; 08:5158
-    ld   hl,$C42B                   ; 08:515B
+    ld   hl,W_AlbumUnlockFlags+2    ; 08:515B
     set  2,[hl]                     ; 08:515E
 Code085160:
     call Sub002597                  ; 08:5160
@@ -2813,7 +2837,9 @@ ReturnL_085278:
 
 Data085279:                         ; 08:5279
 .db $26,$06
-Code08527B:
+
+Spr35_Main:
+; sprite 35 main
     call Sub0025CB                  ; 08:527B
     jp   c,Code08528D               ; 08:527E
     call Sub002920                  ; 08:5281
@@ -2870,7 +2896,8 @@ Code0852BD:
 Return0852D1:
     ret                             ; 08:52D1
 
-Code0852D2:
+BulletBillGen_Init:
+; sprite 36 init
     ld   a,$00                      ; 08:52D2
     ldh  [<$FF97],a                 ; 08:52D4
     ld   de,$0000                   ; 08:52D6
@@ -2924,7 +2951,9 @@ Return08532C:
 
 Data08532D:                         ; 08:532D
 .db $40,$60,$80,$A0,$C0,$40,$C0,$60
-Code085335:
+
+BulletBillGen_Main:
+; sprite 36 main
     call Sub0025CB                  ; 08:5335
     jp   c,Return085370             ; 08:5338
     ld   hl,$D096                   ; 08:533B
@@ -3070,7 +3099,9 @@ Data08564D:                         ; 08:564D
     $3D,$55,$40,$55,$44,$55,$48,$55,\
     $4A,$55,$4B,$55,$4C,$55,$4D,$55,\
     $4E,$55,$4F,$55,$50,$55
-Code0856CB:
+
+ScrollCmd_Init:
+; sprite 39-3B init
     ld   a,[W_SublevelID]           ; 08:56CB
     ldh  [<$FF97],a                 ; 08:56CE
     ld   a,[W_SPFlag]               ; 08:56D0
@@ -3175,7 +3206,8 @@ Code085741:
     ld   [hl],a                     ; 08:576A
     ret                             ; 08:576B
 
-Code08576C:
+ScrollCmd_Main:
+; sprite 39-3B main
     call Sub002920                  ; 08:576C
     jp   c,Return0857FF             ; 08:576F
     call Sub08584B                  ; 08:5772
@@ -3372,7 +3404,8 @@ Code0858CE:
     ccf                             ; 08:58CF
     ret                             ; 08:58D0
 
-Code0858D1:
+Spr3C_Init:
+; sprite 3C init
     ld   hl,W_SpriteYHigh           ; 08:58D1
     add  hl,bc                      ; 08:58D4
     push hl                         ; 08:58D5
@@ -3387,7 +3420,8 @@ Code0858D1:
     ld   [hl],a                     ; 08:58E2
     ret                             ; 08:58E3
 
-Code0858E4:
+Spr3C_Main:
+; sprite 3C main
     call Sub002920                  ; 08:58E4
     jp   c,Return085903             ; 08:58E7
     call Sub001D21                  ; 08:58EA
@@ -3403,19 +3437,20 @@ Code0858E4:
 Return085903:
     ret                             ; 08:5903
 
-Code085904:
+MultiParatroopa_Init:
+; sprite 4E-4F init
     ld   hl,W_SpriteID              ; 08:5904
     add  hl,bc                      ; 08:5907
-    ld   a,[hl]                     ; 08:5908
+    ld   a,[hl]                     ; 08:5908  sprite ID
     sub  $4E                        ; 08:5909
     or   $02                        ; 08:590B
-    ld   e,a                        ; 08:590D
+    ld   e,a                        ; 08:590D  de = sprID-4E+2 = number of Paratroopas
     ld   d,$00                      ; 08:590E
-Code085910:
+@Loop_SpawnParatroopas:
     push de                         ; 08:5910
     ld   a,$26                      ; 08:5911
     call LoadSpriteAnySlot          ; 08:5913
-    jr   c,Code085956               ; 08:5916
+    jr   c,@Break                   ; 08:5916
     push bc                         ; 08:5918
     push de                         ; 08:5919
     ld   hl,W_SpriteYLow            ; 08:591A
@@ -3426,7 +3461,7 @@ Code085910:
     ld   [hl],a                     ; 08:5923
     ld   b,d                        ; 08:5924
     ld   c,e                        ; 08:5925
-    call Sub084582                  ; 08:5926
+    call Paratroopa_Init            ; 08:5926
     pop  de                         ; 08:5929
     pop  bc                         ; 08:592A
     ld   hl,W_SpriteXHigh           ; 08:592B
@@ -3454,15 +3489,16 @@ Code085910:
     ld   [hl],a                     ; 08:594F
     pop  de                         ; 08:5950
     dec  e                          ; 08:5951
-    jr   nz,Code085910              ; 08:5952
-    jr   Code085957                 ; 08:5954
-Code085956:
+    jr   nz,@Loop_SpawnParatroopas  ; 08:5952
+    jr   @Code085957                ; 08:5954
+@Break:
     pop  de                         ; 08:5956
-Code085957:
+@Code085957:
     call Sub0029EF                  ; 08:5957
     ret                             ; 08:595A
 
-Code08595B:
+Firebar_Init:
+; sprite 0F-16 init
     ld   hl,W_SpriteID              ; 08:595B
     add  hl,bc                      ; 08:595E
     ld   a,[hl]                     ; 08:595F
@@ -3500,18 +3536,20 @@ Code08595B:
     add  hl,bc                      ; 08:5992
     pop  af                         ; 08:5993
     and  $04                        ; 08:5994
-    jr   nz,Code08599C              ; 08:5996
+    jr   nz,@SetSpeed38             ; 08:5996
     ld   a,$28                      ; 08:5998
-    jr   Code08599E                 ; 08:599A
-Code08599C:
+    jr   @SetSpeed                  ; 08:599A
+@SetSpeed38:
     ld   a,$38                      ; 08:599C
-Code08599E:
+@SetSpeed:
     ld   [hl],a                     ; 08:599E
     ret                             ; 08:599F
 
 Data0859A0:                         ; 08:59A0
 .db $04,$0A
-Code0859A2:
+
+Firebar_Main:
+; sprite 0F-16 main
     call Sub0025CB                  ; 08:59A2
     jp   c,Code0859D7               ; 08:59A5
     call Sub002920                  ; 08:59A8
@@ -3827,11 +3865,13 @@ Code085BDB:
     ld   [hl],a                     ; 08:5BF2
     ret                             ; 08:5BF3
 
-Code085BF4:
+TrampolineGreen_Init:
+; sprite 4D init
     ld   hl,$D0FF                   ; 08:5BF4
     add  hl,bc                      ; 08:5BF7
     ld   [hl],$01                   ; 08:5BF8
 Return085BFA:
+; also used as sprite 2D init
     ret                             ; 08:5BFA
 
 SubL_085BFB:
@@ -3914,7 +3954,8 @@ Data085CA4:                         ; 08:5CA4
 .db $A0,$86,$80
 Data085CA7:                         ; 08:5CA7
 .db $69,$68,$6B,$6A
-Code085CAB:
+Trampoline_Main:
+; sprite 2D,4D main
     call Sub0025CB                  ; 08:5CAB
     jp   c,Code085CBA               ; 08:5CAE
     call Sub002920                  ; 08:5CB1
@@ -4226,7 +4267,9 @@ Data085EB6:                         ; 08:5EB6
     $00,$04,$00,$00,$00,$04,$00,$00,\
     $00,$08,$00,$04,$00,$04,$00,$00,\
     $00,$09,$00,$05
-Code085EF2:
+
+Spr37_Init:
+; sprite 37 init
     ld   a,[W_SublevelID]           ; 08:5EF2
     ldh  [<$FF99],a                 ; 08:5EF5
     ld   a,[W_SPFlag]               ; 08:5EF7
@@ -4323,7 +4366,9 @@ Data085F8E:                         ; 08:5F8E
     $20,$06,$20,$04,$20,$04,$20,$04,\
     $20,$04,$20,$04,$10,$04,$20,$04,\
     $20,$08,$20,$04,$20,$09
-Code085FAC:
+
+Spr37_Main:
+; sprite 37 main
     call Sub085FB0                  ; 08:5FAC
     ret                             ; 08:5FAF
 
@@ -4335,6 +4380,7 @@ Sub085FB0:
 .dw Code085FBC                      ; 08:5FB6
 .dw Code086137                      ; 08:5FB8
 .dw Code0861F2                      ; 08:5FBA
+
 Code085FBC:
     ld   hl,$D11D                   ; 08:5FBC
     add  hl,bc                      ; 08:5FBF
@@ -4726,10 +4772,11 @@ Code086257:
 Return086262:
     ret                             ; 08:6262
 
-Code086263:
+Spr34_Init:
+; sprite 34 init
     ld   a,[W_ChallengeFlag]        ; 08:6263
     and  a                          ; 08:6266
-    jr   z,Return086274             ; 08:6267
+    jr   z,@Return                  ; 08:6267
     xor  a                          ; 08:6269
     ld   hl,W_SpriteStatus          ; 08:626A
     add  hl,bc                      ; 08:626D
@@ -4737,10 +4784,11 @@ Code086263:
     ld   hl,W_SpriteID              ; 08:626F
     add  hl,bc                      ; 08:6272
     ld   [hl],a                     ; 08:6273
-Return086274:
+@Return:
     ret                             ; 08:6274
 
-Code086275:
+Spr34_Main:
+; sprite 34 main
     call Sub0025CB                  ; 08:6275
     ret  c                          ; 08:6278
     ld   hl,W_SpriteXHigh           ; 08:6279
@@ -4786,69 +4834,69 @@ Code0862B7:
     jr   nz,Code08629E              ; 08:62BB
     ret                             ; 08:62BD
 
-VRAMUp_WarpTextDefault:             ; 08:62BE
+TiUp_WarpTextDefault:               ; 08:62BE
 .db $9A,$09,$0A,$00,$F0,$00,$DE,$00,\
     $E5,$00,$DC,$00,$E8,$00,$E6,$00,\
     $DE,$00,$F4,$00,$ED,$00,$E8,$9A,\
     $49,$0A,$00,$F0,$00,$DA,$00,$EB,\
     $00,$E9,$00,$F4,$00,$F3,$00,$E8,\
     $00,$E7,$00,$DE,$00,$FB,$00
-VRAMUp_WarpTextSPW2:                ; 08:62ED
+TiUp_WarpTextSPW2:                  ; 08:62ED
 .db $9A,$0B,$0A,$00,$F0,$00,$DE,$00,\
     $E5,$00,$DC,$00,$E8,$00,$E6,$00,\
     $DE,$00,$F4,$00,$ED,$00,$E8,$9A,\
     $4B,$0A,$00,$F0,$00,$DA,$00,$EB,\
     $00,$E9,$00,$F4,$00,$F3,$00,$E8,\
     $00,$E7,$00,$DE,$00,$FB,$00
-VRAMUp_WarpTo432:                   ; 08:631C
+TiUp_WarpTo432:                     ; 08:631C
 .db $9A,$A4,$01,$00,$D4,$9A,$AD,$01,\
     $00,$D3,$9A,$B5,$01,$00,$D2,$00
-VRAMUp_WarpTo876:                   ; 08:632C
+TiUp_WarpTo876:                     ; 08:632C
 .db $9A,$A4,$01,$00,$D8,$9A,$AD,$01,\
     $00,$D7,$9A,$B5,$01,$00,$D6,$00
-VRAMUp_WarpTo5Orig:                 ; 08:633C
+TiUp_WarpTo5Orig:                   ; 08:633C
 .db $9A,$AD,$01,$00,$D5,$00
-VRAMUp_WarpTo2:                     ; 08:6342
+TiUp_WarpTo2:                       ; 08:6342
 .db $9A,$AF,$01,$00,$D2,$00
-VRAMUp_WarpTo3:                     ; 08:6348
+TiUp_WarpTo3:                       ; 08:6348
 .db $9A,$AD,$01,$00,$D3,$00
-VRAMUp_WarpTo4:                     ; 08:634E
+TiUp_WarpTo4:                       ; 08:634E
 .db $9A,$AD,$01,$00,$D4,$00
-VRAMUp_WarpTo1:                     ; 08:6354
+TiUp_WarpTo1:                       ; 08:6354
 .db $9A,$AD,$01,$00,$D1,$00
-VRAMUp_WarpTo6:                     ; 08:635A
+TiUp_WarpTo6:                       ; 08:635A
 .db $9A,$AD,$01,$00,$D6,$00
-VRAMUp_WarpTo7:                     ; 08:6360
+TiUp_WarpTo7:                       ; 08:6360
 .db $9A,$AD,$01,$00,$D7,$00
-VRAMUp_WarpTo8:                     ; 08:6366
+TiUp_WarpTo8:                       ; 08:6366
 .db $9A,$AD,$01,$00,$D8,$00
-VRAMUp_WarpTo5SP:                   ; 08:636C
+TiUp_WarpTo5SP:                     ; 08:636C
 .db $9A,$AD,$01,$00,$D5,$00
-VRAMUpWorldNumOrigPtrs:             ; 08:6372
-.dw VRAMUp_WarpTo432, VRAMUp_WarpTo876, VRAMUp_WarpTo5Orig
-VRAMUpWorldNumSPPtrs:               ; 08:6378
-.dw VRAMUp_WarpTo2, VRAMUp_WarpTo3, VRAMUp_WarpTo4, VRAMUp_WarpTo1,\
-    VRAMUp_WarpTo6, VRAMUp_WarpTo7, VRAMUp_WarpTo8, VRAMUp_WarpTo5SP
-VRAMUpWorldNumOrigLengths:          ; 08:6388
+TiUpWorldNumOrigPtrs:               ; 08:6372
+.dw TiUp_WarpTo432, TiUp_WarpTo876, TiUp_WarpTo5Orig
+TiUpWorldNumSPPtrs:                 ; 08:6378
+.dw TiUp_WarpTo2, TiUp_WarpTo3, TiUp_WarpTo4, TiUp_WarpTo1,\
+    TiUp_WarpTo6, TiUp_WarpTo7, TiUp_WarpTo8, TiUp_WarpTo5SP
+TiUpWorldNumOrigLengths:            ; 08:6388
 .db $10,$00,$10,$00,$06,$00
-VRAMUpWorldNumSPLengths:            ; 08:638E
+TiUpWorldNumSPLengths:              ; 08:638E
 .db $06,$00,$06,$00,$06,$00,$06,$00,\
     $06,$00,$06,$00,$06,$00,$06,$00
 DataPtrs08639E:                     ; 08:639E
-.dw VRAMUp_WarpTextDefault, VRAMUp_WarpTextSPW2
-VRAMUpWarpTextIndexOrig:            ; 08:63A2
+.dw TiUp_WarpTextDefault, TiUp_WarpTextSPW2
+TiUpWarpTextIndexOrig:              ; 08:63A2
 .db $00,$00,$00
-VRAMUpWarpTextIndexSP:              ; 08:63A5
+TiUpWarpTextIndexSP:                ; 08:63A5
 .db $01,$00,$00,$00,$00,$00,$00,$00
 
 Sub0863AD:
     ld   a,[W_SPFlag]               ; 08:63AD
     and  a                          ; 08:63B0
     jr   nz,@Code0863B8             ; 08:63B1
-    ld   hl,VRAMUpWarpTextIndexOrig ; 08:63B3
+    ld   hl,TiUpWarpTextIndexOrig   ; 08:63B3
     jr   @Code0863BB                ; 08:63B6
 @Code0863B8:
-    ld   hl,VRAMUpWarpTextIndexSP   ; 08:63B8
+    ld   hl,TiUpWarpTextIndexSP     ; 08:63B8
 @Code0863BB:
     ld   a,[$D2E6]                  ; 08:63BB
     ld   e,a                        ; 08:63BE
@@ -4864,7 +4912,7 @@ Sub0863AD:
     ld   d,[hl]                     ; 08:63CC
     ld   l,e                        ; 08:63CD
     ld   h,d                        ; 08:63CE
-    ld   de,W_TilemapUploadBuffer   ; 08:63CF
+    ld   de,W_TiUpBuffer            ; 08:63CF
     ld   bc,$002F                   ; 08:63D2
     call CopyBytes                  ; 08:63D5
     ld   a,[$D2E6]                  ; 08:63D8
@@ -4874,18 +4922,18 @@ Sub0863AD:
     ld   a,[W_SPFlag]               ; 08:63E0
     and  a                          ; 08:63E3
     jr   nz,@Code0863F2             ; 08:63E4
-    ld   hl,VRAMUpWorldNumOrigLengths; 08:63E6
+    ld   hl,TiUpWorldNumOrigLengths ; 08:63E6
     add  hl,de                      ; 08:63E9
     ld   a,[hl]                     ; 08:63EA
     ldh  [<$FF97],a                 ; 08:63EB
-    ld   hl,VRAMUpWorldNumOrigPtrs  ; 08:63ED
+    ld   hl,TiUpWorldNumOrigPtrs    ; 08:63ED
     jr   @Code0863FC                ; 08:63F0
 @Code0863F2:
-    ld   hl,VRAMUpWorldNumSPLengths ; 08:63F2
+    ld   hl,TiUpWorldNumSPLengths   ; 08:63F2
     add  hl,de                      ; 08:63F5
     ld   a,[hl]                     ; 08:63F6
     ldh  [<$FF97],a                 ; 08:63F7
-    ld   hl,VRAMUpWorldNumSPPtrs    ; 08:63F9
+    ld   hl,TiUpWorldNumSPPtrs      ; 08:63F9
 @Code0863FC:
     add  hl,de                      ; 08:63FC
     ldi  a,[hl]                     ; 08:63FD
@@ -4897,7 +4945,7 @@ Sub0863AD:
 @Loop086405:
     ldi  a,[hl]                     ; 08:6405
     push hl                         ; 08:6406
-    ld   hl,W_TilemapUploadBuffer+$2E; 08:6407
+    ld   hl,W_TiUpBuffer+$2E        ; 08:6407
     add  hl,de                      ; 08:640A
     ld   [hl],a                     ; 08:640B
     pop  hl                         ; 08:640C

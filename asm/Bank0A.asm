@@ -60,6 +60,7 @@ Sub0A4EC1:
     ret                             ; 0A:4EC5
 
 Code0A4EC6:
+; Album substate 0
     call Sub001258                  ; 0A:4EC6
     xor  a                          ; 0A:4EC9
     ldh  [<IE],a                    ; 0A:4ECA
@@ -70,10 +71,10 @@ Code0A4EC6:
     ld   a,$0A                      ; 0A:4ED7
     rst  $10                        ; 0A:4ED9  24-bit call
 .dl SubL_0756D9                     ; 0A:4EDA
-    ld   a,[$C42C]                  ; 0A:4EDD
+    ld   a,[W_AlbumUnlockFlags+3]   ; 0A:4EDD
     and  $01                        ; 0A:4EE0
     jr   nz,Code0A4F08              ; 0A:4EE2
-    ld   hl,$C429                   ; 0A:4EE4
+    ld   hl,W_AlbumUnlockFlags      ; 0A:4EE4
     ldi  a,[hl]                     ; 0A:4EE7
     and  $07                        ; 0A:4EE8
     cp   $07                        ; 0A:4EEA
@@ -100,7 +101,9 @@ Code0A4F08:
     call Sub001813                  ; 0A:4F0F
     call Sub0A4EC1                  ; 0A:4F12
     jp   Code0A4F20                 ; 0A:4F15
+
 Code0A4F18:
+; Album substate 1
     call Sub00126D                  ; 0A:4F18
     xor  a                          ; 0A:4F1B
     ldh  [<IE],a                    ; 0A:4F1C
@@ -214,7 +217,7 @@ Data0A5009:                         ; 0A:5009
     $4E,$01
 
 Code0A5013:
-    ld   a,[$C42C]                  ; 0A:5013
+    ld   a,[W_AlbumUnlockFlags+3]   ; 0A:5013
     and  $01                        ; 0A:5016
     jr   z,Code0A5030               ; 0A:5018
     ld   a,$D4                      ; 0A:501A
@@ -243,7 +246,7 @@ Code0A5033:
     ld   a,$53                      ; 0A:5045
     adc  $00                        ; 0A:5047
     ld   b,a                        ; 0A:5049
-    ld   hl,$C429                   ; 0A:504A
+    ld   hl,W_AlbumUnlockFlags      ; 0A:504A
     add  hl,de                      ; 0A:504D
     ld   a,[bc]                     ; 0A:504E
     and  [hl]                       ; 0A:504F
@@ -252,7 +255,7 @@ Code0A5033:
     ldh  [<$FF99],a                 ; 0A:5054
     jr   Code0A5064                 ; 0A:5056
 Code0A5058:
-    ld   hl,$C42D                   ; 0A:5058
+    ld   hl,W_AlbumViewFlags        ; 0A:5058
     add  hl,de                      ; 0A:505B
     ld   a,[bc]                     ; 0A:505C
     and  [hl]                       ; 0A:505D
@@ -331,7 +334,7 @@ Code0A50BE:
     ld   a,$53                      ; 0A:50D0
     adc  $00                        ; 0A:50D2
     ld   b,a                        ; 0A:50D4
-    ld   hl,$C429                   ; 0A:50D5
+    ld   hl,W_AlbumUnlockFlags      ; 0A:50D5
     add  hl,de                      ; 0A:50D8
     ld   a,[bc]                     ; 0A:50D9
     and  [hl]                       ; 0A:50DA
@@ -340,7 +343,7 @@ Code0A50BE:
     ldh  [<$FF99],a                 ; 0A:50DF
     jr   Code0A50EF                 ; 0A:50E1
 Code0A50E3:
-    ld   hl,$C42D                   ; 0A:50E3
+    ld   hl,W_AlbumViewFlags        ; 0A:50E3
     add  hl,de                      ; 0A:50E6
     ld   a,[bc]                     ; 0A:50E7
     and  [hl]                       ; 0A:50E8
@@ -420,7 +423,7 @@ Code0A5144:
     ld   a,$53                      ; 0A:5156
     adc  $00                        ; 0A:5158
     ld   b,a                        ; 0A:515A
-    ld   hl,$C429                   ; 0A:515B
+    ld   hl,W_AlbumUnlockFlags      ; 0A:515B
     add  hl,de                      ; 0A:515E
     ld   a,[bc]                     ; 0A:515F
     and  [hl]                       ; 0A:5160
@@ -429,7 +432,7 @@ Code0A5144:
     ldh  [<$FF99],a                 ; 0A:5165
     jr   Code0A5175                 ; 0A:5167
 Code0A5169:
-    ld   hl,$C42D                   ; 0A:5169
+    ld   hl,W_AlbumViewFlags        ; 0A:5169
     add  hl,de                      ; 0A:516C
     ld   a,[bc]                     ; 0A:516D
     and  [hl]                       ; 0A:516E
@@ -491,6 +494,7 @@ Sub0A51B0:
 .dw Code0A5228                      ; 0A:51BD
 .dw Code0A52B2                      ; 0A:51BF
 .dw Code0A52B2                      ; 0A:51C1
+
 Code0A51C3:
     xor  a                          ; 0A:51C3
     ldh  [<$FF97],a                 ; 0A:51C4
@@ -519,7 +523,7 @@ Code0A51C6:
     ld   a,$53                      ; 0A:51E9
     adc  $00                        ; 0A:51EB
     ld   b,a                        ; 0A:51ED
-    ld   hl,$C429                   ; 0A:51EE
+    ld   hl,W_AlbumUnlockFlags      ; 0A:51EE
     add  hl,de                      ; 0A:51F1
     ld   a,[bc]                     ; 0A:51F2
     and  [hl]                       ; 0A:51F3
@@ -529,7 +533,7 @@ Code0A51C6:
     ld   [$C415],a                  ; 0A:51FB
     jr   Code0A5210                 ; 0A:51FE
 Code0A5200:
-    ld   hl,$C42D                   ; 0A:5200
+    ld   hl,W_AlbumViewFlags        ; 0A:5200
     add  hl,de                      ; 0A:5203
     ld   a,[bc]                     ; 0A:5204
     and  [hl]                       ; 0A:5205
@@ -595,7 +599,7 @@ Code0A523D:
     ld   a,$53                      ; 0A:5266
     adc  $00                        ; 0A:5268
     ld   b,a                        ; 0A:526A
-    ld   hl,$C429                   ; 0A:526B
+    ld   hl,W_AlbumUnlockFlags      ; 0A:526B
     add  hl,de                      ; 0A:526E
     ld   a,[bc]                     ; 0A:526F
     and  [hl]                       ; 0A:5270
@@ -605,7 +609,7 @@ Code0A523D:
     ld   [$C415],a                  ; 0A:5278
     jr   Code0A528D                 ; 0A:527B
 Code0A527D:
-    ld   hl,$C42D                   ; 0A:527D
+    ld   hl,W_AlbumViewFlags        ; 0A:527D
     add  hl,de                      ; 0A:5280
     ld   a,[bc]                     ; 0A:5281
     and  [hl]                       ; 0A:5282
@@ -673,7 +677,7 @@ Code0A52C7:
     ld   a,$53                      ; 0A:52EA
     adc  $00                        ; 0A:52EC
     ld   b,a                        ; 0A:52EE
-    ld   hl,$C429                   ; 0A:52EF
+    ld   hl,W_AlbumUnlockFlags      ; 0A:52EF
     add  hl,de                      ; 0A:52F2
     ld   a,[bc]                     ; 0A:52F3
     and  [hl]                       ; 0A:52F4
@@ -683,7 +687,7 @@ Code0A52C7:
     ld   [$C415],a                  ; 0A:52FC
     jr   Code0A5344                 ; 0A:52FF
 Code0A5301:
-    ld   hl,$C42D                   ; 0A:5301
+    ld   hl,W_AlbumViewFlags        ; 0A:5301
     add  hl,de                      ; 0A:5304
     ld   a,[bc]                     ; 0A:5305
     and  [hl]                       ; 0A:5306
@@ -767,7 +771,9 @@ Data0A53B4:                         ; 0A:53B4
     $07,$07,$07,$07,$07,$07,$07,$07,\
     $07,$07,$07,$07,$07,$07,$07,$07,\
     $07,$07,$07,$07
+
 Code0A53F8:
+; Album substate 2
     ldh  a,[<H_ButtonsPressed]      ; 0A:53F8
     bit  1,a                        ; 0A:53FA
     jr   z,Code0A540B               ; 0A:53FC
@@ -957,7 +963,7 @@ Code0A550C:
     jr   nz,Code0A555C              ; 0A:553B
     cp   $00                        ; 0A:553D
     jr   nz,Code0A5552              ; 0A:553F
-    ld   a,[$C42C]                  ; 0A:5541
+    ld   a,[W_AlbumUnlockFlags+3]   ; 0A:5541
     and  $01                        ; 0A:5544
     jr   z,Code0A5552               ; 0A:5546
     ld   a,$05                      ; 0A:5548
@@ -1418,7 +1424,7 @@ Code0A5C83:
     ldi  a,[hl]                     ; 0A:5CA9
     ld   h,[hl]                     ; 0A:5CAA
     ld   l,a                        ; 0A:5CAB
-    ld   bc,$C000                   ; 0A:5CAC
+    ld   bc,W_OAMBuffer             ; 0A:5CAC
 Code0A5CAF:
     ldi  a,[hl]                     ; 0A:5CAF
     add  e                          ; 0A:5CB0
@@ -1449,7 +1455,7 @@ Code0A5CC4:
     ldi  a,[hl]                     ; 0A:5CD1
     ld   h,[hl]                     ; 0A:5CD2
     ld   l,a                        ; 0A:5CD3
-    ld   de,W_PaletteBufferSpr      ; 0A:5CD4
+    ld   de,W_PalBufferSpr          ; 0A:5CD4
     ld   bc,$0008                   ; 0A:5CD7
     call CopyBytes                  ; 0A:5CDA
     ld   a,$01                      ; 0A:5CDD
@@ -1539,7 +1545,7 @@ Code0A5D38:
     jr   z,Code0A5D64               ; 0A:5D60
     ld   d,$50                      ; 0A:5D62
 Code0A5D64:
-    ld   bc,$C000                   ; 0A:5D64
+    ld   bc,W_OAMBuffer             ; 0A:5D64
     ret                             ; 0A:5D67
 
 Code0A5D68:
@@ -1568,10 +1574,11 @@ Code0A5D68:
     ldi  a,[hl]                     ; 0A:5D90
     ld   h,[hl]                     ; 0A:5D91
     ld   l,a                        ; 0A:5D92
-    ld   bc,$C000                   ; 0A:5D93
+    ld   bc,W_OAMBuffer             ; 0A:5D93
     ret                             ; 0A:5D96
 
 Code0A5D97:
+; Album substate 3
     call Sub0A5DC4                  ; 0A:5D97
     ld   a,[$D904]                  ; 0A:5D9A
     and  a                          ; 0A:5D9D
@@ -2660,7 +2667,9 @@ AlbumImageTilemapPtrs:              ; 0A:6C0A
 .dl Ti_AlbumMarioLuigi              ; 1C
 .dl Ti_AlbumMarioLuigi              ; 1D
 .dl Ti_AlbumMarioLuigi              ; 1E
+
 Code0A6C67:
+; Album substate 4
     call Sub00126D                  ; 0A:6C67
     xor  a                          ; 0A:6C6A
     ldh  [<IE],a                    ; 0A:6C6B
@@ -2738,7 +2747,7 @@ Code0A6C67:
     ld   b,a                        ; 0A:6CF3
     ld   hl,Pal_AlbumImageBG        ; 0A:6CF4
     add  hl,bc                      ; 0A:6CF7
-    ld   de,W_PaletteBuffer         ; 0A:6CF8
+    ld   de,W_PalBuffer             ; 0A:6CF8
     ld   bc,$0038                   ; 0A:6CFB
     call CopyBytes                  ; 0A:6CFE
     ld   hl,Pal_AlbumImageBG+$38    ; 0A:6D01
@@ -3014,6 +3023,7 @@ Code0A6F77:
     ret                             ; 0A:6F7D
 
 Code0A6F7E:
+; Album substate 5
     ld   a,$0A                      ; 0A:6F7E
     call Sub00160F                  ; 0A:6F80
     ldh  a,[<H_ButtonsPressed]      ; 0A:6F83
@@ -3060,7 +3070,9 @@ Data0A7000:                         ; 0A:7000
     $20,$71,$5A,$0F,$20,$79,$5E,$0F,\
     $20,$81,$62,$0F,$20,$89,$66,$0F,\
     $20,$91,$1E,$0F
+
 Code0A702C:
+; Album substate 6
     ld   hl,$C178                   ; 0A:702C
     dec  [hl]                       ; 0A:702F
     dec  [hl]                       ; 0A:7030
@@ -3076,7 +3088,7 @@ Code0A703A:
     jr   z,Code0A7046               ; 0A:7041
     ld   hl,Data0A6FEC              ; 0A:7043
 Code0A7046:
-    ld   de,$C000                   ; 0A:7046
+    ld   de,W_OAMBuffer             ; 0A:7046
     ld   a,[$C178]                  ; 0A:7049
     ld   c,a                        ; 0A:704C
     ld   b,$10                      ; 0A:704D
@@ -3099,6 +3111,7 @@ Code0A704F:
     ret                             ; 0A:705F
 
 Code0A7060:
+; Album substate 7
     ldh  a,[<H_ButtonsPressed]      ; 0A:7060
     bit  1,a                        ; 0A:7062
     jr   z,Code0A7071               ; 0A:7064
@@ -3148,7 +3161,9 @@ Code0A70AF:
     ldh  [<$FFF2],a                 ; 0A:70B5
 Code0A70B7:
     jp   Code0A703A                 ; 0A:70B7
+
 Code0A70BA:
+; Album substate 8
     ld   hl,$C178                   ; 0A:70BA
     inc  [hl]                       ; 0A:70BD
     inc  [hl]                       ; 0A:70BE
@@ -3171,6 +3186,7 @@ Data0A70CB:                         ; 0A:70CB
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
 
 Code0A714B:
+; Album substate 9
     call Sub00126D                  ; 0A:714B
     xor  a                          ; 0A:714E
     ldh  [<IE],a                    ; 0A:714F
@@ -3344,6 +3360,7 @@ Code0A72AD:
     ret                             ; 0A:72B3
 
 Code0A72B4:
+; Album substate A
     ld   a,$0A                      ; 0A:72B4
     call Sub00160F                  ; 0A:72B6
     ldh  a,[<H_ButtonsPressed]      ; 0A:72B9
@@ -3401,7 +3418,9 @@ Data0A7316:                         ; 0A:7316
     $7DE0,$025F,$001F,$0000,$7DE0,$7FFF,$02A6,$001D,\
     $7DE0,$7FFF,$02BC,$0019,$7DE0,$7FFF,$02A6,$0120,\
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
+
 Code0A7396:
+; Album substate B
     call Sub001258                  ; 0A:7396
     xor  a                          ; 0A:7399
     ldh  [<IE],a                    ; 0A:739A
@@ -3521,6 +3540,7 @@ Code0A7473:
     ret                             ; 0A:749E
 
 Code0A749F:
+; Album substate C
     ldh  a,[<H_ButtonsPressed]      ; 0A:749F
     bit  1,a                        ; 0A:74A1
     jr   z,Code0A74B2               ; 0A:74A3

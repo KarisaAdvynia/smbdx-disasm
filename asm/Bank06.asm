@@ -1,7 +1,8 @@
 .bank $06 slot 1
 .orga $4000
 
-Code064000:
+Spr38_Init:
+; sprite 38 init
     ld   de,$0000                   ; 06:4000
     ld   a,e                        ; 06:4003
     ld   hl,$D12C                   ; 06:4004
@@ -42,7 +43,8 @@ Code064024:
     ld   [$C186],a                  ; 06:4041
     ret                             ; 06:4044
 
-Code064045:
+Spr38_Main:
+; sprite 38 main
     ld   hl,$D12C                   ; 06:4045
     add  hl,bc                      ; 06:4048
     ld   a,[hl]                     ; 06:4049
@@ -135,7 +137,7 @@ Code0640C9:
     ldh  a,[<$FFA5]                 ; 06:40CF
     cp   $03                        ; 06:40D1
     jr   nc,Return0640D8            ; 06:40D3
-    call Sub0640E9                  ; 06:40D5
+    call CheepCheepSwimming_Init    ; 06:40D5
 Return0640D8:
     ret                             ; 06:40D8
 
@@ -144,7 +146,8 @@ Data0640D9:                         ; 06:40D9
 BitTable8Asc_0640E1:                ; 06:40E1
 .db $01,$02,$04,$08,$10,$20,$40,$80
 
-Sub0640E9:
+CheepCheepSwimming_Init:
+; sprite 05-08 init
     ld   a,$05                      ; 06:40E9
     call LoadSpriteAnySlot          ; 06:40EB
     jp   c,Return064196             ; 06:40EE
@@ -254,7 +257,9 @@ Return064196:
 
 Data064197:                         ; 06:4197
 .db $F8,$FC
-Code064199:
+
+CheepCheepSwimming_Main:
+; sprite 05-08 main
     call Sub0025CB                  ; 06:4199
     jp   c,Code0641A8               ; 06:419C
     call Sub001A3D                  ; 06:419F
@@ -277,6 +282,7 @@ Sub0641B4:
     ld   a,[hl]                     ; 06:41B8
     rst  $00                        ; 06:41B9  Execute from 16-bit pointer table
 .dw Code06422A                      ; 06:41BA
+
 Code0641BC:
     call Sub002920                  ; 06:41BC
     jp   c,Return064219             ; 06:41BF
@@ -368,7 +374,8 @@ Code06422A:
 
     ret                             ; 06:4257
 
-Code064258:
+Podoboo_Init:
+; sprite 1F init
     ld   hl,W_SpriteYSpeed          ; 06:4258
     add  hl,bc                      ; 06:425B
     ld   [hl],$C2                   ; 06:425C
@@ -386,7 +393,8 @@ Code064258:
     ld   [hl],a                     ; 06:4271
     ret                             ; 06:4272
 
-Code064273:
+Podoboo_Main:
+; sprite 1F main
     call Sub0025CB                  ; 06:4273
     jp   c,Code064282               ; 06:4276
     call Sub001A3D                  ; 06:4279
@@ -425,6 +433,7 @@ Sub0642A5:
     rst  $00                        ; 06:42AA  Execute from 16-bit pointer table
 .dw Code064324                      ; 06:42AB
 .dw Return06434B                    ; 06:42AD
+
 Code0642AF:
     call Sub002920                  ; 06:42AF
     jp   c,Return0642E3             ; 06:42B2
@@ -516,7 +525,8 @@ Code064339:
 Return06434B:
     ret                             ; 06:434B
 
-Code06434C:
+PiranhaDown_Init:
+; sprite 47 init
     ld   hl,W_SpriteXHigh           ; 06:434C
     add  hl,bc                      ; 06:434F
     push hl                         ; 06:4350
@@ -545,7 +555,8 @@ Code06434C:
     ld   [hl],a                     ; 06:4375
     ret                             ; 06:4376
 
-Code064377:
+PiranhaDown_Main:
+; sprite 47 main
     call Sub0025CB                  ; 06:4377
     jp   c,Code0643D3               ; 06:437A
     call Sub002920                  ; 06:437D
@@ -609,6 +620,7 @@ Sub0643D7:
 .dw Code064422                      ; 06:43E1
 .dw Code064438                      ; 06:43E3
 .dw Code06445D                      ; 06:43E5
+
 Code0643E7:
     ld   hl,$D0A5                   ; 06:43E7
     add  hl,bc                      ; 06:43EA
@@ -748,7 +760,9 @@ Return0644B5:
 
 Data0644B6:                         ; 06:44B6
 .dsb $10, $00
-Code0644C6:
+
+ToadPeach_Init:
+; sprite 1C init
     ld   a,[W_ChallengeFlag]        ; 06:44C6
     and  a                          ; 06:44C9
     jr   nz,Code06451F              ; 06:44CA
@@ -834,7 +848,9 @@ Data064541:                         ; 06:4541
 Data064559:                         ; 06:4559
 .db $86,$00,$86,$00,$86,$00,$86,$00,\
     $8C,$01,$8C,$01
-Code064565:
+
+ToadPeach_Main:
+; sprite 1C main
     ld   a,[W_ChallengeFlag]        ; 06:4565
     and  a                          ; 06:4568
     jr   nz,Code0645BE              ; 06:4569
@@ -938,6 +954,7 @@ Sub064618:
     rst  $00                        ; 06:461D  Execute from 16-bit pointer table
 .dw Code064622                      ; 06:461E
 .dw Code064634                      ; 06:4620
+
 Code064622:
     ld   hl,$D096                   ; 06:4622
     add  hl,bc                      ; 06:4625
@@ -999,6 +1016,7 @@ Sub06466C:
 .dw Code0646CA                      ; 06:4678
 .dw Code06472E                      ; 06:467A
 .dw Return064769                    ; 06:467C
+
 Code06467E:
     ld   a,[$C1D3]                  ; 06:467E
     cp   $06                        ; 06:4681
@@ -1289,7 +1307,8 @@ Code06483C:
     ld   [hl],$78                   ; 06:4878
     ret                             ; 06:487A
 
-Code06487B:
+Spr48_Main:
+; sprite 48 main
     call Sub001A3D                  ; 06:487B
     call Sub001A79                  ; 06:487E
     call Sub064888                  ; 06:4881
@@ -1370,7 +1389,8 @@ Sub0648D8:
     call Sub002861                  ; 06:48F0
     ret                             ; 06:48F3
 
-Code0648F4:
+MultiKoopaGoomba_Init:
+; sprite 49-4C init
     xor  a                          ; 06:48F4
     ldh  [<$FF98],a                 ; 06:48F5
     ld   de,$000E                   ; 06:48F7
@@ -1435,12 +1455,12 @@ Code064940:
     jr   nz,Code06495D              ; 06:4953
     ld   a,$06                      ; 06:4955
     rst  $10                        ; 06:4957  24-bit call
-.dl SubL_024E89                     ; 06:4958
+.dl SubL_KoopaBuzzy_Init            ; 06:4958
     jr   Code064963                 ; 06:495B
 Code06495D:
     ld   a,$06                      ; 06:495D
     rst  $10                        ; 06:495F  24-bit call
-.dl SubL_025754                     ; 06:4960
+.dl SubL_Goomba_Init                ; 06:4960
 Code064963:
     pop  de                         ; 06:4963
     pop  bc                         ; 06:4964
@@ -1521,7 +1541,9 @@ ReturnL_0649DB:
 
 Data0649DC:                         ; 06:49DC
 .db $30,$86,$32,$86
-Code0649E0:
+
+CastleFlag_Main:
+; sprite 0A main
     call Sub0649EA                  ; 06:49E0
     ld   hl,Data0649DC              ; 06:49E3
     call Disp16x16Sprite            ; 06:49E6
@@ -1533,7 +1555,8 @@ Sub0649EA:
     ld   a,[hl]                     ; 06:49EE
     rst  $00                        ; 06:49EF  Execute from 16-bit pointer table
 .dw Code0649F4                      ; 06:49F0
-.dw Code064000                      ; 06:49F2
+.dw Spr38_Init                      ; 06:49F2
+
 Code0649F4:
     call Sub001A79                  ; 06:49F4
     ld   hl,W_SpriteYLow            ; 06:49F7
@@ -1584,7 +1607,9 @@ Code064A36:
 Data064A38:                         ; 06:4A38
 .db $20,$06,$20,$26,$1E,$06,$1E,$26,\
     $1C,$06,$1C,$26
-Code064A44:
+
+Firework_Main:
+; sprite 21 main
     ld   hl,$D096                   ; 06:4A44
     add  hl,bc                      ; 06:4A47
     dec  [hl]                       ; 06:4A48
@@ -1619,7 +1644,7 @@ Code064A66:
     call Disp16x16Sprite            ; 06:4A75
     ret                             ; 06:4A78
 
-Data064A79:                         ; 06:4A79
+TiUp_064A79:                        ; 06:4A79
 .db $9A,$A8,$05,$00,$DE,$00,$EB,$00,\
     $EB,$00,$E8,$00,$EB,$9A,$EA,$02,\
     $00,$F4,$00,$F4,$9B,$28,$04,$00,\
@@ -1653,13 +1678,13 @@ Sub064AA0:
 
 Sub064AD1:
     ld   a,$00                      ; 06:4AD1
-    ld   hl,W_PaletteBuffer         ; 06:4AD3
+    ld   hl,W_PalBuffer             ; 06:4AD3
     ldi  [hl],a                     ; 06:4AD6
     ld   [hl],a                     ; 06:4AD7
     inc  a                          ; 06:4AD8
     ldh  [<$FFC0],a                 ; 06:4AD9
-    ld   de,W_TilemapUploadBuffer   ; 06:4ADB
-    ld   hl,Data064A79              ; 06:4ADE
+    ld   de,W_TiUpBuffer            ; 06:4ADB
+    ld   hl,TiUp_064A79             ; 06:4ADE
     ld   bc,$0027                   ; 06:4AE1
     call CopyBytes                  ; 06:4AE4
     ld   a,[$DA70]                  ; 06:4AE7
@@ -1675,7 +1700,7 @@ Code064AF8:
     and  $F0                        ; 06:4AFC
     swap a                          ; 06:4AFE
     add  $D0                        ; 06:4B00
-    ld   hl,$DF12                   ; 06:4B02
+    ld   hl,W_TiUpBuffer+$11        ; 06:4B02
     ldi  [hl],a                     ; 06:4B05
     ld   a,b                        ; 06:4B06
     and  $0F                        ; 06:4B07
@@ -1687,7 +1712,7 @@ Code064AF8:
     and  $F0                        ; 06:4B11
     swap a                          ; 06:4B13
     add  $D0                        ; 06:4B15
-    ld   hl,$DF24                   ; 06:4B17
+    ld   hl,W_TiUpBuffer+$23        ; 06:4B17
     ldi  [hl],a                     ; 06:4B1A
     ld   a,b                        ; 06:4B1B
     and  $0F                        ; 06:4B1C
@@ -2026,7 +2051,7 @@ Code064D64:
     jr   nz,Code064D9D              ; 06:4D89
 Code064D8B:
     ld   b,$20                      ; 06:4D8B
-    ld   hl,W_PaletteBuffer         ; 06:4D8D
+    ld   hl,W_PalBuffer             ; 06:4D8D
 Code064D90:
     ld   a,$FF                      ; 06:4D90
     ldi  [hl],a                     ; 06:4D92
@@ -2558,7 +2583,7 @@ Sub065156:
     ld   [hl],a                     ; 06:5179
     pop  af                         ; 06:517A
     and  a                          ; 06:517B
-    jp   nz,Code065227              ; 06:517C
+    jp   nz,@Code065227             ; 06:517C
     ld   hl,$A3C2                   ; 06:517F
     ld   a,$45                      ; 06:5182
     ldi  [hl],a                     ; 06:5184
@@ -2684,17 +2709,17 @@ Sub065156:
     ldi  [hl],a                     ; 06:5223
     ld   a,$44                      ; 06:5224
     ldi  [hl],a                     ; 06:5226
-Code065227:
+@Code065227:
     ld   hl,$1000                   ; 06:5227
     ld   a,$00                      ; 06:522A
     ld   [hl],a                     ; 06:522C
     ld   b,$F0                      ; 06:522D
     xor  a                          ; 06:522F
     ld   hl,$D977                   ; 06:5230
-Code065233:
+@Loop065233:
     ldi  [hl],a                     ; 06:5233
     dec  b                          ; 06:5234
-    jp   nz,Code065233              ; 06:5235
+    jp   nz,@Loop065233             ; 06:5235
     ret                             ; 06:5238
 
 Sub065239:
@@ -3288,7 +3313,7 @@ Sub065616:
 .dw Code065879                      ; 06:561F
 .dw Code0658CE                      ; 06:5621
 
-Data065623:                         ; 06:5623
+TiUp_065623:                        ; 06:5623
 .db $9B,$A1,$12,$0A,$99,$0A,$E1,$0A,\
     $D4,$0A,$E2,$0A,$E2,$0A,$A4,$0A,\
     $E3,$0A,$D7,$0A,$D4,$0A,$A4,$0A,\
@@ -3301,8 +3326,8 @@ Data065623:                         ; 06:5623
     $0A,$A4,$0A,$A4,$0A,$A4,$00
 
 Code065672:
-    ld   de,W_TilemapUploadBuffer   ; 06:5672
-    ld   hl,Data065623              ; 06:5675
+    ld   de,W_TiUpBuffer            ; 06:5672
+    ld   hl,TiUp_065623             ; 06:5675
     ld   bc,$004F                   ; 06:5678
     call CopyBytes                  ; 06:567B
     ld   a,$FF                      ; 06:567E
@@ -3318,7 +3343,7 @@ Code065672:
     inc  [hl]                       ; 06:5695
     ret                             ; 06:5696
 
-Data065697:                         ; 06:5697
+TiUp_065697:                        ; 06:5697
 .db $9B,$A1,$12,$0A,$A4,$0A,$A4,$0A,\
     $A4,$0A,$A4,$0A,$A4,$0A,$A4,$0A,\
     $A4,$0A,$A4,$0A,$A4,$0A,$A4,$0A,\
@@ -3329,6 +3354,7 @@ Data065697:                         ; 06:5697
     $0A,$A4,$0A,$A4,$0A,$A4,$0A,$A4,\
     $0A,$A4,$0A,$A4,$0A,$A4,$0A,$A4,\
     $0A,$A4,$0A,$A4,$0A,$A4,$00
+
 Code0656E6:
     di                              ; 06:56E6
     ld   a,$07                      ; 06:56E7
@@ -3355,8 +3381,8 @@ Code065713:
     call Sub065382                  ; 06:5713
     ld   a,$00                      ; 06:5716
     ldh  [<SVBK],a                  ; 06:5718
-    ld   de,W_TilemapUploadBuffer   ; 06:571A
-    ld   hl,Data065697              ; 06:571D
+    ld   de,W_TiUpBuffer            ; 06:571A
+    ld   hl,TiUp_065697             ; 06:571D
     ld   bc,$004F                   ; 06:5720
     call CopyBytes                  ; 06:5723
     ldh  a,[<H_GameSubstate]        ; 06:5726
@@ -3369,8 +3395,8 @@ Code06572E:
     ld   [$DA0C],a                  ; 06:5733
     ld   a,$00                      ; 06:5736
     ldh  [<SVBK],a                  ; 06:5738
-    ld   de,W_TilemapUploadBuffer   ; 06:573A
-    ld   hl,Data065697              ; 06:573D
+    ld   de,W_TiUpBuffer            ; 06:573A
+    ld   hl,TiUp_065697             ; 06:573D
     ld   bc,$004F                   ; 06:5740
     call CopyBytes                  ; 06:5743
     ld   a,$30                      ; 06:5746
@@ -3474,9 +3500,9 @@ Code06580B:
     ld   a,$06                      ; 06:5817
     rst  $10                        ; 06:5819  24-bit call
 .dl SubL_0756D9                     ; 06:581A
-    ld   a,[$C42A]                  ; 06:581D
+    ld   a,[W_AlbumUnlockFlags+1]   ; 06:581D
     or   $20                        ; 06:5820
-    ld   [$C42A],a                  ; 06:5822
+    ld   [W_AlbumUnlockFlags+1],a   ; 06:5822
     ld   a,$06                      ; 06:5825
     rst  $10                        ; 06:5827  24-bit call
 .dl SubL_0757EF                     ; 06:5828
@@ -3524,7 +3550,7 @@ Code065879:
     ld   a,b                        ; 06:5889
     and  a                          ; 06:588A
     jp   z,Code06589F               ; 06:588B
-    ld   hl,$C000                   ; 06:588E
+    ld   hl,W_OAMBuffer             ; 06:588E
     ld   de,Data065859              ; 06:5891
     ld   b,$20                      ; 06:5894
 Code065896:
@@ -3561,7 +3587,7 @@ Code0658CE:
     ld   a,b                        ; 06:58DE
     and  a                          ; 06:58DF
     jp   z,Code0658F3               ; 06:58E0
-    ld   hl,$C000                   ; 06:58E3
+    ld   hl,W_OAMBuffer             ; 06:58E3
     ld   de,Data0658AE              ; 06:58E6
     ld   b,$20                      ; 06:58E9
 Code0658EB:
@@ -3634,6 +3660,7 @@ ChallMiss_CallSubstate:
     rst  $00                        ; 06:596D  Execute from 16-bit pointer table
 .dw Code065972                      ; 06:596E
 .dw Code065991                      ; 06:5970
+
 Code065972:
     ld   hl,$C285                   ; 06:5972
     ld   a,[hl]                     ; 06:5975
@@ -3681,6 +3708,7 @@ AwardCutscene_Main:
 .dw Code0659ED                      ; 06:59B4
 .dw Code065AB9                      ; 06:59B6
 .dw AwardCutscene_CallSubstate      ; 06:59B8
+
 Code0659BA:
     ld   a,$06                      ; 06:59BA
     rst  $10                        ; 06:59BC  24-bit call
@@ -3708,7 +3736,7 @@ Code0659ED:
     ldh  [<IE],a                    ; 06:59F2
     xor  a                          ; 06:59F4
     ldh  [<VBK],a                   ; 06:59F5
-    ld   a,[$C1B0]                  ; 06:59F7
+    ld   a,[W_AwardToGive]          ; 06:59F7
     dec  a                          ; 06:59FA
     ld   c,a                        ; 06:59FB
     sla  a                          ; 06:59FC
@@ -3782,7 +3810,7 @@ Code065A31:
     call LoadFullPaletteLong        ; 06:5A7F
     xor  a                          ; 06:5A82
     ldh  [<SVBK],a                  ; 06:5A83
-    ld   hl,W_PaletteBuffer         ; 06:5A85
+    ld   hl,W_PalBuffer             ; 06:5A85
     ld   b,$2C                      ; 06:5A88
 Code065A8A:
     ld   [hl],$FF                   ; 06:5A8A
@@ -3840,6 +3868,7 @@ AwardCutscene_CallSubstate:
 .dw Code065B62                      ; 06:5AE6
 .dw Code065BB2                      ; 06:5AE8
 .dw Code065BC4                      ; 06:5AEA
+
 Code065AEC:
     call Sub065C52                  ; 06:5AEC
     ld   a,[$C326]                  ; 06:5AEF
@@ -3877,7 +3906,7 @@ Code065B1F:
     cp   b                          ; 06:5B26
     jr   z,Code065B4F               ; 06:5B27
     ldh  [<$FFC5],a                 ; 06:5B29
-    ld   hl,W_TilemapUploadBuffer   ; 06:5B2B
+    ld   hl,W_TiUpBuffer            ; 06:5B2B
     ldh  a,[<$FFC4]                 ; 06:5B2E
     and  $F0                        ; 06:5B30
     swap a                          ; 06:5B32
@@ -3920,7 +3949,7 @@ Code065B62:
     jp   nc,Code065B9F              ; 06:5B6E
     cp   $70                        ; 06:5B71
     jr   nz,Code065B8E              ; 06:5B73
-    ld   a,[$C1B0]                  ; 06:5B75
+    ld   a,[W_AwardToGive]          ; 06:5B75
     dec  a                          ; 06:5B78
     ld   c,a                        ; 06:5B79
     sla  a                          ; 06:5B7A
@@ -3979,7 +4008,7 @@ Code065BC4:
     ldh  a,[<H_ButtonsPressed]      ; 06:5BC4
     and  $01                        ; 06:5BC6
     ret  z                          ; 06:5BC8
-    ld   a,[$C1B0]                  ; 06:5BC9
+    ld   a,[W_AwardToGive]          ; 06:5BC9
     cp   $05                        ; 06:5BCC
     jr   z,Code065BE9               ; 06:5BCE
     cp   $04                        ; 06:5BD0
@@ -3995,7 +4024,7 @@ Code065BE0:
     ldh  [<H_GameState],a           ; 06:5BE0
     xor  a                          ; 06:5BE2
     ldh  [<H_GameSubstate],a        ; 06:5BE3
-    ld   [$C1B0],a                  ; 06:5BE5
+    ld   [W_AwardToGive],a          ; 06:5BE5
     ret                             ; 06:5BE8
 
 Code065BE9:
@@ -4030,7 +4059,7 @@ Sub065C52:
 Code065C5D:
     ld   de,Data065C15              ; 06:5C5D
 Code065C60:
-    ld   hl,$C000                   ; 06:5C60
+    ld   hl,W_OAMBuffer             ; 06:5C60
     ld   b,$00                      ; 06:5C63
 Code065C65:
     ld   a,[de]                     ; 06:5C65
@@ -4044,7 +4073,7 @@ Code065C6F:
     ldh  a,[<H_CameraY]             ; 06:5C6F
     ld   c,a                        ; 06:5C71
     ld   de,$0004                   ; 06:5C72
-    ld   hl,$C000                   ; 06:5C75
+    ld   hl,W_OAMBuffer             ; 06:5C75
     srl  b                          ; 06:5C78
     srl  b                          ; 06:5C7A
 Code065C7C:
@@ -4103,7 +4132,7 @@ Code066280:
     ld   a,$07                      ; 06:6293
     ldh  [<SVBK],a                  ; 06:6295
     ld   a,$00                      ; 06:6297
-    ld   hl,W_PaletteBuffer         ; 06:6299
+    ld   hl,W_PalBuffer             ; 06:6299
     ld   b,$06                      ; 06:629C
 Code06629E:
     ldi  [hl],a                     ; 06:629E
@@ -4116,7 +4145,7 @@ Code06629E:
     ldh  [<$FFC0],a                 ; 06:62A8
     xor  a                          ; 06:62AA
     ldh  [<SVBK],a                  ; 06:62AB
-    ld   hl,W_PaletteBuffer         ; 06:62AD
+    ld   hl,W_PalBuffer             ; 06:62AD
     ld   b,$20                      ; 06:62B0
 Code0662B2:
     ld   [hl],$FF                   ; 06:62B2
@@ -4167,7 +4196,7 @@ Code0662FE:
     ld   a,$00                      ; 06:6303
     and  a                          ; 06:6305
     jr   nz,Code066313              ; 06:6306
-    ld   a,[$C1B0]                  ; 06:6308
+    ld   a,[W_AwardToGive]          ; 06:6308
     and  a                          ; 06:630B
     jr   nz,Code066323              ; 06:630C
     ld   a,$14                      ; 06:630E
@@ -4183,7 +4212,7 @@ Code066313:
 Code06631E:
     ld   a,$04                      ; 06:631E
 Code066320:
-    ld   [$C1B0],a                  ; 06:6320
+    ld   [W_AwardToGive],a          ; 06:6320
 Code066323:
     ld   a,$FF                      ; 06:6323
     ld   [$DE68],a                  ; 06:6325
@@ -4198,206 +4227,208 @@ Code066323:
 SprInitPtrs:                        ; 06:6336
 ; indexed by sprite ID -1
 .dl Return024000                    ; 01
-.dl Sub024E8D                       ; 02
-.dl Sub024E8D                       ; 03
-.dl Sub025758                       ; 04
-.dl Sub0640E9                       ; 05
-.dl Sub0640E9                       ; 06
-.dl Sub0640E9                       ; 07
-.dl Sub0640E9                       ; 08
-.dl Code074A88                      ; 09
+.dl KoopaBuzzy_Init                 ; 02
+.dl KoopaBuzzy_Init                 ; 03
+.dl Goomba_Init                     ; 04
+.dl CheepCheepSwimming_Init         ; 05
+.dl CheepCheepSwimming_Init         ; 06
+.dl CheepCheepSwimming_Init         ; 07
+.dl CheepCheepSwimming_Init         ; 08
+.dl FlagpoleSpr_Init                ; 09
 .dl Return024000                    ; 0A
 .dl Return024000                    ; 0B
 .dl Return024000                    ; 0C
 .dl Return024000                    ; 0D
 .dl Return024000                    ; 0E
-.dl Code08595B                      ; 0F
-.dl Code08595B                      ; 10
-.dl Code08595B                      ; 11
-.dl Code08595B                      ; 12
-.dl Code08595B                      ; 13
-.dl Code08595B                      ; 14
-.dl Code08595B                      ; 15
-.dl Code08595B                      ; 16
-.dl Code025A7A                      ; 17
-.dl Sub025EF4                       ; 18
-.dl Code02609F                      ; 19
-.dl Code026405                      ; 1A
-.dl Code026D38                      ; 1B
-.dl Code0644C6                      ; 1C
+.dl Firebar_Init                    ; 0F
+.dl Firebar_Init                    ; 10
+.dl Firebar_Init                    ; 11
+.dl Firebar_Init                    ; 12
+.dl Firebar_Init                    ; 13
+.dl Firebar_Init                    ; 14
+.dl Firebar_Init                    ; 15
+.dl Firebar_Init                    ; 16
+.dl HammerBro_Init                  ; 17
+.dl Hammer_Init                     ; 18
+.dl PiranhaUp_Init                  ; 19
+.dl Bowser_Init                     ; 1A
+.dl BowserFire_Init                 ; 1B
+.dl ToadPeach_Init                  ; 1C
 .dl Return024000                    ; 1D
 .dl Return024000                    ; 1E
-.dl Code064258                      ; 1F
+.dl Podoboo_Init                    ; 1F
 .dl Return024000                    ; 20
 .dl Return024000                    ; 21
-.dl Code084000                      ; 22
+.dl Spr22_Init                      ; 22
 .dl Return024000                    ; 23
-.dl Code0842B0                      ; 24
+.dl BulletBillShooter_Init          ; 24
 .dl Return024000                    ; 25
-.dl Sub084582                       ; 26
-.dl Sub084582                       ; 27
-.dl Sub084582                       ; 28
-.dl Sub084582                       ; 29
-.dl Sub084582                       ; 2A
-.dl Sub084582                       ; 2B
+.dl Paratroopa_Init                 ; 26
+.dl Paratroopa_Init                 ; 27
+.dl Paratroopa_Init                 ; 28
+.dl Paratroopa_Init                 ; 29
+.dl Paratroopa_Init                 ; 2A
+.dl Paratroopa_Init                 ; 2B
 .dl Return08494A                    ; 2C
 .dl Return085BFA                    ; 2D
-.dl Code084B2A                      ; 2E
+.dl Lakitu_Init                     ; 2E
 .dl Return024000                    ; 2F
 .dl Return024000                    ; 30
-.dl Sub024E8D                       ; 31
+.dl KoopaBuzzy_Init                 ; 31
 .dl Return0279E9                    ; 32
-.dl Code074706                      ; 33
-.dl Code086263                      ; 34
+.dl Spr33_Init                      ; 33
+.dl Spr34_Init                      ; 34
 .dl Return024000                    ; 35
-.dl Code0852D2                      ; 36
-.dl Code085EF2                      ; 37
-.dl Code064000                      ; 38
-.dl Code0856CB                      ; 39
-.dl Code0856CB                      ; 3A
-.dl Code0856CB                      ; 3B
-.dl Code0858D1                      ; 3C
+.dl BulletBillGen_Init              ; 36
+.dl Spr37_Init                      ; 37
+.dl Spr38_Init                      ; 38
+.dl ScrollCmd_Init                  ; 39
+.dl ScrollCmd_Init                  ; 3A
+.dl ScrollCmd_Init                  ; 3B
+.dl Spr3C_Init                      ; 3C
 .dl Return024000                    ; 3D
 .dl Return024000                    ; 3E
 .dl Return024000                    ; 3F
 .dl Return024000                    ; 40
 .dl Return024000                    ; 41
-.dl Code0742A2                      ; 42
+.dl RaceCountdown_Init              ; 42
 .dl Return024000                    ; 43
 .dl Return024000                    ; 44
 .dl Return024000                    ; 45
 .dl Return07511A                    ; 46
-.dl Code06434C                      ; 47
+.dl PiranhaDown_Init                ; 47
 .dl Return024000                    ; 48
-.dl Code0648F4                      ; 49
-.dl Code0648F4                      ; 4A
-.dl Code0648F4                      ; 4B
-.dl Code0648F4                      ; 4C
-.dl Code085BF4                      ; 4D
-.dl Code085904                      ; 4E
-.dl Code085904                      ; 4F
-.dl Code026F03                      ; 50
-.dl Code026F03                      ; 51
-.dl Code026F03                      ; 52
-.dl Code026F03                      ; 53
-.dl Code026F03                      ; 54
-.dl Code026F03                      ; 55
-.dl Code02704A                      ; 56
-.dl Code02704A                      ; 57
-.dl Code02704A                      ; 58
-.dl Code02704A                      ; 59
-.dl Code02704A                      ; 5A
-.dl Code02704A                      ; 5B
-.dl Code02704A                      ; 5C
-.dl Code02704A                      ; 5D
-.dl Code02704A                      ; 5E
-.dl Code02704A                      ; 5F
-.dl Code027C9A                      ; 60
-.dl Code027C9A                      ; 61
-.dl Code027C9A                      ; 62
-.dl Code027C9A                      ; 63
-.dl Code02704A                      ; 64
+.dl MultiKoopaGoomba_Init           ; 49
+.dl MultiKoopaGoomba_Init           ; 4A
+.dl MultiKoopaGoomba_Init           ; 4B
+.dl MultiKoopaGoomba_Init           ; 4C
+.dl TrampolineGreen_Init            ; 4D
+.dl MultiParatroopa_Init            ; 4E
+.dl MultiParatroopa_Init            ; 4F
+.dl ElevatorGen_Init                ; 50
+.dl ElevatorGen_Init                ; 51
+.dl ElevatorGen_Init                ; 52
+.dl ElevatorGen_Init                ; 53
+.dl ElevatorGen_Init                ; 54
+.dl ElevatorGen_Init                ; 55
+.dl MovingPlatform_Init             ; 56
+.dl MovingPlatform_Init             ; 57
+.dl MovingPlatform_Init             ; 58
+.dl MovingPlatform_Init             ; 59
+.dl MovingPlatform_Init             ; 5A
+.dl MovingPlatform_Init             ; 5B
+.dl MovingPlatform_Init             ; 5C
+.dl MovingPlatform_Init             ; 5D
+.dl MovingPlatform_Init             ; 5E
+.dl MovingPlatform_Init             ; 5F
+.dl ScaleLift_Init                  ; 60
+.dl ScaleLift_Init                  ; 61
+.dl ScaleLift_Init                  ; 62
+.dl ScaleLift_Init                  ; 63
+.dl MovingPlatform_Init             ; 64
 
 SprMainPtrs:                        ; 06:6462
 ; indexed by sprite ID -1
-.dl Code0244F5                      ; 01
-.dl Code024EDF                      ; 02
-.dl Code024EDF                      ; 03
-.dl Code025777                      ; 04
-.dl Code064199                      ; 05
-.dl Code064199                      ; 06
-.dl Code064199                      ; 07
-.dl Code064199                      ; 08
-.dl Code074B1C                      ; 09
-.dl Code0649E0                      ; 0A
-.dl Code02480F                      ; 0B
-.dl Code024A1D                      ; 0C
-.dl Code0240A6                      ; 0D
-.dl Code025905                      ; 0E
-.dl Code0859A2                      ; 0F
-.dl Code0859A2                      ; 10
-.dl Code0859A2                      ; 11
-.dl Code0859A2                      ; 12
-.dl Code0859A2                      ; 13
-.dl Code0859A2                      ; 14
-.dl Code0859A2                      ; 15
-.dl Code0859A2                      ; 16
-.dl Code025AFF                      ; 17
-.dl Code025F66                      ; 18
-.dl Code02616E                      ; 19
-.dl Code0264AC                      ; 1A
-.dl Code026D6A                      ; 1B
-.dl Code064565                      ; 1C
-.dl Code0275E4                      ; 1D
-.dl Code02772C                      ; 1E
-.dl Code064273                      ; 1F
-.dl Code027835                      ; 20
-.dl Code064A44                      ; 21
-.dl Code08403A                      ; 22
-.dl Code0841D6                      ; 23
-.dl Code084334                      ; 24
-.dl Code084479                      ; 25
-.dl Code08462D                      ; 26
-.dl Code08462D                      ; 27
-.dl Code08462D                      ; 28
-.dl Code08462D                      ; 29
-.dl Code08462D                      ; 2A
-.dl Code08462D                      ; 2B
-.dl Code084959                      ; 2C
-.dl Code085CAB                      ; 2D
-.dl Code084BA5                      ; 2E
-.dl Code084FA9                      ; 2F
-.dl Code08509E                      ; 30
-.dl Code024EDF                      ; 31
-.dl Code0279EE                      ; 32
-.dl Code0747B4                      ; 33
-.dl Code086275                      ; 34
-.dl Code08527B                      ; 35
-.dl Code085335                      ; 36
-.dl Code085FAC                      ; 37
-.dl Code064045                      ; 38
-.dl Code08576C                      ; 39
-.dl Code08576C                      ; 3A
-.dl Code08576C                      ; 3B
-.dl Code0858E4                      ; 3C
+.dl BounceSpr01_Main                ; 01
+.dl KoopaBuzzy_Main                 ; 02
+.dl KoopaBuzzy_Main                 ; 03
+.dl Goomba_Main                     ; 04
+.dl CheepCheepSwimming_Main         ; 05
+.dl CheepCheepSwimming_Main         ; 06
+.dl CheepCheepSwimming_Main         ; 07
+.dl CheepCheepSwimming_Main         ; 08
+.dl FlagpoleSpr_Main                ; 09
+.dl CastleFlag_Main                 ; 0A
+.dl CoinFromBlock_Main              ; 0B
+.dl ItemFromBlock_Main              ; 0C
+.dl MarioFireball_Main              ; 0D
+.dl BrokenBrick_Main                ; 0E
+.dl Firebar_Main                    ; 0F
+.dl Firebar_Main                    ; 10
+.dl Firebar_Main                    ; 11
+.dl Firebar_Main                    ; 12
+.dl Firebar_Main                    ; 13
+.dl Firebar_Main                    ; 14
+.dl Firebar_Main                    ; 15
+.dl Firebar_Main                    ; 16
+.dl HammerBro_Main                  ; 17
+.dl Hammer_Main                     ; 18
+.dl PiranhaUp_Main                  ; 19
+.dl Bowser_Main                     ; 1A
+.dl BowserFire_Main                 ; 1B
+.dl ToadPeach_Main                  ; 1C
+.dl Spr1D_Main                      ; 1D
+.dl Spr1E_Main                      ; 1E
+.dl Podoboo_Main                    ; 1F
+.dl VineSpr_Main                    ; 20
+.dl Firework_Main                   ; 21
+.dl Spr22_Main                      ; 22
+.dl Spr23_Main                      ; 23
+.dl BulletBillShooter_Main          ; 24
+.dl BulletBill_Main                 ; 25
+.dl Paratroopa_Main                 ; 26
+.dl Paratroopa_Main                 ; 27
+.dl Paratroopa_Main                 ; 28
+.dl Paratroopa_Main                 ; 29
+.dl Paratroopa_Main                 ; 2A
+.dl Paratroopa_Main                 ; 2B
+.dl Blooper_Main                    ; 2C
+.dl Trampoline_Main                 ; 2D
+.dl Lakitu_Main                     ; 2E
+.dl SpinyEgg_Main                   ; 2F
+.dl SPiny_Main                      ; 30
+.dl KoopaBuzzy_Main                 ; 31
+.dl BowserFireGen_Main              ; 32
+.dl Spr33_Main                      ; 33
+.dl Spr34_Main                      ; 34
+.dl Spr35_Main                      ; 35
+.dl BulletBillGen_Main              ; 36
+.dl Spr37_Main                      ; 37
+.dl Spr38_Main                      ; 38
+.dl ScrollCmd_Main                  ; 39
+.dl ScrollCmd_Main                  ; 3A
+.dl ScrollCmd_Main                  ; 3B
+.dl Spr3C_Main                      ; 3C
 .dl Return027A75                    ; 3D
-.dl Code027AFD                      ; 3E
-.dl Code027BD4                      ; 3F
+.dl Spr3E_Main                      ; 3E
+.dl Spr3F_Main                      ; 3F
 .dl Empty06658E                     ; 40
-.dl Code074079                      ; 41
-.dl Code0742D4                      ; 42
-.dl Code0743F3                      ; 43
-.dl Code07444E                      ; 44
-.dl Code07494E                      ; 45
-.dl Code07512B                      ; 46
-.dl Code064377                      ; 47
-.dl Code06487B                      ; 48
+.dl Spr41_Main                      ; 41
+.dl RaceCountdown_Main              ; 42
+.dl Spr43_Main                      ; 43
+.dl Spr44_Main                      ; 44
+.dl CloudBonusPerfect_Main          ; 45
+.dl Boo_Main                        ; 46
+.dl PiranhaDown_Main                ; 47
+.dl Spr48_Main                      ; 48
 .dl Return024000                    ; 49
 .dl Return024000                    ; 4A
 .dl Return024000                    ; 4B
 .dl Return024000                    ; 4C
-.dl Code085CAB                      ; 4D
+.dl Trampoline_Main                 ; 4D
 .dl Return024000                    ; 4E
 .dl Return024000                    ; 4F
-.dl Code026F5E                      ; 50
-.dl Code026F5E                      ; 51
-.dl Code026F5E                      ; 52
-.dl Code026F5E                      ; 53
-.dl Code026F5E                      ; 54
-.dl Code026F5E                      ; 55
-.dl Code0270D1                      ; 56
-.dl Code0270D1                      ; 57
-.dl Code0270D1                      ; 58
-.dl Code0270D1                      ; 59
-.dl Code0270D1                      ; 5A
-.dl Code0270D1                      ; 5B
-.dl Code0270D1                      ; 5C
-.dl Code0270D1                      ; 5D
-.dl Code0270D1                      ; 5E
-.dl Code0270D1                      ; 5F
-.dl Code027CF6                      ; 60
-.dl Code027CF6                      ; 61
-.dl Code027CF6                      ; 62
-.dl Code027CF6                      ; 63
-.dl Code0270D1                      ; 64
+.dl ElevatorGen_Main                ; 50
+.dl ElevatorGen_Main                ; 51
+.dl ElevatorGen_Main                ; 52
+.dl ElevatorGen_Main                ; 53
+.dl ElevatorGen_Main                ; 54
+.dl ElevatorGen_Main                ; 55
+.dl MovingPlatform_Main             ; 56
+.dl MovingPlatform_Main             ; 57
+.dl MovingPlatform_Main             ; 58
+.dl MovingPlatform_Main             ; 59
+.dl MovingPlatform_Main             ; 5A
+.dl MovingPlatform_Main             ; 5B
+.dl MovingPlatform_Main             ; 5C
+.dl MovingPlatform_Main             ; 5D
+.dl MovingPlatform_Main             ; 5E
+.dl MovingPlatform_Main             ; 5F
+.dl ScaleLift_Main                  ; 60
+.dl ScaleLift_Main                  ; 61
+.dl ScaleLift_Main                  ; 62
+.dl ScaleLift_Main                  ; 63
+.dl MovingPlatform_Main             ; 64
+
 Empty06658E:
+; sprite 40 main (crash)

@@ -332,12 +332,12 @@ Sub03427D:
 .dw Code0347FA                      ; 02
 .dw Code03483D                      ; 03
 .dw Code03489A                      ; 04
-.dw PlayerFlagpole_Main             ; 05
+.dw FlagpoleVictory_Main            ; 05
 .dw Code034D75                      ; 06
 .dw Code034DE8                      ; 07
 .dw PlayerHorizPipe_Wrapper         ; 08
 .dw Code034E31                      ; 09
-.dw PlayerAxe_Main                  ; 0A
+.dw AxeVictory_Main                 ; 0A
 .dw PlayerVertPipe_Wrapper          ; 0B
 .dw Code0343C0                      ; 0C
 .dw Code03447F                      ; 0D
@@ -345,7 +345,7 @@ Sub03427D:
 .dw Code034737                      ; 0F
 .dw PlayerPipeIntroWalk             ; 10
 .dw Code034A24                      ; 11
-.dw Code0347E6                      ; 12
+.dw PlayerCloudBonusFall            ; 12
 .dw Code034572                      ; 13
 .dw Code034737                      ; 14
 .dw Return034E70                    ; 15
@@ -642,14 +642,16 @@ PlayerVine_Main:
 .dw Code0344FD                      ; 03:44AA
 .dw Code03451B                      ; 03:44AC
 .dw Code03453A                      ; 03:44AE
+
 Code0344B0:
+; Climbing vine substate 0
     ldh  a,[<H_PlayerYHigh]         ; 03:44B0
     and  a                          ; 03:44B2
-    jr   nz,Code0344BB              ; 03:44B3
+    jr   nz,@Code0344BB             ; 03:44B3
     ld   a,[$C1E4]                  ; 03:44B5
     and  a                          ; 03:44B8
     jr   z,Code0344EB               ; 03:44B9
-Code0344BB:
+@Code0344BB:
     ld   hl,Data0343BA              ; 03:44BB
     ld   a,[hl]                     ; 03:44BE
     ldh  [<$FFAC],a                 ; 03:44BF
@@ -662,6 +664,7 @@ Code0344BB:
     jr   nc,Code0344D3              ; 03:44CD
     ld   a,$0D                      ; 03:44CF
     ldh  [<H_GameState],a           ; 03:44D1
+
 Code0344D3:
     ldh  a,[<H_GlobalTimer]         ; 03:44D3
     and  $03                        ; 03:44D5
@@ -669,9 +672,9 @@ Code0344D3:
     ld   e,$07                      ; 03:44D9
     ld   a,[$C1C6]                  ; 03:44DB
     cp   $07                        ; 03:44DE
-    jr   nz,Code0344E4              ; 03:44E0
+    jr   nz,@Code0344E4             ; 03:44E0
     ld   e,$0C                      ; 03:44E2
-Code0344E4:
+@Code0344E4:
     ld   a,e                        ; 03:44E4
     ld   [$C1C2],a                  ; 03:44E5
     ld   [$C1C6],a                  ; 03:44E8
@@ -680,32 +683,36 @@ Code0344EB:
     ret                             ; 03:44EE
 
 Code0344EF:
+; Climbing vine substate 1
     ld   a,$03                      ; 03:44EF
     rst  $10                        ; 03:44F1  24-bit call
 .dl SubL_027806                     ; 03:44F2
     ld   a,[W_PlayerWarpSubstate]   ; 03:44F5
     inc  a                          ; 03:44F8
     ld   [W_PlayerWarpSubstate],a   ; 03:44F9
-Return0344FC:
+Return0344FC:                       ;          Also used as climbing vine substate 2
     ret                             ; 03:44FC
 
 Code0344FD:
+; Climbing vine substate 3
     ld   hl,Data0343BA              ; 03:44FD
     ld   a,[hl]                     ; 03:4500
     ldh  [<$FFAC],a                 ; 03:4501
     call Sub0359E4                  ; 03:4503
     ldh  a,[<H_PlayerYHigh]         ; 03:4506
     and  a                          ; 03:4508
-    jr   nz,Code034519              ; 03:4509
+    jr   nz,@Code034519             ; 03:4509
     ldh  a,[<H_PlayerYLow]          ; 03:450B
     cp   $C8                        ; 03:450D
-    jp   nc,Code034519              ; 03:450F
+    jp   nc,@Code034519             ; 03:450F
     ld   a,[W_PlayerWarpSubstate]   ; 03:4512
     inc  a                          ; 03:4515
     ld   [W_PlayerWarpSubstate],a   ; 03:4516
-Code034519:
+@Code034519:
     jr   Code0344D3                 ; 03:4519
+
 Code03451B:
+; Climbing vine substate 4
     xor  a                          ; 03:451B
     ld   [$C1C3],a                  ; 03:451C
     ld   hl,Data0343BC              ; 03:451F
@@ -724,23 +731,23 @@ Code03451B:
     ret                             ; 03:4539
 
 Code03453A:
+; Climbing vine substate 5
     ld   a,[$C1D1]                  ; 03:453A
     dec  a                          ; 03:453D
     ld   [$C1D1],a                  ; 03:453E
     cp   $00                        ; 03:4541
-    jr   z,Code03454B               ; 03:4543
+    jr   z,@Code03454B              ; 03:4543
     cp   $08                        ; 03:4545
-    jr   nc,Return034571            ; 03:4547
-    jr   Code034557                 ; 03:4549
-Code03454B:
+    jr   nc,@Return                 ; 03:4547
+    jr   @Code034557                ; 03:4549
+@Code03454B:
     xor  a                          ; 03:454B
     ld   [W_PlayerState],a          ; 03:454C
     ld   [$C170],a                  ; 03:454F
     inc  a                          ; 03:4552
     ld   [$C181],a                  ; 03:4553
     ret                             ; 03:4556
-
-Code034557:
+@Code034557:
     xor  a                          ; 03:4557
     ld   [$C1C2],a                  ; 03:4558
     ld   a,$10                      ; 03:455B
@@ -751,7 +758,7 @@ Code034557:
     call Sub0361DF                  ; 03:4568
     call Sub03650F                  ; 03:456B
     call Sub035A14                  ; 03:456E
-Return034571:
+@Return:
     ret                             ; 03:4571
 
 Code034572:
@@ -1097,7 +1104,7 @@ PlayerPipeIntroWalk:
     call Sub035A14                  ; 03:47E2
     ret                             ; 03:47E5
 
-Code0347E6:
+PlayerCloudBonusFall:
 ; Player state 12
     ld   hl,$C1D1                   ; 03:47E6
     dec  [hl]                       ; 03:47E9
@@ -1523,7 +1530,7 @@ Code034AD1:
     ldh  [<H_PlayerXLow],a          ; 03:4AD3
     ret                             ; 03:4AD5
 
-PlayerFlagpole_Main:
+FlagpoleVictory_Main:
 ; Player state 05
     ld   hl,$C20B                   ; 03:4AD6
     ld   e,[hl]                     ; 03:4AD9
@@ -1533,37 +1540,39 @@ PlayerFlagpole_Main:
     ld   [hl],d                     ; 03:4ADD
     dec  hl                         ; 03:4ADE
     ld   [hl],e                     ; 03:4ADF
-    call Sub034AE4                  ; 03:4AE0
+    call FlagpoleVictory_CallSubstate; 03:4AE0
     ret                             ; 03:4AE3
 
-Sub034AE4:
+FlagpoleVictory_CallSubstate:
     ld   a,[W_PlayerWarpSubstate]   ; 03:4AE4
     rst  $00                        ; 03:4AE7  Execute from 16-bit pointer table
 .dw Return034B2D                    ; 03:4AE8
 .dw Code034AF4                      ; 03:4AEA
 .dw Code034B6E                      ; 03:4AEC
-.dw Code034BC6                      ; 03:4AEE
-.dw Code034C4B                      ; 03:4AF0
+.dw FlagpoleVictory_TimerBonus      ; 03:4AEE
+.dw FlagpoleVictory_Fireworks       ; 03:4AF0
 .dw Code034CAC                      ; 03:4AF2
+
 Code034AF4:
+; Flagpole victory substate 1
     ld   hl,$C1D1                   ; 03:4AF4
     ld   a,[hl]                     ; 03:4AF7
     and  a                          ; 03:4AF8
-    jr   z,Code034AFE               ; 03:4AF9
+    jr   z,@Code034AFE              ; 03:4AF9
     dec  [hl]                       ; 03:4AFB
-    jr   Code034B2A                 ; 03:4AFC
-Code034AFE:
+    jr   @Code034B2A                ; 03:4AFC
+@Code034AFE:
     ld   a,$02                      ; 03:4AFE
     ld   [$C1C2],a                  ; 03:4B00
     ld   hl,$FFAC                   ; 03:4B03
     ld   a,$01                      ; 03:4B06
     add  [hl]                       ; 03:4B08
     bit  7,a                        ; 03:4B09
-    jr   nz,Code034B13              ; 03:4B0B
+    jr   nz,@Code034B13             ; 03:4B0B
     cp   $30                        ; 03:4B0D
-    jr   c,Code034B13               ; 03:4B0F
+    jr   c,@Code034B13              ; 03:4B0F
     ld   a,$30                      ; 03:4B11
-Code034B13:
+@Code034B13:
     ld   [hl],a                     ; 03:4B13
     call Sub0359B4                  ; 03:4B14
     call Sub0359E4                  ; 03:4B17
@@ -1571,12 +1580,12 @@ Code034B13:
     ld   a,[$C20F]                  ; 03:4B1D
     and  $03                        ; 03:4B20
     cp   $03                        ; 03:4B22
-    jr   nz,Code034B2A              ; 03:4B24
+    jr   nz,@Code034B2A             ; 03:4B24
     ld   hl,W_PlayerWarpSubstate    ; 03:4B26
     inc  [hl]                       ; 03:4B29
-Code034B2A:
+@Code034B2A:
     call Sub035A14                  ; 03:4B2A
-Return034B2D:
+Return034B2D:                       ;          Also used as flagpole victory substate 00
     ret                             ; 03:4B2D
 
 Data034B2E:                         ; 03:4B2E
@@ -1589,7 +1598,9 @@ Data034B4E:                         ; 03:4B4E
     $F0,$10,$00,$00,$C0,$50,$00,$00,\
     $00,$10,$50,$00,$A0,$10,$F0,$00,\
     $00,$60,$20,$00,$D0,$F0,$C0,$00
+
 Code034B6E:
+; Flagpole victory substate 2
     ld   a,$10                      ; 03:4B6E
     ld   [$C25E],a                  ; 03:4B70
     call Sub035680                  ; 03:4B73
@@ -1602,9 +1613,9 @@ Code034B6E:
     ld   hl,Data034B2E              ; 03:4B85
     ld   a,[W_SPFlag]               ; 03:4B88
     and  a                          ; 03:4B8B
-    jr   z,Code034B91               ; 03:4B8C
+    jr   z,@Code034B91              ; 03:4B8C
     ld   hl,Data034B4E              ; 03:4B8E
-Code034B91:
+@Code034B91:
     add  hl,de                      ; 03:4B91
     ld   d,[hl]                     ; 03:4B92
     ldh  a,[<H_PlayerXLow]          ; 03:4B93
@@ -1628,7 +1639,7 @@ Code034B91:
     push de                         ; 03:4BB5
     call Sub002EFE                  ; 03:4BB6
     ld   hl,$C280                   ; 03:4BB9
-    ld   [hl],e                     ; 03:4BBC
+    ld   [hl],e                     ; 03:4BBC  $C280 = low digit of timer
     pop  de                         ; 03:4BBD
     ld   a,e                        ; 03:4BBE
     or   d                          ; 03:4BBF
@@ -1637,7 +1648,8 @@ Code034B91:
     ldh  [<$FFF2],a                 ; 03:4BC3
     ret                             ; 03:4BC5
 
-Code034BC6:
+FlagpoleVictory_TimerBonus:
+; Flagpole victory substate 3
     call Sub034C07                  ; 03:4BC6
     jr   c,Return034C06             ; 03:4BC9
     and  a                          ; 03:4BCB
@@ -1651,22 +1663,24 @@ Code034BC6:
     ld   a,$96                      ; 03:4BD9
     ld   [$C1D1],a                  ; 03:4BDB
     ld   hl,W_PlayerWarpSubstate    ; 03:4BDE
-    inc  [hl]                       ; 03:4BE1
-    ld   a,[$C280]                  ; 03:4BE2
+    inc  [hl]                       ; 03:4BE1  substate 4 (fireworks)
+    ld   a,[$C280]                  ; 03:4BE2  low digit of timer, stored in substate 2
     cp   $01                        ; 03:4BE5
-    jr   z,Code034BF2               ; 03:4BE7
+    jr   z,@Code034BF2              ; 03:4BE7
     cp   $03                        ; 03:4BE9
-    jr   z,Code034BF2               ; 03:4BEB
+    jr   z,@Code034BF2              ; 03:4BEB
     cp   $06                        ; 03:4BED
-    jr   z,Code034BF2               ; 03:4BEF
-    inc  [hl]                       ; 03:4BF1
-Code034BF2:
+    jr   z,@Code034BF2              ; 03:4BEF
+    inc  [hl]                       ; 03:4BF1  if not 1/3/6, skip fireworks substate
+@Code034BF2:
     ld   a,$03                      ; 03:4BF2
     rst  $10                        ; 03:4BF4  24-bit call
 .dl SubL_06499F                     ; 03:4BF5
     pop  hl                         ; 03:4BF8
     pop  de                         ; 03:4BF9
+
 Code034BFA:
+; shared by flagpole victory substate 3, axe victory substate 7
     ld   [hl],d                     ; 03:4BFA
     dec  hl                         ; 03:4BFB
     ld   [hl],e                     ; 03:4BFC
@@ -1683,7 +1697,7 @@ Sub034C07:
     dec  [hl]                       ; 03:4C0A
     ld   a,[hl]                     ; 03:4C0B
     and  a                          ; 03:4C0C
-    jp   nz,Code034C39              ; 03:4C0D
+    jp   nz,@ReturnASetCarry        ; 03:4C0D
     ld   [hl],$02                   ; 03:4C10
     ld   hl,W_LevelTimerLow         ; 03:4C12
     ld   e,[hl]                     ; 03:4C15
@@ -1692,44 +1706,44 @@ Sub034C07:
     ld   c,$00                      ; 03:4C18
     ld   a,e                        ; 03:4C1A
     or   d                          ; 03:4C1B
-    jr   z,Code034C34               ; 03:4C1C
+    jr   z,@Return1ClearCarry       ; 03:4C1C
     ld   a,$47                      ; 03:4C1E
     ldh  [<$FFF2],a                 ; 03:4C20
     dec  de                         ; 03:4C22
     ld   c,$05                      ; 03:4C23
     ld   a,e                        ; 03:4C25
     or   d                          ; 03:4C26
-    jr   z,Code034C34               ; 03:4C27
+    jr   z,@Return1ClearCarry       ; 03:4C27
     dec  de                         ; 03:4C29
     ld   c,$0A                      ; 03:4C2A
     ld   a,e                        ; 03:4C2C
     or   d                          ; 03:4C2D
-    jr   z,Code034C34               ; 03:4C2E
+    jr   z,@Return1ClearCarry       ; 03:4C2E
     xor  a                          ; 03:4C30
     scf                             ; 03:4C31
     ccf                             ; 03:4C32
     ret                             ; 03:4C33
-
-Code034C34:
+@Return1ClearCarry:
     ld   a,$01                      ; 03:4C34
     scf                             ; 03:4C36
     ccf                             ; 03:4C37
     ret                             ; 03:4C38
-
-Code034C39:
+@ReturnASetCarry:
     scf                             ; 03:4C39
     ret                             ; 03:4C3A
 
 Data034C3B:                         ; 03:4C3B
 .db $F0,$FF,$B0,$FF,$E0,$FF,$C0,$FF,\
     $08,$00,$C0,$FF,$E0,$FF,$D0,$FF
-Code034C4B:
+
+FlagpoleVictory_Fireworks:
+; Flagpole victory substate 4: give fireworks
     ld   hl,$C281                   ; 03:4C4B
     ld   a,[hl]                     ; 03:4C4E
     dec  [hl]                       ; 03:4C4F
     and  a                          ; 03:4C50
     ret  nz                         ; 03:4C51
-    ld   [hl],$20                   ; 03:4C52
+    ld   [hl],$20                   ; 03:4C52  set fireworks cooldown
     ld   a,[$C27F]                  ; 03:4C54
     sla  a                          ; 03:4C57
     sla  a                          ; 03:4C59
@@ -1751,7 +1765,7 @@ Code034C4B:
     ld   a,$03                      ; 03:4C73
     rst  $10                        ; 03:4C75  24-bit call
 .dl SubL_064A0F                     ; 03:4C76
-    ld   a,$32                      ; 03:4C79
+    ld   a,$32                      ; 03:4C79  50dec -> each firework is worth 500 points
     ldh  [<$FF97],a                 ; 03:4C7B
     xor  a                          ; 03:4C7D
     ldh  [<$FF98],a                 ; 03:4C7E
@@ -1769,7 +1783,7 @@ Code034C4B:
     ld   a,[hl]                     ; 03:4C97
     and  a                          ; 03:4C98
     ret  nz                         ; 03:4C99
-    ld   hl,$C429                   ; 03:4C9A
+    ld   hl,W_AlbumUnlockFlags      ; 03:4C9A
     set  2,[hl]                     ; 03:4C9D
     ld   hl,W_PlayerWarpSubstate    ; 03:4C9F
     inc  [hl]                       ; 03:4CA2
@@ -1777,7 +1791,9 @@ Code034C4B:
 
 BitTable8Asc_034CA4:                ; 03:4CA4
 .db $01,$02,$04,$08,$10,$20,$40,$80
+
 Code034CAC:
+; Flagpole victory substate 5
     ld   hl,$C1D1                   ; 03:4CAC
     ld   a,[hl]                     ; 03:4CAF
     and  a                          ; 03:4CB0
@@ -2035,7 +2051,7 @@ Code034E69:
 Return034E70:
     ret                             ; 03:4E70
 
-PlayerAxe_Main:
+AxeVictory_Main:
 ; Player state 0A
     ld   a,[W_PlayerWarpSubstate]   ; 03:4E71
     rst  $00                        ; 03:4E74  Execute from 16-bit pointer table
@@ -2045,35 +2061,37 @@ PlayerAxe_Main:
 .dw Code035000                      ; 03:4E7B
 .dw Code035071                      ; 03:4E7D
 .dw Code0350C3                      ; 03:4E7F
-.dw Code035349                      ; 03:4E81
+.dw AxeVictory_DisplayMessage       ; 03:4E81
 .dw Code0353CF                      ; 03:4E83
 .dw Code0353E6                      ; 03:4E85
 .dw Sub03540B                       ; 03:4E87
 .dw Return035429                    ; 03:4E89
 .dw Code03542A                      ; 03:4E8B
+
 Code034E8D:
+; Axe victory substate 0
     xor  a                          ; 03:4E8D
     ld   [$C28E],a                  ; 03:4E8E
     ld   [$D2F6],a                  ; 03:4E91
     ld   de,$0000                   ; 03:4E94
-Code034E97:
+@Loop034E97:
     ld   hl,W_SpriteStatus          ; 03:4E97
     add  hl,de                      ; 03:4E9A
     ld   a,[hl]                     ; 03:4E9B
     and  a                          ; 03:4E9C
-    jr   z,Code034EDB               ; 03:4E9D
+    jr   z,@Code034EDB              ; 03:4E9D
     ld   hl,W_SpriteID              ; 03:4E9F
     add  hl,de                      ; 03:4EA2
     ld   a,[hl]                     ; 03:4EA3
     cp   $1A                        ; 03:4EA4
-    jr   nz,Code034EDB              ; 03:4EA6
+    jr   nz,@Code034EDB             ; 03:4EA6
     ld   hl,W_SpriteSubstate        ; 03:4EA8
     add  hl,de                      ; 03:4EAB
     ld   a,[hl]                     ; 03:4EAC
     cp   $03                        ; 03:4EAD
-    jr   z,Code034EE1               ; 03:4EAF
+    jr   z,@Break                   ; 03:4EAF
     call Sub036CA0                  ; 03:4EB1
-    jr   c,Code034ECA               ; 03:4EB4
+    jr   c,@Code034ECA              ; 03:4EB4
     ld   a,[$C265]                  ; 03:4EB6
     ldh  [<$FF97],a                 ; 03:4EB9
     ld   a,[$C267]                  ; 03:4EBB
@@ -2082,7 +2100,7 @@ Code034E97:
     ld   de,$0003                   ; 03:4EC2
     ld   a,$03                      ; 03:4EC5
     call Sub001124                  ; 03:4EC7
-Code034ECA:
+@Code034ECA:
     ld   a,$04                      ; 03:4ECA
     ld   [$C269],a                  ; 03:4ECC
     ld   [$C268],a                  ; 03:4ECF
@@ -2091,13 +2109,12 @@ Code034ECA:
     ld   hl,W_PlayerWarpSubstate    ; 03:4ED6
     inc  [hl]                       ; 03:4ED9
     ret                             ; 03:4EDA
-
-Code034EDB:
+@Code034EDB:
     inc  e                          ; 03:4EDB
     ld   a,e                        ; 03:4EDC
     cp   $0F                        ; 03:4EDD
-    jr   nz,Code034E97              ; 03:4EDF
-Code034EE1:
+    jr   nz,@Loop034E97             ; 03:4EDF
+@Break:
     ld   hl,W_PlayerWarpSubstate    ; 03:4EE1
     ld   a,$04                      ; 03:4EE4
     ld   [hl],a                     ; 03:4EE6
@@ -2109,7 +2126,9 @@ Code034EE1:
     cp   $07                        ; 03:4EF4
     jp   z,Code035030               ; 03:4EF6
     jp   Code035039                 ; 03:4EF9
+
 Code034EFC:
+; Axe victory substate 1
     ld   hl,$C269                   ; 03:4EFC
     dec  [hl]                       ; 03:4EFF
     ld   a,[hl]                     ; 03:4F00
@@ -2123,7 +2142,7 @@ Code034EFC:
     call Return0010B2               ; 03:4F0E
     ld   a,[W_GameMode]             ; 03:4F11
     cp   $02                        ; 03:4F14
-    jr   z,Code034F3D               ; 03:4F16
+    jr   z,@Code034F3D              ; 03:4F16
     ld   a,[$C265]                  ; 03:4F18
     ldh  [<$FF97],a                 ; 03:4F1B
     ld   a,[$C267]                  ; 03:4F1D
@@ -2140,18 +2159,17 @@ Code034EFC:
     ld   hl,W_PlayerWarpSubstate    ; 03:4F38
     inc  [hl]                       ; 03:4F3B
     ret                             ; 03:4F3C
-
-Code034F3D:
+@Code034F3D:
     ld   a,[$C265]                  ; 03:4F3D
     ldh  [<$FF97],a                 ; 03:4F40
     ld   a,[$C267]                  ; 03:4F42
     ldh  [<$FF98],a                 ; 03:4F45
     call Sub036CA0                  ; 03:4F47
-    jr   c,Code034F54               ; 03:4F4A
+    jr   c,@Code034F54              ; 03:4F4A
     ld   de,$0003                   ; 03:4F4C
     ld   a,$03                      ; 03:4F4F
     call Sub001124                  ; 03:4F51
-Code034F54:
+@Code034F54:
     ld   a,$06                      ; 03:4F54
     ldh  [<SVBK],a                  ; 03:4F56
     ld   a,[$C266]                  ; 03:4F58
@@ -2182,9 +2200,9 @@ Code034F54:
     ld   e,$0D                      ; 03:4F8B
     ld   a,[W_SublevelID]           ; 03:4F8D
     cp   $3D                        ; 03:4F90
-    jr   z,Code034F96               ; 03:4F92
+    jr   z,@Code034F96              ; 03:4F92
     ld   e,$0C                      ; 03:4F94
-Code034F96:
+@Code034F96:
     ld   hl,$C26A                   ; 03:4F96
     inc  [hl]                       ; 03:4F99
     ld   a,[hl]                     ; 03:4F9A
@@ -2199,29 +2217,30 @@ Code034F96:
     ret                             ; 03:4FA8
 
 Code034FA9:
+; Axe victory substate 2
     ld   hl,$C269                   ; 03:4FA9
     dec  [hl]                       ; 03:4FAC
     ld   a,[hl]                     ; 03:4FAD
     and  a                          ; 03:4FAE
-    jr   nz,Return034FE7            ; 03:4FAF
+    jr   nz,@Return                 ; 03:4FAF
     ld   de,$0000                   ; 03:4FB1
-Code034FB4:
+@Loop034FB4:
     ld   hl,W_SpriteStatus          ; 03:4FB4
     add  hl,de                      ; 03:4FB7
     ld   a,[hl]                     ; 03:4FB8
     and  a                          ; 03:4FB9
-    jr   z,Code034FC5               ; 03:4FBA
+    jr   z,@Code034FC5              ; 03:4FBA
     ld   hl,W_SpriteID              ; 03:4FBC
     add  hl,de                      ; 03:4FBF
     ld   a,[hl]                     ; 03:4FC0
     cp   $1A                        ; 03:4FC1
-    jr   z,Code034FCB               ; 03:4FC3
-Code034FC5:
+    jr   z,@Code034FCB              ; 03:4FC3
+@Code034FC5:
     inc  e                          ; 03:4FC5
     ld   a,e                        ; 03:4FC6
     cp   $0F                        ; 03:4FC7
-    jr   nz,Code034FB4              ; 03:4FC9
-Code034FCB:
+    jr   nz,@Loop034FB4             ; 03:4FC9
+@Code034FCB:
     ld   hl,W_SpriteSubstate        ; 03:4FCB
     add  hl,de                      ; 03:4FCE
     ld   [hl],$01                   ; 03:4FCF
@@ -2237,7 +2256,7 @@ Code034FCB:
     ldh  [<$FFF2],a                 ; 03:4FE1
     ld   hl,W_PlayerWarpSubstate    ; 03:4FE3
     inc  [hl]                       ; 03:4FE6
-Return034FE7:
+@Return:
     ret                             ; 03:4FE7
 
 Data034FE8:                         ; 03:4FE8
@@ -2245,24 +2264,26 @@ Data034FE8:                         ; 03:4FE8
     $96,$96,$96,$B6,$96,$96,$D6,$36
 Data034FF8:                         ; 03:4FF8
 .db $95,$95,$B5,$D5,$D5,$D5,$F5,$95
+
 Code035000:
+; Axe victory substate 3
     ld   de,$0000                   ; 03:5000
-Code035003:
+@Loop035003:
     ld   hl,W_SpriteStatus          ; 03:5003
     add  hl,de                      ; 03:5006
     ld   a,[hl]                     ; 03:5007
     and  a                          ; 03:5008
-    jr   z,Code035014               ; 03:5009
+    jr   z,@Code035014              ; 03:5009
     ld   hl,W_SpriteID              ; 03:500B
     add  hl,de                      ; 03:500E
     ld   a,[hl]                     ; 03:500F
     cp   $1A                        ; 03:5010
     jr   z,Return035070             ; 03:5012
-Code035014:
+@Code035014:
     inc  e                          ; 03:5014
     ld   a,e                        ; 03:5015
     cp   $0F                        ; 03:5016
-    jr   nz,Code035003              ; 03:5018
+    jr   nz,@Loop035003             ; 03:5018
     ld   hl,W_PlayerWarpSubstate    ; 03:501A
     inc  [hl]                       ; 03:501D
     ld   a,[W_GameMode]             ; 03:501E
@@ -2271,6 +2292,7 @@ Code035014:
     cp   $07                        ; 03:5025
     jr   z,Code035030               ; 03:5027
     jr   Code035039                 ; 03:5029
+
 Code03502B:
     ld   a,$01                      ; 03:502B
     ld   [$C0C3],a                  ; 03:502D
@@ -2280,16 +2302,15 @@ Code035030:
     ld   a,$25                      ; 03:5034
     ldh  [<H_GameState],a           ; 03:5036
     ret                             ; 03:5038
-
 Code035039:
     ld   a,$6B                      ; 03:5039
     ld   [$DE68],a                  ; 03:503B
     ld   hl,Data034FE8              ; 03:503E
     ld   a,[W_SPFlag]               ; 03:5041
     and  a                          ; 03:5044
-    jr   z,Code03504A               ; 03:5045
+    jr   z,@Code03504A              ; 03:5045
     ld   hl,Data034FF8              ; 03:5047
-Code03504A:
+@Code03504A:
     ld   a,[W_LevelID]              ; 03:504A
     srl  a                          ; 03:504D
     srl  a                          ; 03:504F
@@ -2298,10 +2319,10 @@ Code03504A:
     add  hl,de                      ; 03:5054
     ld   a,[W_ChallengeFlag]        ; 03:5055
     and  a                          ; 03:5058
-    jr   z,Code03505F               ; 03:5059
+    jr   z,@Code03505F              ; 03:5059
     ld   de,$0008                   ; 03:505B
     add  hl,de                      ; 03:505E
-Code03505F:
+@Code03505F:
     ld   a,[hl]                     ; 03:505F
     ld   e,a                        ; 03:5060
     and  $0F                        ; 03:5061
@@ -2315,6 +2336,7 @@ Return035070:
     ret                             ; 03:5070
 
 Code035071:
+; Axe victory substate 4
     ld   a,$01                      ; 03:5071
     ld   [$C264],a                  ; 03:5073
     ld   a,$10                      ; 03:5076
@@ -2326,26 +2348,26 @@ Code035071:
     ld   hl,$C267                   ; 03:5087
     ldh  a,[<H_PlayerXHigh]         ; 03:508A
     cp   [hl]                       ; 03:508C
-    jr   nz,Code0350A4              ; 03:508D
+    jr   nz,@Code0350A4             ; 03:508D
     ld   hl,$C265                   ; 03:508F
     ldh  a,[<H_PlayerXLow]          ; 03:5092
     cp   [hl]                       ; 03:5094
-    jr   c,Code0350A4               ; 03:5095
+    jr   c,@Code0350A4              ; 03:5095
     ld   hl,W_PlayerWarpSubstate    ; 03:5097
     inc  [hl]                       ; 03:509A
     ld   a,$10                      ; 03:509B
     ld   [$C269],a                  ; 03:509D
     xor  a                          ; 03:50A0
     ld   [$C1C2],a                  ; 03:50A1
-Code0350A4:
+@Code0350A4:
     ld   a,[W_SubLvScreenCount]     ; 03:50A4
     dec  a                          ; 03:50A7
     ld   hl,H_CameraXHigh           ; 03:50A8
     cp   [hl]                       ; 03:50AB
-    jr   nz,Return0350C2            ; 03:50AC
+    jr   nz,@Return                 ; 03:50AC
     ldh  a,[<H_CameraXLow]          ; 03:50AE
     cp   $04                        ; 03:50B0
-    jr   c,Return0350C2             ; 03:50B2
+    jr   c,@Return                  ; 03:50B2
     xor  a                          ; 03:50B4
     ld   [$C1D6],a                  ; 03:50B5
     ld   a,$04                      ; 03:50B8
@@ -2353,24 +2375,24 @@ Code0350A4:
     ld   a,[W_SubLvScreenCount]     ; 03:50BC
     dec  a                          ; 03:50BF
     ldh  [<H_CameraXHigh],a         ; 03:50C0
-Return0350C2:
+@Return:
     ret                             ; 03:50C2
 
 Code0350C3:
+; Axe victory substate 5
     ld   a,[W_SubLvScreenCount]     ; 03:50C3
     dec  a                          ; 03:50C6
     ld   hl,H_CameraXHigh           ; 03:50C7
     cp   [hl]                       ; 03:50CA
-    jr   nz,Code0350D3              ; 03:50CB
+    jr   nz,@Code0350D3             ; 03:50CB
     ldh  a,[<H_CameraXLow]          ; 03:50CD
     cp   $04                        ; 03:50CF
-    jr   nc,Code0350D9              ; 03:50D1
-Code0350D3:
+    jr   nc,@Code0350D9             ; 03:50D1
+@Code0350D3:
     ld   a,$02                      ; 03:50D3
     ld   [$C1D6],a                  ; 03:50D5
     ret                             ; 03:50D8
-
-Code0350D9:
+@Code0350D9:
     ld   a,$04                      ; 03:50D9
     ldh  [<H_CameraXLow],a          ; 03:50DB
     ld   a,[W_SubLvScreenCount]     ; 03:50DD
@@ -2388,33 +2410,30 @@ Code0350D9:
     inc  [hl]                       ; 03:50F3
     ld   a,[W_ChallengeFlag]        ; 03:50F4
     and  a                          ; 03:50F7
-    jr   z,Code035102               ; 03:50F8
+    jr   z,@Code035102              ; 03:50F8
     ld   [hl],$07                   ; 03:50FA
     ld   a,$30                      ; 03:50FC
     ld   [$C1D1],a                  ; 03:50FE
     ret                             ; 03:5101
-
-Code035102:
+@Code035102:
     ld   a,[W_LevelID]              ; 03:5102
     srl  a                          ; 03:5105
     srl  a                          ; 03:5107
     cp   $07                        ; 03:5109
-    jr   z,Code035124               ; 03:510B
+    jr   z,@Code035124              ; 03:510B
     call Sub03540B                  ; 03:510D
     ld   a,[W_SPFlag]               ; 03:5110
     and  a                          ; 03:5113
-    jr   nz,Code035120              ; 03:5114
+    jr   nz,@Code035120             ; 03:5114
     call Sub034D36                  ; 03:5116
     ld   a,$03                      ; 03:5119
     rst  $10                        ; 03:511B  24-bit call
 .dl SubL_0757EF                     ; 03:511C
     ret                             ; 03:511F
-
-Code035120:
+@Code035120:
     call Sub034D41                  ; 03:5120
     ret                             ; 03:5123
-
-Code035124:
+@Code035124:
     ld   a,[W_LevelID]              ; 03:5124
     push af                         ; 03:5127
     ld   a,[W_HardFlag]             ; 03:5128
@@ -2428,68 +2447,68 @@ Code035124:
     ld   [W_LevelID],a              ; 03:513A
     ret                             ; 03:513D
 
-Data03513E:                         ; 03:513E
+Data03513E:                         ; 03:513E  THANK YOU,LUIGI!
 .db $9A,$23,$10,$00,$ED,$00,$E1,$00,\
     $DA,$00,$E7,$00,$E4,$00,$F4,$00,\
     $F2,$00,$E8,$00,$EE,$00,$FC,$00,\
     $E5,$00,$EE,$00,$E2,$00,$E0,$00,\
     $E2,$00,$FB,$00
-Data035162:                         ; 03:5162
+Data035162:                         ; 03:5162  THANK YOU,LUIGI! (again)
 .db $9A,$23,$10,$00,$ED,$00,$E1,$00,\
     $DA,$00,$E7,$00,$E4,$00,$F4,$00,\
     $F2,$00,$E8,$00,$EE,$00,$FC,$00,\
     $E5,$00,$EE,$00,$E2,$00,$E0,$00,\
     $E2,$00,$FB,$00
-Data035186:                         ; 03:5186
+Data035186:                         ; 03:5186  THANK YOU,MARIO!
 .db $9A,$23,$10,$00,$ED,$00,$E1,$00,\
     $DA,$00,$E7,$00,$E4,$00,$F4,$00,\
     $F2,$00,$E8,$00,$EE,$00,$FC,$00,\
     $E6,$00,$DA,$00,$EB,$00,$E2,$00,\
     $E8,$00,$FB,$00
-Data0351AA:                         ; 03:51AA
+Data0351AA:                         ; 03:51AA  BUT OUR PRINCESS IS
 .db $9A,$81,$13,$00,$DB,$00,$EE,$00,\
     $ED,$00,$F4,$00,$E8,$00,$EE,$00,\
     $EB,$00,$F4,$00,$E9,$00,$EB,$00,\
     $E2,$00,$E7,$00,$DC,$00,$DE,$00,\
     $EC,$00,$EC,$00,$F4,$00,$E2,$00,\
     $EC,$00
-Data0351D4:                         ; 03:51D4
+Data0351D4:                         ; 03:51D4  IN ANOTHER CASTLE!
 .db $9A,$C1,$12,$00,$E2,$00,$E7,$00,\
     $F4,$00,$DA,$00,$E7,$00,$E8,$00,\
     $ED,$00,$E1,$00,$DE,$00,$EB,$00,\
     $F4,$00,$DC,$00,$DA,$00,$EC,$00,\
     $ED,$00,$E5,$00,$DE,$00,$FB,$00
-Data0351FC:                         ; 03:51FC
+Data0351FC:                         ; 03:51FC  WOW! YOU ARE A
 .db $9A,$24,$0E,$00,$F0,$00,$E8,$00,\
     $F0,$00,$FB,$00,$F4,$00,$F2,$00,\
     $E8,$00,$EE,$00,$F4,$00,$DA,$00,\
     $EB,$00,$DE,$00,$F4,$00,$DA,$00
-Data03521C:                         ; 03:521C
+Data03521C:                         ; 03:521C  SUPER PLAYER!
 .db $9A,$84,$0D,$00,$EC,$00,$EE,$00,\
     $E9,$00,$DE,$00,$EB,$00,$F4,$00,\
     $E9,$00,$E5,$00,$DA,$00,$F2,$00,\
     $DE,$00,$EB,$00,$FB,$00
-Data03523A:                         ; 03:523A
+Data03523A:                         ; 03:523A  CONGRATULATIONS!
 .db $9A,$E3,$10,$00,$DC,$00,$E8,$00,\
     $E7,$00,$E0,$00,$EB,$00,$DA,$00,\
     $ED,$00,$EE,$00,$E5,$00,$DA,$00,\
     $ED,$00,$E2,$00,$E8,$00,$E7,$00,\
     $EC,$00,$FB,$00
-Data03525E:                         ; 03:525E
+Data03525E:                         ; 03:525E  THANK YOU,MARIO! (again)
 .db $9A,$23,$10,$00,$ED,$00,$E1,$00,\
     $DA,$00,$E7,$00,$E4,$00,$F4,$00,\
     $F2,$00,$E8,$00,$EE,$00,$FC,$00,\
     $E6,$00,$DA,$00,$EB,$00,$E2,$00,\
     $E8,$00,$FB,$00
-Data035282:                         ; 03:5282
+Data035282:                         ; 03:5282  YOUR QUEST IS OVER.
 .db $9A,$81,$13,$00,$F2,$00,$E8,$00,\
     $EE,$00,$EB,$00,$F4,$00,$EA,$00,\
     $EE,$00,$DE,$00,$EC,$00,$ED,$00,\
     $F4,$00,$E2,$00,$EC,$00,$F4,$00,\
     $E8,$00,$EF,$00,$DE,$00,$EB,$00,\
     $CE,$00
-Data0352AC:                         ; 03:52AC
-.db $9A,$C3,$0E,$00,$F0,$00,$DE,$00,\
+Data0352AC:                         ; 03:52AC  WE PRESENT YOU
+.db $9A,$C3,$0E,$00,$F0,$00,$DE,$00,\;         WITH A NEW QUEST.
     $F4,$00,$E9,$00,$EB,$00,$DE,$00,\
     $EC,$00,$DE,$00,$E7,$00,$ED,$00,\
     $F4,$00,$F2,$00,$E8,$00,$EE,$9B,\
@@ -2514,15 +2533,15 @@ Data035339:                         ; 03:5339
 .db $06,$06,$06,$06,$06,$06,$06,$12,\
     $18,$18,$18,$18,$18,$18,$18,$1E
 
-Code035349:
+AxeVictory_DisplayMessage:
+; Axe victory substate 6
     ld   hl,$C269                   ; 03:5349
     dec  [hl]                       ; 03:534C
     ld   a,[hl]                     ; 03:534D
     and  a                          ; 03:534E
-    jr   z,Code035352               ; 03:534F
+    jr   z,@Code035352              ; 03:534F
     ret                             ; 03:5351
-
-Code035352:
+@Code035352:
     ld   [hl],$50                   ; 03:5352
     ld   a,[W_LevelID]              ; 03:5354
     srl  a                          ; 03:5357
@@ -2531,29 +2550,29 @@ Code035352:
     ld   d,$00                      ; 03:535C
     ld   a,[W_CurrentPlayer]        ; 03:535E
     and  a                          ; 03:5361
-    jr   z,Code035368               ; 03:5362
+    jr   z,@Code035368              ; 03:5362
     ld   a,e                        ; 03:5364
     add  $08                        ; 03:5365
     ld   e,a                        ; 03:5367
-Code035368:
+@Code035368:
     ld   hl,Data035339              ; 03:5368
     add  hl,de                      ; 03:536B
     ld   e,[hl]                     ; 03:536C
     ld   a,e                        ; 03:536D
     cp   $12                        ; 03:536E
-    jr   z,Code035376               ; 03:5370
+    jr   z,@Code035376              ; 03:5370
     cp   $1E                        ; 03:5372
-    jr   nz,Code035384              ; 03:5374
-Code035376:
+    jr   nz,@Code035384             ; 03:5374
+@Code035376:
     ld   a,[W_SPFlag]               ; 03:5376
     and  a                          ; 03:5379
-    jr   nz,Code035382              ; 03:537A
+    jr   nz,@Code035382             ; 03:537A
     ld   a,[W_HardFlag]             ; 03:537C
     and  a                          ; 03:537F
-    jr   z,Code035384               ; 03:5380
-Code035382:
+    jr   z,@Code035384              ; 03:5380
+@Code035382:
     ld   e,$0C                      ; 03:5382
-Code035384:
+@Code035384:
     ld   a,[$C265]                  ; 03:5384
     sla  a                          ; 03:5387
     ld   l,a                        ; 03:5389
@@ -2571,53 +2590,55 @@ Code035384:
     ld   h,d                        ; 03:539A
     ld   l,e                        ; 03:539B
     ld   de,$0000                   ; 03:539C
-Code03539F:
+@Code03539F:
     ldi  a,[hl]                     ; 03:539F
     push hl                         ; 03:53A0
-    ld   hl,W_TilemapUploadBuffer   ; 03:53A1
+    ld   hl,W_TiUpBuffer            ; 03:53A1
     add  hl,de                      ; 03:53A4
     ld   [hl],a                     ; 03:53A5
     pop  hl                         ; 03:53A6
     inc  e                          ; 03:53A7
     ld   a,e                        ; 03:53A8
     cp   c                          ; 03:53A9
-    jr   nz,Code03539F              ; 03:53AA
+    jr   nz,@Code03539F             ; 03:53AA
     ld   a,[$C265]                  ; 03:53AC
     inc  a                          ; 03:53AF
     ld   [$C265],a                  ; 03:53B0
     cp   $03                        ; 03:53B3
-    jr   nz,Return0353CE            ; 03:53B5
+    jr   nz,@Return                 ; 03:53B5
     ld   hl,W_PlayerWarpSubstate    ; 03:53B7
     ld   [hl],$08                   ; 03:53BA
     ld   a,[W_LevelID]              ; 03:53BC
     srl  a                          ; 03:53BF
     srl  a                          ; 03:53C1
     cp   $07                        ; 03:53C3
-    jr   nz,Code0353C9              ; 03:53C5
+    jr   nz,@Code0353C9             ; 03:53C5
     ld   [hl],$09                   ; 03:53C7
-Code0353C9:
+@Code0353C9:
     ld   a,$F0                      ; 03:53C9
     ld   [$C269],a                  ; 03:53CB
-Return0353CE:
+@Return:
     ret                             ; 03:53CE
 
 Code0353CF:
+; Axe victory substate 7
     call Sub034C07                  ; 03:53CF
-    jr   c,Return0353E5             ; 03:53D2
+    jr   c,@Return                  ; 03:53D2
     and  a                          ; 03:53D4
-    jr   z,Code0353E2               ; 03:53D5
+    jr   z,@Code0353E2              ; 03:53D5
     push hl                         ; 03:53D7
     ld   a,$F0                      ; 03:53D8
     ld   [$C269],a                  ; 03:53DA
     ld   hl,W_PlayerWarpSubstate    ; 03:53DD
     inc  [hl]                       ; 03:53E0
     pop  hl                         ; 03:53E1
-Code0353E2:
+@Code0353E2:
     jp   Code034BFA                 ; 03:53E2
-Return0353E5:
+@Return:
     ret                             ; 03:53E5
 
 Code0353E6:
+; Axe victory substate 8
     ld   hl,$C269                   ; 03:53E6
     dec  [hl]                       ; 03:53E9
     ld   a,[hl]                     ; 03:53EA
@@ -2631,45 +2652,46 @@ Code0353E6:
     ld   [$C20C],a                  ; 03:53FA
     ld   a,[W_ChallengeFlag]        ; 03:53FD
     and  a                          ; 03:5400
-    jr   z,Code035408               ; 03:5401
+    jr   z,@Code035408              ; 03:5401
     ld   a,$20                      ; 03:5403
     ldh  [<H_GameState],a           ; 03:5405
     ret                             ; 03:5407
-
-Code035408:
+@Code035408:
     jp   Code034CF4                 ; 03:5408
 
 Sub03540B:
+; Axe victory substate 9
+; subroutine: called by several other axe victory substates?
     ld   hl,$C269                   ; 03:540B
     ld   a,[hl]                     ; 03:540E
     cp   $00                        ; 03:540F
-    jr   z,Code03541E               ; 03:5411
+    jr   z,@Code03541E              ; 03:5411
     cp   $80                        ; 03:5413
-    jr   nz,Code03541C              ; 03:5415
+    jr   nz,@Code03541C             ; 03:5415
     ld   a,$6A                      ; 03:5417
     ld   [$DE68],a                  ; 03:5419
-Code03541C:
+@Code03541C:
     dec  [hl]                       ; 03:541C
     ret                             ; 03:541D
-
-Code03541E:
+@Code03541E:
     xor  a                          ; 03:541E
     ld   [$C265],a                  ; 03:541F
     ld   [$C269],a                  ; 03:5422
     ld   hl,W_PlayerWarpSubstate    ; 03:5425
     inc  [hl]                       ; 03:5428
-Return035429:
+Return035429:                       ;          Also used as axe victory substate A
     ret                             ; 03:5429
 
 Code03542A:
+; Axe victory substate B
     ldh  a,[<H_ButtonsPressed]      ; 03:542A
     and  $03                        ; 03:542C
     ret  z                          ; 03:542E
     ld   a,[W_ChallengeFlag]        ; 03:542F
     and  a                          ; 03:5432
-    jr   nz,Code035438              ; 03:5433
+    jr   nz,@Code035438             ; 03:5433
     call Sub034D26                  ; 03:5435
-Code035438:
+@Code035438:
     xor  a                          ; 03:5438
     ldh  [<H_GameSubstate],a        ; 03:5439
     ld   [$C168],a                  ; 03:543B
@@ -2694,111 +2716,111 @@ Sub035457:
     ld   [hl],a                     ; 03:5462
     ld   a,[W_HardFlag]             ; 03:5463
     and  a                          ; 03:5466
-    jr   z,Code03547B               ; 03:5467
+    jr   z,@Code03547B              ; 03:5467
     ld   a,[$C169]                  ; 03:5469
     or   $03                        ; 03:546C
     ld   [$C169],a                  ; 03:546E
     set  7,[hl]                     ; 03:5471
-    ld   a,[$C429]                  ; 03:5473
+    ld   a,[W_AlbumUnlockFlags]     ; 03:5473
     or   $10                        ; 03:5476
-    ld   [$C429],a                  ; 03:5478
-Code03547B:
+    ld   [W_AlbumUnlockFlags],a     ; 03:5478
+@Code03547B:
     call Sub034D18                  ; 03:547B
     ld   a,[W_SPFlag]               ; 03:547E
     and  a                          ; 03:5481
-    jr   z,Code035494               ; 03:5482
-    ld   a,[$C429]                  ; 03:5484
+    jr   z,@Code035494              ; 03:5482
+    ld   a,[W_AlbumUnlockFlags]     ; 03:5484
     or   $08                        ; 03:5487
-    ld   [$C429],a                  ; 03:5489
+    ld   [W_AlbumUnlockFlags],a     ; 03:5489
     ld   a,$03                      ; 03:548C
     rst  $10                        ; 03:548E  24-bit call
 .dl SubL_094736                     ; 03:548F
-    jr   Code0354E0                 ; 03:5492
-Code035494:
-    ld   a,[$C429]                  ; 03:5494
+    jr   @Code0354E0                ; 03:5492
+@Code035494:
+    ld   a,[W_AlbumUnlockFlags]     ; 03:5494
     or   $40                        ; 03:5497
-    ld   [$C429],a                  ; 03:5499
-    ld   a,[$C42A]                  ; 03:549C
+    ld   [W_AlbumUnlockFlags],a     ; 03:5499
+    ld   a,[W_AlbumUnlockFlags+1]   ; 03:549C
     or   $40                        ; 03:549F
-    ld   [$C42A],a                  ; 03:54A1
-    ld   a,[$C17C]                  ; 03:54A4
+    ld   [W_AlbumUnlockFlags+1],a   ; 03:54A1
+    ld   a,[W_PlayerScoreHigh]      ; 03:54A4 \ check if score > 0x002710 (100,000 displayed)
     and  a                          ; 03:54A7
-    jr   nz,Code0354BA              ; 03:54A8
-    ld   a,[$C17B]                  ; 03:54AA
+    jr   nz,@UnlockYouVsBoo         ; 03:54A8
+    ld   a,[W_PlayerScoreMid]       ; 03:54AA
     cp   $27                        ; 03:54AD
-    jr   c,Code0354E0               ; 03:54AF
-    jr   nz,Code0354BA              ; 03:54B1
-    ld   a,[$C17A]                  ; 03:54B3
+    jr   c,@Code0354E0              ; 03:54AF
+    jr   nz,@UnlockYouVsBoo         ; 03:54B1
+    ld   a,[W_PlayerScoreLow]       ; 03:54B3
     cp   $10                        ; 03:54B6
-    jr   c,Code0354E0               ; 03:54B8
-Code0354BA:
-    ld   a,[$C192]                  ; 03:54BA
+    jr   c,@Code0354E0              ; 03:54B8 /
+@UnlockYouVsBoo:
+    ld   a,[W_ModeUnlockFlags]      ; 03:54BA \ unlock You vs. Boo
     or   $02                        ; 03:54BD
-    ld   [$C192],a                  ; 03:54BF
-    ld   a,[$C17C]                  ; 03:54C2
+    ld   [W_ModeUnlockFlags],a      ; 03:54BF /
+    ld   a,[W_PlayerScoreHigh]      ; 03:54C2 \ check if score > 0x007530 (300,000 displayed)
     and  a                          ; 03:54C5
-    jr   nz,Code0354D8              ; 03:54C6
-    ld   a,[$C17B]                  ; 03:54C8
+    jr   nz,@UnlockSP               ; 03:54C6
+    ld   a,[W_PlayerScoreMid]       ; 03:54C8
     cp   $75                        ; 03:54CB
-    jr   c,Code0354E0               ; 03:54CD
-    jr   nz,Code0354D8              ; 03:54CF
-    ld   a,[$C17A]                  ; 03:54D1
+    jr   c,@Code0354E0              ; 03:54CD
+    jr   nz,@UnlockSP               ; 03:54CF
+    ld   a,[W_PlayerScoreLow]       ; 03:54D1
     cp   $30                        ; 03:54D4
-    jr   c,Code0354E0               ; 03:54D6
-Code0354D8:
-    ld   a,[$C192]                  ; 03:54D8
+    jr   c,@Code0354E0              ; 03:54D6 /
+@UnlockSP:
+    ld   a,[W_ModeUnlockFlags]      ; 03:54D8 \ unlock Super Players
     or   $01                        ; 03:54DB
-    ld   [$C192],a                  ; 03:54DD
-Code0354E0:
-    ld   hl,$C17A                   ; 03:54E0
-    ldi  a,[hl]                     ; 03:54E3
+    ld   [W_ModeUnlockFlags],a      ; 03:54DD /
+@Code0354E0:
+    ld   hl,W_PlayerScoreLow        ; 03:54E0
+    ldi  a,[hl]                     ; 03:54E3 \ copy score to $FFA1
     ldh  [<$FFA1],a                 ; 03:54E4
     ldi  a,[hl]                     ; 03:54E6
     ldh  [<$FFA2],a                 ; 03:54E7
     ld   a,[hl]                     ; 03:54E9
-    ldh  [<$FFA3],a                 ; 03:54EA
-    xor  a                          ; 03:54EC
+    ldh  [<$FFA3],a                 ; 03:54EA /
+    xor  a                          ; 03:54EC \ clear score
     ldd  [hl],a                     ; 03:54ED
     ldd  [hl],a                     ; 03:54EE
-    ld   [hl],a                     ; 03:54EF
+    ld   [hl],a                     ; 03:54EF /
     ld   a,$03                      ; 03:54F0
     rst  $10                        ; 03:54F2  24-bit call
 .dl SubL_0757EF                     ; 03:54F3
     ld   a,[W_SPFlag]               ; 03:54F6
     and  a                          ; 03:54F9
-    jr   z,Code035500               ; 03:54FA
+    jr   z,@Code035500              ; 03:54FA
     xor  a                          ; 03:54FC
     ld   [W_HardFlag],a             ; 03:54FD
-Code035500:
+@Code035500:
     ld   a,$03                      ; 03:5500
     rst  $10                        ; 03:5502  24-bit call
-.dl SubL_075584                     ; 03:5503
-    ld   hl,$C17A                   ; 03:5506
+.dl SubL_SaveToFile                 ; 03:5503
+    ld   hl,W_PlayerScoreLow        ; 03:5506 \ copy $FFA1 back to score
     ldh  a,[<$FFA1]                 ; 03:5509
     ldi  [hl],a                     ; 03:550B
     ldh  a,[<$FFA2]                 ; 03:550C
     ldi  [hl],a                     ; 03:550E
     ldh  a,[<$FFA3]                 ; 03:550F
-    ld   [hl],a                     ; 03:5511
+    ld   [hl],a                     ; 03:5511 /
     ret                             ; 03:5512
 
 Sub035513:
 ; determine award to give, for clearing 8-4
     ld   a,[W_SPFlag]               ; 03:5513
     and  a                          ; 03:5516
-    jr   nz,Code035527              ; 03:5517
+    jr   nz,@SuperPlayers           ; 03:5517
     ld   a,[W_HardFlag]             ; 03:5519
     and  a                          ; 03:551C
-    jr   nz,Code035523              ; 03:551D
-    ld   a,$02                      ; 03:551F
-    jr   Code035529                 ; 03:5521
-Code035523:
-    ld   a,$04                      ; 03:5523
-    jr   Code035529                 ; 03:5525
-Code035527:
-    ld   a,$05                      ; 03:5527
-Code035529:
-    ld   [$C1B0],a                  ; 03:5529
+    jr   nz,@Hard                   ; 03:551D
+    ld   a,$02                      ; 03:551F  02: Mario Award
+    jr   @GiveAward                 ; 03:5521
+@Hard:
+    ld   a,$04                      ; 03:5523  04: Bowser Award
+    jr   @GiveAward                 ; 03:5525
+@SuperPlayers:
+    ld   a,$05                      ; 03:5527  05: Yoshi Award
+@GiveAward:
+    ld   [W_AwardToGive],a          ; 03:5529
     ret                             ; 03:552C
 
 Data03552D:                         ; 03:552D
@@ -4285,6 +4307,7 @@ Sub035F8C:
 .dw Code035F9A                      ; 03:5F94
 .dw Code035FA6                      ; 03:5F96
 .dw Code035F9A                      ; 03:5F98
+
 Code035F9A:
     ld   hl,H_CameraXLow            ; 03:5F9A
     ldh  a,[<H_PlayerXLow]          ; 03:5F9D
@@ -4312,7 +4335,6 @@ Code035FB5:
     add  b                          ; 03:5FC1
     ld   b,a                        ; 03:5FC2
     ret                             ; 03:5FC3
-
 Code035FC4:
     xor  a                          ; 03:5FC4
     ld   [$C1E7],a                  ; 03:5FC5
@@ -6360,8 +6382,8 @@ Sub036EA8:
     ldh  a,[<$FF9B]                 ; 03:6EA8
     or   [hl]                       ; 03:6EAA
     ld   [hl],a                     ; 03:6EAB
-Return036EAC:
-    ret                             ; 03:6EAC  this ret is also used by interaction type 00: no interaction
+Return036EAC:                       ;          Also used as interaction type 00: no interaction
+    ret                             ; 03:6EAC
 
 Tile16_SolidWithItem:
     ld   hl,$C210                   ; 03:6EAD
@@ -7196,7 +7218,9 @@ PlayerHorizPipe_Main:
     rst  $00                        ; 03:74D2  Execute from 16-bit pointer table
 .dw Code0374D7                      ; 03:74D3
 .dw PipeTransition                  ; 03:74D5
+
 Code0374D7:
+; Horiz pipe substate 0
     ld   a,$01                      ; 03:74D7
     ld   [$C1E3],a                  ; 03:74D9
     xor  a                          ; 03:74DC
@@ -7224,14 +7248,14 @@ Code0374D7:
     ld   e,$34                      ; 03:750E
     ld   a,[W_SPFlag]               ; 03:7510
     and  a                          ; 03:7513
-    jr   z,Code037518               ; 03:7514
+    jr   z,@Code037518              ; 03:7514
     ld   e,$62                      ; 03:7516
-Code037518:
+@Code037518:
     ld   a,d                        ; 03:7518
     cp   e                          ; 03:7519
-    jr   nz,Code03751E              ; 03:751A
+    jr   nz,@Code03751E             ; 03:751A
     ld   [hl],$96                   ; 03:751C
-Code03751E:
+@Code03751E:
     ld   a,$01                      ; 03:751E
     ld   [W_PlayerWarpSubstate],a   ; 03:7520
     ret                             ; 03:7523
@@ -7248,7 +7272,9 @@ PlayerVertPipe_Main:
 .dw Code037532                      ; 03:752C
 .dw Code037554                      ; 03:752E
 .dw PipeTransition                  ; 03:7530
+
 Code037532:
+; Vert pipe substate 0
     ld   a,$01                      ; 03:7532
     ld   [$C1E3],a                  ; 03:7534
     ld   a,$18                      ; 03:7537
@@ -7267,22 +7293,23 @@ Return037553:
     ret                             ; 03:7553
 
 Code037554:
+; Vert pipe substate 1
     ld   a,$01                      ; 03:7554
     ld   [$C1E3],a                  ; 03:7556
     ld   a,[$C1D1]                  ; 03:7559
     cp   $00                        ; 03:755C
-    jr   z,Code037576               ; 03:755E
+    jr   z,@Code037576              ; 03:755E
     dec  a                          ; 03:7560
     ld   [$C1D1],a                  ; 03:7561
     cp   $01                        ; 03:7564
-    jr   nz,Return0375AD            ; 03:7566
+    jr   nz,@Return                 ; 03:7566
     ld   a,$25                      ; 03:7568
     ldh  [<$FFF3],a                 ; 03:756A
     ld   de,$0020                   ; 03:756C
     ld   a,$01                      ; 03:756F
     call Return0010B2               ; 03:7571
-    jr   Return0375AD               ; 03:7574
-Code037576:
+    jr   @Return                    ; 03:7574
+@Code037576:
     ld   a,$F0                      ; 03:7576
     ldh  [<$FFAC],a                 ; 03:7578
     call Sub0359E4                  ; 03:757A
@@ -7290,7 +7317,7 @@ Code037576:
     ld   hl,$C1E1                   ; 03:7580
     ldh  a,[<H_PlayerYLow]          ; 03:7583
     cp   [hl]                       ; 03:7585
-    jr   nc,Return0375AD            ; 03:7586
+    jr   nc,@Return                 ; 03:7586
     xor  a                          ; 03:7588
     ld   [$C1F3],a                  ; 03:7589
     ld   [W_PlayerWarpSubstate],a   ; 03:758C
@@ -7306,7 +7333,7 @@ Code037576:
     ld   [$C1FD],a                  ; 03:75A6
     inc  a                          ; 03:75A9
     ld   [$C181],a                  ; 03:75AA
-Return0375AD:
+@Return:
     ret                             ; 03:75AD
 
 WarpZone_SublevelsOrig:             ; 03:75AE
@@ -7359,7 +7386,7 @@ PipeTransition:
     ld   a,[W_SPFlag]               ; 03:7615
     and  a                          ; 03:7618
     jr   z,@Code03761D              ; 03:7619
-    ld   l,$62                      ; 03:761B  62: Super Players pipe intro
+    ld   l,$62                      ; 03:761B  62: SP pipe intro
 @Code03761D:
     ld   a,[W_SublevelID]           ; 03:761D
     cp   l                          ; 03:7620
@@ -7525,6 +7552,7 @@ Sub037725:
 .dw Code03772F                      ; 03:7729
 .dw Code037740                      ; 03:772B
 .dw Code037773                      ; 03:772D
+
 Code03772F:
     ld   a,[W_SublevelID]           ; 03:772F
     cp   $15                        ; 03:7732

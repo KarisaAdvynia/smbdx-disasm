@@ -61,8 +61,8 @@ Code1440B7:
 Code1440D8:
     ld   a,$14                      ; 14:40D8
     rst  $10                        ; 14:40DA  24-bit call
-.dl SubL_LoadChalLevelSaveData      ; 14:40DB
-    ld   a,[$C194]                  ; 14:40DE
+.dl SubL_LoadChalSaveData           ; 14:40DB
+    ld   a,[W_YoshiEggMedalFlag]    ; 14:40DE
     and  a                          ; 14:40E1
     jr   nz,Code1440EF              ; 14:40E2
     ld   a,[W_LevelID]              ; 14:40E4
@@ -263,7 +263,7 @@ Code144282:
     ld   a,$47                      ; 14:4282
     ldh  [<$FFF2],a                 ; 14:4284
 Code144286:
-    ld   hl,$C000                   ; 14:4286
+    ld   hl,W_OAMBuffer             ; 14:4286
     ld   a,[$C41D]                  ; 14:4289
     ld   c,a                        ; 14:428C
     sla  a                          ; 14:428D
@@ -661,7 +661,7 @@ Code14464E:
     ldi  a,[hl]                     ; 14:4674
     ld   h,[hl]                     ; 14:4675
     ld   l,a                        ; 14:4676
-    ld   de,$C000                   ; 14:4677
+    ld   de,W_OAMBuffer             ; 14:4677
     ld   c,$0C                      ; 14:467A
 Code14467C:
     ldh  a,[<$FF97]                 ; 14:467C
@@ -862,7 +862,7 @@ Code144921:
     ldi  a,[hl]                     ; 14:49A1
     ld   h,[hl]                     ; 14:49A2
     ld   l,a                        ; 14:49A3
-    ld   de,W_PaletteBuffer         ; 14:49A4
+    ld   de,W_PalBuffer             ; 14:49A4
     ld   bc,$0038                   ; 14:49A7
     call CopyBytes                  ; 14:49AA
     ld   a,$01                      ; 14:49AD
@@ -990,6 +990,7 @@ Sub144A8E:
 .dw Code144ABB                      ; 14:4A95
 .dw Code144AC0                      ; 14:4A97
 .dw Code144AC8                      ; 14:4A99
+
 Code144A9B:
     ld   a,$7B                      ; 14:4A9B
     ld   [$DE68],a                  ; 14:4A9D
@@ -1094,7 +1095,7 @@ Code144B37:
     ld   [$C4E8],a                  ; 14:4B49
     call Sub144189                  ; 14:4B4C
 Code144B4F:
-    ld   hl,$C000                   ; 14:4B4F
+    ld   hl,W_OAMBuffer             ; 14:4B4F
     ld   de,Data144B13              ; 14:4B52
     ld   c,$09                      ; 14:4B55
     ld   a,[$C4E6]                  ; 14:4B57
@@ -1285,7 +1286,7 @@ Code1450C7:
     call Sub0010A9                  ; 14:50D2
     call Sub144189                  ; 14:50D5
 Code1450D8:
-    ld   de,$C000                   ; 14:50D8
+    ld   de,W_OAMBuffer             ; 14:50D8
     ld   a,$28                      ; 14:50DB
     ld   [de],a                     ; 14:50DD
     inc  de                         ; 14:50DE
@@ -1373,8 +1374,8 @@ Code145136:
 Code14515F:
     ld   a,$14                      ; 14:515F
     rst  $10                        ; 14:5161  24-bit call
-.dl SubL_LoadChalLevelSaveData      ; 14:5162
-    ld   a,[$C194]                  ; 14:5165
+.dl SubL_LoadChalSaveData           ; 14:5162
+    ld   a,[W_YoshiEggMedalFlag]    ; 14:5165
     and  a                          ; 14:5168
     jr   z,Code14517D               ; 14:5169
     call Sub0010E4                  ; 14:516B
@@ -1476,7 +1477,7 @@ Code145262:
     ld   [$C415],a                  ; 14:52B6
     ld   l,c                        ; 14:52B9
     ld   h,b                        ; 14:52BA
-    ld   de,W_PaletteBuffer         ; 14:52BB
+    ld   de,W_PalBuffer             ; 14:52BB
     ld   bc,$0040                   ; 14:52BE
     ld   a,$14                      ; 14:52C1
     call CopyBytesLong              ; 14:52C3
@@ -1502,7 +1503,7 @@ Code1452E3:
     bit  0,a                        ; 14:52E3
     jr   z,Sub145306                ; 14:52E5
     ld   b,$40                      ; 14:52E7
-    ld   hl,W_PaletteBuffer         ; 14:52E9
+    ld   hl,W_PalBuffer             ; 14:52E9
     xor  a                          ; 14:52EC
 Code1452ED:
     ldi  [hl],a                     ; 14:52ED
@@ -1520,7 +1521,7 @@ Code1452ED:
 
 Sub145306:
     ld   hl,Data14504D              ; 14:5306
-    ld   de,$C000                   ; 14:5309
+    ld   de,W_OAMBuffer             ; 14:5309
     ld   b,$1A                      ; 14:530C
     jp   Code145100                 ; 14:530E
 
@@ -2134,7 +2135,7 @@ Code145AE1:
     swap a                          ; 14:5AF1
     add  $3A                        ; 14:5AF3
     sub  e                          ; 14:5AF5
-    ld   [$C000],a                  ; 14:5AF6
+    ld   [W_OAMBuffer],a            ; 14:5AF6
     ld   [$C004],a                  ; 14:5AF9
     ld   [$C008],a                  ; 14:5AFC
     ld   [$C00C],a                  ; 14:5AFF
@@ -3162,7 +3163,7 @@ Sub14614D:
     ld   a,[$D905]                  ; 14:615A
     ldh  [<$FFA5],a                 ; 14:615D
     ld   hl,$FF97                   ; 14:615F
-    call Sub003D54                  ; 14:6162
+    call HexToDec24bit              ; 14:6162
     ld   c,$00                      ; 14:6165
     ldh  a,[<$FF99]                 ; 14:6167
     and  $0F                        ; 14:6169
@@ -3176,14 +3177,14 @@ Code14616E:
     jr   z,Code14617C               ; 14:6178
     ld   c,$00                      ; 14:617A
 Code14617C:
-    ld   de,$DF10                   ; 14:617C
+    ld   de,W_TiUpBuffer+$0F        ; 14:617C
     call Sub146129                  ; 14:617F
     ldh  a,[<$FF9B]                 ; 14:6182
     and  $0F                        ; 14:6184
     jr   z,Code14618A               ; 14:6186
     ld   c,$00                      ; 14:6188
 Code14618A:
-    ld   de,$DF20                   ; 14:618A
+    ld   de,W_TiUpBuffer+$1F        ; 14:618A
     call Sub146129                  ; 14:618D
     ld   c,$00                      ; 14:6190
     ldh  a,[<$FF9C]                 ; 14:6192
@@ -3197,7 +3198,7 @@ Code14618A:
     inc  a                          ; 14:61A4
     ldh  [<$FFA5],a                 ; 14:61A5
     ld   hl,$FF97                   ; 14:61A7
-    call Sub003D54                  ; 14:61AA
+    call HexToDec24bit              ; 14:61AA
     ld   c,$00                      ; 14:61AD
     ldh  a,[<$FF9B]                 ; 14:61AF
     and  $0F                        ; 14:61B1
@@ -3217,7 +3218,7 @@ Code1461B6:
     ld   a,[$D908]                  ; 14:61CD
     ldh  [<$FFA5],a                 ; 14:61D0
     ld   hl,$FF97                   ; 14:61D2
-    call Sub003D54                  ; 14:61D5
+    call HexToDec24bit              ; 14:61D5
     ld   c,$00                      ; 14:61D8
     ldh  a,[<$FF9B]                 ; 14:61DA
     and  $0F                        ; 14:61DC
@@ -3629,7 +3630,7 @@ Code1466BD:
     xor  a                          ; 14:674A
     ldh  [<SVBK],a                  ; 14:674B
     ld   hl,Data14633C              ; 14:674D
-    ld   de,W_PaletteBuffer         ; 14:6750
+    ld   de,W_PalBuffer             ; 14:6750
     ld   bc,$0080                   ; 14:6753
     call CopyBytes                  ; 14:6756
     ld   a,$01                      ; 14:6759
@@ -3712,7 +3713,7 @@ Code1467EB:
     cp   $13                        ; 14:67F0
     jr   c,Code146818               ; 14:67F2
     ld   a,$34                      ; 14:67F4
-    ld   [$C000],a                  ; 14:67F6
+    ld   [W_OAMBuffer],a            ; 14:67F6
     ld   [$C004],a                  ; 14:67F9
     ld   a,$3E                      ; 14:67FC
     ld   [$C001],a                  ; 14:67FE
@@ -3729,7 +3730,7 @@ Code1467EB:
 
 Code146818:
     ld   a,$30                      ; 14:6818
-    ld   [$C000],a                  ; 14:681A
+    ld   [W_OAMBuffer],a            ; 14:681A
     ld   [$C004],a                  ; 14:681D
     ld   a,$10                      ; 14:6820
     ld   [$C001],a                  ; 14:6822
@@ -3809,7 +3810,7 @@ Code1468AA:
     ld   [$D96E],a                  ; 14:68AA
     cp   $09                        ; 14:68AD
     jr   nz,Code1468BC              ; 14:68AF
-    ld   a,[$C429]                  ; 14:68B1
+    ld   a,[W_AlbumUnlockFlags]     ; 14:68B1
     and  $F8                        ; 14:68B4
     cp   $F8                        ; 14:68B6
     jr   z,Code1468C7               ; 14:68B8
@@ -3817,7 +3818,7 @@ Code1468AA:
 Code1468BC:
     cp   $08                        ; 14:68BC
     jr   c,Code1468C7               ; 14:68BE
-    ld   a,[$C429]                  ; 14:68C0
+    ld   a,[W_AlbumUnlockFlags]     ; 14:68C0
     and  $F8                        ; 14:68C3
     jr   z,Code14688D               ; 14:68C5
 Code1468C7:
@@ -4100,7 +4101,7 @@ Code146AA7:
 Return146ABE:
     ret                             ; 14:6ABE
 
-RankingMain:
+RecordsMain:
 ; Game state 2B
     ldh  a,[<H_GameSubstate]        ; 14:6ABF
     rst  $00                        ; 14:6AC1  Execute from 16-bit pointer table
@@ -4131,7 +4132,7 @@ Sub146AD0:
     call DMATransferVRAM            ; 14:6AF2
     ret                             ; 14:6AF5
 
-Data146AF6:                         ; 14:6AF6
+Pal_RecordsFromMainMenu:            ; 14:6AF6
 .dw $0000,$0000,$0000,$7FFF,$0000,$0000,$0000,$001F,\
     $0000,$0000,$0000,$03E0,$0000,$0000,$0000,$7C00,\
     $639F,$3A98,$25D2,$0000,$0000,$0000,$0000,$7FFF,\
@@ -4201,8 +4202,8 @@ Code146BA9:
     ldh  [<SVBK],a                  ; 14:6BFA
     call Sub146EF2                  ; 14:6BFC
     call Sub146AD0                  ; 14:6BFF
-    ld   hl,Data146AF6              ; 14:6C02
-    ld   de,W_PaletteBuffer         ; 14:6C05
+    ld   hl,Pal_RecordsFromMainMenu ; 14:6C02
+    ld   de,W_PalBuffer             ; 14:6C05
     ld   bc,$0080                   ; 14:6C08
     call CopyBytes                  ; 14:6C0B
     ld   a,$01                      ; 14:6C0E
@@ -4683,7 +4684,7 @@ Code146FA9:
     push de                         ; 14:6FAE
     call Sub147053                  ; 14:6FAF
     ld   de,$D922                   ; 14:6FB2
-    call Sub003DFB                  ; 14:6FB5
+    call LoadScoreTileBuffer        ; 14:6FB5
     pop  de                         ; 14:6FB8
     pop  hl                         ; 14:6FB9
     call Sub1470D3                  ; 14:6FBA
@@ -4844,7 +4845,7 @@ Sub147053:
 Sub1470D3:
     ld   a,$06                      ; 14:70D3
     ldh  [<$FF9F],a                 ; 14:70D5
-    ld   bc,$C34F                   ; 14:70D7
+    ld   bc,W_ScoreTileBuffer       ; 14:70D7
 Code1470DA:
     ld   a,[bc]                     ; 14:70DA
     ldi  [hl],a                     ; 14:70DB
@@ -4880,7 +4881,7 @@ Code147103:
     ld   a,[$D92A]                  ; 14:7103
     and  a                          ; 14:7106
     ret  nz                         ; 14:7107
-    ld   hl,$C000                   ; 14:7108
+    ld   hl,W_OAMBuffer             ; 14:7108
     ld   a,$18                      ; 14:710B
     ldi  [hl],a                     ; 14:710D
     ld   b,$23                      ; 14:710E
@@ -5029,7 +5030,7 @@ Code1471E0:
     ret                             ; 14:71F9
 
 Sub1471FA:
-    ld   hl,$C000                   ; 14:71FA
+    ld   hl,W_OAMBuffer             ; 14:71FA
     ld   a,[$D928]                  ; 14:71FD
     sla  a                          ; 14:7200
     sla  a                          ; 14:7202
@@ -5141,7 +5142,7 @@ Code1472C1:
     ld   a,$0E                      ; 14:72D2
     ld   [$C415],a                  ; 14:72D4
     ld   hl,Pal_ChalMenu            ; 14:72D7
-    ld   de,W_PaletteBuffer         ; 14:72DA
+    ld   de,W_PalBuffer             ; 14:72DA
     ld   bc,$0038                   ; 14:72DD
     ld   a,$14                      ; 14:72E0
     call CopyBytesLong              ; 14:72E2
@@ -5183,7 +5184,7 @@ Sub147358:
 Code14735C:
     ld   a,$14                      ; 14:735C
     rst  $10                        ; 14:735E  24-bit call
-.dl SubL_LoadChalLevelSaveData      ; 14:735F
+.dl SubL_LoadChalSaveData           ; 14:735F
     ld   a,[W_LevelID]              ; 14:7362
     and  $03                        ; 14:7365
     ld   c,a                        ; 14:7367
@@ -5244,7 +5245,7 @@ Code14735C:
     ld   a,d                        ; 14:73BA
     adc  $00                        ; 14:73BB
     ld   d,a                        ; 14:73BD
-    ld   a,[$C189]                  ; 14:73BE
+    ld   a,[W_RedCoinsBest]         ; 14:73BE
     cp   $05                        ; 14:73C1
     jr   nc,Code1473CE              ; 14:73C3
     ld   a,$71                      ; 14:73C5
@@ -5260,7 +5261,7 @@ Code1473CE:
     ld   [de],a                     ; 14:73D3
     inc  de                         ; 14:73D4
 Code1473D5:
-    ld   a,[$C18D]                  ; 14:73D5
+    ld   a,[W_HighScoreMedalFlag]   ; 14:73D5
     and  a                          ; 14:73D8
     jr   nz,Code1473E4              ; 14:73D9
     ld   a,$71                      ; 14:73DB
@@ -5276,7 +5277,7 @@ Code1473E4:
     ld   [de],a                     ; 14:73E9
     inc  de                         ; 14:73EA
 Code1473EB:
-    ld   a,[$C194]                  ; 14:73EB
+    ld   a,[W_YoshiEggMedalFlag]    ; 14:73EB
     and  a                          ; 14:73EE
     jr   nz,Code1473F9              ; 14:73EF
     ld   a,$71                      ; 14:73F1
@@ -5302,15 +5303,15 @@ Code1473FF:
     ld   [hl],a                     ; 14:7412
     ld   a,$14                      ; 14:7413
     rst  $10                        ; 14:7415  24-bit call
-.dl SubL_LoadChalLevelSaveData      ; 14:7416
+.dl SubL_LoadChalSaveData           ; 14:7416
     ret                             ; 14:7419
 
 Sub14741A:
     call Sub147457                  ; 14:741A
     ld   de,W_ChalTotalScoreLow     ; 14:741D
-    call Sub003DFB                  ; 14:7420
+    call LoadScoreTileBuffer        ; 14:7420
     ld   hl,$D20C                   ; 14:7423
-    ld   de,$C34F                   ; 14:7426
+    ld   de,W_ScoreTileBuffer       ; 14:7426
     ld   b,$06                      ; 14:7429
 Code14742B:
     ld   a,[de]                     ; 14:742B

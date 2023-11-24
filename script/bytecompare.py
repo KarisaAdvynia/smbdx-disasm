@@ -22,32 +22,39 @@ def bytecompare(source, dest, searchbanks=None):
                     else:
                         mismatchregions.append([i, i])
 
-        if mismatchregions:
-            for start, end in mismatchregions:
-                length = end - start + 1
-                seek_GB(f0, start)
-                seek_GB(f1, start)
+        for start, end in mismatchregions:
+            if start in (0x014E, 0x014F) and end in (0x014F, 0x0150):
+                # don't alert for differing checksum
+                if len(mismatchregions) == 1:
+                    mismatchregions.clear()
+                    break
+                continue
+            length = end - start + 1
+            seek_GB(f0, start)
+            seek_GB(f1, start)
 
-                text = [f"Mismatch at {start>>16:02X}:{start&0xFFFF:04X}"]
-                if length > 1:
-                    text += [f"-{end&0xFFFF:04X}"]
-                if length > 8:
-                    text += [f" (0x{length:X} bytes)"]
-                text += [": source ",
-                    " ".join(f"{i:02X}" for i in f0.read(min(length, 8)))]
-                if length > 8: text.append("...")
-                text += [", dest ",
-                    " ".join(f"{i:02X}" for i in f1.read(min(length, 8)))]
-                if length > 8: text.append("...")
-                print("".join(text))
-        elif isinstance(searchbanks, range):
-            print(f"The compared banks "
-                  f"({searchbanks.start:02X}-{searchbanks.stop-1:02X})"
-                  f" are identical.")
-        else:
-            print("The compared banks (" +
-                  " ".join(f"{bank:02X}" for bank in searchbanks) +
-                  ") are identical.")
+            text = [f"Mismatch at {start>>16:02X}:{start&0xFFFF:04X}"]
+            if length > 1:
+                text += [f"-{end&0xFFFF:04X}"]
+            if length > 8:
+                text += [f" (0x{length:X} bytes)"]
+            text += [": source ",
+                " ".join(f"{i:02X}" for i in f0.read(min(length, 8)))]
+            if length > 8: text.append("...")
+            text += [", dest ",
+                " ".join(f"{i:02X}" for i in f1.read(min(length, 8)))]
+            if length > 8: text.append("...")
+            print("".join(text))
+
+        if not mismatchregions:  # no mismatches found, except possibly checksum
+            if isinstance(searchbanks, range):
+                print(f"The compared banks "
+                      f"({searchbanks.start:02X}-{searchbanks.stop-1:02X})"
+                      f" are identical.")
+            else:
+                print("The compared banks (" +
+                      " ".join(f"{bank:02X}" for bank in sorted(searchbanks)) +
+                      ") are identical.")
 
 if __name__ == "__main__":
     bytecompare(
@@ -55,7 +62,7 @@ if __name__ == "__main__":
         "../smbdx-disasm.gbc",
         searchbanks=
             list(range(0x0F)) +
-            [0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x1A, 0x1D, 0x1F, 0x20, 0x32] +
+            [0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x1A, 0x1B, 0x1D, 0x1F, 0x20, 0x32] +
             list(range(0x26, 0x2C))
         )
     input()  # wait for Enter, if run on a shell that closes at end of program
