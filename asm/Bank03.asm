@@ -332,7 +332,7 @@ Sub03427D:
 .dw Code0347FA                      ; 02
 .dw Code03483D                      ; 03
 .dw Code03489A                      ; 04
-.dw FlagpoleVictory_Main            ; 05
+.dw FlagVictory_Main                ; 05
 .dw Code034D75                      ; 06
 .dw Code034DE8                      ; 07
 .dw PlayerHorizPipe_Wrapper         ; 08
@@ -1530,7 +1530,7 @@ Code034AD1:
     ldh  [<H_PlayerXLow],a          ; 03:4AD3
     ret                             ; 03:4AD5
 
-FlagpoleVictory_Main:
+FlagVictory_Main:
 ; Player state 05
     ld   hl,$C20B                   ; 03:4AD6
     ld   e,[hl]                     ; 03:4AD9
@@ -1540,17 +1540,17 @@ FlagpoleVictory_Main:
     ld   [hl],d                     ; 03:4ADD
     dec  hl                         ; 03:4ADE
     ld   [hl],e                     ; 03:4ADF
-    call FlagpoleVictory_CallSubstate; 03:4AE0
+    call FlagVictory_CallSubstate   ; 03:4AE0
     ret                             ; 03:4AE3
 
-FlagpoleVictory_CallSubstate:
+FlagVictory_CallSubstate:
     ld   a,[W_PlayerWarpSubstate]   ; 03:4AE4
     rst  $00                        ; 03:4AE7  Execute from 16-bit pointer table
 .dw Return034B2D                    ; 03:4AE8
 .dw Code034AF4                      ; 03:4AEA
-.dw Code034B6E                      ; 03:4AEC
-.dw FlagpoleVictory_TimerBonus      ; 03:4AEE
-.dw FlagpoleVictory_Fireworks       ; 03:4AF0
+.dw FlagVictory_MarioRun            ; 03:4AEC
+.dw FlagVictory_TimerBonus          ; 03:4AEE
+.dw FlagVictory_Fireworks           ; 03:4AF0
 .dw Code034CAC                      ; 03:4AF2
 
 Code034AF4:
@@ -1588,18 +1588,18 @@ Code034AF4:
 Return034B2D:                       ;          Also used as flagpole victory substate 00
     ret                             ; 03:4B2D
 
-Data034B2E:                         ; 03:4B2E
+FlagVictory_MarioStopXLowOrig:      ; 03:4B2E
 .db $B0,$B0,$D0,$00,$E0,$B0,$50,$00,\
     $D0,$60,$F0,$00,$60,$B0,$A0,$00,\
     $C0,$D0,$D0,$00,$00,$D0,$E0,$00,\
     $80,$B0,$50,$00,$C0,$E0,$30,$00
-Data034B4E:                         ; 03:4B4E
+FlagVictory_MarioStopXLowSP:        ; 03:4B4E
 .db $10,$10,$F0,$00,$C0,$B0,$70,$00,\
     $F0,$10,$00,$00,$C0,$50,$00,$00,\
     $00,$10,$50,$00,$A0,$10,$F0,$00,\
     $00,$60,$20,$00,$D0,$F0,$C0,$00
 
-Code034B6E:
+FlagVictory_MarioRun:
 ; Flagpole victory substate 2
     ld   a,$10                      ; 03:4B6E
     ld   [$C25E],a                  ; 03:4B70
@@ -1610,11 +1610,11 @@ Code034B6E:
     ld   a,[W_LevelID]              ; 03:4B7F
     ld   e,a                        ; 03:4B82
     ld   d,$00                      ; 03:4B83
-    ld   hl,Data034B2E              ; 03:4B85
+    ld   hl,FlagVictory_MarioStopXLowOrig; 03:4B85
     ld   a,[W_SPFlag]               ; 03:4B88
     and  a                          ; 03:4B8B
     jr   z,@Code034B91              ; 03:4B8C
-    ld   hl,Data034B4E              ; 03:4B8E
+    ld   hl,FlagVictory_MarioStopXLowSP; 03:4B8E
 @Code034B91:
     add  hl,de                      ; 03:4B91
     ld   d,[hl]                     ; 03:4B92
@@ -1648,7 +1648,7 @@ Code034B6E:
     ldh  [<$FFF2],a                 ; 03:4BC3
     ret                             ; 03:4BC5
 
-FlagpoleVictory_TimerBonus:
+FlagVictory_TimerBonus:
 ; Flagpole victory substate 3
     call Sub034C07                  ; 03:4BC6
     jr   c,Return034C06             ; 03:4BC9
@@ -1736,7 +1736,7 @@ Data034C3B:                         ; 03:4C3B
 .db $F0,$FF,$B0,$FF,$E0,$FF,$C0,$FF,\
     $08,$00,$C0,$FF,$E0,$FF,$D0,$FF
 
-FlagpoleVictory_Fireworks:
+FlagVictory_Fireworks:
 ; Flagpole victory substate 4: give fireworks
     ld   hl,$C281                   ; 03:4C4B
     ld   a,[hl]                     ; 03:4C4E
@@ -2058,7 +2058,7 @@ AxeVictory_Main:
 .dw Code034E8D                      ; 03:4E75
 .dw Code034EFC                      ; 03:4E77
 .dw Code034FA9                      ; 03:4E79
-.dw Code035000                      ; 03:4E7B
+.dw AxeVictory_3                    ; 03:4E7B
 .dw Code035071                      ; 03:4E7D
 .dw Code0350C3                      ; 03:4E7F
 .dw AxeVictory_DisplayMessage       ; 03:4E81
@@ -2122,10 +2122,10 @@ Code034E8D:
     ld   [$D2F6],a                  ; 03:4EE9
     ld   a,[W_GameMode]             ; 03:4EEC
     cp   $02                        ; 03:4EEF
-    jp   z,Code03502B               ; 03:4EF1
+    jp   z,AxeVictory_0_3_VS        ; 03:4EF1
     cp   $07                        ; 03:4EF4
-    jp   z,Code035030               ; 03:4EF6
-    jp   Code035039                 ; 03:4EF9
+    jp   z,AxeVictory_0_3_YouVsBoo  ; 03:4EF6
+    jp   AxeVictory_0_3_NonRace     ; 03:4EF9
 
 Code034EFC:
 ; Axe victory substate 1
@@ -2259,13 +2259,13 @@ Code034FA9:
 @Return:
     ret                             ; 03:4FE7
 
-Data034FE8:                         ; 03:4FE8
+AxeVictory_PlayerStopXNormal:       ; 03:4FE8
 .db $95,$95,$95,$B5,$95,$95,$D5,$35,\
     $96,$96,$96,$B6,$96,$96,$D6,$36
-Data034FF8:                         ; 03:4FF8
+AxeVictory_PlayerStopXSP:           ; 03:4FF8
 .db $95,$95,$B5,$D5,$D5,$D5,$F5,$95
 
-Code035000:
+AxeVictory_3:
 ; Axe victory substate 3
     ld   de,$0000                   ; 03:5000
 @Loop035003:
@@ -2278,7 +2278,7 @@ Code035000:
     add  hl,de                      ; 03:500E
     ld   a,[hl]                     ; 03:500F
     cp   $1A                        ; 03:5010
-    jr   z,Return035070             ; 03:5012
+    jr   z,AxeVictory_0_3_Return    ; 03:5012
 @Code035014:
     inc  e                          ; 03:5014
     ld   a,e                        ; 03:5015
@@ -2288,51 +2288,52 @@ Code035000:
     inc  [hl]                       ; 03:501D
     ld   a,[W_GameMode]             ; 03:501E
     cp   $02                        ; 03:5021
-    jr   z,Code03502B               ; 03:5023
+    jr   z,AxeVictory_0_3_VS        ; 03:5023
     cp   $07                        ; 03:5025
-    jr   z,Code035030               ; 03:5027
-    jr   Code035039                 ; 03:5029
+    jr   z,AxeVictory_0_3_YouVsBoo  ; 03:5027
+    jr   AxeVictory_0_3_NonRace     ; 03:5029
 
-Code03502B:
+AxeVictory_0_3_VS:
     ld   a,$01                      ; 03:502B
     ld   [$C0C3],a                  ; 03:502D
-Code035030:
+AxeVictory_0_3_YouVsBoo:
     xor  a                          ; 03:5030
     ld   [$C168],a                  ; 03:5031
     ld   a,$25                      ; 03:5034
     ldh  [<H_GameState],a           ; 03:5036
     ret                             ; 03:5038
-Code035039:
+
+AxeVictory_0_3_NonRace:
     ld   a,$6B                      ; 03:5039
     ld   [$DE68],a                  ; 03:503B
-    ld   hl,Data034FE8              ; 03:503E
+    ld   hl,AxeVictory_PlayerStopXNormal; 03:503E
     ld   a,[W_SPFlag]               ; 03:5041
     and  a                          ; 03:5044
     jr   z,@Code03504A              ; 03:5045
-    ld   hl,Data034FF8              ; 03:5047
+    ld   hl,AxeVictory_PlayerStopXSP; 03:5047
 @Code03504A:
     ld   a,[W_LevelID]              ; 03:504A
     srl  a                          ; 03:504D
     srl  a                          ; 03:504F
     ld   e,a                        ; 03:5051
-    ld   d,$00                      ; 03:5052
+    ld   d,$00                      ; 03:5052  de = 0-indexed world number
     add  hl,de                      ; 03:5054
     ld   a,[W_ChallengeFlag]        ; 03:5055
     and  a                          ; 03:5058
     jr   z,@Code03505F              ; 03:5059
-    ld   de,$0008                   ; 03:505B
-    add  hl,de                      ; 03:505E
+    ld   de,$0008                   ; 03:505B \ if challenge, add 8 to index
+    add  hl,de                      ; 03:505E / (the value is always +1, so why not add 1 to value?)
 @Code03505F:
-    ld   a,[hl]                     ; 03:505F
+    ld   a,[hl]                     ; 03:505F  X position in tiles
     ld   e,a                        ; 03:5060
     and  $0F                        ; 03:5061
-    swap a                          ; 03:5063
+    swap a                          ; 03:5063  low digit << 4 -> X low, in pixels
     ld   [$C265],a                  ; 03:5065
     ld   a,e                        ; 03:5068
     and  $F0                        ; 03:5069
-    swap a                          ; 03:506B
+    swap a                          ; 03:506B  high digit >> 4 -> X high, in pixels
     ld   [$C267],a                  ; 03:506D
-Return035070:
+AxeVictory_0_3_Return:
     ret                             ; 03:5070
 
 Code035071:

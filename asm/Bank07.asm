@@ -1549,12 +1549,12 @@ Data074AD4:                         ; 07:4AD4
 .db $84,$01,$84,$01
 Data074AD8:                         ; 07:4AD8
 .db $A8,$01,$AA,$01
-Data074ADC:                         ; 07:4ADC
+Flagpole_FGBrickX_Normal:           ; 07:4ADC
 .db $67,$67,$77,$00,$67,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$A7,$00
-Data074AFC:                         ; 07:4AFC
+Flagpole_FGBrickX_SP:               ; 07:4AFC
 .db $67,$67,$67,$00,$57,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$77,$00,\
     $67,$67,$77,$00,$67,$67,$67,$00,\
@@ -1604,11 +1604,11 @@ FlagpoleSpr_Main:
     ld   a,[W_LevelID]              ; 07:4B68
     ld   e,a                        ; 07:4B6B
     ld   d,$00                      ; 07:4B6C
-    ld   hl,Data074ADC              ; 07:4B6E
+    ld   hl,Flagpole_FGBrickX_Normal; 07:4B6E
     ld   a,[W_SPFlag]               ; 07:4B71
     and  a                          ; 07:4B74
     jr   z,Code074B7A               ; 07:4B75
-    ld   hl,Data074AFC              ; 07:4B77
+    ld   hl,Flagpole_FGBrickX_SP    ; 07:4B77
 Code074B7A:
     add  hl,de                      ; 07:4B7A
     ld   a,[hl]                     ; 07:4B7B
@@ -1838,7 +1838,7 @@ Code074CCC:
     ld   a,$07                      ; 07:4CEF
     ld   [$C1C2],a                  ; 07:4CF1
     ld   a,$00                      ; 07:4CF4
-    ld   [$C1D3],a                  ; 07:4CF6
+    ld   [W_PlayerWarpSubstate],a   ; 07:4CF6
     ld   [$C1DD],a                  ; 07:4CF9
     ld   [$C1E7],a                  ; 07:4CFC
     inc  a                          ; 07:4CFF
@@ -2399,7 +2399,7 @@ Code075083:
     ld   hl,W_SpriteSubstate        ; 07:5094
     add  hl,bc                      ; 07:5097
     inc  [hl]                       ; 07:5098
-    ld   hl,$C1D3                   ; 07:5099
+    ld   hl,W_PlayerWarpSubstate    ; 07:5099
     inc  [hl]                       ; 07:509C
     ld   a,$00                      ; 07:509D
     ldh  [<$FFAC],a                 ; 07:509F
@@ -4009,17 +4009,17 @@ YouVsBoo_LoadSaveData:
     ld   hl,$A423                   ; 07:5C43
     ldh  a,[<$FF97]                 ; 07:5C46
     cp   [hl]                       ; 07:5C48
-    jr   nz,Code075C58              ; 07:5C49
+    jr   nz,@Code075C58             ; 07:5C49
     inc  hl                         ; 07:5C4B
     ldh  a,[<$FF98]                 ; 07:5C4C
     cp   [hl]                       ; 07:5C4E
-    jr   nz,Code075C58              ; 07:5C4F
+    jr   nz,@Code075C58             ; 07:5C4F
     ld   a,[$A422]                  ; 07:5C51
     cp   $01                        ; 07:5C54
-    jr   z,Code075C8F               ; 07:5C56
-Code075C58:
+    jr   z,@Code075C8F              ; 07:5C56
+@Code075C58:
     ld   de,$0000                   ; 07:5C58
-Code075C5B:
+@Loop075C5B:
     ld   hl,Data075C16              ; 07:5C5B
     add  hl,de                      ; 07:5C5E
     ld   a,[hl]                     ; 07:5C5F
@@ -4029,9 +4029,9 @@ Code075C5B:
     inc  e                          ; 07:5C65
     ld   a,e                        ; 07:5C66
     cp   $10                        ; 07:5C67
-    jr   nz,Code075C5B              ; 07:5C69
+    jr   nz,@Loop075C5B             ; 07:5C69
     ld   de,$0000                   ; 07:5C6B
-Code075C6E:
+@Loop075C6E:
     ld   hl,YouVsBoo_InitialBestTimes; 07:5C6E
     add  hl,de                      ; 07:5C71
     ld   a,[hl]                     ; 07:5C72
@@ -4041,9 +4041,9 @@ Code075C6E:
     inc  e                          ; 07:5C78
     ld   a,e                        ; 07:5C79
     cp   $10                        ; 07:5C7A
-    jr   nz,Code075C6E              ; 07:5C7C
+    jr   nz,@Loop075C6E             ; 07:5C7C
     ld   de,$0000                   ; 07:5C7E
-Code075C81:
+@Loop075C81:
     xor  a                          ; 07:5C81
     ld   hl,$C3D6                   ; 07:5C82
     add  hl,de                      ; 07:5C85
@@ -4051,11 +4051,11 @@ Code075C81:
     inc  e                          ; 07:5C87
     ld   a,e                        ; 07:5C88
     cp   $10                        ; 07:5C89
-    jr   nz,Code075C81              ; 07:5C8B
-    jr   Code075CC8                 ; 07:5C8D
-Code075C8F:
+    jr   nz,@Loop075C81             ; 07:5C8B
+    jr   @Return                    ; 07:5C8D
+@Code075C8F:
     ld   de,$0000                   ; 07:5C8F
-Code075C92:
+@Loop075C92:
     ld   hl,$A3F2                   ; 07:5C92
     add  hl,de                      ; 07:5C95
     ld   a,[hl]                     ; 07:5C96
@@ -4065,9 +4065,9 @@ Code075C92:
     inc  e                          ; 07:5C9C
     ld   a,e                        ; 07:5C9D
     cp   $10                        ; 07:5C9E
-    jr   nz,Code075C92              ; 07:5CA0
+    jr   nz,@Loop075C92             ; 07:5CA0
     ld   de,$0000                   ; 07:5CA2
-Code075CA5:
+@Loop075CA5:
     ld   hl,$A402                   ; 07:5CA5
     add  hl,de                      ; 07:5CA8
     ld   a,[hl]                     ; 07:5CA9
@@ -4077,9 +4077,9 @@ Code075CA5:
     inc  e                          ; 07:5CAF
     ld   a,e                        ; 07:5CB0
     cp   $10                        ; 07:5CB1
-    jr   nz,Code075CA5              ; 07:5CB3
+    jr   nz,@Loop075CA5             ; 07:5CB3
     ld   de,$0000                   ; 07:5CB5
-Code075CB8:
+@Loop075CB8:
     ld   hl,$A412                   ; 07:5CB8
     add  hl,de                      ; 07:5CBB
     ld   a,[hl]                     ; 07:5CBC
@@ -4089,8 +4089,8 @@ Code075CB8:
     inc  e                          ; 07:5CC2
     ld   a,e                        ; 07:5CC3
     cp   $10                        ; 07:5CC4
-    jr   nz,Code075CB8              ; 07:5CC6
-Code075CC8:
+    jr   nz,@Loop075CB8             ; 07:5CC6
+@Return:
     ld   hl,SRAMENABLE              ; 07:5CC8
     ld   [hl],$FF                   ; 07:5CCB
     ret                             ; 07:5CCD

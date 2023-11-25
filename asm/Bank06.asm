@@ -861,7 +861,7 @@ ToadPeach_Main:
     cp   $3A                        ; 06:4575
     jp   z,Code064662               ; 06:4577
     ld   de,$0000                   ; 06:457A
-    ld   a,[$C1D3]                  ; 06:457D
+    ld   a,[W_PlayerWarpSubstate]   ; 06:457D
     cp   $06                        ; 06:4580
     jr   c,Code06458E               ; 06:4582
     call Sub064618                  ; 06:4584
@@ -1018,7 +1018,7 @@ Sub06466C:
 .dw Return064769                    ; 06:467C
 
 Code06467E:
-    ld   a,[$C1D3]                  ; 06:467E
+    ld   a,[W_PlayerWarpSubstate]   ; 06:467E
     cp   $06                        ; 06:4681
     ret  c                          ; 06:4683
     ld   hl,$D096                   ; 06:4684
@@ -1321,7 +1321,7 @@ Sub064888:
     dec  [hl]                       ; 06:488C
     jr   nz,Code064897              ; 06:488D
     call Sub0029EF                  ; 06:488F
-    ld   hl,$C1D3                   ; 06:4892
+    ld   hl,W_PlayerWarpSubstate    ; 06:4892
     inc  [hl]                       ; 06:4895
     ret                             ; 06:4896
 

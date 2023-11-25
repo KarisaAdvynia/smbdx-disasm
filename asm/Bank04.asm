@@ -285,7 +285,7 @@ Code044931:
 
 SublevelTypeMusicIDs:               ; 04:4939
 .db $62,$63,$66,$62,$68,$62
-LevelTimers0:                       ; 04:493F
+LevelTimersNormal:                  ; 04:493F
 ; Original/Challenge timers
 .dw 400, 400, 300, 300, 400, 400, 300, 300,\
     400, 300, 300, 300, 400, 400, 300, 400,\
@@ -307,7 +307,7 @@ Sub0449E7:
     jr   z,SetPipeIntroMusicAndTimer; 04:49EC
     cp   $62                        ; 04:49EE  62: SP pipe intro
     jr   z,SetPipeIntroMusicAndTimer; 04:49F0
-    call SetLevelTimer0             ; 04:49F2
+    call SetLevelTimerNormal        ; 04:49F2
 
 SetSublevelMusic:
 ; subroutine: Set sublevel music (Original/Challenge/Super Players)
@@ -363,7 +363,7 @@ Unused044A43:
 SetPipeIntroMusicAndTimer:
 ; set starting timer to main level's timer, then set music to pipe intro
     ld   a,[W_LevelID]              ; 04:4A4C
-    call SetLevelTimer0             ; 04:4A4F
+    call SetLevelTimerNormal        ; 04:4A4F
     ld   a,$72                      ; 04:4A52  72: Pipe intro
     ld   [$DE68],a                  ; 04:4A54
     ld   [$C36F],a                  ; 04:4A57
@@ -375,12 +375,12 @@ Unused044A5B:
     ld   [$C36F],a                  ; 04:4A60
     ret                             ; 04:4A63
 
-SetLevelTimer0:
+SetLevelTimerNormal:
 ; subroutine: Set starting timer (Original/Challenge/Super Players)
     ld   e,a                        ; 04:4A64
     sla  e                          ; 04:4A65
     ld   d,$00                      ; 04:4A67
-    ld   hl,LevelTimers0            ; 04:4A69
+    ld   hl,LevelTimersNormal       ; 04:4A69
     ld   a,[W_SPFlag]               ; 04:4A6C
     and  a                          ; 04:4A6F
     jr   z,@Code044A75              ; 04:4A70

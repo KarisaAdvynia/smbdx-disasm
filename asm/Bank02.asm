@@ -8536,7 +8536,7 @@ Code0278BA:
     ld   hl,W_SpriteSubstate        ; 02:78D5
     add  hl,bc                      ; 02:78D8
     inc  [hl]                       ; 02:78D9
-    ld   hl,$C1D3                   ; 02:78DA
+    ld   hl,W_PlayerWarpSubstate    ; 02:78DA
     inc  [hl]                       ; 02:78DD
 Return0278DE:
     ret                             ; 02:78DE
