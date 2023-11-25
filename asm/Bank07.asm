@@ -1876,7 +1876,7 @@ Code074D2E:
     cp   $07                        ; 07:4D3B
     ret  nz                         ; 07:4D3D
     ld   a,$01                      ; 07:4D3E
-    ld   [$C36A],a                  ; 07:4D40
+    ld   [W_RaceResults],a          ; 07:4D40
     ret                             ; 07:4D43
 
 Code074D44:
@@ -1891,7 +1891,7 @@ Code074D52:
     sla  a                          ; 07:4D53
     rl   a                          ; 07:4D55
     xor  $01                        ; 07:4D57
-    ld   [$C36A],a                  ; 07:4D59
+    ld   [W_RaceResults],a          ; 07:4D59
     ld   a,$46                      ; 07:4D5C
     ldh  [<$FFF2],a                 ; 07:4D5E
     xor  a                          ; 07:4D60
@@ -2018,7 +2018,7 @@ Code074E30:
     ld   a,[W_SpriteYLow]           ; 07:4E34
     ld   [hl],a                     ; 07:4E37
     xor  a                          ; 07:4E38
-    ld   [$C36A],a                  ; 07:4E39
+    ld   [W_RaceResults],a          ; 07:4E39
     inc  a                          ; 07:4E3C
     ld   [W_SpriteSubstate],a       ; 07:4E3D
 Return074E40:
@@ -2547,7 +2547,7 @@ Code075165:
     ld   [hl],$01                   ; 07:5192
     xor  a                          ; 07:5194
     ld   [$C168],a                  ; 07:5195
-    ld   [$C36A],a                  ; 07:5198
+    ld   [W_RaceResults],a          ; 07:5198
     ld   a,$25                      ; 07:519B
     ldh  [<H_GameState],a           ; 07:519D
     ret                             ; 07:519F
@@ -4009,17 +4009,17 @@ YouVsBoo_LoadSaveData:
     ld   hl,$A423                   ; 07:5C43
     ldh  a,[<$FF97]                 ; 07:5C46
     cp   [hl]                       ; 07:5C48
-    jr   nz,@Code075C58             ; 07:5C49
+    jr   nz,@InitData               ; 07:5C49
     inc  hl                         ; 07:5C4B
     ldh  a,[<$FF98]                 ; 07:5C4C
     cp   [hl]                       ; 07:5C4E
-    jr   nz,@Code075C58             ; 07:5C4F
+    jr   nz,@InitData               ; 07:5C4F
     ld   a,[$A422]                  ; 07:5C51
     cp   $01                        ; 07:5C54
-    jr   z,@Code075C8F              ; 07:5C56
-@Code075C58:
+    jr   z,@LoadData                ; 07:5C56
+@InitData:                          ;          Checksum failed: initialize data
     ld   de,$0000                   ; 07:5C58
-@Loop075C5B:
+@Loop_InitC3B6:
     ld   hl,Data075C16              ; 07:5C5B
     add  hl,de                      ; 07:5C5E
     ld   a,[hl]                     ; 07:5C5F
@@ -4029,9 +4029,9 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5C65
     ld   a,e                        ; 07:5C66
     cp   $10                        ; 07:5C67
-    jr   nz,@Loop075C5B             ; 07:5C69
+    jr   nz,@Loop_InitC3B6          ; 07:5C69
     ld   de,$0000                   ; 07:5C6B
-@Loop075C6E:
+@Loop_InitBestTimes:
     ld   hl,YouVsBoo_InitialBestTimes; 07:5C6E
     add  hl,de                      ; 07:5C71
     ld   a,[hl]                     ; 07:5C72
@@ -4041,9 +4041,9 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5C78
     ld   a,e                        ; 07:5C79
     cp   $10                        ; 07:5C7A
-    jr   nz,@Loop075C6E             ; 07:5C7C
+    jr   nz,@Loop_InitBestTimes     ; 07:5C7C
     ld   de,$0000                   ; 07:5C7E
-@Loop075C81:
+@Loop_ResetBooColors:
     xor  a                          ; 07:5C81
     ld   hl,$C3D6                   ; 07:5C82
     add  hl,de                      ; 07:5C85
@@ -4051,11 +4051,12 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5C87
     ld   a,e                        ; 07:5C88
     cp   $10                        ; 07:5C89
-    jr   nz,@Loop075C81             ; 07:5C8B
+    jr   nz,@Loop_ResetBooColors    ; 07:5C8B
     jr   @Return                    ; 07:5C8D
-@Code075C8F:
+
+@LoadData:
     ld   de,$0000                   ; 07:5C8F
-@Loop075C92:
+@Loop_LoadC3B6:
     ld   hl,$A3F2                   ; 07:5C92
     add  hl,de                      ; 07:5C95
     ld   a,[hl]                     ; 07:5C96
@@ -4065,9 +4066,9 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5C9C
     ld   a,e                        ; 07:5C9D
     cp   $10                        ; 07:5C9E
-    jr   nz,@Loop075C92             ; 07:5CA0
+    jr   nz,@Loop_LoadC3B6          ; 07:5CA0
     ld   de,$0000                   ; 07:5CA2
-@Loop075CA5:
+@Loop_LoadBestTimes:
     ld   hl,$A402                   ; 07:5CA5
     add  hl,de                      ; 07:5CA8
     ld   a,[hl]                     ; 07:5CA9
@@ -4077,9 +4078,9 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5CAF
     ld   a,e                        ; 07:5CB0
     cp   $10                        ; 07:5CB1
-    jr   nz,@Loop075CA5             ; 07:5CB3
+    jr   nz,@Loop_LoadBestTimes     ; 07:5CB3
     ld   de,$0000                   ; 07:5CB5
-@Loop075CB8:
+@Loop_LoadBooColors:
     ld   hl,$A412                   ; 07:5CB8
     add  hl,de                      ; 07:5CBB
     ld   a,[hl]                     ; 07:5CBC
@@ -4089,7 +4090,7 @@ YouVsBoo_LoadSaveData:
     inc  e                          ; 07:5CC2
     ld   a,e                        ; 07:5CC3
     cp   $10                        ; 07:5CC4
-    jr   nz,@Loop075CB8             ; 07:5CC6
+    jr   nz,@Loop_LoadBooColors     ; 07:5CC6
 @Return:
     ld   hl,SRAMENABLE              ; 07:5CC8
     ld   [hl],$FF                   ; 07:5CCB
@@ -4128,7 +4129,7 @@ SubL_075CCE:
     xor  a                          ; 07:5CFF
     ldi  [hl],a                     ; 07:5D00
     ld   [hl],a                     ; 07:5D01
-    call Sub075D36                  ; 07:5D02
+    call SaveYouVsBooData           ; 07:5D02
     rst  $18                        ; 07:5D05  Return from 24-bit call
 
 SubL_075D06:
@@ -4157,14 +4158,14 @@ SubL_075D06:
     ldi  [hl],a                     ; 07:5D2D
     ld   a,[$C3AF]                  ; 07:5D2E
     ld   [hl],a                     ; 07:5D31
-    call Sub075D36                  ; 07:5D32
+    call SaveYouVsBooData           ; 07:5D32
     rst  $18                        ; 07:5D35  Return from 24-bit call
 
-Sub075D36:
+SaveYouVsBooData:
     ld   hl,SRAMENABLE              ; 07:5D36
     ld   [hl],$0A                   ; 07:5D39
     ld   de,$0000                   ; 07:5D3B
-Code075D3E:
+@Loop_SaveC3B6:
     ld   hl,$C3B6                   ; 07:5D3E
     add  hl,de                      ; 07:5D41
     ld   a,[hl]                     ; 07:5D42
@@ -4174,9 +4175,9 @@ Code075D3E:
     inc  e                          ; 07:5D48
     ld   a,e                        ; 07:5D49
     cp   $10                        ; 07:5D4A
-    jr   nz,Code075D3E              ; 07:5D4C
+    jr   nz,@Loop_SaveC3B6          ; 07:5D4C
     ld   de,$0000                   ; 07:5D4E
-Code075D51:
+@Loop_SaveBestTimes:
     ld   hl,$C3C6                   ; 07:5D51
     add  hl,de                      ; 07:5D54
     ld   a,[hl]                     ; 07:5D55
@@ -4186,9 +4187,9 @@ Code075D51:
     inc  e                          ; 07:5D5B
     ld   a,e                        ; 07:5D5C
     cp   $10                        ; 07:5D5D
-    jr   nz,Code075D51              ; 07:5D5F
+    jr   nz,@Loop_SaveBestTimes     ; 07:5D5F
     ld   de,$0000                   ; 07:5D61
-Code075D64:
+@Loop_SaveBooColors:
     ld   hl,$C3D6                   ; 07:5D64
     add  hl,de                      ; 07:5D67
     ld   a,[hl]                     ; 07:5D68
@@ -4198,7 +4199,7 @@ Code075D64:
     inc  e                          ; 07:5D6E
     ld   a,e                        ; 07:5D6F
     cp   $10                        ; 07:5D70
-    jr   nz,Code075D64              ; 07:5D72
+    jr   nz,@Loop_SaveBooColors     ; 07:5D72
     ld   hl,$A422                   ; 07:5D74
     ld   [hl],$01                   ; 07:5D77
     ld   hl,$A3F2                   ; 07:5D79
@@ -4218,7 +4219,7 @@ SubL_075D90:
     ld   [hl],$0A                   ; 07:5D93
     ld   a,[$D900]                  ; 07:5D95
     cp   $03                        ; 07:5D98
-    jr   c,Code075DB7               ; 07:5D9A
+    jr   c,@Code075DB7              ; 07:5D9A
     sub  $03                        ; 07:5D9C
     ld   c,a                        ; 07:5D9E
     sla  a                          ; 07:5D9F
@@ -4234,8 +4235,8 @@ SubL_075D90:
     ld   b,$00                      ; 07:5DAF
     ld   hl,$ADD9                   ; 07:5DB1
     add  hl,bc                      ; 07:5DB4
-    jr   Code075DED                 ; 07:5DB5
-Code075DB7:
+    jr   @Code075DED                ; 07:5DB5
+@Code075DB7:
     ld   b,$00                      ; 07:5DB7
     ld   a,[$D90F]                  ; 07:5DB9
     ld   e,a                        ; 07:5DBC
@@ -4270,7 +4271,7 @@ Code075DB7:
     rl   b                          ; 07:5DE7
     ld   hl,$A425                   ; 07:5DE9
     add  hl,bc                      ; 07:5DEC
-Code075DED:
+@Code075DED:
     ld   de,$C471                   ; 07:5DED
     ld   bc,$006C                   ; 07:5DF0
     call CopyBytes                  ; 07:5DF3

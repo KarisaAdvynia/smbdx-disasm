@@ -14,11 +14,11 @@ ToyBoxMain:
 .dw Code144AE4                      ; 14:400F
 .dw Code144B37                      ; 14:4011
 .dw Code144B6C                      ; 14:4013
-.dw Code145667                      ; 14:4015
-.dw Code14593F                      ; 14:4017
+.dw Calendar_Init                   ; 14:4015
+.dw Calendar_MonthSelect            ; 14:4017
 .dw Code145A5F                      ; 14:4019
-.dw Code145667                      ; 14:401B
-.dw Code145C58                      ; 14:401D
+.dw Calendar_Init                   ; 14:401B
+.dw Calendar_DaySelect              ; 14:401D
 .dw Code145A5F                      ; 14:401F
 .dw Code14668C                      ; 14:4021
 .dw Code146850                      ; 14:4023
@@ -404,33 +404,38 @@ Code144373:
     ldh  [<LCDC],a                  ; 14:43E1
     jp   Sub144189                  ; 14:43E3
 
-.dw $7A80,$79C0,$79C0
+Data1443E6:                         ; 14:43E6
+.dw Data317A80, Data3179C0, Data3179C0
 Data1443EC:                         ; 14:43EC
-.dw $7A20,$7B40,$7BA0,$7AE0,$7BA0,$7BA0,$7C00
+.dw Data317A20, Data317B40, Data317BA0, Data317AE0,\
+    Data317BA0, Data317BA0, Data317C00
 Data1443FA:                         ; 14:43FA
-.dw $7C60,$7D80,$7CC0,$7CC0
+.dw Data317C60
+Data1443FC:                         ; 14:43FC
+.dw Data317D80, Data317CC0, Data317CC0
 Data144402:                         ; 14:4402
-.dw $7D20,$7E40,$7EA0,$7DE0,$7EA0,$7EA0,$7F00
+.dw Data317D20, Data317E40, Data317EA0, Data317DE0,\
+    Data317EA0, Data317EA0, Data317F00
 Data144410:                         ; 14:4410
-.dw $7F60
+.dw Data317F60
 
 Sub144412:
     ld   a,$01                      ; 14:4412
     ldh  [<VBK],a                   ; 14:4414
-    ld   a,$25                      ; 14:4416
-    ld   bc,Data255800              ; 14:4418
+    ld   a,:Gr_PrintMenu            ; 14:4416
+    ld   bc,Gr_PrintMenu            ; 14:4418
     ld   de,$8000                   ; 14:441B
     ld   h,$14                      ; 14:441E
     ld   l,$7F                      ; 14:4420
     call DMATransferVRAM            ; 14:4422
-    ld   a,$25                      ; 14:4425
-    ld   bc,Data256000              ; 14:4427
+    ld   a,:Gr_PrintMenu            ; 14:4425
+    ld   bc,Gr_PrintMenu+$800       ; 14:4427
     ld   de,$8800                   ; 14:442A
     ld   h,$14                      ; 14:442D
     ld   l,$7F                      ; 14:442F
     call DMATransferVRAM            ; 14:4431
-    ld   a,$25                      ; 14:4434
-    ld   bc,Data256800              ; 14:4436
+    ld   a,:Gr_PrintMenu            ; 14:4434
+    ld   bc,Gr_PrintMenu+$1000      ; 14:4436
     ld   de,$9000                   ; 14:4439
     ld   h,$14                      ; 14:443C
     ld   l,$7F                      ; 14:443E
@@ -453,7 +458,7 @@ Code14445E:
     ld   c,a                        ; 14:445E
     ld   b,$00                      ; 14:445F
     push bc                         ; 14:4461
-    ld   hl,Data3143FC              ; 14:4462
+    ld   hl,Data1443FC              ; 14:4462
     add  hl,bc                      ; 14:4465
     ldi  a,[hl]                     ; 14:4466
     ld   h,[hl]                     ; 14:4467
@@ -465,7 +470,7 @@ Code14445E:
     xor  a                          ; 14:4474
     ldh  [<VBK],a                   ; 14:4475
     pop  bc                         ; 14:4477
-    ld   hl,Data3143E6              ; 14:4478
+    ld   hl,Data1443E6              ; 14:4478
     add  hl,bc                      ; 14:447B
     ldi  a,[hl]                     ; 14:447C
     ld   h,[hl]                     ; 14:447D
@@ -1530,7 +1535,7 @@ Unused145311:
     call Unused000F0A               ; 14:5313
     ret                             ; 14:5316
 
-Data145317:                         ; 14:5317
+Pal_CalendarMonth:                  ; 14:5317
 .dw $7FFF,$03FF,$001F,$0000,$7FFF,$4E7F,$00AD,$0017,\
     $7FFF,$03FF,$7CC6,$0000,$36BF,$02C0,$00AD,$0000,\
     $36BF,$0015,$00AD,$0000,$7FFF,$7ED4,$0340,$7400,\
@@ -1539,45 +1544,47 @@ Data145317:                         ; 14:5317
     $7FFF,$4210,$294A,$0000,$7FFF,$4210,$294A,$0000,\
     $7FFF,$4210,$294A,$0000,$7FFF,$4210,$294A,$0000,\
     $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
-Data145397:                         ; 14:5397
-.incbin "data/Tilemaps/Data145397.bin"
+Ti_CalendarMonth:                   ; 14:5397
+.incbin "data/Tilemaps/CalendarMonth.bin"
 
-Code145667:
+Calendar_Init:
 ; Toy box substate 09/0C
+; 09: Calendar init before month select
+; 0C: Calendar init before day select
     call Sub00126D                  ; 14:5667
     xor  a                          ; 14:566A
     ldh  [<IE],a                    ; 14:566B
     ldh  [<$FF93],a                 ; 14:566D
     xor  a                          ; 14:566F
     ldh  [<VBK],a                   ; 14:5670
-    ld   a,$24                      ; 14:5672
-    ld   bc,Data244000              ; 14:5674
+    ld   a,:Gr_CalendarMonth        ; 14:5672
+    ld   bc,Gr_CalendarMonth        ; 14:5674
     ld   de,$8000                   ; 14:5677
     ld   h,$14                      ; 14:567A
     ld   l,$7F                      ; 14:567C
     call DMATransferVRAM            ; 14:567E
-    ld   a,$24                      ; 14:5681
-    ld   bc,Data244800              ; 14:5683
+    ld   a,:Gr_CalendarMonth        ; 14:5681
+    ld   bc,Gr_CalendarMonth+$800   ; 14:5683
     ld   de,$8800                   ; 14:5686
     ld   h,$14                      ; 14:5689
     ld   l,$7F                      ; 14:568B
     call DMATransferVRAM            ; 14:568D
-    ld   a,$24                      ; 14:5690
-    ld   bc,Data245000              ; 14:5692
+    ld   a,:Gr_CalendarMonth        ; 14:5690
+    ld   bc,Gr_CalendarMonth+$1000  ; 14:5692
     ld   de,$9000                   ; 14:5695
     ld   h,$14                      ; 14:5698
     ld   l,$7F                      ; 14:569A
     call DMATransferVRAM            ; 14:569C
-    ld   a,$24                      ; 14:569F
+    ld   a,:Gr_CalendarMonth        ; 14:569F
     ld   [$C415],a                  ; 14:56A1
     ld   a,$02                      ; 14:56A4
     ldh  [<SVBK],a                  ; 14:56A6
-    ld   hl,Data245000              ; 14:56A8
+    ld   hl,Gr_CalendarMonth+$1000  ; 14:56A8
     ld   de,$D000                   ; 14:56AB
     ld   bc,$0800                   ; 14:56AE
     ld   a,$14                      ; 14:56B1
     call CopyBytesLong              ; 14:56B3
-    ld   hl,Data244800              ; 14:56B6
+    ld   hl,Gr_CalendarMonth+$800   ; 14:56B6
     ld   bc,$0800                   ; 14:56B9
     ld   a,$14                      ; 14:56BC
     call CopyBytesLong              ; 14:56BE
@@ -1585,10 +1592,10 @@ Code145667:
     ldh  [<SVBK],a                  ; 14:56C2
     ld   a,$14                      ; 14:56C4
     ld   b,$14                      ; 14:56C6
-    ld   de,Data145317              ; 14:56C8
+    ld   de,Pal_CalendarMonth       ; 14:56C8
     call LoadFullPaletteLong        ; 14:56CB
     call Sub000E29                  ; 14:56CE
-    ld   hl,Data145397              ; 14:56D1
+    ld   hl,Ti_CalendarMonth        ; 14:56D1
     ld   a,$14                      ; 14:56D4
     ld   [$C415],a                  ; 14:56D6
     ld   a,$14                      ; 14:56D9
@@ -1914,7 +1921,7 @@ Data14593B:                         ; 14:593B
 Data14593D:                         ; 14:593D
 .db $04,$00
 
-Code14593F:
+Calendar_MonthSelect:
 ; Toy box substate 0A
     ld   a,[$D92A]                  ; 14:593F
     ld   c,a                        ; 14:5942
@@ -2341,7 +2348,7 @@ Code145C51:
     ld   c,$FF                      ; 14:5C55
     ret                             ; 14:5C57
 
-Code145C58:
+Calendar_DaySelect:
 ; Toy box substate 0D
     call Sub145ACA                  ; 14:5C58
     ldh  a,[<H_ButtonsPressed]      ; 14:5C5B
@@ -3298,7 +3305,7 @@ Code146256:
 .dl SubL_075E6D                     ; 14:6259
     pop  af                         ; 14:625C
     ld   [$D928],a                  ; 14:625D
-    ld   a,$25                      ; 14:6260
+    ld   a,:Data254800              ; 14:6260
     ld   [$C415],a                  ; 14:6262
     ld   bc,$C471                   ; 14:6265
     ld   de,$D800                   ; 14:6268
@@ -3332,7 +3339,7 @@ Code146273:
     sla  a                          ; 14:6296
     rl   b                          ; 14:6298
     ld   c,a                        ; 14:629A
-    ld   hl,Data3A4800              ; 14:629B
+    ld   hl,Data254800              ; 14:629B
     add  hl,bc                      ; 14:629E
     ld   bc,$0010                   ; 14:629F
     ld   a,$02                      ; 14:62A2
@@ -3593,23 +3600,23 @@ Code1466BD:
     ld   h,$14                      ; 14:66F2
     ld   l,$23                      ; 14:66F4
     call DMATransferVRAM            ; 14:66F6
-    ld   a,$3A                      ; 14:66F9
-    ld   bc,Data3A4870              ; 14:66FB
+    ld   a,:Gr_CalendarDayErase     ; 14:66F9
+    ld   bc,Gr_CalendarDayErase     ; 14:66FB
     ld   de,$8000                   ; 14:66FE
     ld   h,$14                      ; 14:6701
     ld   l,$7F                      ; 14:6703
     call DMATransferVRAM            ; 14:6705
-    ld   a,$3A                      ; 14:6708
-    ld   bc,Data3A5870              ; 14:670A
+    ld   a,:Gr_CalendarDay          ; 14:6708
+    ld   bc,Gr_CalendarDay          ; 14:670A
     ld   de,$9000                   ; 14:670D
     ld   h,$14                      ; 14:6710
     ld   l,$7F                      ; 14:6712
     call DMATransferVRAM            ; 14:6714
-    ld   a,$3A                      ; 14:6717
+    ld   a,:Gr_CalendarDay          ; 14:6717
     ld   [$C415],a                  ; 14:6719
     ld   a,$02                      ; 14:671C
     ldh  [<SVBK],a                  ; 14:671E
-    ld   hl,Data3A5870              ; 14:6720
+    ld   hl,Gr_CalendarDay          ; 14:6720
     ld   de,$D000                   ; 14:6723
     ld   bc,$0800                   ; 14:6726
     ld   a,$14                      ; 14:6729
@@ -4171,19 +4178,19 @@ Code146BA9:
     ld   [$C418],a                  ; 14:6BAA
     ld   [$C4EC],a                  ; 14:6BAD
     call Sub144412                  ; 14:6BB0
-    ld   a,$31                      ; 14:6BB3
+    ld   a,:Data314000              ; 14:6BB3
     ld   bc,Data314000              ; 14:6BB5
     ld   de,$8000                   ; 14:6BB8
     ld   h,$14                      ; 14:6BBB
     ld   l,$7F                      ; 14:6BBD
     call DMATransferVRAM            ; 14:6BBF
-    ld   a,$31                      ; 14:6BC2
+    ld   a,:Data314800              ; 14:6BC2
     ld   bc,Data314800              ; 14:6BC4
     ld   de,$8800                   ; 14:6BC7
     ld   h,$14                      ; 14:6BCA
     ld   l,$7F                      ; 14:6BCC
     call DMATransferVRAM            ; 14:6BCE
-    ld   a,$31                      ; 14:6BD1
+    ld   a,:Data315000              ; 14:6BD1
     ld   bc,Data315000              ; 14:6BD3
     ld   de,$9000                   ; 14:6BD6
     ld   h,$14                      ; 14:6BD9
@@ -5090,19 +5097,19 @@ Code14724F:
     ld   [$C418],a                  ; 14:7259
     ld   [$C4EC],a                  ; 14:725C
     call Sub144412                  ; 14:725F
-    ld   a,$31                      ; 14:7262
+    ld   a,:Data314000              ; 14:7262
     ld   bc,Data314000              ; 14:7264
     ld   de,$8000                   ; 14:7267
     ld   h,$14                      ; 14:726A
     ld   l,$7F                      ; 14:726C
     call DMATransferVRAM            ; 14:726E
-    ld   a,$0E                      ; 14:7271
+    ld   a,:Gr_OW_ChalMenu          ; 14:7271
     ld   bc,Gr_OW_ChalMenu+$800     ; 14:7273
     ld   de,$8800                   ; 14:7276
     ld   h,$14                      ; 14:7279
     ld   l,$7F                      ; 14:727B
     call DMATransferVRAM            ; 14:727D
-    ld   a,$0E                      ; 14:7280
+    ld   a,:Gr_OW_ChalMenu          ; 14:7280
     ld   bc,Gr_OW_ChalMenu+$1000    ; 14:7282
     ld   de,$9000                   ; 14:7285
     ld   h,$14                      ; 14:7288

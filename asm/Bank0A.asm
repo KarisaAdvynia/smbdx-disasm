@@ -310,7 +310,7 @@ Code0A50A9:
     sla  a                          ; 0A:50AC
     ld   c,a                        ; 0A:50AE
     ld   b,$00                      ; 0A:50AF
-    ld   hl,DataPtrs0A5648          ; 0A:50B1
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:50B1
     add  hl,bc                      ; 0A:50B4
     ldi  a,[hl]                     ; 0A:50B5
     ld   h,[hl]                     ; 0A:50B6
@@ -399,7 +399,7 @@ Code0A512F:
     sla  a                          ; 0A:5132
     ld   c,a                        ; 0A:5134
     ld   b,$00                      ; 0A:5135
-    ld   hl,DataPtrs0A5648          ; 0A:5137
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5137
     add  hl,bc                      ; 0A:513A
     ldi  a,[hl]                     ; 0A:513B
     ld   h,[hl]                     ; 0A:513C
@@ -562,7 +562,7 @@ Code0A5228:
     sla  a                          ; 0A:522B
     ld   c,a                        ; 0A:522D
     ld   b,$00                      ; 0A:522E
-    ld   hl,DataPtrs0A5648          ; 0A:5230
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5230
     add  hl,bc                      ; 0A:5233
     ldi  a,[hl]                     ; 0A:5234
     ld   h,[hl]                     ; 0A:5235
@@ -643,7 +643,7 @@ Code0A52B2:
     sla  a                          ; 0A:52B5
     ld   c,a                        ; 0A:52B7
     ld   b,$00                      ; 0A:52B8
-    ld   hl,DataPtrs0A5648          ; 0A:52BA
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:52BA
     add  hl,bc                      ; 0A:52BD
     ldi  a,[hl]                     ; 0A:52BE
     ld   h,[hl]                     ; 0A:52BF
@@ -822,7 +822,7 @@ Code0A5442:
     sla  a                          ; 0A:544B
     ld   c,a                        ; 0A:544D
     ld   b,$00                      ; 0A:544E
-    ld   hl,DataPtrs0A5648          ; 0A:5450
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5450
     add  hl,bc                      ; 0A:5453
     ldi  a,[hl]                     ; 0A:5454
     ld   h,[hl]                     ; 0A:5455
@@ -1108,24 +1108,24 @@ Code0A55EE:
     ld   [$D903],a                  ; 0A:5622
     jp   Sub0A4EC1                  ; 0A:5625
 
-Data0A5628:                         ; 0A:5628
+AlbumPage1ImageIDs:                 ; 0A:5628
 .db $00,$01,$02,$03,$01,$04
-Data0A562E:                         ; 0A:562E
+AlbumPage2ImageIDs:                 ; 0A:562E
 .db $05,$06,$07,$08,$09,$0A,$0B,$0C,\
     $0D
-Data0A5637:                         ; 0A:5637
+AlbumPage3ImageIDs:                 ; 0A:5637
 .db $0E,$0F,$10,$11,$12,$13,$14,$15,\
     $16
-Data0A5640:                         ; 0A:5640
+AlbumPage4ImageIDs:                 ; 0A:5640
 .db $17,$19,$18,$1A
-Data0A5644:                         ; 0A:5644
+AlbumPage5ImageIDs:                 ; 0A:5644
 .db $1B,$1D,$1C,$1E
-DataPtrs0A5648:                     ; 0A:5648
-.dw Data0A5628, Data0A562E, Data0A5637, Data0A5640,\
-    Data0A5644
-Data0A5652:                         ; 0A:5652
-.db $03,$03,$03,$02,$02,$02,$03,$03,\
-    $02,$02
+AlbumPageImageIDPtrs:               ; 0A:5648
+.dw AlbumPage1ImageIDs, AlbumPage2ImageIDs, AlbumPage3ImageIDs, AlbumPage4ImageIDs,\
+    AlbumPage5ImageIDs
+AlbumPageColumnsRows:               ; 0A:5652
+.db $03,$03,$03,$02,$02
+.db $02,$03,$03,$02,$02
 Data0A565C:                         ; 0A:565C
 .db $FF,$01
 Data0A565E:                         ; 0A:565E
@@ -1358,7 +1358,7 @@ Code0A5C31:
     add  hl,bc                      ; 0A:5C3A
     ld   a,[hl]                     ; 0A:5C3B
     ldh  [<$FF97],a                 ; 0A:5C3C
-    ld   hl,Data0A5652              ; 0A:5C3E
+    ld   hl,AlbumPageColumnsRows    ; 0A:5C3E
     add  hl,bc                      ; 0A:5C41
     ld   e,[hl]                     ; 0A:5C42
     ld   a,[$D90E]                  ; 0A:5C43
@@ -1382,7 +1382,7 @@ Code0A5C4F:
     sla  a                          ; 0A:5C5F
     ld   c,a                        ; 0A:5C61
     ld   b,$00                      ; 0A:5C62
-    ld   hl,DataPtrs0A5648          ; 0A:5C64
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5C64
     add  hl,bc                      ; 0A:5C67
     ldi  a,[hl]                     ; 0A:5C68
     add  e                          ; 0A:5C69
@@ -1467,7 +1467,7 @@ Sub0A5CE2:
     sla  a                          ; 0A:5CE5
     ld   c,a                        ; 0A:5CE7
     ld   b,$00                      ; 0A:5CE8
-    ld   hl,DataPtrs0A5648          ; 0A:5CEA
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5CEA
     add  hl,bc                      ; 0A:5CED
     ldi  a,[hl]                     ; 0A:5CEE
     ld   h,[hl]                     ; 0A:5CEF
@@ -1629,7 +1629,7 @@ Code0A5DF0:
     sla  a                          ; 0A:5DF9
     ld   c,a                        ; 0A:5DFB
     ld   b,$00                      ; 0A:5DFC
-    ld   hl,DataPtrs0A5648          ; 0A:5DFE
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5DFE
     add  hl,bc                      ; 0A:5E01
     ldi  a,[hl]                     ; 0A:5E02
     ld   h,[hl]                     ; 0A:5E03
@@ -1757,7 +1757,7 @@ Code0A5EE7:
     sla  a                          ; 0A:5EF0
     ld   c,a                        ; 0A:5EF2
     ld   b,$00                      ; 0A:5EF3
-    ld   hl,DataPtrs0A5648          ; 0A:5EF5
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:5EF5
     add  hl,bc                      ; 0A:5EF8
     ldi  a,[hl]                     ; 0A:5EF9
     ld   h,[hl]                     ; 0A:5EFA
@@ -1893,7 +1893,7 @@ Code0A5FFF:
     sla  a                          ; 0A:6002
     ld   c,a                        ; 0A:6004
     ld   b,$00                      ; 0A:6005
-    ld   hl,DataPtrs0A5648          ; 0A:6007
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:6007
     add  hl,bc                      ; 0A:600A
     ldi  a,[hl]                     ; 0A:600B
     ld   h,[hl]                     ; 0A:600C
@@ -2781,24 +2781,70 @@ Code0A6C67:
     ldh  [<LCDC],a                  ; 0A:6D44
     jp   Sub0A4EC1                  ; 0A:6D46
 
-DataPtrs0A6D49:                     ; 0A:6D49
-.dl Data2D6600, Data2D7050, Data354000, Data2E4000,\
-    Data2E4DD0, Data2E58F0, Data354A60, Data2E63F0,\
-    Data2E6F40, Data2F4000, Data2F4B40, Gr_AlbumRedCoin,\
-    Data2F5680, Data2F5FB0, Data247750, Data2F6B20,\
-    Data2F7360, Data1E7540, Data304000, Data3D4000,\
-    Data304990, Data3050D0, Data305970, Data2C5820,\
-    Data2C61C0, Data2C6940, Data2C7120, Data2D4000,\
-    Data2D47F0, Data2D51C0, Data2D5B50
-DataPtrs0A6DA6:                     ; 0A:6DA6
-.dl Data245E00, Data2463A0, Data305FB0, Data306820,\
-    Data3A4000, Ti_AlbumFireworks, Ti_Album1up, Ti_AlbumVine,\
-    Ti_AlbumVS, Ti_AlbumPeachKiss, Ti_AlbumInfrared, Ti_AlbumRedCoin,\
-    Ti_AlbumHighScore, Ti_AlbumYoshi, Ti_AlbumGoomba, Ti_AlbumBlooper,\
-    Ti_AlbumLakitu, Ti_AlbumCheepCheep, Ti_AlbumHammerBro, Ti_AlbumBulletBill,\
-    Ti_AlbumKoopa, Ti_AlbumSpiny, Ti_AlbumBuzzy, Data307090,\
-    Data307360, Data307630, Data307900, Data246C10,\
-    Data246EE0, Data2471B0, Data247480
+AlbumPrintGrPtrs:                   ; 0A:6D49
+.dl GrPrinter_ToadAward             ; 00
+.dl GrPrinter_MarioAward            ; 01
+.dl GrPrinter_PeachAward            ; 02
+.dl GrPrinter_BowserAward           ; 03
+.dl GrPrinter_YoshiAward            ; 04
+.dl GrPrinter_AlbumFireworks        ; 05
+.dl GrPrinter_Album1up              ; 06
+.dl GrPrinter_AlbumVine             ; 07
+.dl GrPrinter_AlbumVS               ; 08
+.dl GrPrinter_AlbumPeachKiss        ; 09
+.dl GrPrinter_AlbumInfrared         ; 0A
+.dl Gr_AlbumRedCoin                 ; 0B
+.dl GrPrinter_AlbumHighScore        ; 0C
+.dl GrPrinter_AlbumYoshi            ; 0D
+.dl GrPrinter_AlbumGoomba           ; 0E
+.dl GrPrinter_AlbumBlooper          ; 0F
+.dl GrPrinter_AlbumLakitu           ; 10
+.dl GrPrinter_AlbumCheepCheep       ; 11
+.dl GrPrinter_AlbumHammerBro        ; 12
+.dl GrPrinter_AlbumBulletBill       ; 13
+.dl GrPrinter_AlbumKoopa            ; 14
+.dl GrPrinter_AlbumSpiny            ; 15
+.dl GrPrinter_AlbumBuzzy            ; 16
+.dl GrPrinter_AlbumBowser1          ; 17
+.dl GrPrinter_AlbumBowser2          ; 18
+.dl GrPrinter_AlbumBowser3          ; 19
+.dl GrPrinter_AlbumBowser4          ; 1A
+.dl GrPrinter_AlbumMarioLuigi5      ; 1B
+.dl GrPrinter_AlbumMarioLuigi6      ; 1C
+.dl GrPrinter_AlbumMarioLuigi7      ; 1D
+.dl GrPrinter_AlbumMarioLuigi8      ; 1E
+AlbumPrintTilemapPtrs:              ; 0A:6DA6
+.dl TiPrinter_ToadAward             ; 00
+.dl TiPrinter_MarioAward            ; 01
+.dl TiPrinter_PeachAward            ; 02
+.dl TiPrinter_BowserAward           ; 03
+.dl TiPrinter_YoshiAward            ; 04
+.dl Ti_AlbumFireworks               ; 05
+.dl Ti_Album1up                     ; 06
+.dl Ti_AlbumVine                    ; 07
+.dl Ti_AlbumVS                      ; 08
+.dl Ti_AlbumPeachKiss               ; 09
+.dl Ti_AlbumInfrared                ; 0A
+.dl Ti_AlbumRedCoin                 ; 0B
+.dl Ti_AlbumHighScore               ; 0C
+.dl Ti_AlbumYoshi                   ; 0D
+.dl Ti_AlbumGoomba                  ; 0E
+.dl Ti_AlbumBlooper                 ; 0F
+.dl Ti_AlbumLakitu                  ; 10
+.dl Ti_AlbumCheepCheep              ; 11
+.dl Ti_AlbumHammerBro               ; 12
+.dl Ti_AlbumBulletBill              ; 13
+.dl Ti_AlbumKoopa                   ; 14
+.dl Ti_AlbumSpiny                   ; 15
+.dl Ti_AlbumBuzzy                   ; 16
+.dl TiPrinter_AlbumBowser1          ; 17
+.dl TiPrinter_AlbumBowser2          ; 18
+.dl TiPrinter_AlbumBowser3          ; 19
+.dl TiPrinter_AlbumBowser4          ; 1A
+.dl TiPrinter_AlbumMarioLuigi5      ; 1B
+.dl TiPrinter_AlbumMarioLuigi6      ; 1C
+.dl TiPrinter_AlbumMarioLuigi7      ; 1D
+.dl TiPrinter_AlbumMarioLuigi8      ; 1E
 Data0A6E03:                         ; 0A:6E03
 .db $03,$01,$01,$01,$01
 Data0A6E08:                         ; 0A:6E08
@@ -2854,7 +2900,7 @@ Code0A6E39:
     sla  a                          ; 0A:6E6F
     ld   c,a                        ; 0A:6E71
     ld   b,$00                      ; 0A:6E72
-    ld   hl,DataPtrs0A5648          ; 0A:6E74
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:6E74
     add  hl,bc                      ; 0A:6E77
     ldi  a,[hl]                     ; 0A:6E78
     ld   h,[hl]                     ; 0A:6E79
@@ -2869,7 +2915,7 @@ Code0A6E7F:
     add  c                          ; 0A:6E84
     ld   c,a                        ; 0A:6E85
     ld   b,$00                      ; 0A:6E86
-    ld   hl,DataPtrs0A6D49          ; 0A:6E88
+    ld   hl,AlbumPrintGrPtrs        ; 0A:6E88
     add  hl,bc                      ; 0A:6E8B
     ld   e,[hl]                     ; 0A:6E8C
     inc  hl                         ; 0A:6E8D
@@ -2903,7 +2949,7 @@ Code0A6E7F:
     add  c                          ; 0A:6EC5
     ld   c,a                        ; 0A:6EC6
     ld   b,$00                      ; 0A:6EC7
-    ld   hl,DataPtrs0A6DA6          ; 0A:6EC9
+    ld   hl,AlbumPrintTilemapPtrs   ; 0A:6EC9
     add  hl,bc                      ; 0A:6ECC
     ld   e,[hl]                     ; 0A:6ECD
     inc  hl                         ; 0A:6ECE
@@ -2922,15 +2968,15 @@ Code0A6E7F:
     ld   [$C434],a                  ; 0A:6EE4
     ret                             ; 0A:6EE7
 
-Data0A6EE8:                         ; 0A:6EE8
-.db $00,$98,$20,$99,$0A,$98,$2A,$99
+VRAMPtrs0A6EE8:                     ; 0A:6EE8
+.dw $9800,$9920,$980A,$992A
 
 Sub0A6EF0:
     ld   a,[$D900]                  ; 0A:6EF0
     sla  a                          ; 0A:6EF3
     ld   c,a                        ; 0A:6EF5
     ld   b,$00                      ; 0A:6EF6
-    ld   hl,DataPtrs0A5648          ; 0A:6EF8
+    ld   hl,AlbumPageImageIDPtrs    ; 0A:6EF8
     add  hl,bc                      ; 0A:6EFB
     ldi  a,[hl]                     ; 0A:6EFC
     ld   h,[hl]                     ; 0A:6EFD
@@ -2989,7 +3035,7 @@ Code0A6F48:
     sla  a                          ; 0A:6F4D
     ld   e,a                        ; 0A:6F4F
     ld   d,$00                      ; 0A:6F50
-    ld   hl,Data0A6EE8              ; 0A:6F52
+    ld   hl,VRAMPtrs0A6EE8          ; 0A:6F52
     add  hl,de                      ; 0A:6F55
     ldi  a,[hl]                     ; 0A:6F56
     ld   h,[hl]                     ; 0A:6F57
@@ -3175,7 +3221,7 @@ Code0A70BA:
 Code0A70C8:
     jp   Code0A703A                 ; 0A:70C8
 
-Data0A70CB:                         ; 0A:70CB
+Pal_0A70CB:                         ; 0A:70CB
 .dw $7FFF,$7E4A,$0180,$0000,$4FDA,$7FBC,$294A,$0000,\
     $7E4A,$7FBC,$7FFF,$0000,$7FFF,$5294,$35AD,$0000,\
     $0000,$5294,$294A,$0180,$4FDA,$365F,$0015,$0009,\
@@ -3281,7 +3327,7 @@ Code0A71C6:
     call Sub000FCF                  ; 0A:7216
     ld   a,$0A                      ; 0A:7219
     ld   b,$0A                      ; 0A:721B
-    ld   de,Data0A70CB              ; 0A:721D
+    ld   de,Pal_0A70CB              ; 0A:721D
     call LoadFullPaletteLong        ; 0A:7220
     call Sub000E29                  ; 0A:7223
     xor  a                          ; 0A:7226
@@ -3312,7 +3358,8 @@ Code0A71C6:
     inc  [hl]                       ; 0A:7260
     ret                             ; 0A:7261
 
-.db $00,$58,$00,$5A,$00,$5C
+DataPtrs0A7262:
+.dw Data245800, Data245A00, Data245C00
 
 Sub0A7268:
     ld   a,$24                      ; 0A:7268
@@ -3323,7 +3370,7 @@ Sub0A7268:
     sla  a                          ; 0A:7274
     ld   c,a                        ; 0A:7276
     ld   b,$00                      ; 0A:7277
-    ld   hl,Data247262              ; 0A:7279
+    ld   hl,DataPtrs0A7262          ; 0A:7279
     add  hl,bc                      ; 0A:727C
     ldi  a,[hl]                     ; 0A:727D
     ld   h,[hl]                     ; 0A:727E

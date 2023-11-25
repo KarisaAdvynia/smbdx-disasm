@@ -1,29 +1,29 @@
 .bank $13 slot 1
 .orga $4000
 
-Data134000:                         ; 13:4000
+RaceResultsMusic:                   ; 13:4000
 .db $79,$7B,$7A,$7A
-DataPtrs134004:                     ; 13:4004
-.dl Data166000, Data164000, Data175000, Data175000,\
-    Data167000, Data165000, Data175000, Data175000
-DataPtrs13401C:                     ; 13:401C
-.dw Data13403C, Data13430C, Data1345DC, Data134E4C,\
-    Data1348AC, Data134B7C, Data1345DC, Data134E4C
-DataPtrs13402C:                     ; 13:402C
+RaceResultsGrPtrs:                  ; 13:4004
+.dl Gr_RaceMarioLost, Gr_RaceMarioWon, Gr_RaceDraw, Gr_RaceDraw,\
+    Gr_RaceLuigiLost, Gr_RaceLuigiWon, Gr_RaceDraw, Gr_RaceDraw
+RaceResultsTilemapPtrs:             ; 13:401C
+.dw Ti_RaceMarioLost, Ti_RaceMarioWon, Ti_RaceDraw1345DC, Ti_RaceDraw134E4C,\
+    Ti_RaceLuigiLost, Ti_RaceLuigiWon, Ti_RaceDraw1345DC, Ti_RaceDraw134E4C
+RaceResultsPalettePtrs:             ; 13:402C
 .dw Data13511C, Data13551C, Data13591C, Data13591C,\
     Data135D1C, Data13611C, Data13591C, Data13591C
-Data13403C:                         ; 13:403C
-.incbin "data/Tilemaps/Data13403C.bin"
-Data13430C:                         ; 13:430C
-.incbin "data/Tilemaps/Data13430C.bin"
-Data1345DC:                         ; 13:45DC
-.incbin "data/Tilemaps/Data1345DC.bin"
-Data1348AC:                         ; 13:48AC
-.incbin "data/Tilemaps/Data1348AC.bin"
-Data134B7C:                         ; 13:4B7C
-.incbin "data/Tilemaps/Data134B7C.bin"
-Data134E4C:                         ; 13:4E4C
-.incbin "data/Tilemaps/Data134E4C.bin"
+Ti_RaceMarioLost:                   ; 13:403C
+.incbin "data/Tilemaps/RaceMarioLost.bin"
+Ti_RaceMarioWon:                    ; 13:430C
+.incbin "data/Tilemaps/RaceMarioWon.bin"
+Ti_RaceDraw1345DC:                  ; 13:45DC
+.incbin "data/Tilemaps/RaceDraw1345DC.bin"
+Ti_RaceLuigiLost:                   ; 13:48AC
+.incbin "data/Tilemaps/RaceLuigiLost.bin"
+Ti_RaceLuigiWon:                    ; 13:4B7C
+.incbin "data/Tilemaps/RaceLuigiWon.bin"
+Ti_RaceDraw134E4C:                  ; 13:4E4C
+.incbin "data/Tilemaps/RaceDraw134E4C.bin"
 Data13511C:                         ; 13:511C
 .dw $0000,$1CFF,$0011,$7FFF,$0000,$5C06,$7D61,$0011,\
     $0000,$36BF,$0011,$1CFF,$0000,$010C,$01B6,$5C06,\
@@ -379,14 +379,14 @@ Code136546:
     ld   d,$00                      ; 13:654F
     add  hl,de                      ; 13:6551
     ld   e,[hl]                     ; 13:6552
-    ld   a,[$C36A]                  ; 13:6553
+    ld   a,[W_RaceResults]          ; 13:6553
     ld   c,a                        ; 13:6556
     sla  a                          ; 13:6557
     add  c                          ; 13:6559
     add  e                          ; 13:655A
     ld   e,a                        ; 13:655B
-    ld   hl,DataPtrs134004          ; 13:655C
-    add  hl,de                      ; 13:655F
+    ld   hl,RaceResultsGrPtrs       ; 13:655C
+    add  hl,de                      ; 13:655F  index with race results *3
     ldi  a,[hl]                     ; 13:6560
     ld   c,a                        ; 13:6561
     ldi  a,[hl]                     ; 13:6562
@@ -400,12 +400,12 @@ Code136546:
     ld   hl,Data13651E              ; 13:6570
     add  hl,de                      ; 13:6573
     ld   e,[hl]                     ; 13:6574
-    ld   a,[$C36A]                  ; 13:6575
+    ld   a,[W_RaceResults]          ; 13:6575
     sla  a                          ; 13:6578
     add  e                          ; 13:657A
     ld   e,a                        ; 13:657B
     push de                         ; 13:657C
-    ld   hl,DataPtrs13401C          ; 13:657D
+    ld   hl,RaceResultsTilemapPtrs  ; 13:657D
     add  hl,de                      ; 13:6580
     ldi  a,[hl]                     ; 13:6581
     ld   e,[hl]                     ; 13:6582
@@ -416,7 +416,7 @@ Code136546:
     ld   de,$9820                   ; 13:6588
     call LoadScreenTilemapVRAM      ; 13:658B
     pop  de                         ; 13:658E
-    ld   hl,DataPtrs13402C          ; 13:658F
+    ld   hl,RaceResultsPalettePtrs  ; 13:658F
     add  hl,de                      ; 13:6592
     ld   e,[hl]                     ; 13:6593
     inc  hl                         ; 13:6594
@@ -432,7 +432,7 @@ Code136546:
     ldh  [<$FFBB],a                 ; 13:65A7
     ld   a,$08                      ; 13:65A9
     ldh  [<H_CameraY],a             ; 13:65AB
-    ld   a,[$C36A]                  ; 13:65AD
+    ld   a,[W_RaceResults]          ; 13:65AD
     cp   $02                        ; 13:65B0
     jr   z,Code1365BB               ; 13:65B2
     cp   $03                        ; 13:65B4
@@ -443,7 +443,7 @@ Code1365BB:
     ld   d,$00                      ; 13:65BC
     cp   $02                        ; 13:65BE
     jr   z,Code1365CC               ; 13:65C0
-    ld   hl,Data134000              ; 13:65C2
+    ld   hl,RaceResultsMusic        ; 13:65C2
     add  hl,de                      ; 13:65C5
     ld   a,[hl]                     ; 13:65C6
     ld   [$DE68],a                  ; 13:65C7
@@ -462,7 +462,7 @@ Code1365CC:
     call Sub001480                  ; 13:65DF
     jr   Code13661B                 ; 13:65E2
 Code1365E4:
-    ld   a,[$C36A]                  ; 13:65E4
+    ld   a,[W_RaceResults]          ; 13:65E4
     cp   $03                        ; 13:65E7
     jr   nz,Code13661B              ; 13:65E9
     ld   a,[$C3E8]                  ; 13:65EB
@@ -503,7 +503,7 @@ Code13661B:
     jr   z,Code13665A               ; 13:662C
     ld   hl,$C168                   ; 13:662E
     inc  [hl]                       ; 13:6631
-    ld   a,[$C36A]                  ; 13:6632
+    ld   a,[W_RaceResults]          ; 13:6632
     cp   $02                        ; 13:6635
     jr   z,Code136649               ; 13:6637
     ld   [hl],$03                   ; 13:6639
@@ -552,7 +552,7 @@ Code13665A:
     ld   [$D0A5],a                  ; 13:6694
     ld   a,$04                      ; 13:6697
     ld   [$D0B4],a                  ; 13:6699
-    ld   a,[$C36A]                  ; 13:669C
+    ld   a,[W_RaceResults]          ; 13:669C
     ld   [W_SpriteSubstate],a       ; 13:669F
     cp   $01                        ; 13:66A2
     jr   nz,Code1366B5              ; 13:66A4
@@ -710,7 +710,7 @@ Code136792:
     ld   e,$01                      ; 13:67A5
 Code1367A7:
     ld   a,e                        ; 13:67A7
-    ld   [$C36A],a                  ; 13:67A8
+    ld   [W_RaceResults],a          ; 13:67A8
     cp   $02                        ; 13:67AB
     jr   z,Code1367BB               ; 13:67AD
     ld   [$C3E7],a                  ; 13:67AF
@@ -720,15 +720,15 @@ Code1367A7:
     ret                             ; 13:67BA
 
 Code1367BB:
-    ld   a,[$C36A]                  ; 13:67BB
+    ld   a,[W_RaceResults]          ; 13:67BB
     push af                         ; 13:67BE
     inc  a                          ; 13:67BF
-    ld   [$C36A],a                  ; 13:67C0
+    ld   [W_RaceResults],a          ; 13:67C0
     ld   a,$00                      ; 13:67C3
     ld   [$C16C],a                  ; 13:67C5
     call Sub136520                  ; 13:67C8
     pop  af                         ; 13:67CB
-    ld   [$C36A],a                  ; 13:67CC
+    ld   [W_RaceResults],a          ; 13:67CC
     ret                             ; 13:67CF
 
 Sub1367D0:
@@ -810,7 +810,7 @@ Data136836:                         ; 13:6836
 .db $90,$C3,$8F,$C3,$91,$C3,$91,$C3
 
 Sub13683E:
-    ld   a,[$C36A]                  ; 13:683E
+    ld   a,[W_RaceResults]          ; 13:683E
     sla  a                          ; 13:6841
     ld   e,a                        ; 13:6843
     ld   d,$00                      ; 13:6844
@@ -1117,17 +1117,15 @@ Code136A18:
 Return136A3F:
     ret                             ; 13:6A3F
 
-Data136A40:                         ; 13:6A40
-.db $98,$46,$08,$00,$50,$00,$51,$00,\
-    $52,$00,$53,$00,$54,$00,$55,$00,\
-    $56,$00,$57,$98,$66,$08,$00,$58,\
-    $00,$59,$00,$5A,$00,$5B,$00,$5C,\
-    $00,$5D,$00,$5E,$00,$5F,$00
+TiUp_136A40:                        ; 13:6A40
+.db $98,$46,$08, $00,$50,$00,$51,$00,$52,$00,$53,$00,$54,$00,$55,$00,$56,$00,$57,\
+    $98,$66,$08, $00,$58,$00,$59,$00,$5A,$00,$5B,$00,$5C,$00,$5D,$00,$5E,$00,$5F,\
+    $00
 
 Sub136A67:
     ld   de,$0000                   ; 13:6A67
 Code136A6A:
-    ld   hl,Data136A40              ; 13:6A6A
+    ld   hl,TiUp_136A40             ; 13:6A6A
     add  hl,de                      ; 13:6A6D
     ld   a,[hl]                     ; 13:6A6E
     ld   hl,W_TiUpBuffer            ; 13:6A6F
@@ -1156,8 +1154,8 @@ Sub136A7B:
     ld   h,$13                      ; 13:6A92
     ld   l,$7F                      ; 13:6A94
     call DMATransferVRAM            ; 13:6A96
-    ld   a,:Gr_Bank17               ; 13:6A99
-    ld   bc,Gr_Bank17               ; 13:6A9B
+    ld   a,:Gr_YouVsBooMenu         ; 13:6A99
+    ld   bc,Gr_YouVsBooMenu         ; 13:6A9B
     ld   de,$8000                   ; 13:6A9E
     ld   h,$13                      ; 13:6AA1
     ld   l,$7F                      ; 13:6AA3

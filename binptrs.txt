@@ -211,6 +211,7 @@
 0F5AD0        Tilemaps/PauseMenuRace.bin
 0F5DA0        Graphics/SPTitle.bin
 0F6DA0 0F7070 Tilemaps/Data0F6DA0.bin
+
 104000        Sublevels/00_Main.bin
 104174        Sublevels/01_Main.bin
 1042B5        Sublevels/02_12_Main.bin
@@ -388,24 +389,33 @@
 126A26        Sublevels/SP54_Sprites.bin
 126A63 126AF4 Sublevels/SP55_Sprites.bin
 126B01 126B14 Sublevels/SP63_Sprites.bin
-13403C        Tilemaps/Data13403C.bin
-13430C        Tilemaps/Data13430C.bin
-1345DC        Tilemaps/Data1345DC.bin
-1348AC        Tilemaps/Data1348AC.bin
-134B7C        Tilemaps/Data134B7C.bin
-134E4C 13511C Tilemaps/Data134E4C.bin
-145397 145667 Tilemaps/Data145397.bin
+13403C        Tilemaps/RaceMarioLost.bin
+13430C        Tilemaps/RaceMarioWon.bin
+1345DC        Tilemaps/RaceDraw1345DC.bin
+1348AC        Tilemaps/RaceLuigiLost.bin
+134B7C        Tilemaps/RaceLuigiWon.bin
+134E4C 13511C Tilemaps/RaceDraw134E4C.bin
+145397 145667 Tilemaps/CalendarMonth.bin
 154449 154719 Tilemaps/Data154449.bin
+164000        Graphics/RaceMarioWon.bin
+165000        Graphics/RaceLuigiWon.bin
+166000        Graphics/RaceMarioLost.bin
+167000 168000 Graphics/RaceLuigiLost.bin
+174000        Graphics/YouVsBooMenu.bin
+175000 176000 Graphics/RaceDraw.bin
 
 184000        Graphics/TitleScreen.bin
 187000        Tilemaps/TitleScreen_Tiles.bin
 187240        Tilemaps/TitleScreen_Attr.bin
 187480 187750 Tilemaps/PreTitle.bin
-
+187890        Tilemaps/Data187890.bin
+187B60 187E30 Tilemaps/Data187B60.bin
 194000        Graphics/MainMenu_FileSelect.bin
 197000        Tilemaps/MainMenu.bin
 1972D0 1975A0 Tilemaps/FileSelect.bin
-
+197660        Tilemaps/Data197660.bin
+197930        Tilemaps/Data197930.bin
+197C00 197ED0 Tilemaps/Data197C00.bin
 1A4000        Graphics/ChalResults.bin
 1A7000        Tilemaps/ChalResultsNormal.bin
 1A72D0 1A75A0 Tilemaps/ChalResultsCastle.bin
@@ -417,6 +427,18 @@
 1C4000        Graphics/ChalMissYoshiHatch.bin
 1C7000        Tilemaps/ChalMiss.bin
 1C72D0 1C75A0 Tilemaps/ChalYoshiHatch.bin
+1C7620 1C7E00 Graphics/Data1C7620.bin
+1E4000        Graphics/Toad4Image0.bin
+1E40E0        Graphics/Toad4Image1.bin
+1E46E0        Graphics/Toad4Image2.bin
+1E4EC0        Graphics/Toad4Image3.bin
+1E5560        Graphics/Toad4Image4.bin
+1E5AF0        Graphics/Toad4Image5.bin
+1E6120        Graphics/Toad4Image6.bin
+1E6880        Graphics/Toad4Image7.bin
+1E6CB0        Graphics/Toad4Image8.bin
+1E7040        Graphics/Toad4Image9.bin
+1E7540 1E7BA0 Graphics/Printer_AlbumCheepCheep.bin
 
 204000        Graphics/PeachGivesMarioAward.bin
 205800        Graphics/PeachGivesLuigiAward.bin
@@ -426,9 +448,24 @@
 207870 207B40 Tilemaps/PeachGivesLuigiAwardBottom.bin
 207C40 207F10 Tilemaps/Data207C40.bin
 
+225AD0        Graphics/Toad37Images.bin
+225F80        Graphics/Toad2Image3.bin
+226E80        Graphics/Toad2Image4.bin
 227BB0 227E80 Tilemaps/ToadAward.bin
 
 235800 236E80 Graphics/FortuneCardsBank23.bin
+
+244000 245800 Graphics/CalendarMonth.bin
+
+245E00        Tilemaps/Printer_ToadAward.bin
+2463A0        Tilemaps/Printer_MarioAward.bin
+246C10        Tilemaps/Printer_AlbumMarioLuigi5.bin
+246EE0        Tilemaps/Printer_AlbumMarioLuigi6.bin
+2471B0        Tilemaps/Printer_AlbumMarioLuigi7.bin
+247480        Tilemaps/Printer_AlbumMarioLuigi8.bin
+247750 247DA0 Graphics/Printer_AlbumGoomba.bin
+
+255800 257000 Graphics/PrintMenu.bin
 
 264000        Tilemaps/YoshiIsHereW1_1.bin
 2642D0        Tilemaps/YoshiIsHereW1_2.bin
@@ -512,7 +549,38 @@
 2B6CD0        Graphics/AlbumSpiny.bin
 2B7570 2B7BB0 Graphics/AlbumBuzzy.bin
 2C4000        Graphics/AlbumBowser.bin
-2C4AC0 2C5820 Graphics/AlbumMarioLuigi.bin
+2C4AC0        Graphics/AlbumMarioLuigi.bin
+2C5820        Graphics/Printer_AlbumBowser1.bin
+2C61C0        Graphics/Printer_AlbumBowser2.bin
+2C6940        Graphics/Printer_AlbumBowser3.bin
+2C7120 2C7A10 Graphics/Printer_AlbumBowser4.bin
+2D4000        Graphics/Printer_AlbumMarioLuigi5.bin
+2D47F0        Graphics/Printer_AlbumMarioLuigi6.bin
+2D51C0        Graphics/Printer_AlbumMarioLuigi7.bin
+2D5B50        Graphics/Printer_AlbumMarioLuigi8.bin
+2D6600        Graphics/Printer_ToadAward.bin
+2D7050 2D7D80 Graphics/Printer_MarioAward.bin
+2E4000        Graphics/Printer_BowserAward.bin
+2E4DD0        Graphics/Printer_YoshiAward.bin
+2E58F0        Graphics/Printer_AlbumFireworks.bin
+2E63F0        Graphics/Printer_AlbumVine.bin
+2E6F40 2E7A40 Graphics/Printer_AlbumVS.bin
+2F4000        Graphics/Printer_AlbumPeachKiss.bin
+2F4B40        Graphics/Printer_AlbumInfrared.bin
+2F5680        Graphics/Printer_AlbumHighScore.bin
+2F5FB0        Graphics/Printer_AlbumYoshi.bin
+2F6B20        Graphics/Printer_AlbumBlooper.bin
+2F7360 2F7AE0 Graphics/Printer_AlbumLakitu.bin
+304000        Graphics/Printer_AlbumHammerBro.bin
+304990        Graphics/Printer_AlbumKoopa.bin
+3050D0        Graphics/Printer_AlbumSpiny.bin
+305970        Graphics/Printer_AlbumBuzzy.bin
+305FB0        Tilemaps/Printer_PeachAward.bin
+306820        Tilemaps/Printer_BowserAward.bin
+307090        Tilemaps/Printer_AlbumBowser1.bin
+307360        Tilemaps/Printer_AlbumBowser2.bin
+307630        Tilemaps/Printer_AlbumBowser3.bin
+307900 307BD0 Tilemaps/Printer_AlbumBowser4.bin
 
 324000        Sublevels/SP20_Main.bin
 324034        Sublevels/SP21_Main.bin
@@ -548,4 +616,33 @@
 326163        Sublevels/SP60_Main.bin
 3261C4 3262A0 Sublevels/SP61_Main.bin
 
-364000 364930 Graphics/AlbumHighScore.bin
+344000        Graphics/Toad5Image0.bin
+3446E0        Graphics/Toad5Image1.bin
+344CF0        Graphics/Toad5Image2.bin
+3454B0        Graphics/Toad5Image3.bin
+345B40        Graphics/Toad5Image4.bin
+346310        Graphics/Toad5Image5.bin
+346840        Graphics/Toad5Image6.bin
+346EE0 347460 Graphics/Toad5Image7.bin
+354000        Graphics/Printer_PeachAward.bin
+354A60 355200 Graphics/Printer_Album1up.bin
+
+364000        Graphics/AlbumHighScore.bin
+364930        Graphics/ToyBoxPeachImage0.bin
+364F00        Graphics/ToyBoxPeachImage1.bin
+365620        Graphics/ToyBoxPeachImage2.bin
+365DC0 366620 Graphics/ToyBoxPeachImage3.bin
+
+3A4000        Tilemaps/Printer_YoshiAward.bin
+3A4870 3A5070 Graphics/CalendarDayErase.bin
+3A5870 3A6070 Graphics/CalendarDay.bin
+
+3A6E80 3A7CC0 Graphics/Toad2Image1.bin
+
+3C59D0        Graphics/Toad2Image0.bin
+3C65A0        Graphics/Toad1Images.bin
+3C7430 3C7DE0 Graphics/Toad2Image2.bin
+
+3D4000 3D45E0 Graphics/Printer_AlbumBulletBill.bin
+3D45E0        Graphics/Data3D45E0.bin
+3D4E90 3D55B0 Graphics/Data3D4E90.bin

@@ -35,15 +35,15 @@ Ti_Overworlds:                      ; 0E:5B50
 .incbin "data/Tilemaps/Overworld_W6.bin"
 .incbin "data/Tilemaps/Overworld_W7.bin"
 .incbin "data/Tilemaps/Overworld_W8.bin"
-Data0E71D0:                         ; 0E:71D0
+Ti_Data0E71D0:                      ; 0E:71D0
 .incbin "data/Tilemaps/Data0E71D0.bin"
-Data0E74A0:                         ; 0E:74A0
+Ti_Data0E74A0:                      ; 0E:74A0
 .incbin "data/Tilemaps/Data0E74A0.bin"
-Data0E7770:                         ; 0E:7770
+Ti_Data0E7770:                      ; 0E:7770
 .incbin "data/Tilemaps/Data0E7770.bin"
-Data0E7A40:                         ; 0E:7A40
+Ti_Data0E7A40:                      ; 0E:7A40
 .incbin "data/Tilemaps/Data0E7A40.bin"
-Data0E7D10:                         ; 0E:7D10
+Ti_Data0E7D10:                      ; 0E:7D10
 .incbin "data/Tilemaps/Data0E7D10.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,36 +72,33 @@ Ti_PauseMenuRace:                   ; 0F:5AD0
 .incbin "data/Tilemaps/PauseMenuRace.bin"
 Gr_SPTitle:                         ; 0F:5DA0
 .incbin "data/Graphics/SPTitle.bin"
-Data0F6DA0:                         ; 0F:6DA0
+Ti_Data0F6DA0:                      ; 0F:6DA0
 .incbin "data/Tilemaps/Data0F6DA0.bin"
+; ??? at 0F:7070-7B12
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $16 slot 1
 
 .orga $4000
-Data164000:                         ; 16:4000
-
-.orga $5000
-Data165000:                         ; 16:5000
-
-.orga $6000
-Data166000:                         ; 16:6000
-
-.orga $7000
-Data167000:                         ; 16:7000
+Gr_RaceMarioWon:                    ; 16:4000
+.incbin "data/Graphics/RaceMarioWon.bin"
+Gr_RaceLuigiWon:                    ; 16:5000
+.incbin "data/Graphics/RaceLuigiWon.bin"
+Gr_RaceMarioLost:                   ; 16:6000
+.incbin "data/Graphics/RaceMarioLost.bin"
+Gr_RaceLuigiLost:                   ; 16:7000
+.incbin "data/Graphics/RaceLuigiLost.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $17 slot 1
 
 .orga $4000
-Gr_Bank17:                          ; 17:4000
-
-.orga $5000
-Data175000:                         ; 17:5000
-
-.orga $6000
+Gr_YouVsBooMenu:                    ; 17:4000
+.incbin "data/Graphics/YouVsBooMenu.bin"
+Gr_RaceDraw:                        ; 17:5000
+.incbin "data/Graphics/RaceDraw.bin"
 Data176000:                         ; 17:6000
 
 .orga $7200
@@ -154,10 +151,10 @@ Pal_PreTitle:                       ; 18:7850
     $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
     $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
     $07FF,$01FF,$0014,$0000,$73FF,$01FF,$0014,$0000
-Data187890:                         ; 18:7890
-
-.orga $7B60
-Data187B60:                         ; 18:7B60
+Ti_Data187890:                      ; 18:7890
+.incbin "data/Tilemaps/Data187890.bin"
+Ti_Data187B60:                      ; 18:7B60
+.incbin "data/Tilemaps/Data187B60.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -184,13 +181,12 @@ Pal_FileSelect:                     ; 19:7620
     $0000,$1BEE,$0222,$0000,$0000,$4F1F,$0133,$0000,\
     $0000,$0173,$0173,$0173,$0000,$7B5F,$001F,$0000,\
     $0000,$7FFF,$7D86,$0000,$0000,$7FFF,$02BC,$0180
-Data197660:                         ; 19:7660
-
-.orga $7930
-Data197930:                         ; 19:7930
-
-.orga $7C00
-Data197C00:                         ; 19:7C00
+Ti_Data197660:                      ; 19:7660
+.incbin "data/Tilemaps/Data197660.bin"
+Ti_Data197930:                      ; 19:7930
+.incbin "data/Tilemaps/Data197930.bin"
+Ti_Data197C00:                      ; 19:7C00
+.incbin "data/Tilemaps/Data197C00.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -268,46 +264,36 @@ Pal_ChalYoshiHatch:                 ; 1C:75E0
     $7FFF,$0329,$0113,$0000,$7FFF,$165E,$0113,$0000,\
     $7FFF,$0329,$7716,$0000,$7FFF,$031E,$15DE,$0000,\
     $7FFF,$7FFF,$7FFF,$0000,$7FFF,$7FFF,$7FFF,$0000
-Data1C7620:                         ; 1C:7620
+Gr_Data1C7620:                      ; 1C:7620
+.incbin "data/Graphics/Data1C7620.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $1E slot 1
 
 .orga $4000
-
-.orga $4000
-Data1E4000:                         ; 1E:4000
-
-.orga $40E0
-Data1E40E0:                         ; 1E:40E0
-
-.orga $46E0
-Data1E46E0:                         ; 1E:46E0
-
-.orga $4EC0
-Data1E4EC0:                         ; 1E:4EC0
-
-.orga $5560
-Data1E5560:                         ; 1E:5560
-
-.orga $5AF0
-Data1E5AF0:                         ; 1E:5AF0
-
-.orga $6120
-Data1E6120:                         ; 1E:6120
-
-.orga $6880
-Data1E6880:                         ; 1E:6880
-
-.orga $6CB0
-Data1E6CB0:                         ; 1E:6CB0
-
-.orga $7040
-Data1E7040:                         ; 1E:7040
-
-.orga $7540
-Data1E7540:                         ; 1E:7540
+Gr_Toad4Image0:                     ; 1E:4000
+.incbin "data/Graphics/Toad4Image0.bin"
+Gr_Toad4Image1:                     ; 1E:40E0
+.incbin "data/Graphics/Toad4Image1.bin"
+Gr_Toad4Image2:                     ; 1E:46E0
+.incbin "data/Graphics/Toad4Image2.bin"
+Gr_Toad4Image3:                     ; 1E:4EC0
+.incbin "data/Graphics/Toad4Image3.bin"
+Gr_Toad4Image4:                     ; 1E:5560
+.incbin "data/Graphics/Toad4Image4.bin"
+Gr_Toad4Image5:                     ; 1E:5AF0
+.incbin "data/Graphics/Toad4Image5.bin"
+Gr_Toad4Image6:                     ; 1E:6120
+.incbin "data/Graphics/Toad4Image6.bin"
+Gr_Toad4Image7:                     ; 1E:6880
+.incbin "data/Graphics/Toad4Image7.bin"
+Gr_Toad4Image8:                     ; 1E:6CB0
+.incbin "data/Graphics/Toad4Image8.bin"
+Gr_Toad4Image9:                     ; 1E:7040
+.incbin "data/Graphics/Toad4Image9.bin"
+GrPrinter_AlbumCheepCheep:          ; 1E:7540
+.incbin "data/Graphics/Printer_AlbumCheepCheep.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -380,15 +366,12 @@ Data224000:                         ; 22:4000
 Data225800:                         ; 22:5800
 
 .orga $5AD0
-Data225AD0:                         ; 22:5AD0
-
-.orga $5F80
-Data225F80:                         ; 22:5F80
-
-.orga $6E80
-Data226E80:                         ; 22:6E80
-
-.orga $7BB0
+Gr_Toad37Images:                    ; 22:5AD0
+.incbin "data/Graphics/Toad37Images.bin"
+Gr_Toad2Image3:                     ; 22:5F80
+.incbin "data/Graphics/Toad2Image3.bin"
+Gr_Toad2Image4:                     ; 22:6E80
+.incbin "data/Graphics/Toad2Image4.bin"
 Ti_ToadAward:                       ; 22:7BB0
 .incbin "data/Tilemaps/ToadAward.bin"
 
@@ -420,40 +403,31 @@ Data237C00:                         ; 23:7C00
 .bank $24 slot 1
 
 .orga $4000
-Data244000:                         ; 24:4000
-
-.orga $4800
-Data244800:                         ; 24:4800
-
-.orga $5000
-Data245000:                         ; 24:5000
-
-.orga $5800
+Gr_CalendarMonth:                   ; 24:4000
+.incbin "data/Graphics/CalendarMonth.bin"
 Data245800:                         ; 24:5800
 
+.orga $5A00
+Data245A00:                         ; 24:5A00
+
+.orga $5C00
+Data245C00:                         ; 24:5C00
+
 .orga $5E00
-Data245E00:                         ; 24:5E00
-
-.orga $63A0
-Data2463A0:                         ; 24:63A0
-
-.orga $6C10
-Data246C10:                         ; 24:6C10
-
-.orga $6EE0
-Data246EE0:                         ; 24:6EE0
-
-.orga $71B0
-Data2471B0:                         ; 24:71B0
-
-.orga $7262
-Data247262:                         ; 24:7262
-
-.orga $7480
-Data247480:                         ; 24:7480
-
-.orga $7750
-Data247750:                         ; 24:7750
+TiPrinter_ToadAward:                ; 24:5E00
+.incbin "data/Tilemaps/Printer_ToadAward.bin"
+TiPrinter_MarioAward:               ; 24:63A0
+.incbin "data/Tilemaps/Printer_MarioAward.bin"
+TiPrinter_AlbumMarioLuigi5:         ; 24:6C10
+.incbin "data/Tilemaps/Printer_AlbumMarioLuigi5.bin"
+TiPrinter_AlbumMarioLuigi6:         ; 24:6EE0
+.incbin "data/Tilemaps/Printer_AlbumMarioLuigi6.bin"
+TiPrinter_AlbumMarioLuigi7:         ; 24:71B0
+.incbin "data/Tilemaps/Printer_AlbumMarioLuigi7.bin"
+TiPrinter_AlbumMarioLuigi8 :        ; 24:7480
+.incbin "data/Tilemaps/Printer_AlbumMarioLuigi8.bin"
+GrPrinter_AlbumGoomba:              ; 24:7750
+.incbin "data/Graphics/Printer_AlbumGoomba.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -466,15 +440,8 @@ Data254000:                         ; 25:4000
 Data254800:                         ; 25:4800
 
 .orga $5800
-Data255800:                         ; 25:5800
-
-.orga $6000
-Data256000:                         ; 25:6000
-
-.orga $6800
-Data256800:                         ; 25:6800
-
-.orga $7000
+Gr_PrintMenu:                       ; 25:5800
+.incbin "data/Graphics/PrintMenu.bin"
 Data257000:                         ; 25:7000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -685,113 +652,92 @@ Gr_AlbumBowser:                     ; 2C:4000
 .incbin "data/Graphics/AlbumBowser.bin"
 Gr_AlbumMarioLuigi:                 ; 2C:4AC0
 .incbin "data/Graphics/AlbumMarioLuigi.bin"
-Data2C5820:                         ; 2C:5820
-
-.orga $61C0
-Data2C61C0:                         ; 2C:61C0
-
-.orga $6940
-Data2C6940:                         ; 2C:6940
-
-.orga $7120
-Data2C7120:                         ; 2C:7120
+GrPrinter_AlbumBowser1:             ; 2C:5820
+.incbin "data/Graphics/Printer_AlbumBowser1.bin"
+GrPrinter_AlbumBowser2:             ; 2C:61C0
+.incbin "data/Graphics/Printer_AlbumBowser2.bin"
+GrPrinter_AlbumBowser3:             ; 2C:6940
+.incbin "data/Graphics/Printer_AlbumBowser3.bin"
+GrPrinter_AlbumBowser4:             ; 2C:7120
+.incbin "data/Graphics/Printer_AlbumBowser4.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2D slot 1
 
 .orga $4000
-Data2D4000:                         ; 2D:4000
-
-.orga $47F0
-Data2D47F0:                         ; 2D:47F0
-
-.orga $51C0
-Data2D51C0:                         ; 2D:51C0
-
-.orga $5B50
-Data2D5B50:                         ; 2D:5B50
-
-.orga $6600
-Data2D6600:                         ; 2D:6600
-
-.orga $7050
-Data2D7050:                         ; 2D:7050
+GrPrinter_AlbumMarioLuigi5:         ; 2D:4000
+.incbin "data/Graphics/Printer_AlbumMarioLuigi5.bin"
+GrPrinter_AlbumMarioLuigi6:         ; 2D:47F0
+.incbin "data/Graphics/Printer_AlbumMarioLuigi6.bin"
+GrPrinter_AlbumMarioLuigi7:         ; 2D:51C0
+.incbin "data/Graphics/Printer_AlbumMarioLuigi7.bin"
+GrPrinter_AlbumMarioLuigi8:         ; 2D:5B50
+.incbin "data/Graphics/Printer_AlbumMarioLuigi8.bin"
+GrPrinter_ToadAward:                ; 2D:6600
+.incbin "data/Graphics/Printer_ToadAward.bin"
+GrPrinter_MarioAward:               ; 2D:7050
+.incbin "data/Graphics/Printer_MarioAward.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2E slot 1
 
 .orga $4000
-Data2E4000:                         ; 2E:4000
-
-.orga $4DD0
-Data2E4DD0:                         ; 2E:4DD0
-
-.orga $58F0
-Data2E58F0:                         ; 2E:58F0
-
-.orga $63F0
-Data2E63F0:                         ; 2E:63F0
-
-.orga $6F40
-Data2E6F40:                         ; 2E:6F40
+GrPrinter_BowserAward:              ; 2E:4000
+.incbin "data/Graphics/Printer_BowserAward.bin"
+GrPrinter_YoshiAward:               ; 2E:4DD0
+.incbin "data/Graphics/Printer_YoshiAward.bin"
+GrPrinter_AlbumFireworks:           ; 2E:58F0
+.incbin "data/Graphics/Printer_AlbumFireworks.bin"
+GrPrinter_AlbumVine:                ; 2E:63F0
+.incbin "data/Graphics/Printer_AlbumVine.bin"
+GrPrinter_AlbumVS:                  ; 2E:6F40
+.incbin "data/Graphics/Printer_AlbumVS.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $2F slot 1
 
 .orga $4000
-Data2F4000:                         ; 2F:4000
-
-.orga $4B40
-Data2F4B40:                         ; 2F:4B40
-
-.orga $5680
-Data2F5680:                         ; 2F:5680
-
-.orga $5FB0
-Data2F5FB0:                         ; 2F:5FB0
-
-.orga $6B20
-Data2F6B20:                         ; 2F:6B20
-
-.orga $7360
-Data2F7360:                         ; 2F:7360
+GrPrinter_AlbumPeachKiss:           ; 2F:4000
+.incbin "data/Graphics/Printer_AlbumPeachKiss.bin"
+GrPrinter_AlbumInfrared:            ; 2F:4B40
+.incbin "data/Graphics/Printer_AlbumInfrared.bin"
+GrPrinter_AlbumHighScore:           ; 2F:5680
+.incbin "data/Graphics/Printer_AlbumHighScore.bin"
+GrPrinter_AlbumYoshi:               ; 2F:5FB0
+.incbin "data/Graphics/Printer_AlbumYoshi.bin"
+GrPrinter_AlbumBlooper:             ; 2F:6B20
+.incbin "data/Graphics/Printer_AlbumBlooper.bin"
+GrPrinter_AlbumLakitu:              ; 2F:7360
+.incbin "data/Graphics/Printer_AlbumLakitu.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $30 slot 1
 
 .orga $4000
-Data304000:                         ; 30:4000
-
-.orga $4990
-Data304990:                         ; 30:4990
-
-.orga $50D0
-Data3050D0:                         ; 30:50D0
-
-.orga $5970
-Data305970:                         ; 30:5970
-
-.orga $5FB0
-Data305FB0:                         ; 30:5FB0
-
-.orga $6820
-Data306820:                         ; 30:6820
-
-.orga $7090
-Data307090:                         ; 30:7090
-
-.orga $7360
-Data307360:                         ; 30:7360
-
-.orga $7630
-Data307630:                         ; 30:7630
-
-.orga $7900
-Data307900:                         ; 30:7900
+GrPrinter_AlbumHammerBro:           ; 30:4000
+.incbin "data/Graphics/Printer_AlbumHammerBro.bin"
+GrPrinter_AlbumKoopa:               ; 30:4990
+.incbin "data/Graphics/Printer_AlbumKoopa.bin"
+GrPrinter_AlbumSpiny:               ; 30:50D0
+.incbin "data/Graphics/Printer_AlbumSpiny.bin"
+GrPrinter_AlbumBuzzy:               ; 30:5970
+.incbin "data/Graphics/Printer_AlbumBuzzy.bin"
+TiPrinter_PeachAward:               ; 30:5FB0
+.incbin "data/Tilemaps/Printer_PeachAward.bin"
+TiPrinter_BowserAward:              ; 30:6820
+.incbin "data/Tilemaps/Printer_BowserAward.bin"
+TiPrinter_AlbumBowser1:             ; 30:7090
+.incbin "data/Tilemaps/Printer_AlbumBowser1.bin"
+TiPrinter_AlbumBowser2:             ; 30:7360
+.incbin "data/Tilemaps/Printer_AlbumBowser2.bin"
+TiPrinter_AlbumBowser3:             ; 30:7630
+.incbin "data/Tilemaps/Printer_AlbumBowser3.bin"
+TiPrinter_AlbumBowser4:             ; 30:7900
+.incbin "data/Tilemaps/Printer_AlbumBowser4.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -799,12 +745,6 @@ Data307900:                         ; 30:7900
 
 .orga $4000
 Data314000:                         ; 31:4000
-
-.orga $43E6
-Data3143E6:                         ; 31:43E6
-
-.orga $43FC
-Data3143FC:                         ; 31:43FC
 
 .orga $4800
 Data314800:                         ; 31:4800
@@ -842,6 +782,216 @@ Data317300:                         ; 31:7300
 .orga $7660
 Data317660:                         ; 31:7660
 
+.orga $79C0
+Data3179C0:                         ; 31:79C0
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$08,$09,$0A,$0B,\
+    $0C,$0D,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00
+Data317A20:                         ; 31:7A20
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$20,$0E,$0F,$10,\
+    $11,$20,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00
+Data317A80:                         ; 31:7A80
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$20,$04,$05,$06,\
+    $07,$20,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00
+Data317AE0:                         ; 31:7AE0
+.db $22,$22,$22,$22,$22,$22,$22,$22,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$22,$22,$22,$22,\
+    $22,$22,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$22,$22,$22,$22,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00
+Data317B40:                         ; 31:7B40
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$20,$1A,$1B,$1C,\
+    $1D,$20,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $24,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00
+Data317BA0:                         ; 31:7BA0
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$20,$12,$13,$14,\
+    $15,$20,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$00,$00,$00,\
+    $00,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00
+Data317C00:                         ; 31:7C00
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$20,$16,$17,$18,\
+    $19,$20,$22,$22,$20,$00,$01,$02,\
+    $03,$20,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00
+Data317C60:                         ; 31:7C60
+.db $22,$22,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$25,$26,$27,$28,\
+    $2A,$2C,$22,$22,$20,$16,$17,$18,\
+    $19,$20,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00,\
+    $22,$22,$22,$22,$1E,$1F,$1F,$29,\
+    $2B,$1E,$22,$22,$1E,$1F,$1F,$1F,\
+    $1F,$1E,$22,$22,$22,$22,$22,$22,\
+    $22,$00,$00,$00,$00,$00,$00,$00
+Data317CC0:                         ; 31:7CC0
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08
+Data317D20:                         ; 31:7D20
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$6F,$6F,$6F,\
+    $6F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08
+Data317D80:                         ; 31:7D80
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08
+Data317DE0:                         ; 31:7DE0
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08
+Data317E40:                         ; 31:7E40
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $0F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08
+Data317EA0:                         ; 31:7EA0
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$08,$08,$08,\
+    $08,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08
+Data317F00:                         ; 31:7F00
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08
+Data317F60:                         ; 31:7F60
+.db $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$2F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08,\
+    $0F,$0F,$0F,$0F,$4F,$4F,$4F,$0F,\
+    $0F,$6F,$0F,$0F,$4F,$4F,$4F,$4F,\
+    $4F,$6F,$0F,$0F,$0F,$0F,$0F,$0F,\
+    $0F,$08,$08,$08,$08,$08,$08,$08,\
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $33 slot 1
@@ -854,44 +1004,36 @@ Data334000:                         ; 33:4000
 .bank $34 slot 1
 
 .orga $4000
-Data344000:                         ; 34:4000
-
-.orga $46E0
-Data3446E0:                         ; 34:46E0
-
-.orga $4CF0
-Data344CF0:                         ; 34:4CF0
-
-.orga $54B0
-Data3454B0:                         ; 34:54B0
-
-.orga $5B40
-Data345B40:                         ; 34:5B40
-
-.orga $6310
-Data346310:                         ; 34:6310
-
-.orga $6840
-Data346840:                         ; 34:6840
-
-.orga $6EE0
-Data346EE0:                         ; 34:6EE0
+Gr_Toad5Image0:                     ; 34:4000
+.incbin "data/Graphics/Toad5Image0.bin"
+Gr_Toad5Image1:                     ; 34:46E0
+.incbin "data/Graphics/Toad5Image1.bin"
+Gr_Toad5Image2:                     ; 34:4CF0
+.incbin "data/Graphics/Toad5Image2.bin"
+Gr_Toad5Image3:                     ; 34:54B0
+.incbin "data/Graphics/Toad5Image3.bin"
+Gr_Toad5Image4:                     ; 34:5B40
+.incbin "data/Graphics/Toad5Image4.bin"
+Gr_Toad5Image5:                     ; 34:6310
+.incbin "data/Graphics/Toad5Image5.bin"
+Gr_Toad5Image6:                     ; 34:6840
+.incbin "data/Graphics/Toad5Image6.bin"
+Gr_Toad5Image7:                     ; 34:6EE0
+.incbin "data/Graphics/Toad5Image7.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $35 slot 1
 
 .orga $4000
-Data354000:                         ; 35:4000
-
-.orga $4A60
-Data354A60:                         ; 35:4A60
-
-.orga $5200
-Data355200:                         ; 35:5200
+GrPrinter_PeachAward:               ; 35:4000
+.incbin "data/Graphics/Printer_PeachAward.bin"
+GrPrinter_Album1up:                 ; 35:4A60
+.incbin "data/Graphics/Printer_Album1up.bin"
+Ti_Data355200:                      ; 35:5200
 
 .orga $57A0
-Data3557A0:                         ; 35:57A0
+Ti_Data3557A0:                      ; 35:57A0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -900,137 +1042,133 @@ Data3557A0:                         ; 35:57A0
 .orga $4000
 Gr_AlbumHighScore:                  ; 36:4000
 .incbin "data/Graphics/AlbumHighScore.bin"
-Data364930:                         ; 36:4930
-
-.orga $4F00
-Data364F00:                         ; 36:4F00
-
-.orga $5620
-Data365620:                         ; 36:5620
-
-.orga $5DC0
-Data365DC0:                         ; 36:5DC0
+Gr_ToyBoxPeachImage0:               ; 36:4930
+.incbin "data/Graphics/ToyBoxPeachImage0.bin"
+Gr_ToyBoxPeachImage1:               ; 36:4F00
+.incbin "data/Graphics/ToyBoxPeachImage1.bin"
+Gr_ToyBoxPeachImage2:               ; 36:5620
+.incbin "data/Graphics/ToyBoxPeachImage2.bin"
+Gr_ToyBoxPeachImage3:               ; 36:5DC0
+.incbin "data/Graphics/ToyBoxPeachImage3.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $37 slot 1
 
 .orga $4000
-Data374000:                         ; 37:4000
+Ti_Data374000:                      ; 37:4000
 
 .orga $42D0
-Data3742D0:                         ; 37:42D0
+Ti_Data3742D0:                      ; 37:42D0
 
 .orga $45A0
-Data3745A0:                         ; 37:45A0
+Ti_Data3745A0:                      ; 37:45A0
 
 .orga $4870
-Data374870:                         ; 37:4870
+Ti_Data374870:                      ; 37:4870
 
 .orga $4B40
-Data374B40:                         ; 37:4B40
+Ti_Data374B40:                      ; 37:4B40
 
 .orga $4E10
-Data374E10:                         ; 37:4E10
+Ti_Data374E10:                      ; 37:4E10
 
 .orga $50E0
-Data3750E0:                         ; 37:50E0
+Ti_Data3750E0:                      ; 37:50E0
 
 .orga $53B0
-Data3753B0:                         ; 37:53B0
+Ti_Data3753B0:                      ; 37:53B0
 
 .orga $5680
-Data375680:                         ; 37:5680
+Ti_Data375680:                      ; 37:5680
 
 .orga $5950
-Data375950:                         ; 37:5950
+Ti_Data375950:                      ; 37:5950
 
 .orga $5C20
-Data375C20:                         ; 37:5C20
+Ti_Data375C20:                      ; 37:5C20
 
 .orga $5EF0
-Data375EF0:                         ; 37:5EF0
+Ti_Data375EF0:                      ; 37:5EF0
 
 .orga $61C0
-Data3761C0:                         ; 37:61C0
+Ti_Data3761C0:                      ; 37:61C0
 
 .orga $6490
-Data376490:                         ; 37:6490
+Ti_Data376490:                      ; 37:6490
 
 .orga $6760
-Data376760:                         ; 37:6760
+Ti_Data376760:                      ; 37:6760
 
 .orga $72A0
-Data3772A0:                         ; 37:72A0
+Ti_Data3772A0:                      ; 37:72A0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $38 slot 1
 
 .orga $4000
-Data384000:                         ; 38:4000
+Gr_Data384000:                      ; 38:4000
 
 .orga $4520
-Data384520:                         ; 38:4520
+Gr_Data384520:                      ; 38:4520
 
 .orga $4B50
-Data384B50:                         ; 38:4B50
+Gr_Data384B50:                      ; 38:4B50
 
 .orga $50D0
-Data3850D0:                         ; 38:50D0
+Gr_Data3850D0:                      ; 38:50D0
 
 .orga $56B0
-Data3856B0:                         ; 38:56B0
+Gr_Data3856B0:                      ; 38:56B0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $39 slot 1
 
 .orga $4000
-Data394000:                         ; 39:4000
+Ti_Data394000:                      ; 39:4000
 
 .orga $4B40
-Data394B40:                         ; 39:4B40
+Ti_Data394B40:                      ; 39:4B40
 
 .orga $61C0
-Data3961C0:                         ; 39:61C0
+Ti_Data3961C0:                      ; 39:61C0
 
 .orga $6A30
-Data396A30:                         ; 39:6A30
+Ti_Data396A30:                      ; 39:6A30
 
 .orga $6D00
-Data396D00:                         ; 39:6D00
+Ti_Data396D00:                      ; 39:6D00
 
 .orga $6FD0
-Data396FD0:                         ; 39:6FD0
+Ti_Data396FD0:                      ; 39:6FD0
 
 .orga $72A0
-Data3972A0:                         ; 39:72A0
+Ti_Data3972A0:                      ; 39:72A0
 
 .orga $7570
-Data397570:                         ; 39:7570
+Ti_Data397570:                      ; 39:7570
 
 .orga $7840
-Data397840:                         ; 39:7840
+Ti_Data397840:                      ; 39:7840
 
 .orga $7B10
-Data397B10:                         ; 39:7B10
+Ti_Data397B10:                      ; 39:7B10
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $3A slot 1
 
 .orga $4000
-Data3A4000:                         ; 3A:4000
-
-.orga $4800
-Data3A4800:                         ; 3A:4800
-
-.orga $4870
-Data3A4870:                         ; 3A:4870
+TiPrinter_YoshiAward:               ; 3A:4000
+.incbin "data/Tilemaps/Printer_YoshiAward.bin"
+Gr_CalendarDayErase:                ; 3A:4870
+.incbin "data/Graphics/CalendarDayErase.bin"
 
 .orga $5870
-Data3A5870:                         ; 3A:5870
+Gr_CalendarDay:                     ; 3A:5870
+.incbin "data/Graphics/CalendarDay.bin"
 
 .orga $5B70
 Data3A5B70:                         ; 3A:5B70
@@ -1039,38 +1177,39 @@ Data3A5B70:                         ; 3A:5B70
 Data3A5EA0:                         ; 3A:5EA0
 
 .orga $6070
-Data3A6070:                         ; 3A:6070
+Ti_Data3A6070:                      ; 3A:6070
 
 .orga $6E80
-Data3A6E80:                         ; 3A:6E80
+Gr_Toad2Image1:                     ; 3A:6E80
+.incbin "data/Graphics/Toad2Image1.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $3B slot 1
 
 .orga $4000
-Data3B4000:                         ; 3B:4000
+Ti_Data3B4000:                      ; 3B:4000
 
 .orga $42D0
-Data3B42D0:                         ; 3B:42D0
+Ti_Data3B42D0:                      ; 3B:42D0
 
 .orga $45A0
-Data3B45A0:                         ; 3B:45A0
+Ti_Data3B45A0:                      ; 3B:45A0
 
 .orga $4870
-Data3B4870:                         ; 3B:4870
+Ti_Data3B4870:                      ; 3B:4870
 
 .orga $4B40
-Data3B4B40:                         ; 3B:4B40
+Ti_Data3B4B40:                      ; 3B:4B40
 
 .orga $4E10
-Data3B4E10:                         ; 3B:4E10
+Ti_Data3B4E10:                      ; 3B:4E10
 
 .orga $50E0
-Data3B50E0:                         ; 3B:50E0
+Ti_Data3B50E0:                      ; 3B:50E0
 
 .orga $53B0
-Data3B53B0:                         ; 3B:53B0
+Ti_Data3B53B0:                      ; 3B:53B0
 
 .orga $5680
 Data3B5680:                         ; 3B:5680
@@ -1095,41 +1234,37 @@ Data3B61C0:                         ; 3B:61C0
 Data3C4000:                         ; 3C:4000
 
 .orga $59D0
-Data3C59D0:                         ; 3C:59D0
-
-.orga $65A0
-Data3C65A0:                         ; 3C:65A0
-
-.orga $7430
-Data3C7430:                         ; 3C:7430
+Gr_Toad2Image0:                     ; 3C:59D0
+.incbin "data/Graphics/Toad2Image0.bin"
+Gr_Toad1Images:                     ; 3C:65A0
+.incbin "data/Graphics/Toad1Images.bin"
+Gr_Toad2Image2:                     ; 3C:7430
+.incbin "data/Graphics/Toad2Image2.bin"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .bank $3D slot 1
 
 .orga $4000
-Data3D4000:                         ; 3D:4000
-
-.orga $45E0
-Data3D45E0:                         ; 3D:45E0
-
-.orga $4E90
-Data3D4E90:                         ; 3D:4E90
-
-.orga $55B0
+GrPrinter_AlbumBulletBill:          ; 3D:4000
+.incbin "data/Graphics/Printer_AlbumBulletBill.bin"
+Gr_Data3D45E0:                      ; 3D:45E0
+.incbin "data/Graphics/Data3D45E0.bin"
+Gr_Data3D4E90:                      ; 3D:4E90
+.incbin "data/Graphics/Data3D4E90.bin"
 Data3D55B0:                         ; 3D:55B0
 
 .orga $5F00
-Data3D5F00:                         ; 3D:5F00
+Ti_Data3D5F00:                      ; 3D:5F00
 
 .orga $61D0
-Data3D61D0:                         ; 3D:61D0
+Ti_Data3D61D0:                      ; 3D:61D0
 
 .orga $64A0
-Data3D64A0:                         ; 3D:64A0
+Ti_Data3D64A0:                      ; 3D:64A0
 
 .orga $6770
-Data3D6770:                         ; 3D:6770
+Ti_Data3D6770:                      ; 3D:6770
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1143,64 +1278,64 @@ Data3E4000:                         ; 3E:4000
 .bank $3F slot 1
 
 .orga $4000
-Data3F4000:                         ; 3F:4000
+Ti_Data3F4000:                      ; 3F:4000
 
 .orga $42D0
-Data3F42D0:                         ; 3F:42D0
+Ti_Data3F42D0:                      ; 3F:42D0
 
 .orga $45A0
-Data3F45A0:                         ; 3F:45A0
+Ti_Data3F45A0:                      ; 3F:45A0
 
 .orga $4870
-Data3F4870:                         ; 3F:4870
+Ti_Data3F4870:                      ; 3F:4870
 
 .orga $4B40
-Data3F4B40:                         ; 3F:4B40
+Ti_Data3F4B40:                      ; 3F:4B40
 
 .orga $4E10
-Data3F4E10:                         ; 3F:4E10
+Ti_Data3F4E10:                      ; 3F:4E10
 
 .orga $50E0
-Data3F50E0:                         ; 3F:50E0
+Ti_Data3F50E0:                      ; 3F:50E0
 
 .orga $53B0
-Data3F53B0:                         ; 3F:53B0
+Ti_Data3F53B0:                      ; 3F:53B0
 
 .orga $5680
-Data3F5680:                         ; 3F:5680
+Ti_Data3F5680:                      ; 3F:5680
 
 .orga $5950
-Data3F5950:                         ; 3F:5950
+Ti_Data3F5950:                      ; 3F:5950
 
 .orga $5C20
-Data3F5C20:                         ; 3F:5C20
+Ti_Data3F5C20:                      ; 3F:5C20
 
 .orga $5EF0
-Data3F5EF0:                         ; 3F:5EF0
+Ti_Data3F5EF0:                      ; 3F:5EF0
 
 .orga $61C0
-Data3F61C0:                         ; 3F:61C0
+Ti_Data3F61C0:                      ; 3F:61C0
 
 .orga $6490
-Data3F6490:                         ; 3F:6490
+Ti_Data3F6490:                      ; 3F:6490
 
 .orga $6760
-Data3F6760:                         ; 3F:6760
+Ti_Data3F6760:                      ; 3F:6760
 
 .orga $6A30
-Data3F6A30:                         ; 3F:6A30
+Ti_Data3F6A30:                      ; 3F:6A30
 
 .orga $6D00
-Data3F6D00:                         ; 3F:6D00
+Ti_Data3F6D00:                      ; 3F:6D00
 
 .orga $6FD0
-Data3F6FD0:                         ; 3F:6FD0
+Ti_Data3F6FD0:                      ; 3F:6FD0
 
 .orga $72A0
-Data3F72A0:                         ; 3F:72A0
+Ti_Data3F72A0:                      ; 3F:72A0
 
 .orga $7570
-Data3F7570:                         ; 3F:7570
+Ti_Data3F7570:                      ; 3F:7570
 
 .orga $7840
-Data3F7840:                         ; 3F:7840
+Ti_Data3F7840:                      ; 3F:7840

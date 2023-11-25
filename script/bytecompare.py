@@ -62,7 +62,9 @@ if __name__ == "__main__":
         "../smbdx-disasm.gbc",
         searchbanks=
             list(range(0x0F)) +
-            [0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x1A, 0x1B, 0x1D, 0x1F, 0x20, 0x32] +
-            list(range(0x26, 0x2C))
+            list(range(0x10, 0x17)) +
+            list(range(0x1A, 0x21)) +
+            list(range(0x26, 0x31)) +
+            [0x32, 0x34, 0x36]
         )
     input()  # wait for Enter, if run on a shell that closes at end of program

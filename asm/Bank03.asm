@@ -1297,7 +1297,7 @@ Code034922:
 
 Code034924:
     xor  a                          ; 03:4924
-    ld   [$C36A],a                  ; 03:4925
+    ld   [W_RaceResults],a          ; 03:4925
     inc  a                          ; 03:4928
     ld   [$C168],a                  ; 03:4929
     ld   a,$25                      ; 03:492C
@@ -1338,7 +1338,7 @@ Code03495F:
     inc  e                          ; 03:4967
 Code034968:
     ld   a,e                        ; 03:4968
-    ld   [$C36A],a                  ; 03:4969
+    ld   [W_RaceResults],a          ; 03:4969
     xor  a                          ; 03:496C
     ld   [$C168],a                  ; 03:496D
     inc  a                          ; 03:4970
@@ -5401,7 +5401,7 @@ Code036713:
     jr   Code0367A6                 ; 03:673D
 Code03673F:
     ld   a,$01                      ; 03:673F
-    ld   [$C36A],a                  ; 03:6741
+    ld   [W_RaceResults],a          ; 03:6741
     inc  a                          ; 03:6744
     ld   [W_SpriteSubstate],a       ; 03:6745
     ld   a,$03                      ; 03:6748
@@ -6940,7 +6940,7 @@ Sub0371C9:
     ld   [$C28D],a                  ; 03:7268
     ld   [$C1F3],a                  ; 03:726B
     ld   [$C1E8],a                  ; 03:726E
-    ld   [$C36A],a                  ; 03:7271
+    ld   [W_RaceResults],a          ; 03:7271
     ld   [$C375],a                  ; 03:7274
     ld   [$C3AB],a                  ; 03:7277
     ld   [$C1FA],a                  ; 03:727A

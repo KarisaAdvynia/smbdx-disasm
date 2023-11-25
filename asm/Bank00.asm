@@ -210,7 +210,7 @@ RunGameState:
 .dw ChalMiss_Wrapper                ; 22
 .dw Code0004E5                      ; 23
 .dw Code0005FB                      ; 24
-.dw Code000BA2                      ; 25
+.dw YouVsBooResults_InitWrapper     ; 25
 .dw Code000BD4                      ; 26
 .dw Code00069B                      ; 27
 .dw Code0006C0                      ; 28
@@ -1411,12 +1411,12 @@ ChalMiss_Wrapper:
     call ChalMiss_Main              ; 00:0B9E
     ret                             ; 00:0BA1
 
-Code000BA2:
+YouVsBooResults_InitWrapper:
 ; Game state 25 wrapper
-    call Sub000BA6                  ; 00:0BA2
+    call YouVsBooResults_Init       ; 00:0BA2
     ret                             ; 00:0BA5
 
-Sub000BA6:
+YouVsBooResults_Init:
 ; Game state 25
     ld   a,[$C168]                  ; 00:0BA6
     rst  $00                        ; 00:0BA9  Execute from 16-bit pointer table

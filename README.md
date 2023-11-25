@@ -6,11 +6,11 @@ wla-gb smbdx.asm
 wlalink smbdx-linkfile smbdx-disasm.gbc
 ```
 
-Work in progress. Produces an exact match for the 0x10 banks that contain code (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), the 6 banks that contain level data (05, 0C, 0D, 10, 12, 32), and certain graphics banks (01, 0E, 1A-1B, 20, 26-2B), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
+Work in progress. Produces an exact match for the 0x10 banks that contain code (00, 02-04, 06-0B, 11, 13-15, 1D, 1F), the 6 banks that contain level data (05, 0C, 0D, 10, 12, 32), and certain graphics banks (01, 0E, 16, 1A-1B, 1E, 20, 26-30, 34, 36), with the exception of the auto-calculated checksum at $014E. Most ROM pointers have been replaced by labels, but not all.
 
 Remaining regions:
 - Bank 1D: Music. While this mixed code/data bank does assemble to an exact match, much of this bank's data seems to contain pointers, in a yet-to-be-documented format.
-- Graphics banks 0F, 16-19, 1C-1F, 21-25, 2C-31, 33-3F. Many data pointers are unconfirmed, so their `.incbin`s haven't been included yet.
+- Graphics banks 0F, 17-19, 1C-1D, 1F, 21-25, 31, 33, 35, 37-3F. Many data pointers are unconfirmed, so their `.incbin`s haven't been included yet.
 
 ## About data files
 This repository does not include in-game data files (graphics, tilemaps, etc), which must be extracted from the vanilla game before assembling. A script is provided to do so:

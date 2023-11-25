@@ -3792,6 +3792,7 @@ Data156814:                         ; 15:6814
     $48,$40,$10,$01,$48,$48,$1A,$07,\
     $48,$60,$2E,$01,$48,$68,$30,$01,\
     $58,$40,$12,$01,$58,$68,$32,$01
+
 Code156864:
     ldh  a,[<H_ButtonsPressed]      ; 15:6864
     bit  1,a                        ; 15:6866
@@ -3977,7 +3978,7 @@ Code156983:
     jr   nz,Code156983              ; 15:6990
     ret                             ; 15:6992
 
-Data156993:                         ; 15:6993
+Pal_156993:                         ; 15:6993
 .dw $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
@@ -3985,23 +3986,30 @@ Data156993:                         ; 15:6993
     $7FFF,$7FFF,$56B5,$0000,$7FFF,$471E,$77DF,$38AC,\
     $7FFF,$471E,$043C,$38AC,$7FFF,$043C,$77DF,$38AC,\
     $7FFF,$7FFF,$03E0,$0100,$7FFF,$7FFF,$7FFF,$7FFF,\
-    $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000,\
-    $639F,$1CFF,$02BF,$0000,$0006,$04D3,$22FF,$7FFF,\
+    $7DE0,$7FFF,$02BC,$0019,$7FFF,$22FF,$04D3,$0000
+Pal_156A13:                         ; 15:6A13
+.dw $639F,$1CFF,$02BF,$0000,$0006,$04D3,$22FF,$7FFF,\
     $639F,$667F,$48FF,$0429,$639F,$3B3F,$267A,$0429,\
     $639F,$0636,$042C,$0423,$639F,$4275,$2DB0,$0429,\
-    $335F,$0429,$0429,$0429,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$6A31,$5D29,$2C00,$7FFF,$56B5,$294A,$0000,\
+    $335F,$0429,$0429,$0429
+Pal_156A4B:                         ; 15:6A4B
+.dw $7FFF,$56B5,$294A,$0000,$7FFF,$6A31,$5D29,$2C00,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
     $7FFF,$56B5,$294A,$0000,$7FFF,$56B5,$294A,$0000,\
-    $7FFF,$3EBA,$1094,$0000,$7FFF,$6F16,$5D69,$0000,\
+    $7FFF,$56B5,$294A,$0000
+Pal_156A83:                         ; 15:6A83
+.dw $7FFF,$3EBA,$1094,$0000,$7FFF,$6F16,$5D69,$0000,\
     $7FFF,$031A,$1094,$0000,$7FFF,$6F16,$1094,$0000,\
     $5D69,$6F16,$1094,$0000,$7FFF,$6F16,$04AA,$0000,\
-    $7FFF,$3EBA,$01F5,$0000,$0000,$0014,$01FF,$07FF,\
-    $0000,$0014,$013B,$07FF,$07FF,$01FF,$0014,$0000,\
+    $7FFF,$3EBA,$01F5,$0000
+Pal_156ABB:                         ; 15:6ABB
+.dw $0000,$0014,$01FF,$07FF,$0000,$0014,$013B,$07FF,\
     $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
-    $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000
-Data156AF3:                         ; 15:6AF3
-.db $13,$6A,$4B,$6A,$83,$6A,$BB,$6A
+    $07FF,$01FF,$0014,$0000,$07FF,$01FF,$0014,$0000,\
+    $07FF,$01FF,$0014,$0000
+DataPtrs156AF3:                     ; 15:6AF3
+.dw Pal_156A13, Pal_156A4B, Pal_156A83, Pal_156ABB
+
 Code156AFB:
     call Sub001258                  ; 15:6AFB
     xor  a                          ; 15:6AFE
@@ -4014,7 +4022,7 @@ Code156AFB:
     ld   bc,$0800                   ; 15:6B0E
     ld   a,$15                      ; 15:6B11
     call CopyBytesLong              ; 15:6B13
-    call Sub156BB9                  ; 15:6B16
+    call LoadPrintableGr            ; 15:6B16
     ld   a,$02                      ; 15:6B19
     ldh  [<SVBK],a                  ; 15:6B1B
     ld   hl,$8800                   ; 15:6B1D
@@ -4044,7 +4052,7 @@ Code156AFB:
     call Sub000FCF                  ; 15:6B5D
     ld   a,$15                      ; 15:6B60
     ld   b,$15                      ; 15:6B62
-    ld   de,Data156993              ; 15:6B64
+    ld   de,Pal_156993              ; 15:6B64
     call LoadFullPaletteLong        ; 15:6B67
     ld   a,[$C500]                  ; 15:6B6A
     cp   $07                        ; 15:6B6D
@@ -4053,7 +4061,7 @@ Code156AFB:
     sla  a                          ; 15:6B74
     ld   c,a                        ; 15:6B76
     ld   b,$00                      ; 15:6B77
-    ld   hl,Data156AF3              ; 15:6B79
+    ld   hl,DataPtrs156AF3          ; 15:6B79
     add  hl,bc                      ; 15:6B7C
     ldi  a,[hl]                     ; 15:6B7D
     ld   h,[hl]                     ; 15:6B7E
@@ -4084,35 +4092,36 @@ Code156B89:
     ldh  [<LCDC],a                  ; 15:6BB4
     jp   Sub15648C                  ; 15:6BB6
 
-Sub156BB9:
+LoadPrintableGr:
     ld   a,[$C500]                  ; 15:6BB9
     rst  $00                        ; 15:6BBC  Execute from 16-bit pointer table
-.dw Code156BCD                      ; 15:6BBD
-.dw Code156BFD                      ; 15:6BBF
-.dw Code156C34                      ; 15:6BC1
-.dw Code156C6A                      ; 15:6BC3
-.dw Code156CFF                      ; 15:6BC5
-.dw Code156D4A                      ; 15:6BC7
-.dw Code156D8E                      ; 15:6BC9
-.dw Code156DBA                      ; 15:6BCB
+.dw LoadPrintableGr_Toad1           ; 15:6BBD
+.dw LoadPrintableGr_Toad2           ; 15:6BBF
+.dw LoadPrintableGr_Toad3           ; 15:6BC1
+.dw LoadPrintableGr_Toad4           ; 15:6BC3
+.dw LoadPrintableGr_Toad5           ; 15:6BC5
+.dw LoadPrintableGr_Toad6           ; 15:6BC7
+.dw LoadPrintableGr_Toad7           ; 15:6BC9
+.dw LoadPrintableGr_Peach           ; 15:6BCB
 
-Code156BCD:
+LoadPrintableGr_Toad1:
     xor  a                          ; 15:6BCD
     ld   [$C4EC],a                  ; 15:6BCE
     ld   a,$3C                      ; 15:6BD1
     ld   [$C415],a                  ; 15:6BD3
-    ld   hl,Data3C65A0              ; 15:6BD6
+    ld   hl,Gr_Toad1Images          ; 15:6BD6
     ld   de,$8800                   ; 15:6BD9
     ld   bc,$0E90                   ; 15:6BDC
     ld   a,$15                      ; 15:6BDF
     jp   CopyBytesLong              ; 15:6BE1
 
-DataPtrs156BE4:                     ; 15:6BE4
-.dl Data3C59D0, Data3A6E80, Data3C7430, Data225F80,\
-    Data226E80
+Toad2ImageGrPtrs:                   ; 15:6BE4
+.dl Gr_Toad2Image0, Gr_Toad2Image1, Gr_Toad2Image2, Gr_Toad2Image3,\
+    Gr_Toad2Image4
+Toad2ImageGrLengths:                ; 15:6BF3
 .dw $0BD0,$0E40,$09B0,$0F00,$0D30
 
-Code156BFD:
+LoadPrintableGr_Toad2:
     ld   a,$01                      ; 15:6BFD
     ld   [$C4EC],a                  ; 15:6BFF
     ld   a,[$C4DF]                  ; 15:6C02
@@ -4121,7 +4130,7 @@ Code156BFD:
     add  c                          ; 15:6C08
     ld   c,a                        ; 15:6C09
     ld   b,$00                      ; 15:6C0A
-    ld   hl,DataPtrs156BE4          ; 15:6C0C
+    ld   hl,Toad2ImageGrPtrs        ; 15:6C0C
     add  hl,bc                      ; 15:6C0F
     ld   e,[hl]                     ; 15:6C10
     inc  hl                         ; 15:6C11
@@ -4133,9 +4142,9 @@ Code156BFD:
     ld   h,d                        ; 15:6C19
     ld   a,[$C4DF]                  ; 15:6C1A
     sla  a                          ; 15:6C1D
-    add  $F3                        ; 15:6C1F
+    add  <Toad2ImageGrLengths       ; 15:6C1F
     ld   e,a                        ; 15:6C21
-    ld   a,$6B                      ; 15:6C22
+    ld   a,>Toad2ImageGrLengths     ; 15:6C22
     adc  $00                        ; 15:6C24
     ld   d,a                        ; 15:6C26
     ld   a,[de]                     ; 15:6C27
@@ -4146,23 +4155,24 @@ Code156BFD:
     ld   de,$8800                   ; 15:6C2C
     ld   a,$15                      ; 15:6C2F
     jp   CopyBytesLong              ; 15:6C31
-Code156C34:
+
+LoadPrintableGr_Toad3:
     ld   a,$01                      ; 15:6C34
     ld   [$C4EC],a                  ; 15:6C36
     ld   a,$22                      ; 15:6C39
     ld   [$C415],a                  ; 15:6C3B
-    ld   hl,Data225AD0              ; 15:6C3E
+    ld   hl,Gr_Toad37Images         ; 15:6C3E
     ld   de,$8800                   ; 15:6C41
     ld   bc,$04B0                   ; 15:6C44
     ld   a,$15                      ; 15:6C47
     jp   CopyBytesLong              ; 15:6C49
 
-DataPtrs156C4C:                     ; 15:6C4C
-.dl Data1E4000, Data1E40E0, Data1E46E0, Data1E4EC0,\
-    Data1E5560, Data1E5AF0, Data1E6120, Data1E6880,\
-    Data1E6CB0, Data1E7040
+Toad4ImageGrPtrs:                   ; 15:6C4C
+.dl Gr_Toad4Image0, Gr_Toad4Image1, Gr_Toad4Image2, Gr_Toad4Image3,\
+    Gr_Toad4Image4, Gr_Toad4Image5, Gr_Toad4Image6, Gr_Toad4Image7,\
+    Gr_Toad4Image8, Gr_Toad4Image9
 
-Code156C6A:
+LoadPrintableGr_Toad4:
     xor  a                          ; 15:6C6A
     ld   [$C4EC],a                  ; 15:6C6B
     ld   a,$02                      ; 15:6C6E
@@ -4176,7 +4186,7 @@ Code156C6A:
     add  c                          ; 15:6C7F
     ld   c,a                        ; 15:6C80
     ld   b,$00                      ; 15:6C81
-    ld   hl,DataPtrs156C4C          ; 15:6C83
+    ld   hl,Toad4ImageGrPtrs        ; 15:6C83
     add  hl,bc                      ; 15:6C86
     ldi  a,[hl]                     ; 15:6C87
     ld   e,a                        ; 15:6C88
@@ -4224,11 +4234,13 @@ Code156CAB:
     jr   nz,Code156CAB              ; 15:6CD4
     ret                             ; 15:6CD6
 
-DataPtrs156CD7:                     ; 15:6CD7
-.dl Data344000, Data3446E0, Data344CF0, Data3454B0,\
-    Data345B40, Data346310, Data346840, Data346EE0
+Toad5ImageGrPtrs:                   ; 15:6CD7
+.dl Gr_Toad5Image0, Gr_Toad5Image1, Gr_Toad5Image2, Gr_Toad5Image3,\
+    Gr_Toad5Image4, Gr_Toad5Image5, Gr_Toad5Image6, Gr_Toad5Image7
+Toad5ImageGrLengths:                ; 15:6CEF
 .dw $06E0,$0610,$07C0,$0690,$07D0,$0530,$06A0,$0580
-Code156CFF:
+
+LoadPrintableGr_Toad5:
     ld   a,$01                      ; 15:6CFF
     ld   [$C4EC],a                  ; 15:6D01
     ld   a,[$C4DF]                  ; 15:6D04
@@ -4237,7 +4249,7 @@ Code156CFF:
     add  c                          ; 15:6D0A
     ld   c,a                        ; 15:6D0B
     ld   b,$00                      ; 15:6D0C
-    ld   hl,DataPtrs156CD7          ; 15:6D0E
+    ld   hl,Toad5ImageGrPtrs        ; 15:6D0E
     add  hl,bc                      ; 15:6D11
     ldi  a,[hl]                     ; 15:6D12
     ld   e,a                        ; 15:6D13
@@ -4249,9 +4261,9 @@ Code156CFF:
     ld   h,d                        ; 15:6D1B
     ld   a,[$C4DF]                  ; 15:6D1C
     sla  a                          ; 15:6D1F
-    add  $EF                        ; 15:6D21
+    add  <Toad5ImageGrLengths       ; 15:6D21
     ld   e,a                        ; 15:6D23
-    ld   a,$6C                      ; 15:6D24
+    ld   a,>Toad5ImageGrLengths     ; 15:6D24
     adc  $00                        ; 15:6D26
     ld   d,a                        ; 15:6D28
     ld   a,[de]                     ; 15:6D29
@@ -4263,11 +4275,12 @@ Code156CFF:
     ld   a,$15                      ; 15:6D31
     jp   CopyBytesLong              ; 15:6D33
 
-DataPtrs156D36:                     ; 15:6D36
-.dl Data3D45E0, Data3D4E90, Data3D4E90, Data3D4E90
+Toad6ImageGrPtrs:                   ; 15:6D36
+.dl Gr_Data3D45E0, Gr_Data3D4E90, Gr_Data3D4E90, Gr_Data3D4E90
+Toad6ImageGrLengths:                ; 15:6D42
 .dw $08B0,$0720,$0720,$0720
 
-Code156D4A:
+LoadPrintableGr_Toad6:
     xor  a                          ; 15:6D4A
     ld   [$C4EC],a                  ; 15:6D4B
     ld   a,$04                      ; 15:6D4E
@@ -4281,7 +4294,7 @@ Code156D4A:
     add  c                          ; 15:6D5F
     ld   c,a                        ; 15:6D60
     ld   b,$00                      ; 15:6D61
-    ld   hl,DataPtrs156D36          ; 15:6D63
+    ld   hl,Toad6ImageGrPtrs        ; 15:6D63
     add  hl,bc                      ; 15:6D66
     ldi  a,[hl]                     ; 15:6D67
     ld   e,a                        ; 15:6D68
@@ -4293,9 +4306,9 @@ Code156D4A:
     ld   h,d                        ; 15:6D70
     ld   a,[$C4DF]                  ; 15:6D71
     sla  a                          ; 15:6D74
-    add  $42                        ; 15:6D76
+    add  <Toad6ImageGrLengths       ; 15:6D76
     ld   e,a                        ; 15:6D78
-    ld   a,$6D                      ; 15:6D79
+    ld   a,>Toad6ImageGrLengths     ; 15:6D79
     adc  $00                        ; 15:6D7B
     ld   d,a                        ; 15:6D7D
     ld   a,[de]                     ; 15:6D7E
@@ -4307,22 +4320,25 @@ Code156D4A:
     ld   a,$15                      ; 15:6D86
     call CopyBytesLong              ; 15:6D88
     jp   Sub156C9C                  ; 15:6D8B
-Code156D8E:
+
+LoadPrintableGr_Toad7:
     ld   a,$01                      ; 15:6D8E
     ld   [$C4EC],a                  ; 15:6D90
     ld   a,$22                      ; 15:6D93
     ld   [$C415],a                  ; 15:6D95
-    ld   hl,Data225AD0              ; 15:6D98
+    ld   hl,Gr_Toad37Images         ; 15:6D98
     ld   de,$8800                   ; 15:6D9B
     ld   bc,$04B0                   ; 15:6D9E
     ld   a,$15                      ; 15:6DA1
     jp   CopyBytesLong              ; 15:6DA3
 
-DataPtrs156DA6:                     ; 15:6DA6
-.dl Data364930, Data364F00, Data365620, Data365DC0
+ToyBoxPeachImagePtrs:               ; 15:6DA6
+.dl Gr_ToyBoxPeachImage0, Gr_ToyBoxPeachImage1
+.dl Gr_ToyBoxPeachImage2, Gr_ToyBoxPeachImage3
+ToyBoxPeachImageLengths:            ; 15:6DB2
 .dw $05D0,$0720,$07A0,$0860
 
-Code156DBA:
+LoadPrintableGr_Peach:
     xor  a                          ; 15:6DBA
     ld   [$C4EC],a                  ; 15:6DBB
     ld   a,$06                      ; 15:6DBE
@@ -4336,7 +4352,7 @@ Code156DBA:
     add  c                          ; 15:6DCF
     ld   c,a                        ; 15:6DD0
     ld   b,$00                      ; 15:6DD1
-    ld   hl,DataPtrs156DA6          ; 15:6DD3
+    ld   hl,ToyBoxPeachImagePtrs    ; 15:6DD3
     add  hl,bc                      ; 15:6DD6
     ldi  a,[hl]                     ; 15:6DD7
     ld   e,a                        ; 15:6DD8
@@ -4348,9 +4364,9 @@ Code156DBA:
     ld   h,d                        ; 15:6DE0
     ld   a,[$C4DF]                  ; 15:6DE1
     sla  a                          ; 15:6DE4
-    add  $B2                        ; 15:6DE6
+    add  <ToyBoxPeachImageLengths   ; 15:6DE6
     ld   e,a                        ; 15:6DE8
-    ld   a,$6D                      ; 15:6DE9
+    ld   a,>ToyBoxPeachImageLengths ; 15:6DE9
     adc  $00                        ; 15:6DEB
     ld   d,a                        ; 15:6DED
     ld   a,[de]                     ; 15:6DEE
@@ -4381,15 +4397,16 @@ Sub156E05:
 Code156E19:
     ld   a,$1C                      ; 15:6E19
     ld   [$C415],a                  ; 15:6E1B
-    ld   hl,Data1C7620              ; 15:6E1E
+    ld   hl,Gr_Data1C7620           ; 15:6E1E
     ld   de,$8800                   ; 15:6E21
     ld   bc,$07E0                   ; 15:6E24
     ld   a,$15                      ; 15:6E27
     jp   CopyBytesLong              ; 15:6E29
 
 DataPtrs156E2C:                     ; 15:6E2C
-.dl Data384000, Data384520, Data384B50, Data3850D0,\
-    Data3856B0
+.dl Gr_Data384000, Gr_Data384520, Gr_Data384B50, Gr_Data3850D0,\
+    Gr_Data3856B0
+Data156E3B:                         ; 15:6E3B
 .dw $0520,$0630,$0580,$05E0,$0620
 
 Code156E45:
@@ -4411,9 +4428,9 @@ Code156E45:
     ld   h,d                        ; 15:6E5C
     ld   a,[$C4DF]                  ; 15:6E5D
     sla  a                          ; 15:6E60
-    add  $3B                        ; 15:6E62
+    add  <Data156E3B                ; 15:6E62
     ld   e,a                        ; 15:6E64
-    ld   a,$6E                      ; 15:6E65
+    ld   a,>Data156E3B              ; 15:6E65
     adc  $00                        ; 15:6E67
     ld   d,a                        ; 15:6E69
     ld   a,[de]                     ; 15:6E6A
@@ -4529,7 +4546,7 @@ Code156F30:
     adc  $00                        ; 15:6F34
     ld   b,a                        ; 15:6F36
     push bc                         ; 15:6F37
-    ld   hl,Data3B4000              ; 15:6F38
+    ld   hl,Ti_Data3B4000           ; 15:6F38
     add  hl,bc                      ; 15:6F3B
     ldh  a,[<$FFA5]                 ; 15:6F3C
     ld   e,a                        ; 15:6F3E
@@ -4856,8 +4873,8 @@ Code157167:
     ret                             ; 15:7186
 
 DataPtrs157187:                     ; 15:7187
-.dl Data3A6070, Data394000, Data0F6DA0, Data394B40,\
-    Data3961C0
+.dl Ti_Data3A6070, Ti_Data394000, Ti_Data0F6DA0, Ti_Data394B40,\
+    Ti_Data3961C0
 Data157196:                         ; 15:7196
 .db $85,$01,$84,$02,$85,$03,$88,$04,\
     $83,$04
@@ -4898,10 +4915,10 @@ Code1571A0:
     ret                             ; 15:71DC
 
 DataPtrs1571DD:                     ; 15:71DD
-.dw Data3F4000, Data3F42D0, Data3F45A0, Data3F4870,\
-    Data3F4B40, Data3F4E10, Data3F50E0, Data3F53B0,\
-    Data3F5680, Data3F5950, Data3F5C20, Data3F5EF0,\
-    Data3F61C0
+.dw Ti_Data3F4000, Ti_Data3F42D0, Ti_Data3F45A0, Ti_Data3F4870,\
+    Ti_Data3F4B40, Ti_Data3F4E10, Ti_Data3F50E0, Ti_Data3F53B0,\
+    Ti_Data3F5680, Ti_Data3F5950, Ti_Data3F5C20, Ti_Data3F5EF0,\
+    Ti_Data3F61C0
 Code1571F7:
     ld   a,$01                      ; 15:71F7
     ld   [$CDF3],a                  ; 15:71F9
@@ -4929,9 +4946,9 @@ Code157210:
     jp   LoadScreenTilemapD000      ; 15:7226
 
 DataPtrs157229:                     ; 15:7229
-.dl Data374000, Data3742D0, Data3745A0, Data374870,\
-    Data374B40, Data374E10, Data3750E0, Data3753B0,\
-    Data375680, Data375950
+.dl Ti_Data374000, Ti_Data3742D0, Ti_Data3745A0, Ti_Data374870,\
+    Ti_Data374B40, Ti_Data374E10, Ti_Data3750E0, Ti_Data3753B0,\
+    Ti_Data375680, Ti_Data375950
 
 Code157247:
     ld   a,$01                      ; 15:7247
@@ -4964,8 +4981,8 @@ Code157247:
     jp   LoadScreenTilemapD000      ; 15:727A
 
 DataPtrs15727D:                     ; 15:727D
-.dl Data3F6490, Data3F6760, Data3F6A30, Data3F6D00,\
-    Data3F6FD0, Data3F72A0, Data3F7570, Data3F7840
+.dl Ti_Data3F6490, Ti_Data3F6760, Ti_Data3F6A30, Ti_Data3F6D00,\
+    Ti_Data3F6FD0, Ti_Data3F72A0, Ti_Data3F7570, Ti_Data3F7840
 
 Code157295:
     ld   a,$01                      ; 15:7295
@@ -4998,7 +5015,7 @@ Code157295:
     jp   LoadScreenTilemapD000      ; 15:72C8
 
 DataPtrs1572CB:                     ; 15:72CB
-.dl Data376760, Data3772A0, Data355200, Data3557A0
+.dl Ti_Data376760, Ti_Data3772A0, Ti_Data355200, Ti_Data3557A0
 Data1572D7:                         ; 15:72D7
 .db $04,$03,$82,$09,$82,$09,$06,$09
 
@@ -5047,10 +5064,11 @@ Code1572DF:
     ret                             ; 15:732F
 
 DataPtrs157330:                     ; 15:7330
-.dl Data396A30, Data396D00, Data396FD0, Data3972A0,\
-    Data397570, Data397840, Data397B10, Data3B4000,\
-    Data3B42D0, Data3B45A0, Data3B4870, Data3B4B40,\
-    Data3B4E10, Data3B50E0, Data3B53B0
+.dl Ti_Data396A30, Ti_Data396D00, Ti_Data396FD0, Ti_Data3972A0,\
+    Ti_Data397570, Ti_Data397840, Ti_Data397B10, Ti_Data3B4000,\
+    Ti_Data3B42D0, Ti_Data3B45A0, Ti_Data3B4870, Ti_Data3B4B40,\
+    Ti_Data3B4E10, Ti_Data3B50E0, Ti_Data3B53B0
+
 Code15735D:
     ld   a,$01                      ; 15:735D
     ld   [$CDF3],a                  ; 15:735F
@@ -5083,7 +5101,7 @@ Code157376:
     jp   LoadScreenTilemapD000      ; 15:7390
 
 DataPtrs157393:                     ; 15:7393
-.dl Data375C20, Data375EF0, Data3761C0, Data376490
+.dl Ti_Data375C20, Ti_Data375EF0, Ti_Data3761C0, Ti_Data376490
 
 Code15739F:
     ld   a,$01                      ; 15:739F
@@ -5120,8 +5138,8 @@ Sub1573C1:
 .dw Return15745D                    ; 15:73D3
 
 DataPtrs1573D5:                     ; 15:73D5
-.dl Data187890, Data187B60, Data197660, Data197930,\
-    Data197C00
+.dl Ti_Data187890, Ti_Data187B60, Ti_Data197660, Ti_Data197930,\
+    Ti_Data197C00
 
 Code1573E4:
     ld   a,[$C4DF]                  ; 15:73E4
@@ -5161,8 +5179,9 @@ Code1573E4:
     jp   CopyBytes                  ; 15:742B
 
 DataPtrs15742E:                     ; 15:742E
-.dl Data0E71D0, Data0E74A0, Data0E7770, Data0E7A40,\
-    Data0E7D10
+.dl Ti_Data0E71D0, Ti_Data0E74A0, Ti_Data0E7770, Ti_Data0E7A40,\
+    Ti_Data0E7D10
+
 Code15743D:
     ld   a,[$C4DF]                  ; 15:743D
     ld   c,a                        ; 15:7440
@@ -5187,7 +5206,7 @@ Return15745D:
     ret                             ; 15:745D
 
 DataPtrs15745E:                     ; 15:745E
-.dl Data3D5F00, Data3D61D0, Data3D64A0, Data3D6770
+.dl Ti_Data3D5F00, Ti_Data3D61D0, Ti_Data3D64A0, Ti_Data3D6770
 
 Code15746A:
     ld   a,[$C4DF]                  ; 15:746A
@@ -6235,7 +6254,7 @@ SubL_157B22:
     ld   c,a                        ; 15:7B2A
     ld   b,$00                      ; 15:7B2B
     push bc                         ; 15:7B2D
-    ld   hl,DataPtrs156DA6          ; 15:7B2E
+    ld   hl,ToyBoxPeachImagePtrs    ; 15:7B2E
     add  hl,bc                      ; 15:7B31
     ldi  a,[hl]                     ; 15:7B32
     ld   e,a                        ; 15:7B33
@@ -6269,7 +6288,7 @@ SubL_157B22:
     sla  a                          ; 15:7B65
     ld   c,a                        ; 15:7B67
     ld   b,$00                      ; 15:7B68
-    ld   hl,Data156AF3              ; 15:7B6A
+    ld   hl,DataPtrs156AF3          ; 15:7B6A
     add  hl,bc                      ; 15:7B6D
     ldi  a,[hl]                     ; 15:7B6E
     ld   h,[hl]                     ; 15:7B6F

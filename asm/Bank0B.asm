@@ -1070,7 +1070,7 @@ SubL_0B5328:
     inc  e                          ; 0B:5346
 Code0B5347:
     ld   a,e                        ; 0B:5347
-    ld   [$C36A],a                  ; 0B:5348
+    ld   [W_RaceResults],a          ; 0B:5348
     ld   hl,$C509                   ; 0B:534B
     add  hl,bc                      ; 0B:534E
     ld   [hl],$15                   ; 0B:534F
@@ -1199,7 +1199,7 @@ Sub0B575E:
     ldh  [<H_CameraXHigh],a         ; 0B:5781
     call Sub00128D                  ; 0B:5783
     ld   b,$0B                      ; 0B:5786
-    ld   a,:Gr_Bank17               ; 0B:5788
+    ld   a,:Gr_YouVsBooMenu         ; 0B:5788
     call LoadGraphicsBank           ; 0B:578A
     ld   a,$0B                      ; 0B:578D
     ld   b,a                        ; 0B:578F

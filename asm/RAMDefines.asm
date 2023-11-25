@@ -132,6 +132,7 @@
 .define W_PlayerCoins         $C1F2
 .define W_ChallengeFlag       $C283
 .define W_ChalScoreBarPixels  $C35D
+.define W_RaceResults         $C36A
 .define W_CurrentPlayer       $C383
 .define W_RaceHeaderFlags     $C3A2
 .define W_ScoreTileBuffer     $C34F
